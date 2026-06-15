@@ -1,0 +1,141 @@
+<?php
+require_once __DIR__ . '/../public/api/config.php';
+require_once __DIR__ . '/../public/api/storage.php';
+
+use PHPUnit\Framework\TestCase;
+
+class ContactFormTest extends TestCase
+{
+    protected function setUp(): void
+    {
+        if (!is_dir(DATA_DIR)) {
+            mkdir(DATA_DIR, 0755, true);
+        }
+    }
+
+    protected function tearDown(): void
+    {
+        $file = Storage::getFilePath('mensajes');
+        if (file_exists($file)) {
+            unlink($file);
+        }
+        $file = Storage::getFilePath('rate_limits');
+        if (file_exists($file)) {
+            unlink($file);
+        }
+    }
+
+    public function testContactFormValidationAllValid()
+    {
+        $errors = $this->validateContact([
+            'nombre' => 'Juan',
+            'correo' => 'juan@test.cu',
+            'telefono' => '+53 555 12345',
+            'asunto' => 'informacion',
+            'mensaje' => 'Hola, quiero información sobre sus servicios.',
+        ]);
+
+        $this->assertEmpty($errors);
+    }
+
+    private function validateContact($data)
+    {
+        $errors = [];
+
+        $nombre = isset($data['nombre']) ? trim($data['nombre']) : '';
+        $correo = isset($data['correo']) ? trim($data['correo']) : '';
+        $telefono = isset($data['telefono']) ? trim($data['telefono']) : '';
+        $asunto = isset($data['asunto']) ? trim($data['asunto']) : '';
+        $mensaje = isset($data['mensaje']) ? trim($data['mensaje']) : '';
+
+        if (empty($nombre) || strlen($nombre) < 2) {
+            $errors[] = 'El nombre debe tener al menos 2 caracteres.';
+        }
+        if (empty($correo) || !filter_var($correo, FILTER_VALIDATE_EMAIL)) {
+            $errors[] = 'El correo electrónico no es válido.';
+        }
+        if (!empty($telefono) && !preg_match('/^[\d\s\-\+\(\)]{7,15}$/', $telefono)) {
+            $errors[] = 'El teléfono no es válido.';
+        }
+        $asuntosValidos = array('informacion', 'cotizacion', 'soporte', 'otro');
+        if (empty($asunto) || !in_array($asunto, $asuntosValidos)) {
+            $errors[] = 'El asunto seleccionado no es válido.';
+        }
+        if (empty($mensaje) || strlen($mensaje) < 10) {
+            $errors[] = 'El mensaje debe tener al menos 10 caracteres.';
+        }
+
+        return $errors;
+    }
+
+    public function testNombreTooShort()
+    {
+        $errors = $this->validateContact(['nombre' => 'A', 'correo' => 'a@b.cu', 'asunto' => 'otro', 'mensaje' => 'Mensaje largo de prueba']);
+        $this->assertNotEmpty($errors);
+        $this->assertStringContainsString('2 caracteres', $errors[0]);
+    }
+
+    public function testInvalidEmail()
+    {
+        $errors = $this->validateContact(['nombre' => 'Juan', 'correo' => 'invalido', 'asunto' => 'otro', 'mensaje' => 'Mensaje largo de prueba']);
+        $this->assertNotEmpty($errors);
+    }
+
+    public function testTelefonoOptional()
+    {
+        $errors = $this->validateContact(['nombre' => 'Juan', 'correo' => 'a@b.cu', 'telefono' => '', 'asunto' => 'otro', 'mensaje' => 'Mensaje largo de prueba']);
+        $this->assertEmpty($errors);
+    }
+
+    public function testTelefonoInvalid()
+    {
+        $errors = $this->validateContact(['nombre' => 'Juan', 'correo' => 'a@b.cu', 'telefono' => 'abc', 'asunto' => 'otro', 'mensaje' => 'Mensaje largo de prueba']);
+        $this->assertNotEmpty($errors);
+    }
+
+    public function testAsuntoInvalido()
+    {
+        $errors = $this->validateContact(['nombre' => 'Juan', 'correo' => 'a@b.cu', 'asunto' => 'otra-cosa', 'mensaje' => 'Mensaje largo de prueba']);
+        $this->assertNotEmpty($errors);
+    }
+
+    public function testAsuntoValido()
+    {
+        $errors = $this->validateContact(['nombre' => 'Juan', 'correo' => 'a@b.cu', 'asunto' => 'soporte', 'mensaje' => 'Mensaje largo de prueba']);
+        $this->assertEmpty($errors);
+    }
+
+    public function testMensajeTooShort()
+    {
+        $errors = $this->validateContact(['nombre' => 'Juan', 'correo' => 'a@b.cu', 'asunto' => 'otro', 'mensaje' => 'Corto']);
+        $this->assertNotEmpty($errors);
+    }
+
+    public function testMensajeValido()
+    {
+        $errors = $this->validateContact(['nombre' => 'Juan', 'correo' => 'a@b.cu', 'asunto' => 'otro', 'mensaje' => 'Mensaje de prueba con mas de diez caracteres.']);
+        $this->assertEmpty($errors);
+    }
+
+    public function testRateLimitTracksSubmissions()
+    {
+        $rateData = array('contact_rate_test' => 5);
+        Storage::write('rate_limits', $rateData);
+        $rateDataRead = Storage::read('rate_limits');
+        $this->assertEquals(5, $rateDataRead['contact_rate_test']);
+    }
+
+    public function testDataPersistsAfterInsert()
+    {
+        Storage::insert('mensajes', array(
+            'nombre' => 'Test',
+            'correo' => 'test@test.cu',
+            'mensaje' => 'Mensaje de prueba para verificar persistencia.',
+            'leido' => 0
+        ));
+
+        $mensajes = Storage::read('mensajes');
+        $this->assertCount(1, $mensajes);
+        $this->assertEquals('Test', $mensajes[0]['nombre']);
+    }
+}

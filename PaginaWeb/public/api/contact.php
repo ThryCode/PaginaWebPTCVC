@@ -1,8 +1,4 @@
 <?php
-/**
- * API: Formulario de contacto
- * Guarda en JSON
- */
 
 header('Content-Type: application/json; charset=utf-8');
 header('X-Content-Type-Options: nosniff');
@@ -22,6 +18,14 @@ if (empty($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'
 }
 
 session_start();
+
+$token = isset($_POST[CSRF_TOKEN_NAME]) ? $_POST[CSRF_TOKEN_NAME] : '';
+if (!empty($token) && !validateCSRFToken($token)) {
+    http_response_code(403);
+    echo json_encode(array('success' => false, 'message' => 'Token de seguridad inválido.'));
+    exit;
+}
+
 $sessionId = session_id();
 
 $rateKey = 'contact_rate_' . $sessionId;
@@ -34,7 +38,8 @@ if ($submissions >= MAX_FORM_SUBMISSIONS) {
 }
 
 $nombre = isset($_POST['nombre']) ? trim($_POST['nombre']) : '';
-$email = isset($_POST['email']) ? trim($_POST['email']) : '';
+$apellidos = isset($_POST['apellidos']) ? trim($_POST['apellidos']) : '';
+$correo = isset($_POST['correo']) ? trim($_POST['correo']) : '';
 $telefono = isset($_POST['telefono']) ? trim($_POST['telefono']) : '';
 $asunto = isset($_POST['asunto']) ? trim($_POST['asunto']) : '';
 $mensaje = isset($_POST['mensaje']) ? trim($_POST['mensaje']) : '';
@@ -44,10 +49,10 @@ $errors = array();
 if (empty($nombre) || strlen($nombre) < 2) {
     $errors[] = 'El nombre debe tener al menos 2 caracteres.';
 }
-if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+if (empty($correo) || !filter_var($correo, FILTER_VALIDATE_EMAIL)) {
     $errors[] = 'El correo electrónico no es válido.';
 }
-if (empty($telefono) || !preg_match('/^[\d\s\-\+\(\)]{7,15}$/', $telefono)) {
+if (!empty($telefono) && !preg_match('/^[\d\s\-\+\(\)]{7,15}$/', $telefono)) {
     $errors[] = 'El teléfono no es válido.';
 }
 $asuntosValidos = array('informacion', 'cotizacion', 'soporte', 'otro');
@@ -65,7 +70,8 @@ if (!empty($errors)) {
 
 Storage::insert('mensajes', array(
     'nombre' => htmlspecialchars($nombre, ENT_QUOTES, 'UTF-8'),
-    'email' => htmlspecialchars($email, ENT_QUOTES, 'UTF-8'),
+    'apellidos' => htmlspecialchars($apellidos, ENT_QUOTES, 'UTF-8'),
+    'correo' => htmlspecialchars($correo, ENT_QUOTES, 'UTF-8'),
     'telefono' => htmlspecialchars($telefono, ENT_QUOTES, 'UTF-8'),
     'asunto' => $asunto,
     'mensaje' => htmlspecialchars($mensaje, ENT_QUOTES, 'UTF-8'),

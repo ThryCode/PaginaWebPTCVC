@@ -80,13 +80,20 @@
                             </div>
                             <div class="form-group">
                                 <label for="asunto">Asunto</label>
-                                <input type="text" id="asunto" name="asunto" placeholder="Asunto">
+                                <select id="asunto" name="asunto" required>
+                                    <option value="">Seleccione un asunto</option>
+                                    <option value="informacion">Información</option>
+                                    <option value="cotizacion">Cotización</option>
+                                    <option value="soporte">Soporte</option>
+                                    <option value="otro">Otro</option>
+                                </select>
                             </div>
                             <div class="form-group">
                                 <label for="mensaje">Mensaje</label>
                                 <textarea id="mensaje" name="mensaje" rows="5" required placeholder="Mensaje"></textarea>
                             </div>
                             <div id="formMessage" class="form-message"></div>
+                            <?= csrfField() ?>
                             <button type="submit" class="btn btn-primary" style="width:100%">
                                 <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="margin-right:8px"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5"/></svg>
                                 Enviar Mensaje
