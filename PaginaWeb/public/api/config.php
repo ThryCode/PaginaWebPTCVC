@@ -4,11 +4,11 @@
  * Sin base de datos - todo en archivos JSON
  */
 
-if (version_compare(PHP_VERSION, '7.3.11', '!=')) {
+if (version_compare(PHP_VERSION, '7.3.11', '<')) {
     http_response_code(500);
     die(json_encode(array(
         'success' => false,
-        'message' => 'Este proyecto requiere PHP 7.3.11. Versión actual: ' . PHP_VERSION
+        'message' => 'Este proyecto requiere PHP 7.3.11 o superior. Versión actual: ' . PHP_VERSION
     )));
 }
 
@@ -29,3 +29,25 @@ define('FROM_NAME', 'PCT Villa Clara');
 
 // Timezone
 date_default_timezone_set('America/Havana');
+
+// CSRF Token functions
+function generateCSRFToken() {
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+    if (empty($_SESSION[CSRF_TOKEN_NAME])) {
+        $_SESSION[CSRF_TOKEN_NAME] = bin2hex(random_bytes(32));
+    }
+    return $_SESSION[CSRF_TOKEN_NAME];
+}
+
+function validateCSRFToken($token) {
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+    return isset($_SESSION[CSRF_TOKEN_NAME]) && hash_equals($_SESSION[CSRF_TOKEN_NAME], $token);
+}
+
+function csrfField() {
+    return '<input type="hidden" name="' . CSRF_TOKEN_NAME . '" value="' . generateCSRFToken() . '">';
+}

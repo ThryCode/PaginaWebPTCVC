@@ -1,0 +1,26 @@
+[
+    {
+        "id": 1,
+        "numero": 4,
+        "label": "Empresas incubadas",
+        "orden": 1
+    },
+    {
+        "id": 2,
+        "numero": 40,
+        "label": "Proyectos activos",
+        "orden": 2
+    },
+    {
+        "id": 3,
+        "numero": 2,
+        "label": "Años de experiencia",
+        "orden": 3
+    },
+    {
+        "id": 4,
+        "numero": 50,
+        "label": "Colaboraciones",
+        "orden": 4
+    }
+]

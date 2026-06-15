@@ -66,7 +66,7 @@ class Storage {
     public static function insert($collection, $item) {
         $items = self::read($collection);
         $item['id'] = self::nextId($items);
-        $item['created_at'] = date('Y-m-d H:i:s');
+        $item['created_at'] = date('Y-m-d H:i');
         $items[] = $item;
         self::write($collection, $items);
         return $item;
@@ -78,7 +78,7 @@ class Storage {
             if (isset($item['id']) && $item['id'] == $id) {
                 $data['id'] = $item['id'];
                 $data['created_at'] = $item['created_at'];
-                $data['updated_at'] = date('Y-m-d H:i:s');
+                $data['updated_at'] = date('Y-m-d H:i');
                 $item = $data;
                 self::write($collection, $items);
                 return $item;

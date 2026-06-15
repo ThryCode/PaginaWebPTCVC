@@ -1,9 +1,6 @@
 <?php
-/**
- * Gestión de Mensajes
- */
-require_once '../../api/auth.php';
-require_once '../../api/storage.php';
+require_once '../api/auth.php';
+require_once '../api/storage.php';
 
 $auth = new Auth();
 $auth->requireLogin();
@@ -11,30 +8,40 @@ $auth->requireLogin();
 $action = isset($_GET['action']) ? $_GET['action'] : 'list';
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 $message = '';
+$error = '';
 
-if ($action === 'read' && $id > 0) {
-    $msg = Storage::findById('mensajes', $id);
-    if ($msg) {
-        $msg['leido'] = 1;
-        Storage::update('mensajes', $id, $msg);
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!validateCSRFToken($_POST[CSRF_TOKEN_NAME] ?? '')) {
+        $error = 'Token de seguridad inválido.';
+    } else {
+        if ($action === 'delete') {
+            $deleteId = intval($_POST['id'] ?? 0);
+            if ($deleteId > 0) {
+                Storage::delete('mensajes', $deleteId);
+                $message = 'Mensaje eliminado.';
+            }
+            $action = 'list';
+        } elseif ($action === 'readall') {
+            $all = Storage::read('mensajes');
+            foreach ($all as &$m) {
+                $m['leido'] = 1;
+            }
+            Storage::write('mensajes', $all);
+            $message = 'Todos marcados como leídos.';
+            $action = 'list';
+        } elseif ($action === 'read') {
+            $readId = intval($_POST['id'] ?? 0);
+            if ($readId > 0) {
+                $msg = Storage::findById('mensajes', $readId);
+                if ($msg) {
+                    $msg['leido'] = 1;
+                    Storage::update('mensajes', $readId, $msg);
+                }
+            }
+            $action = 'view';
+            $id = $readId;
+        }
     }
-    $action = 'view';
-}
-
-if ($action === 'delete' && $id > 0) {
-    Storage::delete('mensajes', $id);
-    $message = 'Mensaje eliminado.';
-    $action = 'list';
-}
-
-if ($action === 'readall') {
-    $all = Storage::read('mensajes');
-    foreach ($all as &$m) {
-        $m['leido'] = 1;
-    }
-    Storage::write('mensajes', $all);
-    $message = 'Todos marcados como leídos.';
-    $action = 'list';
 }
 
 $msg = null;
@@ -56,6 +63,7 @@ if ($action === 'list') {
 }
 
 $noLeidos = Storage::count('mensajes', array('leido' => 0));
+$csrfToken = generateCSRFToken();
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -67,31 +75,22 @@ $noLeidos = Storage::count('mensajes', array('leido' => 0));
 </head>
 <body>
     <div class="admin-wrapper">
-        <aside class="sidebar">
-            <div class="sidebar-header"><h2>Admin</h2></div>
-            <nav class="sidebar-nav">
-                <ul>
-                    <li><a href="index.php">Dashboard</a></li>
-                    <li><a href="noticias.php">Noticias / Eventos</a></li>
-                    <li><a href="mensajes.php" class="active">Mensajes <?php if ($noLeidos > 0): ?><span class="badge"><?php echo $noLeidos; ?></span><?php endif; ?></a></li>
-                    <li><a href="categorias.php">Categorías</a></li>
-                    <li><a href="configuracion.php">Configuración</a></li>
-                </ul>
-            </nav>
-            <div class="sidebar-footer">
-                <p><?php echo htmlspecialchars($_SESSION['user_nombre']); ?></p>
-                <a href="logout.php" class="btn-logout">Cerrar sesión</a>
-            </div>
-        </aside>
+        <?php include 'includes/sidebar.php'; ?>
+
         <main class="main-content">
             <header class="topbar">
+                <button class="hamburger" onclick="toggleSidebar()" aria-label="Menu" style="display:none;">☰</button>
                 <h1>Mensajes de Contacto</h1>
                 <?php if ($action === 'list' && $noLeidos > 0): ?>
-                    <a href="?action=readall" class="btn btn-sm btn-secondary">Marcar todos leídos</a>
+                    <form method="POST" action="?action=readall" style="display:inline;">
+                        <?php echo csrfField(); ?>
+                        <button type="submit" class="btn btn-sm btn-secondary">Marcar todos leídos</button>
+                    </form>
                 <?php endif; ?>
             </header>
             <div class="content">
                 <?php if (!empty($message)): ?><div class="alert alert-success"><?php echo $message; ?></div><?php endif; ?>
+                <?php if (!empty($error)): ?><div class="alert alert-error"><?php echo $error; ?></div><?php endif; ?>
 
                 <?php if ($action === 'list'): ?>
                     <div class="panel"><div class="panel-body">
@@ -110,7 +109,11 @@ $noLeidos = Storage::count('mensajes', array('leido' => 0));
                                     <td><?php echo date('d/m/Y H:i', strtotime($m['created_at'])); ?></td>
                                     <td>
                                         <a href="?action=view&id=<?php echo $m['id']; ?>" class="btn btn-sm btn-primary">Ver</a>
-                                        <a href="?action=delete&id=<?php echo $m['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('¿Eliminar?')">X</a>
+                                        <form class="delete-form" method="POST" action="?action=delete" onsubmit="return confirm('¿Eliminar este mensaje?')">
+                                            <?php echo csrfField(); ?>
+                                            <input type="hidden" name="id" value="<?php echo $m['id']; ?>">
+                                            <button type="submit" class="btn btn-sm btn-danger">X</button>
+                                        </form>
                                     </td>
                                 </tr>
                                 <?php endforeach; ?>

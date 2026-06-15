@@ -363,7 +363,295 @@ function escapeHtml(text) {
     return div.innerHTML;
 }
 
-// Cargar noticias en el index
+// ============================================
+// SKELETON LOADERS
+// ============================================
+function skeletonCards(count) {
+    var html = '';
+    for (var i = 0; i < count; i++) {
+        html += '<div class="skeleton-card">' +
+            '<div class="skeleton-img"></div>' +
+            '<div class="skeleton-body">' +
+            '<div class="skeleton-tag"></div>' +
+            '<div class="skeleton-text wide"></div>' +
+            '<div class="skeleton-text"></div>' +
+            '<div class="skeleton-text medium"></div>' +
+            '</div></div>';
+    }
+    return html;
+}
+
+function skeletonGallery(count) {
+    var html = '';
+    for (var i = 0; i < count; i++) {
+        html += '<div class="skeleton-gallery-item">' +
+            '<div class="skeleton-img"></div>' +
+            '</div>';
+    }
+    return html;
+}
+
+// ============================================
+// CARGAR NOTICIAS DESDE LA API
+// ============================================
+function loadNews(containerId, options) {
+    var container = document.getElementById(containerId);
+    if (!container) return;
+
+    var limit = (options && options.limit) || 6;
+    var tipo = (options && options.tipo) || '';
+    var q = (options && options.q) || '';
+    var baseUrl = 'api/news.php';
+
+    var url = baseUrl + '?limit=' + limit;
+    if (tipo) url += '&tipo=' + tipo;
+    if (q) url += '&q=' + encodeURIComponent(q);
+
+    container.innerHTML = skeletonCards(Math.min(limit, 6));
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            try {
+                var response = JSON.parse(xhr.responseText);
+                if (response.success && response.data.length > 0) {
+                    var html = '';
+                    response.data.forEach(function(item) {
+                        var fecha = new Date(item.created_at);
+                        var fechaStr = fecha.toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' });
+                        var tagClass = item.tipo === 'evento' ? 'news-tag-evento' : 'news-tag-noticia';
+
+                        html += '<div class="news-card">';
+                        if (item.imagen) {
+                            html += '<div class="news-card-img"><img src="' + item.imagen + '" alt="' + escapeHtml(item.titulo) + '" loading="lazy"></div>';
+                        } else {
+                            html += '<div class="news-card-img">' + (item.tipo === 'evento' ? '&#128197;' : '&#128196;') + '</div>';
+                        }
+                        html += '<div class="news-card-body">';
+                        html += '<div class="news-card-meta">';
+                        html += '<span class="news-tag ' + tagClass + '">' + item.tipo.charAt(0).toUpperCase() + item.tipo.slice(1) + '</span>';
+                        if (item.categoria) {
+                            html += '<span class="news-card-date">' + escapeHtml(item.categoria) + '</span>';
+                        }
+                        html += '</div>';
+                        html += '<h4>' + escapeHtml(item.titulo) + '</h4>';
+                        html += '<p>' + escapeHtml(item.resumen || '') + '</p>';
+                        html += '</div>';
+                        html += '<div class="news-card-footer">';
+                        html += '<span class="news-card-date">' + fechaStr + '</span>';
+                        if (item.ubicacion) {
+                            html += '<span class="news-card-location">&#128205; ' + escapeHtml(item.ubicacion) + '</span>';
+                        }
+                        html += '</div>';
+                        html += '</div>';
+                    });
+                    container.innerHTML = html;
+                } else {
+                    container.innerHTML = '<p class="empty" style="grid-column: 1/-1;">No hay publicaciones disponibles.</p>';
+                }
+            } catch (e) {
+                container.innerHTML = '<p class="empty" style="grid-column: 1/-1;">Error al cargar noticias.</p>';
+            }
+        }
+    };
+
+    xhr.onerror = function() {
+        container.innerHTML = '<p class="empty" style="grid-column: 1/-1;">Error de conexion.</p>';
+    };
+
+    xhr.send();
+}
+
+// ============================================
+// CARGAR EVENTOS DESDE LA API
+// ============================================
+function loadEvents(containerId, options) {
+    var container = document.getElementById(containerId);
+    if (!container) return;
+
+    var limit = (options && options.limit) || 10;
+    var q = (options && options.q) || '';
+    var baseUrl = 'api/events.php';
+
+    var url = baseUrl + '?limit=' + limit;
+    if (q) url += '&q=' + encodeURIComponent(q);
+
+    container.innerHTML = skeletonCards(Math.min(limit, 6));
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            try {
+                var response = JSON.parse(xhr.responseText);
+                if (response.success && response.data.length > 0) {
+                    var html = '';
+                    response.data.forEach(function(item) {
+                        var fecha = new Date(item.created_at);
+                        var fechaStr = fecha.toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' });
+
+                        html += '<div class="news-card">';
+                        if (item.imagen) {
+                            html += '<div class="news-card-img"><img src="' + item.imagen + '" alt="' + escapeHtml(item.titulo) + '" loading="lazy"></div>';
+                        } else {
+                            html += '<div class="news-card-img">&#128197;</div>';
+                        }
+                        html += '<div class="news-card-body">';
+                        html += '<div class="news-card-meta">';
+                        html += '<span class="news-tag news-tag-evento">Evento</span>';
+                        if (item.categoria) {
+                            html += '<span class="news-card-date">' + escapeHtml(item.categoria) + '</span>';
+                        }
+                        html += '</div>';
+                        html += '<h4>' + escapeHtml(item.titulo) + '</h4>';
+                        html += '<p>' + escapeHtml(item.resumen || '') + '</p>';
+                        html += '</div>';
+                        html += '<div class="news-card-footer">';
+                        html += '<span class="news-card-date">' + fechaStr + '</span>';
+                        if (item.ubicacion) {
+                            html += '<span class="news-card-location">&#128205; ' + escapeHtml(item.ubicacion) + '</span>';
+                        }
+                        html += '</div>';
+                        html += '</div>';
+                    });
+                    container.innerHTML = html;
+                } else {
+                    container.innerHTML = '<p class="empty" style="grid-column: 1/-1;">No hay eventos disponibles.</p>';
+                }
+            } catch (e) {
+                container.innerHTML = '<p class="empty" style="grid-column: 1/-1;">Error al cargar eventos.</p>';
+            }
+        }
+    };
+
+    xhr.onerror = function() {
+        container.innerHTML = '<p class="empty" style="grid-column: 1/-1;">Error de conexion.</p>';
+    };
+
+    xhr.send();
+}
+
+// ============================================
+// CARGAR GALERIA DESDE LA API + LIGHTBOX
+// ============================================
+function loadGallery(containerId, options) {
+    var container = document.getElementById(containerId);
+    if (!container) return;
+
+    var limit = (options && options.limit) || 20;
+    var baseUrl = 'api/gallery.php';
+
+    var url = baseUrl + '?limit=' + limit;
+
+    container.innerHTML = skeletonGallery(Math.min(limit, 12));
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            try {
+                var response = JSON.parse(xhr.responseText);
+                if (response.success && response.data.length > 0) {
+                    var html = '';
+                    response.data.forEach(function(item) {
+                        var src = item.imagen || item.url || '';
+                        var title = escapeHtml(item.titulo || item.descripcion || '');
+                        html += '<div class="gallery-item" onclick="openLightbox(\'' + src.replace(/'/g, "\\'") + '\', \'' + title.replace(/'/g, "\\'") + '\')">';
+                        html += '<img src="' + src + '" alt="' + title + '" loading="lazy">';
+                        if (title) {
+                            html += '<div class="gallery-overlay"><span>' + title + '</span></div>';
+                        }
+                        html += '</div>';
+                    });
+                    container.innerHTML = html;
+                } else {
+                    container.innerHTML = '<p class="empty" style="grid-column: 1/-1;">No hay fotos en la galeria.</p>';
+                }
+            } catch (e) {
+                container.innerHTML = '<p class="empty" style="grid-column: 1/-1;">Error al cargar galeria.</p>';
+            }
+        }
+    };
+
+    xhr.onerror = function() {
+        container.innerHTML = '<p class="empty" style="grid-column: 1/-1;">Error de conexion.</p>';
+    };
+
+    xhr.send();
+}
+
+// ============================================
+// LIGHTBOX
+// ============================================
+function openLightbox(src, alt) {
+    var existing = document.getElementById('lightbox');
+    if (existing) existing.remove();
+
+    var lb = document.createElement('div');
+    lb.id = 'lightbox';
+    lb.className = 'lightbox-overlay';
+    lb.innerHTML = '<button class="lightbox-close" aria-label="Cerrar">&times;</button>' +
+        '<button class="lightbox-prev" aria-label="Anterior">&#10094;</button>' +
+        '<button class="lightbox-next" aria-label="Siguiente">&#10095;</button>' +
+        '<div class="lightbox-content"><img src="' + src + '" alt="' + (alt || '') + '"></div>';
+    document.body.appendChild(lb);
+    document.body.style.overflow = 'hidden';
+
+    setTimeout(function() { lb.classList.add('active'); }, 10);
+
+    lb.querySelector('.lightbox-close').addEventListener('click', closeLightbox);
+    lb.querySelector('.lightbox-prev').addEventListener('click', function() { navigateLightbox(-1); });
+    lb.querySelector('.lightbox-next').addEventListener('click', function() { navigateLightbox(1); });
+    lb.addEventListener('click', function(e) {
+        if (e.target === lb) closeLightbox();
+    });
+}
+
+function closeLightbox() {
+    var lb = document.getElementById('lightbox');
+    if (lb) {
+        lb.classList.remove('active');
+        document.body.style.overflow = '';
+        setTimeout(function() { lb.remove(); }, 300);
+    }
+}
+
+function navigateLightbox(dir) {
+    var lb = document.getElementById('lightbox');
+    if (!lb) return;
+    var img = lb.querySelector('.lightbox-content img');
+    var currentSrc = img.src;
+
+    var galleryImages = document.querySelectorAll('.gallery-item img');
+    var srcs = [];
+    galleryImages.forEach(function(el) { srcs.push(el.src); });
+
+    if (srcs.length <= 1) return;
+
+    var idx = srcs.indexOf(currentSrc);
+    idx = (idx + dir + srcs.length) % srcs.length;
+    img.src = srcs[idx];
+
+    var overlay = lb.querySelector('.lightbox-overlay');
+    img.style.opacity = '0';
+    setTimeout(function() { img.style.opacity = '1'; }, 50);
+}
+
+document.addEventListener('keydown', function(e) {
+    var lb = document.getElementById('lightbox');
+    if (!lb) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') navigateLightbox(-1);
+    if (e.key === 'ArrowRight') navigateLightbox(1);
+});
+
+// ============================================
+// CARGAR NOTICIAS EN EL INDEX
+// ============================================
 document.addEventListener('DOMContentLoaded', function() {
     var newsContainer = document.getElementById('newsContainer');
     if (newsContainer) {
@@ -375,7 +663,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // SCROLL ANIMATIONS - Intersection Observer
 // ============================================
 document.addEventListener('DOMContentLoaded', function() {
-    var animatedElements = document.querySelectorAll('.animate-on-scroll');
+    var animatedElements = document.querySelectorAll('.animate-on-scroll, .animate-fade-up, .animate-fade-down, .animate-fade-left, .animate-fade-right, .animate-fade-in, .animate-scale-in');
     if (animatedElements.length === 0) return;
 
     var observer = new IntersectionObserver(function(entries) {
@@ -392,5 +680,148 @@ document.addEventListener('DOMContentLoaded', function() {
 
     animatedElements.forEach(function(el) {
         observer.observe(el);
+    });
+});
+
+// ============================================
+// TRANSICIONES DE PAGINA
+// ============================================
+document.addEventListener('DOMContentLoaded', function() {
+    if (sessionStorage.getItem('pageTransition') === 'in') {
+        sessionStorage.removeItem('pageTransition');
+        document.body.classList.add('page-transition');
+        requestAnimationFrame(function() {
+            requestAnimationFrame(function() {
+                document.body.classList.add('active');
+            });
+        });
+    }
+
+    var links = document.querySelectorAll('a[href]');
+    links.forEach(function(link) {
+        var href = link.getAttribute('href');
+        if (!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('mailto') || href.startsWith('tel')) return;
+        if (link.target === '_blank') return;
+
+        link.addEventListener('click', function(e) {
+            var currentPath = window.location.pathname.split('/').pop();
+            if (href === currentPath) return;
+
+            e.preventDefault();
+            document.body.classList.remove('active');
+            sessionStorage.setItem('pageTransition', 'in');
+            setTimeout(function() {
+                window.location.href = href;
+            }, 250);
+        });
+    });
+});
+
+// ============================================
+// BOTON VOLVER ARRIBA
+// ============================================
+document.addEventListener('DOMContentLoaded', function() {
+    var backToTop = document.getElementById('backToTop');
+    if (!backToTop) return;
+
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > 400) {
+            backToTop.classList.add('visible');
+        } else {
+            backToTop.classList.remove('visible');
+        }
+    });
+
+    backToTop.addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+});
+
+// ============================================
+// CONTADORES ANIMADOS
+// ============================================
+document.addEventListener('DOMContentLoaded', function() {
+    var counters = document.querySelectorAll('.counter-number');
+    if (counters.length === 0) return;
+
+    var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                animateCounter(entry.target);
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.5 });
+
+    counters.forEach(function(counter) {
+        observer.observe(counter);
+    });
+});
+
+function animateCounter(el) {
+    var target = parseInt(el.getAttribute('data-target'), 10);
+    var duration = 2000;
+    var start = 0;
+    var startTime = null;
+
+    function step(timestamp) {
+        if (!startTime) startTime = timestamp;
+        var progress = Math.min((timestamp - startTime) / duration, 1);
+        var eased = 1 - Math.pow(1 - progress, 3);
+        var current = Math.floor(eased * target);
+        el.textContent = current.toLocaleString('es-ES');
+        if (progress < 1) {
+            requestAnimationFrame(step);
+        } else {
+            el.textContent = target.toLocaleString('es-ES');
+        }
+    }
+
+    requestAnimationFrame(step);
+}
+
+// ============================================
+// BUSQUEDA CON DEBOUNCE
+// ============================================
+document.addEventListener('DOMContentLoaded', function() {
+    var searchInput = document.getElementById('searchInput');
+    if (!searchInput) return;
+
+    var debounceTimer;
+
+    searchInput.addEventListener('input', function() {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(function() {
+            var query = searchInput.value.trim();
+            var containerId = searchInput.getAttribute('data-container') || 'allNewsContainer';
+            var type = searchInput.getAttribute('data-type') || '';
+
+            var options = { limit: 20 };
+            if (query) options.q = query;
+            if (type) options.tipo = type;
+
+            loadNews(containerId, options);
+        }, 300);
+    });
+});
+
+// Busqueda de eventos
+document.addEventListener('DOMContentLoaded', function() {
+    var eventSearch = document.getElementById('eventSearchInput');
+    if (!eventSearch) return;
+
+    var debounceTimer;
+
+    eventSearch.addEventListener('input', function() {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(function() {
+            var query = eventSearch.value.trim();
+            var containerId = eventSearch.getAttribute('data-container') || 'eventsContainer';
+
+            var options = { limit: 10 };
+            if (query) options.q = query;
+
+            loadEvents(containerId, options);
+        }, 300);
     });
 });

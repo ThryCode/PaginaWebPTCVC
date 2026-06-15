@@ -1,5 +1,4 @@
 <?php
-session_start();
-session_destroy();
-header('Location: login.php');
-exit;
+require_once '../api/auth.php';
+$auth = new Auth();
+$auth->logout();

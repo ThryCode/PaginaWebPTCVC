@@ -17,17 +17,13 @@ $error = '';
 
 $categorias = Storage::read('categorias');
 
-// POST handlers
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Validate CSRF
     if (!validateCSRFToken($_POST[CSRF_TOKEN_NAME] ?? '')) {
         $error = 'Token de seguridad inválido.';
     } else {
-        // Delete action
         if ($action === 'delete') {
             $deleteId = intval($_POST['id'] ?? 0);
             if ($deleteId > 0) {
-                // Delete image file if exists
                 $existing = Storage::findById('noticias', $deleteId);
                 if ($existing && isset($existing['imagen'])) {
                     $imgPath = '../' . $existing['imagen'];
@@ -36,13 +32,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
                 }
                 Storage::delete('noticias', $deleteId);
-                $message = 'Publicación eliminada.';
+                $message = 'Evento eliminado.';
             }
             $action = 'list';
         } else {
-            // Create/Update
             $titulo = trim($_POST['titulo'] ?? '');
-            $tipo = $_POST['tipo'] ?? 'noticia';
             $categoria_id = intval($_POST['categoria_id'] ?? 0) ?: null;
             $resumen = trim($_POST['resumen'] ?? '');
             $contenido = $_POST['contenido'] ?? '';
@@ -61,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'slug' => $slug,
                 'resumen' => htmlspecialchars($resumen),
                 'contenido' => $contenido,
-                'tipo' => $tipo,
+                'tipo' => 'evento',
                 'categoria_id' => $categoria_id,
                 'autor_id' => $_SESSION['user_id'],
                 'fecha_evento' => $fecha_evento,
@@ -70,7 +64,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'destacada' => $destacada
             );
 
-            // Handle image upload
             if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
                 $uploadDir = '../uploads/';
                 if (!is_dir($uploadDir)) {
@@ -80,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $ext = strtolower(pathinfo($_FILES['imagen']['name'], PATHINFO_EXTENSION));
 
                 if (in_array($ext, $allowedExts) && $_FILES['imagen']['size'] <= 5 * 1024 * 1024) {
-                    $filename = 'noticia_' . time() . '_' . rand(1000, 9999) . '.' . $ext;
+                    $filename = 'evento_' . time() . '_' . rand(1000, 9999) . '.' . $ext;
                     $filepath = $uploadDir . $filename;
                     if (move_uploaded_file($_FILES['imagen']['tmp_name'], $filepath)) {
                         $data['imagen'] = 'uploads/' . $filename;
@@ -100,10 +93,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             }
                         }
                         Storage::update('noticias', $id, $data);
-                        $message = 'Publicación actualizada correctamente.';
+                        $message = 'Evento actualizado correctamente.';
                     } else {
                         Storage::insert('noticias', $data);
-                        $message = 'Publicación creada correctamente.';
+                        $message = 'Evento creado correctamente.';
                     }
                     $action = 'list';
                 } catch (Exception $e) {
@@ -114,19 +107,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$noticia = null;
+$evento = null;
 if ($action === 'edit' && $id > 0) {
-    $noticia = Storage::findById('noticias', $id);
-    if (!$noticia) {
+    $evento = Storage::findById('noticias', $id);
+    if (!$evento || $evento['tipo'] !== 'evento') {
         $action = 'list';
-        $error = 'Publicación no encontrada.';
+        $error = 'Evento no encontrado.';
     }
 }
 
-$noticias = null;
+$eventos = null;
 if ($action === 'list') {
-    $noticias = Storage::read('noticias');
-    usort($noticias, function($a, $b) {
+    $allNoticias = Storage::read('noticias');
+    $eventos = array();
+    foreach ($allNoticias as $n) {
+        if (isset($n['tipo']) && $n['tipo'] === 'evento') {
+            $eventos[] = $n;
+        }
+    }
+    usort($eventos, function($a, $b) {
         return strcmp($b['created_at'], $a['created_at']);
     });
 }
@@ -138,7 +137,7 @@ $csrfToken = generateCSRFToken();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Noticias</title>
+    <title>Admin - Eventos</title>
     <link rel="stylesheet" href="css/admin.css">
 </head>
 <body>
@@ -148,9 +147,9 @@ $csrfToken = generateCSRFToken();
         <main class="main-content">
             <header class="topbar">
                 <button class="hamburger" onclick="toggleSidebar()" aria-label="Menu" style="display:none;">☰</button>
-                <h1><?php echo $action === 'list' ? 'Noticias' : ($action === 'edit' ? 'Editar Publicación' : 'Nueva Publicación'); ?></h1>
+                <h1><?php echo $action === 'list' ? 'Eventos' : ($action === 'edit' ? 'Editar Evento' : 'Nuevo Evento'); ?></h1>
                 <?php if ($action === 'list'): ?>
-                    <a href="?action=new" class="btn btn-primary">+ Nueva</a>
+                    <a href="?action=new" class="btn btn-primary">+ Nuevo</a>
                 <?php endif; ?>
             </header>
             <div class="content">
@@ -159,33 +158,23 @@ $csrfToken = generateCSRFToken();
 
                 <?php if ($action === 'list'): ?>
                     <div class="panel"><div class="panel-body">
-                        <?php if (empty($noticias)): ?>
-                            <p class="empty">No hay publicaciones.</p>
+                        <?php if (empty($eventos)): ?>
+                            <p class="empty">No hay eventos.</p>
                         <?php else: ?>
                             <table class="table">
-                                <thead><tr><th>Título</th><th>Tipo</th><th>Categoría</th><th>Estado</th><th>Fecha</th><th>Acciones</th></tr></thead>
+                                <thead><tr><th>Título</th><th>Fecha</th><th>Ubicación</th><th>Estado</th><th>Acciones</th></tr></thead>
                                 <tbody>
-                                <?php foreach ($noticias as $n): ?>
+                                <?php foreach ($eventos as $e): ?>
                                 <tr>
-                                    <td><?php echo htmlspecialchars(substr($n['titulo'], 0, 50)); ?></td>
-                                    <td><span class="tag tag-<?php echo $n['tipo']; ?>"><?php echo ucfirst($n['tipo']); ?></span></td>
-                                    <td><?php
-                                        $catName = '—';
-                                        foreach ($categorias as $cat) {
-                                            if ($cat['id'] == $n['categoria_id']) {
-                                                $catName = htmlspecialchars($cat['nombre']);
-                                                break;
-                                            }
-                                        }
-                                        echo $catName;
-                                    ?></td>
-                                    <td><span class="tag tag-<?php echo $n['publicada'] ? 'publicado' : 'borrador'; ?>"><?php echo $n['publicada'] ? 'Publicado' : 'Borrador'; ?></span></td>
-                                    <td><?php echo date('d/m/Y', strtotime($n['created_at'])); ?></td>
+                                    <td><?php echo htmlspecialchars(substr($e['titulo'], 0, 50)); ?></td>
+                                    <td><?php echo $e['fecha_evento'] ? date('d/m/Y H:i', strtotime($e['fecha_evento'])) : '—'; ?></td>
+                                    <td><?php echo htmlspecialchars($e['ubicacion'] ?: '—'); ?></td>
+                                    <td><span class="tag tag-<?php echo $e['publicada'] ? 'publicado' : 'borrador'; ?>"><?php echo $e['publicada'] ? 'Publicado' : 'Borrador'; ?></span></td>
                                     <td>
-                                        <a href="?action=edit&id=<?php echo $n['id']; ?>" class="btn btn-sm btn-primary">Editar</a>
-                                        <form class="delete-form" method="POST" action="?action=delete" onsubmit="return confirm('¿Eliminar esta publicación?')">
+                                        <a href="?action=edit&id=<?php echo $e['id']; ?>" class="btn btn-sm btn-primary">Editar</a>
+                                        <form class="delete-form" method="POST" action="?action=delete" onsubmit="return confirm('¿Eliminar este evento?')">
                                             <?php echo csrfField(); ?>
-                                            <input type="hidden" name="id" value="<?php echo $n['id']; ?>">
+                                            <input type="hidden" name="id" value="<?php echo $e['id']; ?>">
                                             <button type="submit" class="btn btn-sm btn-danger">X</button>
                                         </form>
                                     </td>
@@ -203,62 +192,58 @@ $csrfToken = generateCSRFToken();
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="titulo">Título *</label>
-                                    <input type="text" id="titulo" name="titulo" required value="<?php echo $noticia ? htmlspecialchars($noticia['titulo']) : ''; ?>">
+                                    <input type="text" id="titulo" name="titulo" required value="<?php echo $evento ? htmlspecialchars($evento['titulo']) : ''; ?>">
                                 </div>
-                                <div class="form-group">
-                                    <label for="tipo">Tipo *</label>
-                                    <select id="tipo" name="tipo" required>
-                                        <option value="noticia" <?php echo ($noticia && $noticia['tipo'] === 'noticia') ? 'selected' : ''; ?>>Noticia</option>
-                                        <option value="evento" <?php echo ($noticia && $noticia['tipo'] === 'evento') ? 'selected' : ''; ?>>Evento</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-row">
                                 <div class="form-group">
                                     <label for="categoria_id">Categoría</label>
                                     <select id="categoria_id" name="categoria_id">
                                         <option value="">Sin categoría</option>
                                         <?php foreach ($categorias as $cat): ?>
-                                            <option value="<?php echo $cat['id']; ?>" <?php echo ($noticia && isset($noticia['categoria_id']) && $noticia['categoria_id'] == $cat['id']) ? 'selected' : ''; ?>><?php echo htmlspecialchars($cat['nombre']); ?></option>
+                                            <option value="<?php echo $cat['id']; ?>" <?php echo ($evento && isset($evento['categoria_id']) && $evento['categoria_id'] == $cat['id']) ? 'selected' : ''; ?>><?php echo htmlspecialchars($cat['nombre']); ?></option>
                                         <?php endforeach; ?>
                                     </select>
                                 </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="fecha_evento_date">Fecha del Evento *</label>
+                                    <input type="date" id="fecha_evento_date" name="fecha_evento_date" required value="<?php echo ($evento && $evento['fecha_evento']) ? date('Y-m-d', strtotime($evento['fecha_evento'])) : ''; ?>">
+                                </div>
+                                <div class="form-group">
+                                    <label for="fecha_evento_time">Hora del Evento *</label>
+                                    <input type="time" id="fecha_evento_time" name="fecha_evento_time" required value="<?php echo ($evento && $evento['fecha_evento']) ? date('H:i', strtotime($evento['fecha_evento'])) : ''; ?>">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="ubicacion">Ubicación</label>
+                                    <input type="text" id="ubicacion" name="ubicacion" value="<?php echo $evento ? htmlspecialchars($evento['ubicacion']) : ''; ?>">
+                                </div>
+                            </div>
+                            <div class="form-row">
                                 <div class="form-group">
                                     <label for="imagen">Imagen</label>
                                     <input type="file" id="imagen" name="imagen" accept="image/*">
-                                    <?php if ($noticia && isset($noticia['imagen'])): ?>
-                                        <small>Actual: <?php echo basename($noticia['imagen']); ?></small>
+                                    <?php if ($evento && isset($evento['imagen'])): ?>
+                                        <small>Actual: <?php echo basename($evento['imagen']); ?></small>
                                     <?php endif; ?>
                                 </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="fecha_evento_date">Fecha del Evento</label>
-                                    <input type="date" id="fecha_evento_date" name="fecha_evento_date" value="<?php echo ($noticia && $noticia['fecha_evento']) ? date('Y-m-d', strtotime($noticia['fecha_evento'])) : ''; ?>">
-                                </div>
-                                <div class="form-group">
-                                    <label for="fecha_evento_time">Hora del Evento</label>
-                                    <input type="time" id="fecha_evento_time" name="fecha_evento_time" value="<?php echo ($noticia && $noticia['fecha_evento']) ? date('H:i', strtotime($noticia['fecha_evento'])) : ''; ?>">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="ubicacion">Ubicación</label>
-                                <input type="text" id="ubicacion" name="ubicacion" value="<?php echo $noticia ? htmlspecialchars($noticia['ubicacion']) : ''; ?>">
+                                <div class="form-group"></div>
                             </div>
                             <div class="form-group">
                                 <label for="resumen">Resumen</label>
-                                <textarea id="resumen" name="resumen" rows="3"><?php echo $noticia ? htmlspecialchars($noticia['resumen']) : ''; ?></textarea>
+                                <textarea id="resumen" name="resumen" rows="3"><?php echo $evento ? htmlspecialchars($evento['resumen']) : ''; ?></textarea>
                             </div>
                             <div class="form-group">
                                 <label for="contenido">Contenido *</label>
-                                <textarea id="contenido" name="contenido" rows="10" required><?php echo $noticia ? $noticia['contenido'] : ''; ?></textarea>
+                                <textarea id="contenido" name="contenido" rows="10" required><?php echo $evento ? $evento['contenido'] : ''; ?></textarea>
                             </div>
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label><input type="checkbox" name="publicada" value="1" <?php echo (!$noticia || $noticia['publicada']) ? 'checked' : ''; ?>> Publicada</label>
+                                    <label><input type="checkbox" name="publicada" value="1" <?php echo (!$evento || $evento['publicada']) ? 'checked' : ''; ?>> Publicado</label>
                                 </div>
                                 <div class="form-group">
-                                    <label><input type="checkbox" name="destacada" value="1" <?php echo ($noticia && $noticia['destacada']) ? 'checked' : ''; ?>> Destacada</label>
+                                    <label><input type="checkbox" name="destacada" value="1" <?php echo ($evento && $evento['destacada']) ? 'checked' : ''; ?>> Destacado</label>
                                 </div>
                             </div>
                             <div class="form-actions">

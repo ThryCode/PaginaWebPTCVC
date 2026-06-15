@@ -1,52 +1,56 @@
 <?php
-/**
- * Configuración del sitio
- */
-require_once '../../api/auth.php';
-require_once '../../api/storage.php';
+require_once '../api/auth.php';
+require_once '../api/storage.php';
 
 $auth = new Auth();
 $auth->requireLogin();
 
 $message = '';
+$error = '';
 $pwMessage = '';
+$pwError = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['site_name'])) {
-        $campos = array('site_name', 'site_description', 'contact_email', 'contact_phone', 'contact_address');
-        $config = Storage::read('config');
-        foreach ($campos as $campo) {
-            if (isset($_POST[$campo])) {
-                $config[$campo] = trim($_POST[$campo]);
-            }
-        }
-        Storage::write('config', $config);
-        $message = 'Configuración actualizada.';
-    }
-
-    if (isset($_POST['new_password'])) {
-        $newPass = $_POST['new_password'];
-        $confirmPass = $_POST['confirm_password'];
-        if (strlen($newPass) < 6) {
-            $pwMessage = 'Mínimo 6 caracteres.';
-        } elseif ($newPass !== $confirmPass) {
-            $pwMessage = 'Las contraseñas no coinciden.';
-        } else {
-            $hashed = $auth->hashPassword($newPass);
-            $usuarios = Storage::read('usuarios');
-            foreach ($usuarios as &$u) {
-                if ($u['id'] == $_SESSION['user_id']) {
-                    $u['password'] = $hashed;
-                    break;
+    if (!validateCSRFToken($_POST[CSRF_TOKEN_NAME] ?? '')) {
+        $error = 'Token de seguridad inválido.';
+    } else {
+        if (isset($_POST['site_name'])) {
+            $campos = array('site_name', 'site_description', 'contact_email', 'contact_phone', 'contact_address');
+            $config = Storage::read('config');
+            foreach ($campos as $campo) {
+                if (isset($_POST[$campo])) {
+                    $config[$campo] = trim($_POST[$campo]);
                 }
             }
-            Storage::write('usuarios', $usuarios);
-            $pwMessage = 'Contraseña actualizada.';
+            Storage::write('config', $config);
+            $message = 'Configuración actualizada.';
+        }
+
+        if (isset($_POST['new_password'])) {
+            $newPass = $_POST['new_password'];
+            $confirmPass = $_POST['confirm_password'];
+            if (strlen($newPass) < 6) {
+                $pwError = 'Mínimo 6 caracteres.';
+            } elseif ($newPass !== $confirmPass) {
+                $pwError = 'Las contraseñas no coinciden.';
+            } else {
+                $hashed = $auth->hashPassword($newPass);
+                $usuarios = Storage::read('usuarios');
+                foreach ($usuarios as &$u) {
+                    if ($u['id'] == $_SESSION['user_id']) {
+                        $u['password'] = $hashed;
+                        break;
+                    }
+                }
+                Storage::write('usuarios', $usuarios);
+                $pwMessage = 'Contraseña actualizada.';
+            }
         }
     }
 }
 
 $config = Storage::read('config');
+$csrfToken = generateCSRFToken();
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -58,30 +62,21 @@ $config = Storage::read('config');
 </head>
 <body>
     <div class="admin-wrapper">
-        <aside class="sidebar">
-            <div class="sidebar-header"><h2>Admin</h2></div>
-            <nav class="sidebar-nav">
-                <ul>
-                    <li><a href="index.php">Dashboard</a></li>
-                    <li><a href="noticias.php">Noticias / Eventos</a></li>
-                    <li><a href="mensajes.php">Mensajes</a></li>
-                    <li><a href="categorias.php">Categorías</a></li>
-                    <li><a href="configuracion.php" class="active">Configuración</a></li>
-                </ul>
-            </nav>
-            <div class="sidebar-footer">
-                <p><?php echo htmlspecialchars($_SESSION['user_nombre']); ?></p>
-                <a href="logout.php" class="btn-logout">Cerrar sesión</a>
-            </div>
-        </aside>
+        <?php include 'includes/sidebar.php'; ?>
+
         <main class="main-content">
-            <header class="topbar"><h1>Configuración</h1></header>
+            <header class="topbar">
+                <button class="hamburger" onclick="toggleSidebar()" aria-label="Menu" style="display:none;">☰</button>
+                <h1>Configuración</h1>
+            </header>
             <div class="content">
                 <?php if (!empty($message)): ?><div class="alert alert-success"><?php echo $message; ?></div><?php endif; ?>
+                <?php if (!empty($error)): ?><div class="alert alert-error"><?php echo $error; ?></div><?php endif; ?>
 
                 <div class="form-card" style="margin-bottom:30px;">
                     <h2 style="margin-bottom:20px; color:#2c3e50;">Información del Sitio</h2>
                     <form method="POST">
+                        <?php echo csrfField(); ?>
                         <div class="form-row">
                             <div class="form-group">
                                 <label>Nombre del Sitio</label>
@@ -115,9 +110,13 @@ $config = Storage::read('config');
                 <div class="form-card">
                     <h2 style="margin-bottom:20px; color:#2c3e50;">Cambiar Contraseña</h2>
                     <?php if (!empty($pwMessage)): ?>
-                        <div class="alert <?php echo strpos($pwMessage, 'actualizada') !== false ? 'alert-success' : 'alert-error'; ?>"><?php echo $pwMessage; ?></div>
+                        <div class="alert alert-success"><?php echo $pwMessage; ?></div>
+                    <?php endif; ?>
+                    <?php if (!empty($pwError)): ?>
+                        <div class="alert alert-error"><?php echo $pwError; ?></div>
                     <?php endif; ?>
                     <form method="POST">
+                        <?php echo csrfField(); ?>
                         <div class="form-row">
                             <div class="form-group">
                                 <label>Nueva Contraseña</label>

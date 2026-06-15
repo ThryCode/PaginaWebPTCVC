@@ -23,16 +23,16 @@ $usuarios = array(
         'password' => password_hash('admin123', PASSWORD_BCRYPT),
         'rol' => 'admin',
         'activo' => 1,
-        'created_at' => date('Y-m-d H:i:s')
+        'created_at' => date('Y-m-d H:i')
     )
 );
 file_put_contents($dataDir . '/usuarios.json', json_encode($usuarios, JSON_PRETTY_PRINT));
 
 // Categorías
 $categorias = array(
-    array('id' => 1, 'nombre' => 'Noticias', 'descripcion' => 'Últimas novedades de la empresa', 'created_at' => date('Y-m-d H:i:s')),
-    array('id' => 2, 'nombre' => 'Eventos', 'descripcion' => 'Próximos eventos y actividades', 'created_at' => date('Y-m-d H:i:s')),
-    array('id' => 3, 'nombre' => 'Anuncios', 'descripcion' => 'Comunicados oficiales', 'created_at' => date('Y-m-d H:i:s'))
+    array('id' => 1, 'nombre' => 'Noticias', 'descripcion' => 'Últimas novedades de la empresa', 'created_at' => date('Y-m-d H:i')),
+    array('id' => 2, 'nombre' => 'Eventos', 'descripcion' => 'Próximos eventos y actividades', 'created_at' => date('Y-m-d H:i')),
+    array('id' => 3, 'nombre' => 'Anuncios', 'descripcion' => 'Comunicados oficiales', 'created_at' => date('Y-m-d H:i'))
 );
 file_put_contents($dataDir . '/categorias.json', json_encode($categorias, JSON_PRETTY_PRINT));
 
