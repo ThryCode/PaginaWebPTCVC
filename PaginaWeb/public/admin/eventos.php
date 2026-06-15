@@ -15,6 +15,13 @@ $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 $message = '';
 $error = '';
 
+if (isset($_GET['msg'])) {
+    $msg = $_GET['msg'];
+    if ($msg === 'creado') $message = 'Evento creado correctamente.';
+    elseif ($msg === 'editado') $message = 'Evento actualizado correctamente.';
+    elseif ($msg === 'eliminado') $message = 'Evento eliminado.';
+}
+
 $categorias = Storage::read('categorias');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -32,12 +39,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
                 }
                 Storage::delete('noticias', $deleteId);
-                $message = 'Evento eliminado.';
+                header('Location: eventos.php?msg=eliminado');
+                exit;
             }
-            $action = 'list';
         } else {
             $titulo = trim($_POST['titulo'] ?? '');
-            $categoria_id = intval($_POST['categoria_id'] ?? 0) ?: null;
+            $categoria_id = 2;
             $resumen = trim($_POST['resumen'] ?? '');
             $contenido = $_POST['contenido'] ?? '';
             $fecha_evento_date = trim($_POST['fecha_evento_date'] ?? '');
@@ -93,12 +100,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             }
                         }
                         Storage::update('noticias', $id, $data);
-                        $message = 'Evento actualizado correctamente.';
+                        header('Location: eventos.php?msg=editado');
+                        exit;
                     } else {
                         Storage::insert('noticias', $data);
-                        $message = 'Evento creado correctamente.';
+                        header('Location: eventos.php?msg=creado');
+                        exit;
                     }
-                    $action = 'list';
                 } catch (Exception $e) {
                     $error = 'Error al guardar.';
                 }
@@ -195,13 +203,11 @@ $csrfToken = generateCSRFToken();
                                     <input type="text" id="titulo" name="titulo" required value="<?php echo $evento ? htmlspecialchars($evento['titulo']) : ''; ?>">
                                 </div>
                                 <div class="form-group">
-                                    <label for="categoria_id">Categoría</label>
-                                    <select id="categoria_id" name="categoria_id">
-                                        <option value="">Sin categoría</option>
-                                        <?php foreach ($categorias as $cat): ?>
-                                            <option value="<?php echo $cat['id']; ?>" <?php echo ($evento && isset($evento['categoria_id']) && $evento['categoria_id'] == $cat['id']) ? 'selected' : ''; ?>><?php echo htmlspecialchars($cat['nombre']); ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
+                                    <label for="imagen">Imagen</label>
+                                    <input type="file" id="imagen" name="imagen" accept="image/*">
+                                    <?php if ($evento && isset($evento['imagen'])): ?>
+                                        <small>Actual: <?php echo basename($evento['imagen']); ?></small>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                             <div class="form-row">
@@ -214,21 +220,9 @@ $csrfToken = generateCSRFToken();
                                     <input type="time" id="fecha_evento_time" name="fecha_evento_time" required value="<?php echo ($evento && $evento['fecha_evento']) ? date('H:i', strtotime($evento['fecha_evento'])) : ''; ?>">
                                 </div>
                             </div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="ubicacion">Ubicación</label>
-                                    <input type="text" id="ubicacion" name="ubicacion" value="<?php echo $evento ? htmlspecialchars($evento['ubicacion']) : ''; ?>">
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="imagen">Imagen</label>
-                                    <input type="file" id="imagen" name="imagen" accept="image/*">
-                                    <?php if ($evento && isset($evento['imagen'])): ?>
-                                        <small>Actual: <?php echo basename($evento['imagen']); ?></small>
-                                    <?php endif; ?>
-                                </div>
-                                <div class="form-group"></div>
+                            <div class="form-group">
+                                <label for="ubicacion">Ubicación</label>
+                                <input type="text" id="ubicacion" name="ubicacion" value="<?php echo $evento ? htmlspecialchars($evento['ubicacion']) : ''; ?>">
                             </div>
                             <div class="form-group">
                                 <label for="resumen">Resumen</label>

@@ -15,19 +15,23 @@ $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 $message = '';
 $error = '';
 
+if (isset($_GET['msg'])) {
+    $msg = $_GET['msg'];
+    if ($msg === 'creado') $message = 'Publicación creada correctamente.';
+    elseif ($msg === 'editado') $message = 'Publicación actualizada correctamente.';
+    elseif ($msg === 'eliminado') $message = 'Publicación eliminada.';
+}
+
 $categorias = Storage::read('categorias');
 
 // POST handlers
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Validate CSRF
     if (!validateCSRFToken($_POST[CSRF_TOKEN_NAME] ?? '')) {
         $error = 'Token de seguridad inválido.';
     } else {
-        // Delete action
         if ($action === 'delete') {
             $deleteId = intval($_POST['id'] ?? 0);
             if ($deleteId > 0) {
-                // Delete image file if exists
                 $existing = Storage::findById('noticias', $deleteId);
                 if ($existing && isset($existing['imagen'])) {
                     $imgPath = '../' . $existing['imagen'];
@@ -36,14 +40,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
                 }
                 Storage::delete('noticias', $deleteId);
-                $message = 'Publicación eliminada.';
+                header('Location: noticias.php?msg=eliminado');
+                exit;
             }
-            $action = 'list';
         } else {
             // Create/Update
             $titulo = trim($_POST['titulo'] ?? '');
-            $tipo = $_POST['tipo'] ?? 'noticia';
-            $categoria_id = intval($_POST['categoria_id'] ?? 0) ?: null;
+            $tipo = 'noticia';
+            $categoria_id = 1;
             $resumen = trim($_POST['resumen'] ?? '');
             $contenido = $_POST['contenido'] ?? '';
             $fecha_evento_date = trim($_POST['fecha_evento_date'] ?? '');
@@ -100,12 +104,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             }
                         }
                         Storage::update('noticias', $id, $data);
-                        $message = 'Publicación actualizada correctamente.';
+                        header('Location: noticias.php?msg=editado');
+                        exit;
                     } else {
                         Storage::insert('noticias', $data);
-                        $message = 'Publicación creada correctamente.';
+                        header('Location: noticias.php?msg=creado');
+                        exit;
                     }
-                    $action = 'list';
                 } catch (Exception $e) {
                     $error = 'Error al guardar.';
                 }
@@ -125,7 +130,13 @@ if ($action === 'edit' && $id > 0) {
 
 $noticias = null;
 if ($action === 'list') {
-    $noticias = Storage::read('noticias');
+    $allNoticias = Storage::read('noticias');
+    $noticias = array();
+    foreach ($allNoticias as $n) {
+        if (isset($n['tipo']) && $n['tipo'] === 'noticia') {
+            $noticias[] = $n;
+        }
+    }
     usort($noticias, function($a, $b) {
         return strcmp($b['created_at'], $a['created_at']);
     });
@@ -204,24 +215,6 @@ $csrfToken = generateCSRFToken();
                                 <div class="form-group">
                                     <label for="titulo">Título *</label>
                                     <input type="text" id="titulo" name="titulo" required value="<?php echo $noticia ? htmlspecialchars($noticia['titulo']) : ''; ?>">
-                                </div>
-                                <div class="form-group">
-                                    <label for="tipo">Tipo *</label>
-                                    <select id="tipo" name="tipo" required>
-                                        <option value="noticia" <?php echo ($noticia && $noticia['tipo'] === 'noticia') ? 'selected' : ''; ?>>Noticia</option>
-                                        <option value="evento" <?php echo ($noticia && $noticia['tipo'] === 'evento') ? 'selected' : ''; ?>>Evento</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="categoria_id">Categoría</label>
-                                    <select id="categoria_id" name="categoria_id">
-                                        <option value="">Sin categoría</option>
-                                        <?php foreach ($categorias as $cat): ?>
-                                            <option value="<?php echo $cat['id']; ?>" <?php echo ($noticia && isset($noticia['categoria_id']) && $noticia['categoria_id'] == $cat['id']) ? 'selected' : ''; ?>><?php echo htmlspecialchars($cat['nombre']); ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="imagen">Imagen</label>

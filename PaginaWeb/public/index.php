@@ -325,7 +325,7 @@ include 'includes/header.php';
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-        loadNews('homeNewsContainer', { limit: 3 });
+        loadNews('homeNewsContainer', { limit: 3, tipo: 'noticia' });
         loadEvents('homeEventsContainer', { limit: 3 });
     });
     </script>
