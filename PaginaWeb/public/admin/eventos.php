@@ -166,7 +166,7 @@ $csrfToken = generateCSRFToken();
                                 <tbody>
                                 <?php foreach ($eventos as $e): ?>
                                 <tr>
-                                    <td><?php echo htmlspecialchars(substr($e['titulo'], 0, 50)); ?></td>
+                                    <td><?php echo htmlspecialchars(substr($e['titulo'] ?? 'Sin título', 0, 50)); ?></td>
                                     <td><?php echo $e['fecha_evento'] ? date('d/m/Y H:i', strtotime($e['fecha_evento'])) : '—'; ?></td>
                                     <td><?php echo htmlspecialchars($e['ubicacion'] ?: '—'); ?></td>
                                     <td><span class="tag tag-<?php echo $e['publicada'] ? 'publicado' : 'borrador'; ?>"><?php echo $e['publicada'] ? 'Publicado' : 'Borrador'; ?></span></td>

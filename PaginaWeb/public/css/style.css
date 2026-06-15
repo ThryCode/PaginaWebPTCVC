@@ -1835,6 +1835,61 @@ body {
 }
 
 /* ============================================
+   BOTON ACCESO ADMIN
+   ============================================ */
+.admin-access-btn {
+    position: fixed;
+    bottom: 24px;
+    left: 24px;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 44px;
+    height: 44px;
+    background: rgba(26, 58, 107, 0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 50%;
+    color: #fff;
+    text-decoration: none;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.admin-access-btn:hover {
+    background: #008674;
+    transform: scale(1.1);
+    box-shadow: 0 6px 25px rgba(0, 134, 116, 0.4);
+    width: auto;
+    width: auto;
+    border-radius: 22px;
+    padding: 0 16px 0 12px;
+}
+
+.admin-access-btn svg {
+    flex-shrink: 0;
+}
+
+.admin-access-tooltip {
+    font-size: 0.8rem;
+    font-weight: 700;
+    white-space: nowrap;
+    max-width: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.admin-access-btn:hover .admin-access-tooltip {
+    max-width: 60px;
+    opacity: 1;
+    margin-left: 2px;
+}
+
+/* ============================================
    UTILIDADES
    ============================================ */
 .text-center {

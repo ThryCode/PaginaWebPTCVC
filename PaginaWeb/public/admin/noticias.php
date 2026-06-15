@@ -167,7 +167,7 @@ $csrfToken = generateCSRFToken();
                                 <tbody>
                                 <?php foreach ($noticias as $n): ?>
                                 <tr>
-                                    <td><?php echo htmlspecialchars(substr($n['titulo'], 0, 50)); ?></td>
+                                    <td><?php echo htmlspecialchars(substr($n['titulo'] ?? 'Sin título', 0, 50)); ?></td>
                                     <td><span class="tag tag-<?php echo $n['tipo']; ?>"><?php echo ucfirst($n['tipo']); ?></span></td>
                                     <td><?php
                                         $catName = '—';
