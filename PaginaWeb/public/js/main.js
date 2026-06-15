@@ -257,6 +257,10 @@ function handleSubmit(event) {
                         messageDiv.className = 'form-message success';
                         messageDiv.textContent = response.message || 'Mensaje enviado correctamente. Nos pondremos en contacto pronto.';
                         form.reset();
+                        setTimeout(function() {
+                            messageDiv.style.display = 'none';
+                            messageDiv.textContent = '';
+                        }, 20000);
                     } else {
                         messageDiv.className = 'form-message error';
                         messageDiv.textContent = response.message || 'Error al enviar el mensaje.';
