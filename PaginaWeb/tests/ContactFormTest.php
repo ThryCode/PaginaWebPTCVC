@@ -57,9 +57,8 @@ class ContactFormTest extends TestCase
         if (!empty($telefono) && !preg_match('/^[\d\s\-\+\(\)]{7,15}$/', $telefono)) {
             $errors[] = 'El teléfono no es válido.';
         }
-        $asuntosValidos = array('informacion', 'cotizacion', 'soporte', 'otro');
-        if (empty($asunto) || !in_array($asunto, $asuntosValidos)) {
-            $errors[] = 'El asunto seleccionado no es válido.';
+        if (empty($asunto)) {
+            $errors[] = 'El asunto es obligatorio.';
         }
         if (empty($mensaje) || strlen($mensaje) < 10) {
             $errors[] = 'El mensaje debe tener al menos 10 caracteres.';
@@ -93,15 +92,9 @@ class ContactFormTest extends TestCase
         $this->assertNotEmpty($errors);
     }
 
-    public function testAsuntoInvalido()
-    {
-        $errors = $this->validateContact(['nombre' => 'Juan', 'correo' => 'a@b.cu', 'asunto' => 'otra-cosa', 'mensaje' => 'Mensaje largo de prueba']);
-        $this->assertNotEmpty($errors);
-    }
-
     public function testAsuntoValido()
     {
-        $errors = $this->validateContact(['nombre' => 'Juan', 'correo' => 'a@b.cu', 'asunto' => 'soporte', 'mensaje' => 'Mensaje largo de prueba']);
+        $errors = $this->validateContact(['nombre' => 'Juan', 'correo' => 'a@b.cu', 'asunto' => 'Cualquier texto válido', 'mensaje' => 'Mensaje largo de prueba']);
         $this->assertEmpty($errors);
     }
 

@@ -80,13 +80,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="asunto">Asunto</label>
-                                <select id="asunto" name="asunto" required>
-                                    <option value="">Seleccione un asunto</option>
-                                    <option value="informacion">Información</option>
-                                    <option value="cotizacion">Cotización</option>
-                                    <option value="soporte">Soporte</option>
-                                    <option value="otro">Otro</option>
-                                </select>
+                                <input type="text" id="asunto" name="asunto" required placeholder="Asunto">
                             </div>
                             <div class="form-group">
                                 <label for="mensaje">Mensaje</label>

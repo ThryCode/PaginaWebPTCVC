@@ -55,9 +55,8 @@ if (empty($correo) || !filter_var($correo, FILTER_VALIDATE_EMAIL)) {
 if (!empty($telefono) && !preg_match('/^[\d\s\-\+\(\)]{7,15}$/', $telefono)) {
     $errors[] = 'El teléfono no es válido.';
 }
-$asuntosValidos = array('informacion', 'cotizacion', 'soporte', 'otro');
-if (empty($asunto) || !in_array($asunto, $asuntosValidos)) {
-    $errors[] = 'El asunto seleccionado no es válido.';
+if (empty($asunto)) {
+    $errors[] = 'El asunto es obligatorio.';
 }
 if (empty($mensaje) || strlen($mensaje) < 10) {
     $errors[] = 'El mensaje debe tener al menos 10 caracteres.';
