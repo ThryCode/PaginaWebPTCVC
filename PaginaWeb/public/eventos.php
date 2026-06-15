@@ -13,6 +13,7 @@
                     <div class="events-subtitle">Calendario de Eventos</div>
                     <h2>Proximos Eventos</h2>
                 </div>
+                <div id="calendarContainer" class="calendar-wrapper"></div>
                 <div class="search-bar" style="margin-bottom: 30px;">
                     <input type="text" id="eventSearchInput" placeholder="Buscar eventos..." data-container="eventsContainer">
                     <button type="button" aria-label="Buscar">
@@ -36,6 +37,7 @@
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {
+        renderCalendar('calendarContainer');
         loadEvents('eventsContainer', { limit: 10 });
     });
     </script>

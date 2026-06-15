@@ -535,8 +535,157 @@ function loadEvents(containerId, options) {
 }
 
 // ============================================
-// CARGAR GALERIA DESDE LA API + LIGHTBOX
+// CALENDARIO DE EVENTOS
 // ============================================
+var calendarState = {};
+
+function renderCalendar(containerId) {
+    var container = document.getElementById(containerId);
+    if (!container) return;
+
+    var now = new Date();
+    calendarState.year = now.getFullYear();
+    calendarState.month = now.getMonth() + 1;
+    calendarState.containerId = containerId;
+
+    loadCalendarMonth();
+}
+
+function loadCalendarMonth() {
+    var container = document.getElementById(calendarState.containerId);
+    if (!container) return;
+
+    var year = calendarState.year;
+    var month = calendarState.month;
+
+    var monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+        'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+    var dayNames = ['Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab', 'Dom'];
+
+    var firstDay = new Date(year, month - 1, 1).getDay();
+    var daysInMonth = new Date(year, month, 0).getDate();
+    var startDay = (firstDay === 0) ? 6 : firstDay - 1;
+
+    var html = '<div class="calendar">';
+    html += '<div class="calendar-header">';
+    html += '<button class="calendar-nav" onclick="calendarPrev()" aria-label="Mes anterior">&#9664;</button>';
+    html += '<span class="calendar-title">' + monthNames[month - 1] + ' ' + year + '</span>';
+    html += '<button class="calendar-nav" onclick="calendarNext()" aria-label="Mes siguiente">&#9654;</button>';
+    html += '</div>';
+
+    html += '<div class="calendar-grid">';
+    for (var d = 0; d < 7; d++) {
+        html += '<div class="calendar-day-name">' + dayNames[d] + '</div>';
+    }
+
+    for (var i = 0; i < startDay; i++) {
+        html += '<div class="calendar-day empty"></div>';
+    }
+
+    for (var day = 1; day <= daysInMonth; day++) {
+        html += '<div class="calendar-day" data-day="' + day + '">' + day + '<span class="calendar-dot"></span></div>';
+    }
+
+    html += '</div>';
+    html += '<div id="calendarEventDetail" class="calendar-event-detail"></div>';
+    html += '</div>';
+
+    container.innerHTML = html;
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'api/events.php?calendar=1&year=' + year + '&month=' + month, true);
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            try {
+                var response = JSON.parse(xhr.responseText);
+                if (response.success) {
+                    calendarState.dates = response.dates;
+                    calendarState.currentYear = year;
+                    calendarState.currentMonth = month;
+                    highlightCalendarDays();
+                }
+            } catch (e) {}
+        }
+    };
+    xhr.send();
+}
+
+function highlightCalendarDays() {
+    if (calendarState.currentYear !== calendarState.year || calendarState.currentMonth !== calendarState.month) return;
+
+    var dates = calendarState.dates;
+    var days = document.querySelectorAll('.calendar-day[data-day]');
+    for (var i = 0; i < days.length; i++) {
+        var dayNum = parseInt(days[i].getAttribute('data-day'), 10);
+        if (dates && dates[dayNum]) {
+            days[i].classList.add('has-event');
+            days[i].onclick = (function(d) {
+                return function() { showCalendarEvents(d); };
+            })(dayNum);
+        }
+    }
+
+    var today = new Date();
+    if (today.getFullYear() === calendarState.year && (today.getMonth() + 1) === calendarState.month) {
+        var todayEl = document.querySelector('.calendar-day[data-day="' + today.getDate() + '"]');
+        if (todayEl) todayEl.classList.add('today');
+    }
+}
+
+function showCalendarEvents(day) {
+    var detail = document.getElementById('calendarEventDetail');
+    if (!detail) return;
+
+    var events = calendarState.dates[day];
+    if (!events || events.length === 0) {
+        detail.innerHTML = '';
+        detail.style.display = 'none';
+        return;
+    }
+
+    var html = '<div class="calendar-event-list">';
+    html += '<h4>Dia ' + day + '</h4>';
+    for (var i = 0; i < events.length; i++) {
+        var ev = events[i];
+        var time = ev.fecha_evento.length > 10 ? ev.fecha_evento.substring(11, 16) : '';
+        html += '<div class="calendar-event-item">';
+        html += '<span class="calendar-event-time">' + time + '</span>';
+        html += '<span class="calendar-event-title">' + escapeHtml(ev.titulo) + '</span>';
+        if (ev.ubicacion) {
+            html += '<span class="calendar-event-location">&#128205; ' + escapeHtml(ev.ubicacion) + '</span>';
+        }
+        html += '</div>';
+    }
+    html += '</div>';
+
+    detail.innerHTML = html;
+    detail.style.display = 'block';
+
+    var allDays = document.querySelectorAll('.calendar-day.selected');
+    for (var j = 0; j < allDays.length; j++) {
+        allDays[j].classList.remove('selected');
+    }
+    var selected = document.querySelector('.calendar-day[data-day="' + day + '"]');
+    if (selected) selected.classList.add('selected');
+}
+
+function calendarPrev() {
+    calendarState.month--;
+    if (calendarState.month < 1) {
+        calendarState.month = 12;
+        calendarState.year--;
+    }
+    loadCalendarMonth();
+}
+
+function calendarNext() {
+    calendarState.month++;
+    if (calendarState.month > 12) {
+        calendarState.month = 1;
+        calendarState.year++;
+    }
+    loadCalendarMonth();
+}
 function loadGallery(containerId, options) {
     var container = document.getElementById(containerId);
     if (!container) return;

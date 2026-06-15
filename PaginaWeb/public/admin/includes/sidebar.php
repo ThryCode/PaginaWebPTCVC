@@ -32,10 +32,6 @@ $isAdmin = isset($_SESSION['user_rol']) && $_SESSION['user_rol'] === 'admin';
                 <svg viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
                 Mensajes<?php if ($mensajesNoLeidos > 0): ?><span class="badge"><?php echo $mensajesNoLeidos; ?></span><?php endif; ?>
             </a></li>
-            <li><a href="categorias.php" class="<?php echo $currentPage === 'categorias.php' ? 'active' : ''; ?>">
-                <svg viewBox="0 0 24 24"><path d="M12 2H2v10h10V2Z"/><path d="M12 12H2v10h10V12Z"/><path d="M22 2h-6v6h6V2Z"/><path d="M22 12h-6v6h6v-6Z"/></svg>
-                Categorias
-            </a></li>
             <li><a href="contadores.php" class="<?php echo $currentPage === 'contadores.php' ? 'active' : ''; ?>">
                 <svg viewBox="0 0 24 24"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
                 Contadores

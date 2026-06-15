@@ -95,7 +95,7 @@ include 'includes/header.php';
             <div class="solutions-content">
                 <h3 class="solutions-title animate-fade-down">Soluciones Integrales</h3>
                 <div class="solutions-grid">
-                    <div class="solution-card-wrapper" style="transition-delay:0ms">
+                    <div class="solution-card-wrapper animate-fade-up">
                         <div class="solution-card-inner">
                             <div class="solution-icon-wrap">
                                 <svg viewBox="0 0 64 64" class="solution-svg">
@@ -108,7 +108,7 @@ include 'includes/header.php';
                             <div class="solution-bar bar-amber"></div>
                         </div>
                     </div>
-                    <div class="solution-card-wrapper" style="transition-delay:150ms">
+                    <div class="solution-card-wrapper animate-fade-up delay-1">
                         <div class="solution-card-inner">
                             <div class="solution-icon-wrap">
                                 <svg viewBox="0 0 64 64" class="solution-svg">
@@ -121,7 +121,7 @@ include 'includes/header.php';
                             <div class="solution-bar bar-emerald"></div>
                         </div>
                     </div>
-                    <div class="solution-card-wrapper" style="transition-delay:300ms">
+                    <div class="solution-card-wrapper animate-fade-up delay-2">
                         <div class="solution-card-inner">
                             <div class="solution-icon-wrap">
                                 <svg viewBox="0 0 64 64" class="solution-svg">
@@ -137,7 +137,7 @@ include 'includes/header.php';
                             <div class="solution-bar bar-slate"></div>
                         </div>
                     </div>
-                    <div class="solution-card-wrapper" style="transition-delay:450ms">
+                    <div class="solution-card-wrapper animate-fade-up delay-3">
                         <div class="solution-card-inner">
                             <div class="solution-icon-wrap">
                                 <svg viewBox="0 0 64 64" class="solution-svg">
@@ -224,7 +224,13 @@ include 'includes/header.php';
         <?php if (!empty($counters)): ?>
         <section class="counters-section">
             <div class="container">
-                <div class="counters-grid">
+                <?php
+                $total = count($counters);
+                $cols = $total <= 4 ? $total : 4;
+                $lastRow = $total % 4;
+                $lastClass = ($total > 4 && $lastRow > 0 && $lastRow < 4) ? ' last-' . $lastRow : '';
+                ?>
+                <div class="counters-grid<?php echo $lastClass; ?>" style="--cols:<?php echo $cols; ?>">
                     <?php foreach ($counters as $idx => $c): ?>
                     <div class="counter-item animate-scale-in<?php echo $idx > 0 ? ' delay-' . min($idx, 3) : ''; ?>">
                         <div class="counter-number" data-target="<?php echo intval($c['numero']); ?>">0</div>
