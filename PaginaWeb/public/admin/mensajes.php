@@ -63,6 +63,7 @@ if ($action === 'list') {
 }
 
 $noLeidos = Storage::count('mensajes', array('leido' => 0));
+$mensajesNoLeidos = $noLeidos;
 $csrfToken = generateCSRFToken();
 ?>
 <!DOCTYPE html>
@@ -102,8 +103,8 @@ $csrfToken = generateCSRFToken();
                                 <tbody>
                                 <?php foreach ($mensajes as $m): ?>
                                 <tr style="<?php echo !$m['leido'] ? 'font-weight:bold; background:#f0f7ff;' : ''; ?>">
-                                    <td><?php echo htmlspecialchars($m['nombre']); ?></td>
-                                    <td><?php echo htmlspecialchars($m['email']); ?></td>
+                                    <td><?php echo htmlspecialchars($m['nombre'] . ( !empty($m['apellidos']) ? ' ' . $m['apellidos'] : '' )); ?></td>
+                                    <td><?php echo htmlspecialchars($m['correo']); ?></td>
                                     <td><?php echo htmlspecialchars($m['asunto']); ?></td>
                                     <td><span class="tag tag-<?php echo $m['leido'] ? 'leido' : 'noleido'; ?>"><?php echo $m['leido'] ? 'Leído' : 'Nuevo'; ?></span></td>
                                     <td><?php echo date('d/m/Y H:i', strtotime($m['created_at'])); ?></td>
@@ -126,8 +127,8 @@ $csrfToken = generateCSRFToken();
                     <div class="form-card">
                         <h2 style="margin-bottom:20px; color:#2c3e50;"><?php echo htmlspecialchars($msg['asunto']); ?></h2>
                         <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px; margin-bottom:20px;">
-                            <div><strong>Nombre:</strong> <?php echo htmlspecialchars($msg['nombre']); ?></div>
-                            <div><strong>Email:</strong> <?php echo htmlspecialchars($msg['email']); ?></div>
+                            <div><strong>Nombre:</strong> <?php echo htmlspecialchars($msg['nombre'] . ( !empty($msg['apellidos']) ? ' ' . $msg['apellidos'] : '' )); ?></div>
+                            <div><strong>Email:</strong> <?php echo htmlspecialchars($msg['correo']); ?></div>
                             <div><strong>Teléfono:</strong> <?php echo htmlspecialchars($msg['telefono']); ?></div>
                             <div><strong>Fecha:</strong> <?php echo date('d/m/Y H:i', strtotime($msg['created_at'])); ?></div>
                         </div>
@@ -135,7 +136,7 @@ $csrfToken = generateCSRFToken();
                             <?php echo nl2br(htmlspecialchars($msg['mensaje'])); ?>
                         </div>
                         <div class="form-actions">
-                            <a href="mailto:<?php echo htmlspecialchars($msg['email']); ?>?subject=Re: <?php echo urlencode($msg['asunto']); ?>" class="btn btn-primary">Responder</a>
+                            <a href="mailto:<?php echo htmlspecialchars($msg['correo']); ?>?subject=Re: <?php echo urlencode($msg['asunto']); ?>" class="btn btn-primary">Responder</a>
                             <a href="?action=list" class="btn btn-secondary">Volver</a>
                         </div>
                     </div>
