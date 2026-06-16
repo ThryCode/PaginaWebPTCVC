@@ -12,7 +12,7 @@
     --secondary-6: #646464;
     --bg-light: #E6F4FA;
     --danger: #C0392B;
-    --whatsapp: #00A0E1;
+    --whatsapp: #25D366;
 }
 
 /* ============================================
@@ -1884,7 +1884,7 @@ body {
     justify-content: center;
     width: 60px;
     height: 60px;
-    background-color: #00A0E1;
+    background-color: #25D366;
     border-radius: 50%;
     box-shadow: 0 4px 20px rgba(37, 211, 102, 0.5);
     transition: all 0.3s;
