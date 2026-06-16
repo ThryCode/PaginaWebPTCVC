@@ -539,6 +539,97 @@ function loadEvents(containerId, options) {
 }
 
 // ============================================
+// CARGAR OPINIONES DESDE LA API
+// ============================================
+function loadOpiniones(containerId) {
+    var container = document.getElementById(containerId);
+    if (!container) return;
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'api/opiniones.php', true);
+
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            try {
+                var response = JSON.parse(xhr.responseText);
+                if (response.success && response.data.length > 0) {
+                    var html = '';
+                    response.data.forEach(function(item, index) {
+                        html += '<div class="opinion-card' + (index === 0 ? ' active' : '') + '">';
+                        html += '<p class="opinion-text">"' + escapeHtml(item.texto) + '"</p>';
+                        html += '<div class="opinion-author">';
+                        if (item.imagen) {
+                            html += '<img src="' + item.imagen + '" alt="' + escapeHtml(item.nombre) + '" class="opinion-img">';
+                        } else {
+                            html += '<div class="opinion-img opinion-img-placeholder">' + escapeHtml(item.nombre.charAt(0)) + '</div>';
+                        }
+                        html += '<div class="opinion-info">';
+                        html += '<strong>' + escapeHtml(item.nombre) + '</strong>';
+                        html += '<span>' + escapeHtml(item.cargo) + '</span>';
+                        html += '</div>';
+                        html += '</div>';
+                        html += '</div>';
+                    });
+                    container.innerHTML = html;
+                    initOpinionesCarousel();
+                } else {
+                    container.closest('.opiniones-section').style.display = 'none';
+                }
+            } catch (e) {
+                container.innerHTML = '';
+            }
+        }
+    };
+
+    xhr.onerror = function() {
+        container.innerHTML = '';
+    };
+
+    xhr.send();
+}
+
+function initOpinionesCarousel() {
+    var cards = document.querySelectorAll('#homeOpinionesContainer .opinion-card');
+    var prevBtn = document.getElementById('opinionesPrev');
+    var nextBtn = document.getElementById('opinionesNext');
+    if (cards.length <= 1) {
+        if (prevBtn) prevBtn.style.display = 'none';
+        if (nextBtn) nextBtn.style.display = 'none';
+        return;
+    }
+    var current = 0;
+    var autoPlay;
+    function showOpinion(index) {
+        cards[current].classList.remove('active');
+        cards[current].classList.add('fade-out');
+        setTimeout(function() {
+            cards[current].classList.remove('fade-out');
+            current = index;
+            cards[current].classList.add('active');
+        }, 600);
+        resetAutoPlay();
+    }
+    function nextOpinion() {
+        showOpinion(current === cards.length - 1 ? 0 : current + 1);
+    }
+    function resetAutoPlay() {
+        clearInterval(autoPlay);
+        autoPlay = setInterval(nextOpinion, 5000);
+    }
+    if (prevBtn) {
+        prevBtn.onclick = function() {
+            showOpinion(current === 0 ? cards.length - 1 : current - 1);
+        };
+    }
+    if (nextBtn) {
+        nextBtn.onclick = function() {
+            showOpinion(current === cards.length - 1 ? 0 : current + 1);
+        };
+    }
+    resetAutoPlay();
+}
+
+// ============================================
 // CALENDARIO DE EVENTOS
 // ============================================
 var calendarState = {};

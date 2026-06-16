@@ -226,6 +226,24 @@ include 'includes/header.php';
             </div>
         </section>
 
+        <section class="opiniones-section">
+            <div class="container">
+                <div class="opiniones-header animate-fade-down">
+                    <p class="opiniones-subtitle">Lo que dicen de nosotros</p>
+                    <h2>Opiniones</h2>
+                </div>
+                <div class="opiniones-wrapper">
+                    <button class="opiniones-arrow opiniones-prev" id="opinionesPrev">&#10094;</button>
+                    <div class="opiniones-carousel">
+                        <div id="homeOpinionesContainer" class="opiniones-track">
+                            <p class="empty">Cargando opiniones...</p>
+                        </div>
+                    </div>
+                    <button class="opiniones-arrow opiniones-next" id="opinionesNext">&#10095;</button>
+                </div>
+            </div>
+        </section>
+
         <section class="news-section" id="noticias">
             <div class="container">
                 <div class="news-header animate-fade-down">
@@ -369,5 +387,6 @@ include 'includes/header.php';
     document.addEventListener('DOMContentLoaded', function() {
         loadNews('homeNewsContainer', { limit: 3, tipo: 'noticia' });
         loadEvents('homeEventsContainer', { limit: 3 });
+        loadOpiniones('homeOpinionesContainer');
     });
     </script>
