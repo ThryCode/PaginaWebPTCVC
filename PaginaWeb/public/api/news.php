@@ -33,9 +33,6 @@ foreach ($items as $item) {
         }
     }
     $results[] = $item;
-    if (count($results) >= $limit) {
-        break;
-    }
 }
 
 usort($results, function($a, $b) {
@@ -43,6 +40,8 @@ usort($results, function($a, $b) {
     $db = isset($b['created_at']) ? $b['created_at'] : '';
     return strcmp($db, $da);
 });
+
+$results = array_slice($results, 0, $limit);
 
 echo json_encode(array(
     'success' => true,
