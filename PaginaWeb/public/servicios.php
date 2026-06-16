@@ -50,6 +50,29 @@
             </div>
         </section>
 
+        <section class="services-preview" style="background: #f9fafb;">
+            <div class="container">
+                <div class="section-title">
+                    <h3>Servicios Especializados</h3>
+                    <p>Conoce nuestras &aacute;reas de servicio especializado.</p>
+                </div>
+                <div class="grid">
+                    <div class="card animate-on-scroll">
+                        <div class="card-icon">&#129309;</div>
+                        <h4>Producciones Cooperadas</h4>
+                        <p>Alianzas estrat&eacute;gicas entre empresas para compartir recursos, acceder a nuevos mercados y fomentar la innovaci&oacute;n.</p>
+                        <a href="producciones-cooperadas.php" class="btn btn-outline-green" style="margin-top: 15px;">Conocer m&aacute;s</a>
+                    </div>
+                    <div class="card animate-on-scroll delay-1">
+                        <div class="card-icon">&#128200;</div>
+                        <h4>Incubaci&oacute;n de Empresas</h4>
+                        <p>Apoyo integral a emprendedores y startups en sus etapas iniciales con capacitaci&oacute;n, mentor&iacute;a y financiamiento.</p>
+                        <a href="incubacion-empresas.php" class="btn btn-outline-green" style="margin-top: 15px;">Conocer m&aacute;s</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section class="about-preview" style="background-color: #f8f9fa;">
             <div class="container" style="text-align: center; grid-template-columns: 1fr;">
                 <h3 style="font-size: 2.2rem; font-weight: 900; margin-bottom: 20px; color: #1a3a6b;">Necesitas una cotización?</h3>

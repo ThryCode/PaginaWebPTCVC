@@ -35,7 +35,14 @@ require_once __DIR__ . '/../api/config.php';
                             <li><a href="galeria.php">Galería</a></li>
                         </ul>
                     </li>
-                    <li><a href="servicios.php" class="<?php echo $currentPage === 'servicios.php' ? 'active' : ''; ?>">Servicios</a></li>
+                    <li class="dropdown">
+                        <a href="servicios.php">Servicios</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="servicios.php">Todos los Servicios</a></li>
+                            <li><a href="producciones-cooperadas.php">Producciones Cooperadas</a></li>
+                            <li><a href="incubacion-empresas.php">Incubaci&oacute;n de Empresas</a></li>
+                        </ul>
+                    </li>
                     <li><a href="contacto.php" class="<?php echo $currentPage === 'contacto.php' ? 'active' : ''; ?>">Contacto</a></li>
                 </ul>
             </nav>
