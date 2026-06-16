@@ -12,7 +12,7 @@
     --secondary-6: #646464;
     --bg-light: #E6F4FA;
     --danger: #C0392B;
-    --whatsapp: #25D366;
+    --whatsapp: #00A0E1;
 }
 
 /* ============================================
@@ -1193,8 +1193,8 @@ body {
 }
 
 .ventaja-icon.bg-purple {
-    background: #BFC250;
-    color: #626514;
+    background: #66C5EE;
+    color: #004966;
 }
 
 .ventaja-icon.bg-orange {
@@ -1562,8 +1562,8 @@ body {
 }
 
 .news-tag-noticia {
-    background: #BFC250;
-    color: #626514;
+    background: #E6F4FA;
+    color: #00A0E1;
 }
 
 .news-tag-evento {
@@ -1727,9 +1727,9 @@ body {
 }
 
 .form-message.success {
-    background-color: #BFC250;
-    color: #626514;
-    border: 1px solid #BFC250;
+    background-color: #E6F4FA;
+    color: #004966;
+    border: 1px solid #E6F4FA;
     display: block;
 }
 
@@ -1884,7 +1884,7 @@ body {
     justify-content: center;
     width: 60px;
     height: 60px;
-    background-color: #25D366;
+    background-color: #00A0E1;
     border-radius: 50%;
     box-shadow: 0 4px 20px rgba(37, 211, 102, 0.5);
     transition: all 0.3s;
@@ -3073,7 +3073,7 @@ body {
     content: '+';
     font-size: 1.4rem;
     font-weight: 300;
-    color: #799922;
+    color: #00A0E1;
     transition: transform 0.3s ease;
     flex-shrink: 0;
     margin-left: 16px;
@@ -3084,7 +3084,7 @@ body {
 }
 
 .faq-question:hover {
-    color: #799922;
+    color: #00A0E1;
 }
 
 .faq-answer {
@@ -3391,12 +3391,12 @@ body {
 .calendar-day.has-event {
     cursor: pointer;
     background: #E6F4FA;
-    color: #626514;
+    color: #004966;
     font-weight: 600;
 }
 
 .calendar-day.has-event:hover {
-    background: #BFC250;
+    background: #00A0E1;
     transform: scale(1.1);
 }
 
@@ -3409,7 +3409,7 @@ body {
     display: none;
     width: 6px;
     height: 6px;
-    background: #799922;
+    background: #00A0E1;
     border-radius: 50%;
     position: absolute;
     bottom: 4px;

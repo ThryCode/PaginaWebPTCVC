@@ -136,10 +136,10 @@ body { font-family: 'Lato', 'Segoe UI', Tahoma, sans-serif; background: #E6F4FA;
    ============================================ */
 .tag { padding: 4px 12px; border-radius: 20px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; }
 .tag-noticia { background: #E6F4FA; color: #00A0E1; }
-.tag-evento { background: #BFC250; color: #626514; }
-.tag-publicado { background: #BFC250; color: #799922; }
-.tag-borrador { background: #BFC250; color: #626514; }
-.tag-leido { background: #BFC250; color: #799922; }
+.tag-evento { background: #E6F4FA; color: #00A0E1; }
+.tag-publicado { background: #E6F4FA; color: #004966; }
+.tag-borrador { background: #E6F4FA; color: #004966; }
+.tag-leido { background: #E6F4FA; color: #004966; }
 .tag-noleido { background: rgba(192, 57, 43, 0.08); color: #C0392B; }
 
 /* ============================================
@@ -148,8 +148,8 @@ body { font-family: 'Lato', 'Segoe UI', Tahoma, sans-serif; background: #E6F4FA;
 .btn { padding: 8px 18px; border-radius: 8px; text-decoration: none; font-size: 0.85rem; font-weight: 600; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s; }
 .btn-primary { background: #00A0E1; color: #fff; }
 .btn-primary:hover { background: #004966; transform: translateY(-1px); }
-.btn-success { background: #799922; color: #fff; }
-.btn-success:hover { background: #626514; }
+.btn-success { background: #00A0E1; color: #fff; }
+.btn-success:hover { background: #004966; }
 .btn-danger { background: #C0392B; color: #fff; }
 .btn-danger:hover { background: #C0392B; }
 .btn-secondary { background: #9B9B9B; color: #fff; }
@@ -177,7 +177,7 @@ body { font-family: 'Lato', 'Segoe UI', Tahoma, sans-serif; background: #E6F4FA;
    ALERTS
    ============================================ */
 .alert { padding: 14px 18px; border-radius: 10px; margin-bottom: 20px; font-size: 0.9rem; }
-.alert-success { background: #BFC250; color: #626514; border: 1px solid #BFC250; }
+.alert-success { background: #E6F4FA; color: #004966; border: 1px solid #E6F4FA; }
 .alert-error { background: rgba(192, 57, 43, 0.08); color: #C0392B; border: 1px solid rgba(192, 57, 43, 0.3); }
 
 /* ============================================
