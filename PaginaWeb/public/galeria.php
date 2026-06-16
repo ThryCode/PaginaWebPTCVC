@@ -9,14 +9,14 @@
 
         <section class="intro-text-section">
             <div class="container">
-                <p>Revive los mejores momentos del Parque Científico Tecnológico de Villa Clara a través de nuestra galeria de imágenes. Aquí encontrarás fotos de eventos, instalaciones, proyectos y actividades realizadas en el parque.</p>
+                <p>Revive los mejores momentos del Parque Científico Tecnológico de Villa Clara a través de nuestra galería de imágenes. Aquí encontrarás fotos de eventos, instalaciones, proyectos y actividades realizadas en el parque.</p>
             </div>
         </section>
 
         <section class="gallery-section">
             <div class="container">
                 <div id="galleryContainer" class="gallery-grid">
-                    <p class="empty">Cargando galeria...</p>
+                    <p class="empty">Cargando galería...</p>
                 </div>
             </div>
         </section>

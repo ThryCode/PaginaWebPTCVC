@@ -85,7 +85,7 @@ include 'includes/header.php';
                 <div class="sectors-text animate-fade-right">
                     <h2>Un modelo de colaboración para un futuro sostenible</h2>
                     <p>El Parque Científico Tecnológico funciona como un espacio de articulación donde confluyen el talento, el conocimiento, la producción y los servicios y la gestión gubernamental.</p>
-                    <p>El sector del conocimiento aporta investigación, formacion y capital humano, que en vínculo con las demandas y recursos empresariales y de la sociedad, se alinean e integran con las estrategias de desarrollo gubernamentales.</p>
+                    <p>El sector del conocimiento aporta investigación, formación y capital humano, que en vínculo con las demandas y recursos empresariales y de la sociedad, se alinean e integran con las estrategias de desarrollo gubernamentales.</p>
                 </div>
             </div>
         </section>
@@ -199,7 +199,7 @@ include 'includes/header.php';
                             <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
                         </div>
                         <h3>Incentivos fiscales sostenidos</h3>
-                        <p>Las empresas incubadas disfrutan de una exención total de tributos sobre utilidades durante los primeros cinco anos de funcionamiento.</p>
+                        <p>Las empresas incubadas disfrutan de una exención total de tributos sobre utilidades durante los primeros cinco años de funcionamiento.</p>
                     </div>
                     <div class="ventaja-card animate-fade-right delay-1">
                         <div class="ventaja-icon bg-emerald">
@@ -213,7 +213,7 @@ include 'includes/header.php';
                             <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 0 1-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 0 1 4.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0 1 12 15a9.065 9.065 0 0 0-6.23.693L5 14.5m14.8.8 1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0 1 12 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5"/></svg>
                         </div>
                         <h3>Ecosistema de ciencia e innovación</h3>
-                        <p>El Parque ofrece un entorno especializado para la investigación, el desarrollo tecnologico y la innovación.</p>
+                        <p>El Parque ofrece un entorno especializado para la investigación, el desarrollo tecnológico y la innovación.</p>
                     </div>
                     <div class="ventaja-card animate-fade-right delay-3">
                         <div class="ventaja-icon bg-orange">

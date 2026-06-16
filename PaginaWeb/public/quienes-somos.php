@@ -12,7 +12,7 @@
                 <div class="about-content">
                     <h3>Nuestra Historia</h3>
                     <p>El Parque Científico Tecnológico de Villa Clara fue fundado con la visión de crear un centro de innovación que impulsara el desarrollo tecnológico y científico de la región.</p>
-                    <p>A lo largo de los anos, hemos consolidado un ecosistema de innovación que conecta a empresas, universidades y centros de investigación para fomentar el emprendimiento basado en ciencia.</p>
+                    <p>A lo largo de los años, hemos consolidado un ecosistema de innovación que conecta a empresas, universidades y centros de investigación para fomentar el emprendimiento basado en ciencia.</p>
                 </div>
                 <div class="about-image">
                     <div class="placeholder-img">Nuestra Historia</div>
