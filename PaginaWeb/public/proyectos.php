@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 require_once 'api/storage.php';
 $proyectos = Storage::read('proyectos');
 $proyectos = array_filter($proyectos, function($p) { return !empty($p['publicada']); });
@@ -12,21 +12,21 @@ include 'includes/header.php'; ?>
         <section class="page-header">
             <div class="container">
                 <h2>Proyectos</h2>
-                <p>Proyectos de innovación y desarrollo</p>
+                <p>Proyectos de innovaciÃ³n y desarrollo</p>
             </div>
         </section>
 
         <section class="intro-text-section">
             <div class="container">
-                <p>En el Parque Científico Tecnológico de Villa Clara desarrollamos proyectos de innovación, ciencia y tecnología que impulsan el desarrollo sostenible de la región. Nuestros proyectos abarcan diversas áreas estratégicas.</p>
+                <p>En el Parque CientÃ­fico TecnolÃ³gico de Villa Clara desarrollamos proyectos de innovaciÃ³n, ciencia y tecnologÃ­a que impulsan el desarrollo sostenible de la regiÃ³n. Nuestros proyectos abarcan diversas Ã¡reas estratÃ©gicas.</p>
             </div>
         </section>
 
-        <section class="services-preview" style="background: #f9fafb;">
+        <section class="services-preview" style="background: #E6F4FA;">
             <div class="container">
                 <div class="section-title">
                     <h3>Nuestros Proyectos</h3>
-                    <p>Soluciones innovadoras para los desafíos actuales.</p>
+                    <p>Soluciones innovadoras para los desafÃ­os actuales.</p>
                 </div>
                 <div class="grid">
                     <?php if (empty($proyectos)): ?>

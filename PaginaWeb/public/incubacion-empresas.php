@@ -1,4 +1,4 @@
-<?php include 'includes/header.php'; ?>
+﻿<?php include 'includes/header.php'; ?>
 
         <section class="page-header">
             <div class="container">
@@ -10,7 +10,7 @@
         <section class="about-preview">
             <div class="container">
                 <div class="about-content">
-                    <h3>¿Qué es la incubaci&oacute;n de empresas?</h3>
+                    <h3>Â¿QuÃ© es la incubaci&oacute;n de empresas?</h3>
                     <p>La incubaci&oacute;n de empresas es un proceso dise&ntilde;ado para apoyar a emprendedores y startups en sus etapas iniciales de desarrollo. Las incubadoras de empresas proporcionan una variedad de recursos y servicios.</p>
                 </div>
                 <div class="about-image">
@@ -60,9 +60,9 @@
             </div>
         </section>
 
-        <section class="about-preview" style="background-color: #f8f9fa;">
+        <section class="about-preview" style="background-color: #E6F4FA;">
             <div class="container" style="text-align: center; grid-template-columns: 1fr;">
-                <h3 style="font-size: 2.2rem; font-weight: 900; margin-bottom: 20px; color: #1a3a6b;">&iquest;Tienes una idea innovadora?</h3>
+                <h3 style="font-size: 2.2rem; font-weight: 900; margin-bottom: 20px; color: #004966;">&iquest;Tienes una idea innovadora?</h3>
                 <p style="color: #666; margin-bottom: 30px; max-width: 600px; margin-left: auto; margin-right: auto; font-size: 1.05rem;">Conoce todos nuestros servicios y descubre c&oacute;mo podemos ayudarte a hacerla realidad.</p>
                 <a href="servicios.php" class="btn btn-primary">Ver Todos los Servicios</a>
             </div>

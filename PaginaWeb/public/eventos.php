@@ -1,17 +1,17 @@
-<?php include 'includes/header.php'; ?>
+﻿<?php include 'includes/header.php'; ?>
 
         <section class="page-header">
             <div class="container">
                 <h2 class="animate-fade-down">Eventos</h2>
-                <p class="animate-fade-up">Próximos eventos y actividades</p>
+                <p class="animate-fade-up">PrÃ³ximos eventos y actividades</p>
             </div>
         </section>
 
-        <section class="events-section" style="background: #f9fafb;">
+        <section class="events-section" style="background: #E6F4FA;">
             <div class="container">
                 <div class="events-header">
                     <div class="events-subtitle">Calendario de Eventos</div>
-                    <h2>Próximos Eventos</h2>
+                    <h2>PrÃ³ximos Eventos</h2>
                 </div>
                 <div id="calendarContainer" class="calendar-wrapper"></div>
                 <div class="search-bar" style="margin-bottom: 30px;">
@@ -28,8 +28,8 @@
 
         <section class="cta-section">
             <div class="container">
-                <p>¿Tienes un evento que quieras realizar con nosotros?</p>
-                <a href="contacto.php" class="btn btn-primary">Contáctanos</a>
+                <p>Â¿Tienes un evento que quieras realizar con nosotros?</p>
+                <a href="contacto.php" class="btn btn-primary">ContÃ¡ctanos</a>
             </div>
         </section>
 

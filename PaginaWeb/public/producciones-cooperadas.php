@@ -1,16 +1,16 @@
-<?php include 'includes/header.php'; ?>
+﻿<?php include 'includes/header.php'; ?>
 
         <section class="page-header">
             <div class="container">
                 <h2>Producciones Cooperadas</h2>
-                <p>Alianzas estratégicas para el crecimiento empresarial</p>
+                <p>Alianzas estratÃ©gicas para el crecimiento empresarial</p>
             </div>
         </section>
 
         <section class="about-preview">
             <div class="container">
                 <div class="about-content">
-                    <h3>¿Qué son las Producciones Cooperadas?</h3>
+                    <h3>Â¿QuÃ© son las Producciones Cooperadas?</h3>
                     <p>Las producciones cooperadas entre empresas, tambi&eacute;n conocidas como cooperaci&oacute;n empresarial, son alianzas estrat&eacute;gicas donde dos o m&aacute;s empresas colaboran para alcanzar objetivos comunes. Este tipo de cooperaci&oacute;n puede tomar varias formas y tiene m&uacute;ltiples beneficios:</p>
                 </div>
                 <div class="about-image">
@@ -50,9 +50,9 @@
             </div>
         </section>
 
-        <section class="about-preview" style="background-color: #f8f9fa;">
+        <section class="about-preview" style="background-color: #E6F4FA;">
             <div class="container" style="text-align: center; grid-template-columns: 1fr;">
-                <h3 style="font-size: 2.2rem; font-weight: 900; margin-bottom: 20px; color: #1a3a6b;">&iquest;Listo para colaborar?</h3>
+                <h3 style="font-size: 2.2rem; font-weight: 900; margin-bottom: 20px; color: #004966;">&iquest;Listo para colaborar?</h3>
                 <p style="color: #666; margin-bottom: 30px; max-width: 600px; margin-left: auto; margin-right: auto; font-size: 1.05rem;">Descubre todos nuestros servicios y encuentra la soluci&oacute;n que tu empresa necesita.</p>
                 <a href="servicios.php" class="btn btn-primary">Ver Todos los Servicios</a>
             </div>
