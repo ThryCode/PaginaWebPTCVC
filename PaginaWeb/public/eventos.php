@@ -3,7 +3,7 @@
         <section class="page-header">
             <div class="container">
                 <h2 class="animate-fade-down">Eventos</h2>
-                <p class="animate-fade-up">Proximos eventos y actividades</p>
+                <p class="animate-fade-up">Próximos eventos y actividades</p>
             </div>
         </section>
 
@@ -11,7 +11,7 @@
             <div class="container">
                 <div class="events-header">
                     <div class="events-subtitle">Calendario de Eventos</div>
-                    <h2>Proximos Eventos</h2>
+                    <h2>Próximos Eventos</h2>
                 </div>
                 <div id="calendarContainer" class="calendar-wrapper"></div>
                 <div class="search-bar" style="margin-bottom: 30px;">
@@ -29,7 +29,7 @@
         <section class="cta-section">
             <div class="container">
                 <p>¿Tienes un evento que quieras realizar con nosotros?</p>
-                <a href="contacto.php" class="btn btn-primary">Contactanos</a>
+                <a href="contacto.php" class="btn btn-primary">Contáctanos</a>
             </div>
         </section>
 

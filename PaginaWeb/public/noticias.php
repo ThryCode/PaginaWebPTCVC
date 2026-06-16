@@ -3,7 +3,7 @@
         <section class="page-header">
             <div class="container">
                 <h2 class="animate-fade-down">Noticias</h2>
-                <p class="animate-fade-up">Mantente al dia con las ultimas novedades</p>
+                <p class="animate-fade-up">Mantente al día con las últimas novedades</p>
             </div>
         </section>
 

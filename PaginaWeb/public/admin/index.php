@@ -9,7 +9,7 @@ $user = $auth->getUser();
 
 $totalNoticias = Storage::count('noticias', array('tipo' => 'noticia'));
 $totalEventos = Storage::count('noticias', array('tipo' => 'evento'));
-$totalGaleria = Storage::count('galeria');
+$totalGalería = Storage::count('galeria');
 $totalMensajes = Storage::count('mensajes');
 $mensajesNoLeidos = Storage::count('mensajes', array('leido' => 0));
 
@@ -78,8 +78,8 @@ if (!empty($user['nombre'])) {
                     <div class="stat-card">
                         <div class="stat-icon">&#127748;</div>
                         <div class="stat-info">
-                            <h3><?php echo $totalGaleria; ?></h3>
-                            <p>Galeria</p>
+                            <h3><?php echo $totalGalería; ?></h3>
+                            <p>Galería</p>
                         </div>
                     </div>
                     <div class="stat-card">
@@ -94,7 +94,7 @@ if (!empty($user['nombre'])) {
                 <div class="grid-2">
                     <div class="panel">
                         <div class="panel-header">
-                            <h2>Ultimas Publicaciones</h2>
+                            <h2>Últimas Publicaciones</h2>
                             <a href="noticias.php" class="btn btn-sm btn-primary">Ver todas</a>
                         </div>
                         <div class="panel-body">
@@ -102,7 +102,7 @@ if (!empty($user['nombre'])) {
                                 <p class="empty">No hay publicaciones aun.</p>
                             <?php else: ?>
                                 <table class="table">
-                                    <thead><tr><th>Titulo</th><th>Tipo</th><th>Estado</th><th>Fecha</th></tr></thead>
+                                    <thead><tr><th>Título</th><th>Tipo</th><th>Estado</th><th>Fecha</th></tr></thead>
                                     <tbody>
                                         <?php foreach ($ultimasNoticias as $n): ?>
                                         <tr>
@@ -120,7 +120,7 @@ if (!empty($user['nombre'])) {
 
                     <div class="panel">
                         <div class="panel-header">
-                            <h2>Ultimos Mensajes</h2>
+                            <h2>Últimos Mensajes</h2>
                             <a href="mensajes.php" class="btn btn-sm btn-primary">Ver todos</a>
                         </div>
                         <div class="panel-body">
@@ -134,7 +134,7 @@ if (!empty($user['nombre'])) {
                                         <tr>
                                             <td><?php echo htmlspecialchars(substr($m['nombre'], 0, 25)); ?></td>
                                             <td><?php echo htmlspecialchars($m['asunto']); ?></td>
-                                            <td><span class="tag tag-<?php echo $m['leido'] ? 'leido' : 'noleido'; ?>"><?php echo $m['leido'] ? 'Leido' : 'Nuevo'; ?></span></td>
+                                            <td><span class="tag tag-<?php echo $m['leido'] ? 'leido' : 'noleido'; ?>"><?php echo $m['leido'] ? 'Leído' : 'Nuevo'; ?></span></td>
                                             <td><?php echo date('d/m/Y', strtotime($m['created_at'])); ?></td>
                                         </tr>
                                         <?php endforeach; ?>

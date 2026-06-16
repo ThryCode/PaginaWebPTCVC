@@ -52,9 +52,9 @@ include 'includes/header.php';
         <section class="intro-section">
             <div class="container">
                 <div class="intro-content animate-fade-left">
-                    <h3>Parque Cientifico Tecnologico de Villa Clara</h3>
-                    <p>El Parque Cientifico Tecnologico de Villa Clara es un centro de innovacion que promueve la colaboracion entre gobierno, el sector del conocimiento y el sector empresarial para impulsar el desarrollo cientifico-tecnologico en Cuba. Ofrece un entorno dinamico para crear y hacer crecer empresas tecnologicas, facilitando la transferencia de conocimientos y tecnologias.</p>
-                    <p>Nuestro compromiso es ser el puente entre la academia, la industria y el gobierno, facilitando la transferencia de conocimiento y tecnologia que genere impacto positivo en la sociedad.</p>
+                    <h3>Parque Científico Tecnológico de Villa Clara</h3>
+                    <p>El Parque Científico Tecnológico de Villa Clara es un centro de innovación que promueve la colaboración entre gobierno, el sector del conocimiento y el sector empresarial para impulsar el desarrollo científico-tecnológico en Cuba. Ofrece un entorno dinámico para crear y hacer crecer empresas tecnológicas, facilitando la transferencia de conocimientos y tecnologías.</p>
+                    <p>Nuestro compromiso es ser el puente entre la academia, la industria y el gobierno, facilitando la transferencia de conocimiento y tecnología que genere impacto positivo en la sociedad.</p>
                 </div>
                 <div class="intro-image animate-fade-right">
                     <img src="assets/img/general/feriaC4.jpg" alt="PCTVC - Feria Cientifica">
@@ -83,9 +83,9 @@ include 'includes/header.php';
                     </div>
                 </div>
                 <div class="sectors-text animate-fade-right">
-                    <h2>Un modelo de colaboracion para un futuro sostenible</h2>
-                    <p>El Parque Cientifico Tecnologico funciona como un espacio de articulacion donde confluyen el talento, el conocimiento, la produccion y los servicios y la gestion gubernamental.</p>
-                    <p>El sector del conocimiento aporta investigacion, formacion y capital humano, que en vinculo con las demandas y recursos empresariales y de la sociedad, se alinean e integran con las estrategias de desarrollo gubernamentales.</p>
+                    <h2>Un modelo de colaboración para un futuro sostenible</h2>
+                    <p>El Parque Científico Tecnológico funciona como un espacio de articulación donde confluyen el talento, el conocimiento, la producción y los servicios y la gestión gubernamental.</p>
+                    <p>El sector del conocimiento aporta investigación, formacion y capital humano, que en vínculo con las demandas y recursos empresariales y de la sociedad, se alinean e integran con las estrategias de desarrollo gubernamentales.</p>
                 </div>
             </div>
         </section>
@@ -112,8 +112,8 @@ include 'includes/header.php';
                                     <circle cx="20" cy="50" r="1.5" fill="#facc15" class="pulse-dot"/>
                                 </svg>
                             </div>
-                            <h4 class="solution-title">Financiacion</h4>
-                            <p class="solution-desc">Fondos e inversion</p>
+                            <h4 class="solution-title">Financiación</h4>
+                            <p class="solution-desc">Fondos e inversión</p>
                             <div class="solution-bar bar-amber"></div>
                         </div>
                     </div>
@@ -199,28 +199,28 @@ include 'includes/header.php';
                             <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
                         </div>
                         <h3>Incentivos fiscales sostenidos</h3>
-                        <p>Las empresas incubadas disfrutan de una exencion total de tributos sobre utilidades durante los primeros cinco anos de funcionamiento.</p>
+                        <p>Las empresas incubadas disfrutan de una exención total de tributos sobre utilidades durante los primeros cinco anos de funcionamiento.</p>
                     </div>
                     <div class="ventaja-card animate-fade-right delay-1">
                         <div class="ventaja-icon bg-emerald">
                             <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z"/></svg>
                         </div>
-                        <h3>Facilitacion de importaciones</h3>
-                        <p>Se otorga la exencion del pago de aranceles por la importacion de partes, piezas y equipamiento para la produccion.</p>
+                        <h3>Facilitación de importaciónes</h3>
+                        <p>Se otorga la exención del pago de aranceles por la importación de partes, piezas y equipamiento para la producción.</p>
                     </div>
                     <div class="ventaja-card animate-fade-left delay-2">
                         <div class="ventaja-icon bg-purple">
                             <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 0 1-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 0 1 4.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0 1 12 15a9.065 9.065 0 0 0-6.23.693L5 14.5m14.8.8 1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0 1 12 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5"/></svg>
                         </div>
-                        <h3>Ecosistema de ciencia e innovacion</h3>
-                        <p>El Parque ofrece un entorno especializado para la investigacion, el desarrollo tecnologico y la innovacion.</p>
+                        <h3>Ecosistema de ciencia e innovación</h3>
+                        <p>El Parque ofrece un entorno especializado para la investigación, el desarrollo tecnologico y la innovación.</p>
                     </div>
                     <div class="ventaja-card animate-fade-right delay-3">
                         <div class="ventaja-icon bg-orange">
                             <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"/></svg>
                         </div>
-                        <h3>Ubicacion estrategica y conectividad</h3>
-                        <p>Ubicado en la zona industrial de Santa Clara, en el centro del pais, con acceso a multiples vias de comunicacion.</p>
+                        <h3>Ubicación estratégica y conectividad</h3>
+                        <p>Ubicado en la zona industrial de Santa Clara, en el centro del país, con acceso a múltiples vías de comunicación.</p>
                     </div>
                 </div>
             </div>
@@ -231,7 +231,7 @@ include 'includes/header.php';
                 <div class="news-header animate-fade-down">
                     <div>
                         <p class="news-subtitle">Mantente Informado</p>
-                        <h2>Articulos tecnicos, entrevistas y noticias nacionales e internacionales</h2>
+                        <h2>Artículos técnicos, entrevistas y noticias nacionales e internacionales</h2>
                     </div>
                     <a href="noticias.php" class="btn btn-primary">Ver Todas</a>
                 </div>
@@ -283,7 +283,7 @@ include 'includes/header.php';
                 <div class="contact-grid">
                     <div class="contact-info animate-fade-left">
                         <h2>Ponte en Contacto</h2>
-                        <p>No dudes en comunicarte. Simplemente complete el formulario de contacto y nos aseguraremos de responderle lo mas rapido posible.</p>
+                        <p>No dudes en comunicarte. Simplemente complete el formulario de contacto y nos aseguraremos de responderle lo más rápido posible.</p>
                         <div class="contact-items">
                             <div class="contact-item">
                                 <div class="contact-item-icon">
@@ -291,7 +291,7 @@ include 'includes/header.php';
                                 </div>
                                 <div>
                                     <h4>Visita nuestra oficina</h4>
-                                    <p>Carretera a Planta Mecanica, No. 39 B</p>
+                                    <p>Carretera a Planta Mecánica, No. 39 B</p>
                                     <p>Santa Clara, Villa Clara, Cuba</p>
                                 </div>
                             </div>
@@ -310,7 +310,7 @@ include 'includes/header.php';
                                     <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z"/></svg>
                                 </div>
                                 <div>
-                                    <h4>Telefono Fijo</h4>
+                                    <h4>Teléfono Fijo</h4>
                                     <p>+53 42281551</p>
                                     <p>Extensiones: 101-107</p>
                                 </div>
@@ -341,10 +341,10 @@ include 'includes/header.php';
                             </div>
                             <div class="form-group">
                                 <label for="correo">Correo</label>
-                                <input type="email" id="correo" name="correo" required placeholder="Direccion de Correo">
+                                <input type="email" id="correo" name="correo" required placeholder="Dirección de Correo">
                             </div>
                             <div class="form-group">
-                                <label for="telefono">Telefono</label>
+                                <label for="telefono">Teléfono</label>
                                 <input type="tel" id="telefono" name="telefono" placeholder="+53 555 12345">
                             </div>
                             <div class="form-group">

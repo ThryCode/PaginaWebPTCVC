@@ -24,7 +24,7 @@ function saveCounters($file, $data) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!validateCSRFToken($_POST[CSRF_TOKEN_NAME] ?? '')) {
-        $error = 'Token de seguridad invalido.';
+        $error = 'Token de seguridad inválido.';
     } else {
         $action = $_POST['action'] ?? '';
         $counters = loadCounters($countersFile);
@@ -164,11 +164,11 @@ $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
                                 <input type="hidden" name="action" value="create">
                                 <div class="form-group">
                                     <label for="new_label">Etiqueta (ej: Empresas incubadas)</label>
-                                    <input type="text" id="new_label" name="label" required placeholder=" Nombre de la categoria">
+                                    <input type="text" id="new_label" name="label" required placeholder=" Nombre de la categoría">
                                 </div>
                                 <div class="inline-grid">
                                     <div class="form-group">
-                                        <label for="new_numero">Numero</label>
+                                        <label for="new_numero">Número</label>
                                         <input type="number" id="new_numero" name="numero" required min="0" value="0">
                                     </div>
                                     <div class="form-group">
@@ -194,7 +194,7 @@ $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
                                         <span class="drag-handle">☰</span>
                                         <div class="counter-data">
                                             <h4><?php echo htmlspecialchars($c['label']); ?></h4>
-                                            <span>Numero: <?php echo intval($c['numero']); ?> | Orden: <?php echo intval($c['orden']); ?></span>
+                                            <span>Número: <?php echo intval($c['numero']); ?> | Orden: <?php echo intval($c['orden']); ?></span>
                                         </div>
                                         <div class="actions">
                                             <button class="btn btn-sm btn-primary" onclick="toggleEdit(<?php echo $c['id']; ?>)">Editar</button>
@@ -217,7 +217,7 @@ $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
                                             </div>
                                             <div class="inline-grid">
                                                 <div class="form-group">
-                                                    <label>Numero</label>
+                                                    <label>Número</label>
                                                     <input type="number" name="numero" required min="0" value="<?php echo intval($c['numero']); ?>">
                                                 </div>
                                                 <div class="form-group">

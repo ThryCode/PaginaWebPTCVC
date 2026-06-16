@@ -20,7 +20,7 @@ require_once __DIR__ . '/../api/config.php';
         <div class="container">
             <a href="index.php" class="logo">
                 <img src="assets/img/logo/logo.png" alt="PCTVC" class="logo-img" onerror="this.style.display='none'">
-                <h1>Parque Cientifico Tecnologico<span>de Villa Clara</span></h1>
+                <h1>Parque Científico Tecnológico<span>de Villa Clara</span></h1>
             </a>
             <nav class="nav" id="nav">
                 <ul>
@@ -39,7 +39,7 @@ require_once __DIR__ . '/../api/config.php';
                     <li><a href="contacto.php" class="<?php echo $currentPage === 'contacto.php' ? 'active' : ''; ?>">Contacto</a></li>
                 </ul>
             </nav>
-            <button class="nav-toggle" id="navToggle" aria-label="Abrir menu">
+            <button class="nav-toggle" id="navToggle" aria-label="Abrir menú">
                 <span></span>
                 <span></span>
                 <span></span>

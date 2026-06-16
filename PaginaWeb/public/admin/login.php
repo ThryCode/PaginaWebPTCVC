@@ -11,7 +11,7 @@ $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!validateCSRFToken($_POST[CSRF_TOKEN_NAME] ?? '')) {
-        $error = 'Token de seguridad invalido.';
+        $error = 'Token de seguridad inválido.';
     } else {
         $email = isset($_POST['email']) ? trim($_POST['email']) : '';
         $password = isset($_POST['password']) ? $_POST['password'] : '';
@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 header('Location: index.php');
                 exit;
             } else {
-                $error = 'Email o contrasena incorrectos.';
+                $error = 'Email o contraseña incorrectos.';
             }
         }
     }
@@ -36,7 +36,7 @@ $csrfToken = generateCSRFToken();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Iniciar Sesion</title>
+    <title>Admin - Iniciar Sesión</title>
     <link rel="icon" type="image/x-icon" href="../assets/img/logo/favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
     <style>
@@ -274,7 +274,7 @@ $csrfToken = generateCSRFToken();
                 </div>
             </div>
             <h1>Panel Admin</h1>
-            <p class="subtitle">Parque Cientifico Tecnologico de Villa Clara</p>
+            <p class="subtitle">Parque Científico Tecnológico de Villa Clara</p>
 
             <?php if (!empty($error)): ?>
                 <div class="error"><?php echo $error; ?></div>
@@ -283,20 +283,20 @@ $csrfToken = generateCSRFToken();
             <form method="POST">
                 <input type="hidden" name="<?php echo CSRF_TOKEN_NAME; ?>" value="<?php echo $csrfToken; ?>">
                 <div class="form-group">
-                    <label for="email">Correo electronico</label>
+                    <label for="email">Correo electrónico</label>
                     <div class="input-wrap">
                         <input type="email" id="email" name="email" required placeholder="admin@pctvc.cu">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="password">Contrasena</label>
+                    <label for="password">Contraseña</label>
                     <div class="input-wrap">
                         <input type="password" id="password" name="password" required placeholder="••••••••">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
                     </div>
                 </div>
-                <button type="submit" class="btn-login">Iniciar Sesion</button>
+                <button type="submit" class="btn-login">Iniciar Sesión</button>
             </form>
         </div>
         <div class="back-link">

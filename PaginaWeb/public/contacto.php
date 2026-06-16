@@ -3,8 +3,8 @@
         <section class="carousel" style="height: 400px;">
             <div class="carousel-overlay">
                 <div class="carousel-content animate-fade-up">
-                    <h2>Contactanos</h2>
-                    <p>Estamos aqui para ayudarte</p>
+                    <h2>Contáctanos</h2>
+                    <p>Estamos aquí para ayudarte</p>
                 </div>
             </div>
         </section>
@@ -14,7 +14,7 @@
                 <div class="contact-grid">
                     <div class="contact-info animate-fade-left">
                         <h2>Ponte en Contacto</h2>
-                        <p>No dudes en comunicarte. Simplemente complete el formulario de contacto y nos aseguraremos de responderle lo mas rapido posible.</p>
+                        <p>No dudes en comunicarte. Simplemente complete el formulario de contacto y nos aseguraremos de responderle lo más rápido posible.</p>
                         <div class="contact-items">
                             <div class="contact-item">
                                 <div class="contact-item-icon">
@@ -22,7 +22,7 @@
                                 </div>
                                 <div>
                                     <h4>Visita nuestra oficina</h4>
-                                    <p>Carretera a Planta Mecanica, No. 39 B</p>
+                                    <p>Carretera a Planta Mecánica, No. 39 B</p>
                                     <p>Santa Clara, Villa Clara, Cuba</p>
                                 </div>
                             </div>
@@ -41,7 +41,7 @@
                                     <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z"/></svg>
                                 </div>
                                 <div>
-                                    <h4>Telefono Fijo</h4>
+                                    <h4>Teléfono Fijo</h4>
                                     <p>+53 42281551</p>
                                     <p>Extensiones: 101-107</p>
                                 </div>
@@ -72,10 +72,10 @@
                             </div>
                             <div class="form-group">
                                 <label for="correo">Correo</label>
-                                <input type="email" id="correo" name="correo" required placeholder="Direccion de Correo">
+                                <input type="email" id="correo" name="correo" required placeholder="Dirección de Correo">
                             </div>
                             <div class="form-group">
-                                <label for="telefono">Telefono</label>
+                                <label for="telefono">Teléfono</label>
                                 <input type="tel" id="telefono" name="telefono" placeholder="+53 555 12345">
                             </div>
                             <div class="form-group">
