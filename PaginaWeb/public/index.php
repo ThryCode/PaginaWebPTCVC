@@ -93,14 +93,23 @@ include 'includes/header.php';
         <section class="solutions-section">
             <div class="parallax-bg"></div>
             <div class="solutions-content">
-                <h3 class="solutions-title animate-fade-down">Soluciones Integrales</h3>
+                <h3 class="solutions-title animate-on-scroll">Soluciones Integrales</h3>
                 <div class="solutions-grid">
-                    <div class="solution-card-wrapper animate-fade-up">
+                    <div class="solution-card-wrapper" style="transition-delay:0ms">
                         <div class="solution-card-inner">
                             <div class="solution-icon-wrap">
                                 <svg viewBox="0 0 64 64" class="solution-svg">
                                     <circle cx="32" cy="32" r="14" fill="#fbbf24" stroke="#f59e0b" stroke-width="2"/>
                                     <text x="32" y="37" text-anchor="middle" fill="#92400e" font-size="16" font-weight="bold" font-family="Arial">$</text>
+                                    <g class="floating-elements">
+                                        <circle cx="18" cy="20" r="8" fill="#fcd34d" stroke="#fbbf24" stroke-width="1" class="floating-1"/>
+                                        <circle cx="48" cy="18" r="6" fill="#fde68a" stroke="#fcd34d" stroke-width="1" class="floating-2"/>
+                                        <circle cx="50" cy="44" r="7" fill="#fcd34d" stroke="#fbbf24" stroke-width="1" class="floating-3"/>
+                                    </g>
+                                    <path d="M10 50 L10 40 L16 46" class="arrow-indicator" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <circle cx="14" cy="28" r="2" fill="#facc15" class="pulse-dot"/>
+                                    <circle cx="54" cy="40" r="1.5" fill="#fde047" class="pulse-dot"/>
+                                    <circle cx="20" cy="50" r="1.5" fill="#facc15" class="pulse-dot"/>
                                 </svg>
                             </div>
                             <h4 class="solution-title">Financiacion</h4>
@@ -108,28 +117,47 @@ include 'includes/header.php';
                             <div class="solution-bar bar-amber"></div>
                         </div>
                     </div>
-                    <div class="solution-card-wrapper animate-fade-up delay-1">
+
+                    <div class="solution-card-wrapper" style="transition-delay:150ms">
                         <div class="solution-card-inner">
                             <div class="solution-icon-wrap">
                                 <svg viewBox="0 0 64 64" class="solution-svg">
-                                    <path d="M32 18 L35 22 L40 22 L42 26 L46 28 L46 32 L46 36 L42 38 L40 42 L35 42 L32 46 L29 42 L24 42 L22 38 L18 36 L18 32 L18 28 L22 26 L24 22 L29 22 Z" fill="#10b981" stroke="#059669" stroke-width="1"/>
-                                    <circle cx="32" cy="32" r="6" fill="#065f46"/>
+                                    <g class="gear-main">
+                                        <path d="M32 18 L35 22 L40 22 L42 26 L46 28 L46 32 L46 36 L42 38 L40 42 L35 42 L32 46 L29 42 L24 42 L22 38 L18 36 L18 32 L18 28 L22 26 L24 22 L29 22 Z" fill="#10b981" stroke="#059669" stroke-width="1"/>
+                                        <circle cx="32" cy="32" r="6" fill="#065f46"/>
+                                    </g>
+                                    <g class="gear-small">
+                                        <path d="M50 12 L52 14 L55 14 L56 16 L58 17 L58 19 L58 21 L56 22 L55 24 L52 24 L50 26 L48 24 L45 24 L44 22 L42 21 L42 19 L42 17 L44 16 L45 14 L48 14 Z" fill="#2dd4bf" stroke="#14b8a6" stroke-width="1"/>
+                                        <circle cx="50" cy="18" r="3" fill="#0d9488"/>
+                                    </g>
                                 </svg>
                             </div>
-                            <h4 class="solution-title">Usos</h4>
+                            <h4 class="solution-title">Recursos</h4>
                             <p class="solution-desc">Equipos y materiales</p>
                             <div class="solution-bar bar-emerald"></div>
                         </div>
                     </div>
-                    <div class="solution-card-wrapper animate-fade-up delay-2">
+
+                    <div class="solution-card-wrapper" style="transition-delay:300ms">
                         <div class="solution-card-inner">
                             <div class="solution-icon-wrap">
                                 <svg viewBox="0 0 64 64" class="solution-svg">
                                     <rect x="20" y="20" width="24" height="30" rx="2" fill="#475569" stroke="#334155" stroke-width="1"/>
-                                    <rect x="24" y="24" width="6" height="5" rx="1" fill="#94a3b8"/>
-                                    <rect x="34" y="24" width="6" height="5" rx="1" fill="#94a3b8"/>
-                                    <rect x="24" y="32" width="6" height="5" rx="1" fill="#94a3b8"/>
-                                    <rect x="34" y="32" width="6" height="5" rx="1" fill="#94a3b8"/>
+                                    <rect x="24" y="24" width="6" height="5" rx="1" fill="#94a3b8" class="window-glow" style="animation-delay:0s"/>
+                                    <rect x="34" y="24" width="6" height="5" rx="1" fill="#94a3b8" class="window-glow" style="animation-delay:0.1s"/>
+                                    <rect x="24" y="32" width="6" height="5" rx="1" fill="#94a3b8" class="window-glow" style="animation-delay:0.2s"/>
+                                    <rect x="34" y="32" width="6" height="5" rx="1" fill="#94a3b8" class="window-glow" style="animation-delay:0.3s"/>
+                                    <rect x="24" y="40" width="6" height="5" rx="1" fill="#94a3b8" class="window-glow" style="animation-delay:0.4s"/>
+                                    <rect x="34" y="40" width="6" height="5" rx="1" fill="#94a3b8" class="window-glow" style="animation-delay:0.5s"/>
+                                    <rect x="29" y="44" width="6" height="6" rx="1" fill="#1e293b"/>
+                                    <g class="person-left">
+                                        <circle cx="16" cy="46" r="3" fill="#3b82f6"/>
+                                        <rect x="14" y="49" width="4" height="6" rx="1" fill="#3b82f6"/>
+                                    </g>
+                                    <g class="person-right">
+                                        <circle cx="50" cy="46" r="3" fill="#8b5cf6"/>
+                                        <rect x="48" y="49" width="4" height="6" rx="1" fill="#8b5cf6"/>
+                                    </g>
                                 </svg>
                             </div>
                             <h4 class="solution-title">Espacios</h4>
@@ -137,12 +165,20 @@ include 'includes/header.php';
                             <div class="solution-bar bar-slate"></div>
                         </div>
                     </div>
-                    <div class="solution-card-wrapper animate-fade-up delay-3">
+
+                    <div class="solution-card-wrapper" style="transition-delay:450ms">
                         <div class="solution-card-inner">
                             <div class="solution-icon-wrap">
                                 <svg viewBox="0 0 64 64" class="solution-svg">
                                     <path d="M32 8 L50 16 L50 32 C50 44 42 52 32 56 C22 52 14 44 14 32 L14 16 Z" fill="#6366f1" stroke="#4f46e5" stroke-width="2"/>
-                                    <path d="M24 32 L30 38 L42 26" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M24 32 L30 38 L42 26" class="checkmark" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <g class="waves-anim">
+                                        <path d="M32 4 L54 14 L54 32 C54 46 44 56 32 60" fill="none" stroke="#a5b4fc" stroke-width="1" stroke-linecap="round"/>
+                                        <path d="M32 4 L10 14 L10 32 C10 46 20 56 32 60" fill="none" stroke="#a5b4fc" stroke-width="1" stroke-linecap="round"/>
+                                    </g>
+                                    <circle cx="8" cy="24" r="2" fill="#4f46e5" class="ping-dot"/>
+                                    <circle cx="56" cy="24" r="2" fill="#4f46e5" class="ping-dot"/>
+                                    <circle cx="32" cy="62" r="2" fill="#4f46e5" class="ping-dot"/>
                                 </svg>
                             </div>
                             <h4 class="solution-title">Riesgos</h4>

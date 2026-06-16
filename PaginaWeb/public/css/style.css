@@ -932,13 +932,20 @@ body {
     to { transform: rotate(360deg); }
 }
 
+@keyframes gearSpinReverse {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(-360deg); }
+}
+
 .gear-small {
     opacity: 0.5;
+    transform-origin: 50px 18px;
     transition: opacity 0.3s ease;
 }
 
 .solution-card-wrapper:hover .gear-small {
     opacity: 1;
+    animation: gearSpinReverse 2s linear infinite;
 }
 
 /* Pulse dots */
@@ -952,8 +959,10 @@ body {
 }
 
 @keyframes pulseDot {
-    0%, 100% { opacity: 0.3; transform: scale(1); }
-    50% { opacity: 1; transform: scale(1.5); }
+    0% { opacity: 0; transform: scale(1); }
+    30% { opacity: 1; transform: scale(1.5); }
+    60% { opacity: 0; transform: scale(2); }
+    100% { opacity: 0; transform: scale(1); }
 }
 
 /* Window glow */
