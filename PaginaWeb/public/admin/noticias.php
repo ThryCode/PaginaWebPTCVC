@@ -10,6 +10,65 @@ require_once '../api/storage.php';
 $auth = new Auth();
 $auth->requireLogin();
 
+function autoResumen($texto, $max = 200) {
+    $limpio = trim(strip_tags($texto));
+    if (mb_strlen($limpio) <= $max) return $limpio;
+    return mb_substr($limpio, 0, $max) . '…';
+}
+
+function getNoticiaFolder($id) {
+    return '../uploads/noticia_' . $id . '/';
+}
+function getNoticiaFolderUrl($id) {
+    return 'uploads/noticia_' . $id . '/';
+}
+function getEventoFolder($id) {
+    return '../uploads/evento_' . $id . '/';
+}
+function getEventoFolderUrl($id) {
+    return 'uploads/evento_' . $id . '/';
+}
+function ensureFolder($dir) {
+    if (!is_dir($dir)) {
+        mkdir($dir, 0755, true);
+    }
+}
+function migrateOldImages(&$imagenes, $folderDir, $folderUrl) {
+    $result = array();
+    foreach ($imagenes as $img) {
+        if (strpos($img, $folderUrl) === 0) {
+            $result[] = $img;
+        } elseif (preg_match('#^uploads/[^/]+$#', $img)) {
+            $oldFile = '../' . $img;
+            if (file_exists($oldFile)) {
+                $ext = pathinfo($oldFile, PATHINFO_EXTENSION);
+                $newName = 'img_' . time() . '_' . rand(1000, 9999) . '.' . $ext;
+                if (copy($oldFile, $folderDir . $newName)) {
+                    unlink($oldFile);
+                    $result[] = $folderUrl . $newName;
+                } else {
+                    $result[] = $img;
+                }
+            } else {
+                $result[] = $img;
+            }
+        } else {
+            $result[] = $img;
+        }
+    }
+    $imagenes = $result;
+}
+function deleteFolder($dir) {
+    if (!is_dir($dir)) return;
+    $files = glob($dir . '*');
+    if ($files) {
+        foreach ($files as $f) {
+            if (is_file($f)) unlink($f);
+        }
+    }
+    rmdir($dir);
+}
+
 $action = isset($_GET['action']) ? $_GET['action'] : 'list';
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 $message = '';
@@ -33,11 +92,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $deleteId = intval($_POST['id'] ?? 0);
             if ($deleteId > 0) {
                 $existing = Storage::findById('noticias', $deleteId);
-                if ($existing && isset($existing['imagen'])) {
-                    $imgPath = '../' . $existing['imagen'];
-                    if (file_exists($imgPath)) {
-                        unlink($imgPath);
+                if ($existing) {
+                    $allImages = array();
+                    if (isset($existing['imagenes']) && is_array($existing['imagenes'])) {
+                        $allImages = $existing['imagenes'];
+                    } elseif (isset($existing['imagen'])) {
+                        $allImages = array($existing['imagen']);
                     }
+                    foreach ($allImages as $img) {
+                        $imgPath = '../' . $img;
+                        if (file_exists($imgPath)) {
+                            unlink($imgPath);
+                        }
+                    }
+                    $tipo = $existing['tipo'] ?? 'noticia';
+                    $folder = ($tipo === 'evento') ? getEventoFolder($deleteId) : getNoticiaFolder($deleteId);
+                    deleteFolder($folder);
                 }
                 Storage::delete('noticias', $deleteId);
                 header('Location: noticias.php?msg=eliminado');
@@ -45,14 +115,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         } else {
             // Create/Update
-            $titulo = trim($_POST['titulo'] ?? '');
+            $titulo = mb_substr(trim($_POST['titulo'] ?? ''), 0, 100);
             $tipo = 'noticia';
             $categoria_id = 1;
-            $resumen = trim($_POST['resumen'] ?? '');
             $contenido = $_POST['contenido'] ?? '';
+            $resumen = autoResumen($contenido);
             $fecha_evento_date = trim($_POST['fecha_evento_date'] ?? '');
-            $fecha_evento_time = trim($_POST['fecha_evento_time'] ?? '');
-            $fecha_evento = ($fecha_evento_date && $fecha_evento_time) ? $fecha_evento_date . ' ' . $fecha_evento_time : null;
+            $fecha_evento = $fecha_evento_date ?: null;
             $ubicacion = trim($_POST['ubicacion'] ?? '');
             $publicada = isset($_POST['publicada']) ? 1 : 0;
             $destacada = isset($_POST['destacada']) ? 1 : 0;
@@ -61,58 +130,137 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $slug = substr($slug, 0, 280);
 
             $data = array(
-                'titulo' => htmlspecialchars($titulo),
+                'titulo' => $titulo,
                 'slug' => $slug,
-                'resumen' => htmlspecialchars($resumen),
+                'resumen' => $resumen,
                 'contenido' => $contenido,
                 'tipo' => $tipo,
                 'categoria_id' => $categoria_id,
                 'autor_id' => $_SESSION['user_id'],
                 'fecha_evento' => $fecha_evento,
-                'ubicacion' => htmlspecialchars($ubicacion),
+                'ubicacion' => $ubicacion,
                 'publicada' => $publicada,
                 'destacada' => $destacada
             );
 
-            // Handle image upload
-            if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
-                $uploadDir = '../uploads/';
-                if (!is_dir($uploadDir)) {
-                    mkdir($uploadDir, 0755, true);
-                }
-                $allowedExts = array('jpg', 'jpeg', 'png', 'gif', 'webp');
-                $ext = strtolower(pathinfo($_FILES['imagen']['name'], PATHINFO_EXTENSION));
-
-                if (in_array($ext, $allowedExts) && $_FILES['imagen']['size'] <= 5 * 1024 * 1024) {
-                    $filename = 'noticia_' . time() . '_' . rand(1000, 9999) . '.' . $ext;
-                    $filepath = $uploadDir . $filename;
-                    if (move_uploaded_file($_FILES['imagen']['tmp_name'], $filepath)) {
-                        $data['imagen'] = 'uploads/' . $filename;
+            if ($action === 'edit' && $id > 0) {
+                // === EDIT ===
+                $existing = Storage::findById('noticias', $id);
+                $imagenes = array();
+                if ($existing) {
+                    if (isset($existing['imagenes']) && is_array($existing['imagenes'])) {
+                        $imagenes = $existing['imagenes'];
+                    } elseif (isset($existing['imagen'])) {
+                        $imagenes = array($existing['imagen']);
                     }
-                } else {
-                    $error = 'Imagen no válida (máx 5MB, JPG/PNG/GIF/WEBP).';
                 }
-            }
 
-            if (empty($error)) {
-                try {
-                    if ($action === 'edit' && $id > 0) {
-                        if (!isset($data['imagen'])) {
-                            $existing = Storage::findById('noticias', $id);
-                            if ($existing && isset($existing['imagen'])) {
-                                $data['imagen'] = $existing['imagen'];
+                // Handle image deletions
+                if (isset($_POST['delete_imagenes']) && is_array($_POST['delete_imagenes'])) {
+                    $deleteList = $_POST['delete_imagenes'];
+                    $kept = array();
+                    foreach ($imagenes as $img) {
+                        if (!in_array($img, $deleteList)) {
+                            $kept[] = $img;
+                        } else {
+                            $delPath = '../' . $img;
+                            if (file_exists($delPath)) {
+                                unlink($delPath);
                             }
                         }
+                    }
+                    $imagenes = $kept;
+                }
+
+                // Ensure folder and migrate old-format images
+                $folderDir = getNoticiaFolder($id);
+                $folderUrl = getNoticiaFolderUrl($id);
+                ensureFolder($folderDir);
+                migrateOldImages($imagenes, $folderDir, $folderUrl);
+
+                // Handle new uploads
+                if (isset($_FILES['imagenes'])) {
+                    $allowedExts = array('jpg', 'jpeg', 'png', 'gif', 'webp');
+                    $files = $_FILES['imagenes'];
+                    $fileCount = is_array($files['name']) ? count($files['name']) : 0;
+                    for ($i = 0; $i < $fileCount; $i++) {
+                        if ($files['error'][$i] !== UPLOAD_ERR_OK) {
+                            if ($files['error'][$i] === UPLOAD_ERR_INI_SIZE || $files['error'][$i] === UPLOAD_ERR_FORM_SIZE) {
+                                $error = 'Una o más imágenes exceden el tamaño máximo permitido (5MB).';
+                            }
+                            continue;
+                        }
+                        $ext = strtolower(pathinfo($files['name'][$i], PATHINFO_EXTENSION));
+                        if (!in_array($ext, $allowedExts) || $files['size'][$i] > 5 * 1024 * 1024) {
+                            $error = 'Imagen no válida (máx 5MB, JPG/PNG/GIF/WEBP).';
+                            continue;
+                        }
+                        $filename = 'img_' . time() . '_' . rand(1000, 9999) . '.' . $ext;
+                        if (move_uploaded_file($files['tmp_name'][$i], $folderDir . $filename)) {
+                            $imagenes[] = $folderUrl . $filename;
+                        }
+                    }
+                }
+
+                $data['imagenes'] = $imagenes;
+                $data['imagen'] = !empty($imagenes) ? $imagenes[0] : '';
+
+                if (empty($error)) {
+                    try {
                         Storage::update('noticias', $id, $data);
                         header('Location: noticias.php?msg=editado');
                         exit;
-                    } else {
-                        Storage::insert('noticias', $data);
+                    } catch (Exception $e) {
+                        $error = 'Error al guardar.';
+                    }
+                }
+            } else {
+                // === CREATE ===
+                $data['imagenes'] = array();
+                $data['imagen'] = '';
+
+                if (empty($error)) {
+                    try {
+                        $saved = Storage::insert('noticias', $data);
+                        $newId = $saved['id'];
+
+                        $folderDir = getNoticiaFolder($newId);
+                        $folderUrl = getNoticiaFolderUrl($newId);
+                        ensureFolder($folderDir);
+
+                        $imagenes = array();
+                        if (isset($_FILES['imagenes'])) {
+                            $allowedExts = array('jpg', 'jpeg', 'png', 'gif', 'webp');
+                            $files = $_FILES['imagenes'];
+                            $fileCount = is_array($files['name']) ? count($files['name']) : 0;
+                            for ($i = 0; $i < $fileCount; $i++) {
+                                if ($files['error'][$i] !== UPLOAD_ERR_OK) {
+                                    if ($files['error'][$i] === UPLOAD_ERR_INI_SIZE || $files['error'][$i] === UPLOAD_ERR_FORM_SIZE) {
+                                        $error = 'Una o más imágenes exceden el tamaño máximo permitido (5MB).';
+                                    }
+                                    continue;
+                                }
+                                $ext = strtolower(pathinfo($files['name'][$i], PATHINFO_EXTENSION));
+                                if (!in_array($ext, $allowedExts) || $files['size'][$i] > 5 * 1024 * 1024) {
+                                    $error = 'Imagen no válida (máx 5MB, JPG/PNG/GIF/WEBP).';
+                                    continue;
+                                }
+                                $filename = 'img_' . time() . '_' . rand(1000, 9999) . '.' . $ext;
+                                if (move_uploaded_file($files['tmp_name'][$i], $folderDir . $filename)) {
+                                    $imagenes[] = $folderUrl . $filename;
+                                }
+                            }
+                        }
+
+                        $saved['imagenes'] = $imagenes;
+                        $saved['imagen'] = !empty($imagenes) ? $imagenes[0] : '';
+                        Storage::update('noticias', $newId, $saved);
+
                         header('Location: noticias.php?msg=creado');
                         exit;
+                    } catch (Exception $e) {
+                        $error = 'Error al guardar.';
                     }
-                } catch (Exception $e) {
-                    $error = 'Error al guardar.';
                 }
             }
         }
@@ -191,7 +339,7 @@ $csrfToken = generateCSRFToken();
                                         echo $catName;
                                     ?></td>
                                     <td><span class="tag tag-<?php echo $n['publicada'] ? 'publicado' : 'borrador'; ?>"><?php echo $n['publicada'] ? 'Publicado' : 'Borrador'; ?></span></td>
-                                    <td><?php echo date('d/m/Y', strtotime($n['created_at'])); ?></td>
+                                    <td><?php echo date('d/m/Y', strtotime($n['fecha_evento'] ?? $n['created_at'])); ?></td>
                                     <td>
                                         <a href="?action=edit&id=<?php echo $n['id']; ?>" class="btn btn-sm btn-primary">Editar</a>
                                         <form class="delete-form" method="POST" action="?action=delete" onsubmit="return confirm('¿Eliminar esta publicación?')">
@@ -214,37 +362,49 @@ $csrfToken = generateCSRFToken();
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="titulo">Título *</label>
-                                    <input type="text" id="titulo" name="titulo" required value="<?php echo $noticia ? htmlspecialchars($noticia['titulo']) : ''; ?>">
+                                    <input type="text" id="titulo" name="titulo" required maxlength="100" value="<?php echo $noticia ? htmlspecialchars($noticia['titulo']) : ''; ?>">
                                 </div>
                                 <div class="form-group">
-                                    <label for="imagen">Imagen</label>
-                                    <input type="file" id="imagen" name="imagen" accept="image/*">
-                                    <?php if ($noticia && isset($noticia['imagen'])): ?>
-                                        <small>Actual: <?php echo basename($noticia['imagen']); ?></small>
+                                    <label>Fotos</label>
+                                    <input type="file" id="imagenes" name="imagenes[]" accept="image/*" multiple>
+                                    <small>Puede seleccionar varias fotos. Máx 5MB cada una.</small>
+                                    <?php if ($noticia): 
+                                        $existingImages = array();
+                                        if (isset($noticia['imagenes']) && is_array($noticia['imagenes'])) {
+                                            $existingImages = $noticia['imagenes'];
+                                        } elseif (isset($noticia['imagen'])) {
+                                            $existingImages = array($noticia['imagen']);
+                                        }
+                                        if (!empty($existingImages)): ?>
+                                        <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;">
+                                        <?php foreach ($existingImages as $ei): ?>
+                                            <div style="position:relative;width:100px;height:80px;border-radius:8px;overflow:hidden;border:2px solid #E6F4FA;">
+                                                <img src="../<?php echo $ei; ?>" style="width:100%;height:100%;object-fit:cover;">
+                                                <label style="position:absolute;bottom:2px;left:2px;background:rgba(192,57,43,0.85);color:#fff;padding:2px 6px;border-radius:4px;font-size:0.7rem;cursor:pointer;">
+                                                    <input type="checkbox" name="delete_imagenes[]" value="<?php echo $ei; ?>" onchange="this.parentElement.style.background=this.checked?'rgba(192,57,43,1)':'rgba(192,57,43,0.85)'"> Eliminar
+                                                </label>
+                                            </div>
+                                        <?php endforeach; ?>
+                                        </div>
+                                        <?php endif; ?>
                                     <?php endif; ?>
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label for="fecha_evento_date">Fecha del Evento</label>
+                                    <label for="fecha_evento_date">Fecha de la noticia</label>
                                     <input type="date" id="fecha_evento_date" name="fecha_evento_date" value="<?php echo ($noticia && $noticia['fecha_evento']) ? date('Y-m-d', strtotime($noticia['fecha_evento'])) : ''; ?>">
+                                    <small>Si no se especifica, se usa la fecha de publicaci&oacute;n.</small>
                                 </div>
-                                <div class="form-group">
-                                    <label for="fecha_evento_time">Hora del Evento</label>
-                                    <input type="time" id="fecha_evento_time" name="fecha_evento_time" value="<?php echo ($noticia && $noticia['fecha_evento']) ? date('H:i', strtotime($noticia['fecha_evento'])) : ''; ?>">
-                                </div>
+                                <div class="form-group"></div>
                             </div>
                             <div class="form-group">
                                 <label for="ubicacion">Ubicación</label>
                                 <input type="text" id="ubicacion" name="ubicacion" value="<?php echo $noticia ? htmlspecialchars($noticia['ubicacion']) : ''; ?>">
                             </div>
                             <div class="form-group">
-                                <label for="resumen">Resumen</label>
-                                <textarea id="resumen" name="resumen" rows="3"><?php echo $noticia ? htmlspecialchars($noticia['resumen']) : ''; ?></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label for="contenido">Contenido *</label>
-                                <textarea id="contenido" name="contenido" rows="10" required><?php echo $noticia ? $noticia['contenido'] : ''; ?></textarea>
+                                <label for="contenido">Contenido completo</label>
+                                <textarea id="contenido" name="contenido" rows="10"><?php echo $noticia ? htmlspecialchars($noticia['contenido'] ?? '') : ''; ?></textarea>
                             </div>
                             <div class="form-row">
                                 <div class="form-group">

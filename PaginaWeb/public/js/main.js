@@ -292,72 +292,68 @@ function handleSubmit(event) {
 }
 
 // ============================================
-// CARGAR NOTICIAS DESDE LA API
+// HELPER - Obtener array de imagenes
 // ============================================
-function loadNews(containerId, options) {
-    var container = document.getElementById(containerId);
-    if (!container) return;
+function getImagenes(item) {
+    if (item.imagenes && Array.isArray(item.imagenes) && item.imagenes.length > 0) {
+        return item.imagenes;
+    }
+    if (item.imagen) {
+        return [item.imagen];
+    }
+    return [];
+}
 
-    var limit = (options && options.limit) || 6;
-    var tipo = (options && options.tipo) || '';
-    var baseUrl = 'api/news.php';
+// ============================================
+// HELPER - Renderizar imagen o carrusel
+// ============================================
+function renderCardImage(imagenes, titulo, tipo) {
+    if (imagenes.length === 0) {
+        return '<div class="news-card-img">' + (tipo === 'evento' ? '&#128197;' : '&#128196;') + '</div>';
+    }
+    if (imagenes.length === 1) {
+        return '<div class="news-card-img"><img src="' + imagenes[0] + '" alt="' + escapeHtml(titulo) + '"></div>';
+    }
+    var html = '<div class="card-carousel" data-count="' + imagenes.length + '">';
+    html += '<div class="carousel-track">';
+    imagenes.forEach(function(src) {
+        html += '<div class="carousel-slide"><img src="' + src + '" alt="' + escapeHtml(titulo) + '"></div>';
+    });
+    html += '</div>';
+    html += '<div class="carousel-dots">';
+    for (var i = 0; i < imagenes.length; i++) {
+        html += '<span class="carousel-dot' + (i === 0 ? ' active' : '') + '"></span>';
+    }
+    html += '</div>';
+    html += '</div>';
+    return html;
+}
 
-    var url = baseUrl + '?limit=' + limit;
-    if (tipo) url += '&tipo=' + tipo;
-
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', url, true);
-
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            try {
-                var response = JSON.parse(xhr.responseText);
-                if (response.success && response.data.length > 0) {
-                    var html = '';
-                    response.data.forEach(function(item) {
-                        var fecha = new Date(item.created_at);
-                        var fechaStr = fecha.toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' });
-                        var tagClass = item.tipo === 'evento' ? 'news-tag-evento' : 'news-tag-noticia';
-
-                        html += '<div class="news-card">';
-                        if (item.imagen) {
-                            html += '<div class="news-card-img"><img src="' + item.imagen + '" alt="' + escapeHtml(item.titulo) + '"></div>';
-                        } else {
-                            html += '<div class="news-card-img">' + (item.tipo === 'evento' ? '&#128197;' : '&#128196;') + '</div>';
-                        }
-                        html += '<div class="news-card-body">';
-                        html += '<div class="news-card-meta">';
-                        html += '<span class="news-tag ' + tagClass + '">' + item.tipo.charAt(0).toUpperCase() + item.tipo.slice(1) + '</span>';
-                        if (item.categoria) {
-                            html += '<span class="news-card-date">' + escapeHtml(item.categoria) + '</span>';
-                        }
-                        html += '</div>';
-                        html += '<h4>' + escapeHtml(item.titulo) + '</h4>';
-                        html += '<p>' + escapeHtml(item.resumen || '') + '</p>';
-                        html += '</div>';
-                        html += '<div class="news-card-footer">';
-                        html += '<span class="news-card-date">' + fechaStr + '</span>';
-                        if (item.ubicacion) {
-                            html += '<span class="news-card-location">&#128205; ' + escapeHtml(item.ubicacion) + '</span>';
-                        }
-                        html += '</div>';
-                        html += '</div>';
-                    });
-                    container.innerHTML = html;
-                } else {
-                    container.innerHTML = '<p class="empty" style="grid-column: 1/-1;">No hay publicaciones disponibles.</p>';
-                }
-            } catch (e) {
-                container.innerHTML = '<p class="empty" style="grid-column: 1/-1;">Error al cargar noticias.</p>';
-            }
+// ============================================
+// HELPER - Iniciar carruseles
+// ============================================
+function initCardCarousels(container) {
+    container.querySelectorAll('.card-carousel').forEach(function(carousel) {
+        var track = carousel.querySelector('.carousel-track');
+        var slides = track.querySelectorAll('.carousel-slide');
+        var dots = carousel.querySelectorAll('.carousel-dot');
+        var count = slides.length;
+        if (count < 2) return;
+        var cw = carousel.offsetWidth;
+        if (cw === 0) cw = carousel.getBoundingClientRect().width;
+        if (cw === 0) cw = carousel.parentElement.offsetWidth;
+        track.style.width = (count * cw) + 'px';
+        for (var i = 0; i < slides.length; i++) {
+            slides[i].style.width = cw + 'px';
         }
-    };
-
-    xhr.onerror = function() {
-        container.innerHTML = '<p class="empty" style="grid-column: 1/-1;">Error de conexion.</p>';
-    };
-
-    xhr.send();
+        var current = 0;
+        setInterval(function() {
+            current = (current + 1) % count;
+            track.style.transform = 'translateX(-' + (current * cw) + 'px)';
+            dots.forEach(function(d) { d.classList.remove('active'); });
+            if (dots[current]) dots[current].classList.add('active');
+        }, 4000);
+    });
 }
 
 function escapeHtml(text) {
@@ -423,16 +419,14 @@ function loadNews(containerId, options) {
                 if (response.success && response.data.length > 0) {
                     var html = '';
                     response.data.forEach(function(item) {
-                        var fecha = new Date(item.created_at);
+                        var dateSource = (item.fecha_evento || item.created_at).split(' ')[0];
+                        var fecha = new Date(dateSource + 'T12:00:00');
                         var fechaStr = fecha.toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' });
                         var tagClass = item.tipo === 'evento' ? 'news-tag-evento' : 'news-tag-noticia';
+                        var imagenes = getImagenes(item);
 
                         html += '<div class="news-card">';
-                        if (item.imagen) {
-                            html += '<div class="news-card-img"><img src="' + item.imagen + '" alt="' + escapeHtml(item.titulo) + '" loading="lazy"></div>';
-                        } else {
-                            html += '<div class="news-card-img">' + (item.tipo === 'evento' ? '&#128197;' : '&#128196;') + '</div>';
-                        }
+                        html += renderCardImage(imagenes, item.titulo, item.tipo);
                         html += '<div class="news-card-body">';
                         html += '<div class="news-card-meta">';
                         html += '<span class="news-tag ' + tagClass + '">' + item.tipo.charAt(0).toUpperCase() + item.tipo.slice(1) + '</span>';
@@ -442,6 +436,7 @@ function loadNews(containerId, options) {
                         html += '</div>';
                         html += '<h4>' + escapeHtml(item.titulo) + '</h4>';
                         html += '<p>' + escapeHtml(item.resumen || '') + '</p>';
+                        html += '<a href="noticia.php?id=' + item.id + '" class="news-read-more">Leer m&aacute;s <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>';
                         html += '</div>';
                         html += '<div class="news-card-footer">';
                         html += '<span class="news-card-date">' + fechaStr + '</span>';
@@ -452,6 +447,7 @@ function loadNews(containerId, options) {
                         html += '</div>';
                     });
                     container.innerHTML = html;
+                    initCardCarousels(container);
                 } else {
                     container.innerHTML = '<p class="empty" style="grid-column: 1/-1;">No hay publicaciones disponibles.</p>';
                 }
@@ -494,15 +490,13 @@ function loadEvents(containerId, options) {
                 if (response.success && response.data.length > 0) {
                     var html = '';
                     response.data.forEach(function(item) {
-                        var fecha = new Date(item.created_at);
+                        var dateSource = (item.fecha_evento || item.created_at).split(' ')[0];
+                        var fecha = new Date(dateSource + 'T12:00:00');
                         var fechaStr = fecha.toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' });
+                        var imagenes = getImagenes(item);
 
                         html += '<div class="news-card">';
-                        if (item.imagen) {
-                            html += '<div class="news-card-img"><img src="' + item.imagen + '" alt="' + escapeHtml(item.titulo) + '" loading="lazy"></div>';
-                        } else {
-                            html += '<div class="news-card-img">&#128197;</div>';
-                        }
+                        html += renderCardImage(imagenes, item.titulo, 'evento');
                         html += '<div class="news-card-body">';
                         html += '<div class="news-card-meta">';
                         html += '<span class="news-tag news-tag-evento">Evento</span>';
@@ -512,6 +506,7 @@ function loadEvents(containerId, options) {
                         html += '</div>';
                         html += '<h4>' + escapeHtml(item.titulo) + '</h4>';
                         html += '<p>' + escapeHtml(item.resumen || '') + '</p>';
+                        html += '<a href="noticia.php?id=' + item.id + '" class="news-read-more">Leer m&aacute;s <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>';
                         html += '</div>';
                         html += '<div class="news-card-footer">';
                         html += '<span class="news-card-date">' + fechaStr + '</span>';
@@ -522,6 +517,7 @@ function loadEvents(containerId, options) {
                         html += '</div>';
                     });
                     container.innerHTML = html;
+                    initCardCarousels(container);
                 } else {
                     container.innerHTML = '<p class="empty" style="grid-column: 1/-1;">No hay eventos disponibles.</p>';
                 }

@@ -123,7 +123,7 @@ if (!empty($user['nombre'])) {
                                             <td><?php echo htmlspecialchars(substr($n['titulo'], 0, 40)); ?></td>
                                             <td><span class="tag tag-<?php echo $n['tipo']; ?>"><?php echo ucfirst($n['tipo']); ?></span></td>
                                             <td><span class="tag tag-<?php echo $n['publicada'] ? 'publicado' : 'borrador'; ?>"><?php echo $n['publicada'] ? 'Publicado' : 'Borrador'; ?></span></td>
-                                            <td><?php echo date('d/m/Y', strtotime($n['created_at'])); ?></td>
+                                            <td><?php echo date('d/m/Y', strtotime($n['fecha_evento'] ?? $n['created_at'])); ?></td>
                                         </tr>
                                         <?php endforeach; ?>
                                     </tbody>
