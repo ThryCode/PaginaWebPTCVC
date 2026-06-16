@@ -978,3 +978,22 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 300);
     });
 });
+
+// ============================================
+// FAQ ACCORDION
+// ============================================
+document.addEventListener('DOMContentLoaded', function() {
+    var faqQuestions = document.querySelectorAll('.faq-question');
+    faqQuestions.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            var item = this.parentElement;
+            var isOpen = item.classList.contains('faq-open');
+            document.querySelectorAll('.faq-item.faq-open').forEach(function(i) {
+                i.classList.remove('faq-open');
+            });
+            if (!isOpen) {
+                item.classList.add('faq-open');
+            }
+        });
+    });
+});

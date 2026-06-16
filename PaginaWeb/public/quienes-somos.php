@@ -71,6 +71,57 @@
             </div>
         </section>
 
+        <section class="faq-section">
+            <div class="container">
+                <div class="section-title">
+                    <h3>Preguntas Frecuentes</h3>
+                    <p>Respuestas a las dudas m&aacute;s comunes sobre el PCTVC.</p>
+                </div>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <button class="faq-question">¿Qu&eacute; es el Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara?</button>
+                        <div class="faq-answer"><p></p></div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question">¿Se obtiene alg&uacute;n beneficio econ&oacute;mico por participar en un proyecto?</button>
+                        <div class="faq-answer"><p></p></div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question">Tengo una idea de proyecto. ¿C&oacute;mo puedo desarrollarla en el PCTVC?</button>
+                        <div class="faq-answer"><p></p></div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question">¿Puedo inscribirme y participar en proyectos si vivo fuera de Villa Clara?</button>
+                        <div class="faq-answer"><p></p></div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question">¿Cu&aacute;les son los requisitos para pertenecer al PCTVC?</button>
+                        <div class="faq-answer"><p></p></div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question">¿Qu&eacute; tipo de apoyo brinda el PCTVC a las empresas y emprendedores?</button>
+                        <div class="faq-answer"><p></p></div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question">¿Qu&eacute; tipos de proyectos se desarrollan en el PCTVC?</button>
+                        <div class="faq-answer"><p></p></div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question">¿Qui&eacute;nes pueden participar en los proyectos del PCTVC?</button>
+                        <div class="faq-answer"><p></p></div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question">¿El PCTVC ofrece servicios de incubaci&oacute;n de empresas?</button>
+                        <div class="faq-answer"><p></p></div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question">¿C&oacute;mo puedo contactar con el PCTVC para obtener m&aacute;s informaci&oacute;n?</button>
+                        <div class="faq-answer"><p></p></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section class="about-preview">
             <div class="container">
                 <div class="about-content">
