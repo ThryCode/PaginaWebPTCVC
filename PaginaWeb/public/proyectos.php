@@ -1,4 +1,13 @@
-<?php include 'includes/header.php'; ?>
+<?php
+require_once 'api/storage.php';
+$proyectos = Storage::read('proyectos');
+$proyectos = array_filter($proyectos, function($p) { return !empty($p['publicada']); });
+usort($proyectos, function($a, $b) {
+    return strcmp($b['created_at'], $a['created_at']);
+});
+$proyectos = array_values($proyectos);
+$iconos = array('&#128300;', '&#9881;', '&#127758;');
+include 'includes/header.php'; ?>
 
         <section class="page-header">
             <div class="container">
@@ -20,33 +29,21 @@
                     <p>Soluciones innovadoras para los desafíos actuales.</p>
                 </div>
                 <div class="grid">
-                    <div class="project-card animate-on-scroll">
-                        <div class="project-card-top"></div>
-                        <div class="project-card-body">
-                            <div class="project-card-icon icon-1">&#128300;</div>
-                            <h4>Biotech Solutions</h4>
-                            <p>Desarrollo de soluciones biotecnológicas para la agricultura sostenible y la salud.</p>
-                            <a href="#" class="btn btn-outline-green">Conocer más</a>
+                    <?php if (empty($proyectos)): ?>
+                        <p class="empty" style="grid-column:1/-1;text-align:center;">No hay proyectos disponibles.</p>
+                    <?php else: ?>
+                        <?php foreach ($proyectos as $i => $p): ?>
+                        <div class="project-card animate-on-scroll<?php echo $i > 0 ? ' delay-' . $i : ''; ?>">
+                            <div class="project-card-top"></div>
+                            <div class="project-card-body">
+                                <div class="project-card-icon icon-<?php echo ($i % 3) + 1; ?>"><?php echo $iconos[$i % 3]; ?></div>
+                                <h4><?php echo htmlspecialchars($p['titulo'] ?? ''); ?></h4>
+                                <p><?php echo htmlspecialchars($p['resumen'] ?? ''); ?></p>
+                                <a href="#" class="btn btn-outline-green">Conocer m&aacute;s</a>
+                            </div>
                         </div>
-                    </div>
-                    <div class="project-card animate-on-scroll delay-1">
-                        <div class="project-card-top"></div>
-                        <div class="project-card-body">
-                            <div class="project-card-icon icon-2">&#9881;</div>
-                            <h4>Smart Manufacturing</h4>
-                            <p>Implementación de tecnologías de Industria 4.0 en procesos productivos locales.</p>
-                            <a href="#" class="btn btn-outline-green">Conocer más</a>
-                        </div>
-                    </div>
-                    <div class="project-card animate-on-scroll delay-2">
-                        <div class="project-card-top"></div>
-                        <div class="project-card-body">
-                            <div class="project-card-icon icon-3">&#127758;</div>
-                            <h4>Green Energy Hub</h4>
-                            <p>Proyectos de energía renovable y eficiencia energética para comunidades.</p>
-                            <a href="#" class="btn btn-outline-green">Conocer más</a>
-                        </div>
-                    </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </div>
             </div>
         </section>

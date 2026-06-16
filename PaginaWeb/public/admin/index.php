@@ -11,6 +11,7 @@ $totalNoticias = Storage::count('noticias', array('tipo' => 'noticia'));
 $totalEventos = Storage::count('noticias', array('tipo' => 'evento'));
 $totalGalería = Storage::count('galeria');
 $totalMensajes = Storage::count('mensajes');
+$totalProyectos = Storage::count('proyectos');
 $mensajesNoLeidos = Storage::count('mensajes', array('leido' => 0));
 
 $ultimasNoticias = Storage::read('noticias');
@@ -24,6 +25,12 @@ usort($ultimosMensajes, function($a, $b) {
     return strcmp($b['created_at'], $a['created_at']);
 });
 $ultimosMensajes = array_slice($ultimosMensajes, 0, 5);
+
+$ultimosProyectos = Storage::read('proyectos');
+usort($ultimosProyectos, function($a, $b) {
+    return strcmp($b['created_at'], $a['created_at']);
+});
+$ultimosProyectos = array_slice($ultimosProyectos, 0, 5);
 
 $iniciales = '';
 if (!empty($user['nombre'])) {
@@ -80,6 +87,13 @@ if (!empty($user['nombre'])) {
                         <div class="stat-info">
                             <h3><?php echo $totalGalería; ?></h3>
                             <p>Galería</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">&#128640;</div>
+                        <div class="stat-info">
+                            <h3><?php echo $totalProyectos; ?></h3>
+                            <p>Proyectos</p>
                         </div>
                     </div>
                     <div class="stat-card">
@@ -142,6 +156,32 @@ if (!empty($user['nombre'])) {
                                 </table>
                             <?php endif; ?>
                         </div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-header">
+                        <h2>&Uacute;ltimos Proyectos</h2>
+                        <a href="proyectos.php" class="btn btn-sm btn-primary">Ver todos</a>
+                    </div>
+                    <div class="panel-body">
+                        <?php if (empty($ultimosProyectos)): ?>
+                            <p class="empty">No hay proyectos aun.</p>
+                        <?php else: ?>
+                            <table class="table">
+                                <thead><tr><th>T&iacute;tulo</th><th>&Aacute;rea</th><th>Estado</th><th>Inicio</th></tr></thead>
+                                <tbody>
+                                    <?php foreach ($ultimosProyectos as $p): ?>
+                                    <tr>
+                                        <td><?php echo htmlspecialchars(substr($p['titulo'] ?? 'Sin t&iacute;tulo', 0, 40)); ?></td>
+                                        <td><?php echo htmlspecialchars($p['area'] ?: '—'); ?></td>
+                                        <td><span class="tag tag-<?php echo $p['publicada'] ? 'publicado' : 'borrador'; ?>"><?php echo htmlspecialchars(ucfirst($p['estado'] ?: 'propuesta')); ?></span></td>
+                                        <td><?php echo $p['fecha_inicio'] ? date('d/m/Y', strtotime($p['fecha_inicio'])) : '—'; ?></td>
+                                    </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
