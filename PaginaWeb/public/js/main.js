@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var nextBtn = document.getElementById('carouselNext');
     var currentSlide = 0;
     var autoPlayInterval = null;
-    var autoPlayDelay = 4000;
+    var autoPlayDelay = 3500;
 
     // Create dots
     slides.forEach(function(_, index) {
