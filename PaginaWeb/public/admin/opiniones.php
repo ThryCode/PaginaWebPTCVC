@@ -13,14 +13,14 @@ usort($opiniones, function($a, $b) {
 $message = '';
 if (isset($_GET['msg'])) {
     $msg = $_GET['msg'];
-    if ($msg === 'created') $message = 'Opinion creada correctamente.';
-    elseif ($msg === 'updated') $message = 'Opinion actualizada correctamente.';
-    elseif ($msg === 'deleted') $message = 'Opinion eliminada correctamente.';
+    if ($msg === 'created') $message = 'Opinión creada correctamente.';
+    elseif ($msg === 'updated') $message = 'Opinión actualizada correctamente.';
+    elseif ($msg === 'deleted') $message = 'Opinión eliminada correctamente.';
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!validateCSRFToken($_POST[CSRF_TOKEN_NAME] ?? '')) {
-        $error = 'Token de seguridad invalido.';
+        $error = 'Token de seguridad inválido.';
     } else {
         $action = $_POST['action'] ?? '';
 

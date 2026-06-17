@@ -12,13 +12,13 @@ include 'includes/header.php'; ?>
         <section class="page-header">
             <div class="container">
                 <h2>Proyectos</h2>
-                <p>Proyectos de innovaciÃ³n y desarrollo</p>
+                <p>Proyectos de innovación y desarrollo</p>
             </div>
         </section>
 
         <section class="intro-text-section">
             <div class="container">
-                <p>En el Parque CientÃ­fico TecnolÃ³gico de Villa Clara desarrollamos proyectos de innovaciÃ³n, ciencia y tecnologÃ­a que impulsan el desarrollo sostenible de la regiÃ³n. Nuestros proyectos abarcan diversas Ã¡reas estratÃ©gicas.</p>
+                <p>En el Parque Científico Tecnológico de Villa Clara desarrollamos proyectos de innovación, ciencia y tecnología que impulsan el desarrollo sostenible de la región. Nuestros proyectos abarcan diversas áreas estratégicas.</p>
             </div>
         </section>
 
@@ -26,7 +26,7 @@ include 'includes/header.php'; ?>
             <div class="container">
                 <div class="section-title">
                     <h3>Nuestros Proyectos</h3>
-                    <p>Soluciones innovadoras para los desafÃ­os actuales.</p>
+                    <p>Soluciones innovadoras para los desafíos actuales.</p>
                 </div>
                 <div class="grid">
                     <?php if (empty($proyectos)): ?>
