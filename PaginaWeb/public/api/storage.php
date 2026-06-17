@@ -9,6 +9,7 @@ require_once 'config.php';
 class Storage {
 
     public static function getFilePath($collection) {
+        $collection = preg_replace('/[^a-zA-Z0-9_\-]/', '', $collection);
         return DATA_DIR . '/' . $collection . '.json';
     }
 

@@ -19,11 +19,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (empty($email) || empty($password)) {
             $error = 'Por favor complete todos los campos.';
         } else {
-            if ($auth->login($email, $password)) {
+            $loginResult = $auth->login($email, $password);
+            if ($loginResult === true) {
                 header('Location: index.php');
                 exit;
+            } elseif ($loginResult === 'locked') {
+                $error = 'Cuenta bloqueada temporalmente por demasiados intentos fallidos. Intente m&aacute;s tarde.';
             } else {
-                $error = 'Email o contraseña incorrectos.';
+                $error = 'Email o contrase&ntilde;a incorrectos.';
             }
         }
     }

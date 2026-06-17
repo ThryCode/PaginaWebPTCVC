@@ -72,7 +72,7 @@ Storage::insert('mensajes', array(
     'apellidos' => htmlspecialchars($apellidos, ENT_QUOTES, 'UTF-8'),
     'correo' => htmlspecialchars($correo, ENT_QUOTES, 'UTF-8'),
     'telefono' => htmlspecialchars($telefono, ENT_QUOTES, 'UTF-8'),
-    'asunto' => $asunto,
+    'asunto' => htmlspecialchars($asunto, ENT_QUOTES, 'UTF-8'),
     'mensaje' => htmlspecialchars($mensaje, ENT_QUOTES, 'UTF-8'),
     'leido' => 0
 ));

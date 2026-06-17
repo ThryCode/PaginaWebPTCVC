@@ -1,8 +1,8 @@
 <?php
 error_reporting(E_ALL);
-ini_set('display_errors', 1);
+ini_set('display_errors', 0);
 ini_set('log_errors', 1);
-ini_set('error_log', __DIR__ . '/../error_log');
+ini_set('error_log', __DIR__ . '/data/error_log');
 
 require_once '../api/auth.php';
 require_once '../api/storage.php';

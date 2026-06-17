@@ -48,6 +48,15 @@ class StorageTest extends TestCase
         $this->assertCount(2, $all);
     }
 
+    public function testReadEmptyCollectionReturnsEmptyArray()
+    {
+        $file = Storage::getFilePath('_nonexistent');
+        if (file_exists($file)) {
+            unlink($file);
+        }
+        $this->assertEquals([], Storage::read('_nonexistent'));
+    }
+
     public function testFindWhereFiltersCorrectly()
     {
         Storage::insert('_test', ['nombre' => 'X', 'tipo' => 'a']);
@@ -62,6 +71,27 @@ class StorageTest extends TestCase
         $created = Storage::insert('_test', ['nombre' => 'Old']);
         $updated = Storage::update('_test', $created['id'], ['nombre' => 'New']);
         $this->assertEquals('New', $updated['nombre']);
+    }
+
+    public function testUpdateNonExistentReturnsNull()
+    {
+        $result = Storage::update('_test', 999, ['nombre' => 'Ghost']);
+        $this->assertNull($result);
+    }
+
+    public function testUpdatedAtSetOnUpdate()
+    {
+        $created = Storage::insert('_test', ['nombre' => 'Before']);
+        $this->assertArrayNotHasKey('updated_at', $created);
+        $updated = Storage::update('_test', $created['id'], ['nombre' => 'After']);
+        $this->assertArrayHasKey('updated_at', $updated);
+    }
+
+    public function testPathTraversalSanitized()
+    {
+        $path = Storage::getFilePath('../../shell');
+        $this->assertStringEndsWith('shell.json', $path);
+        $this->assertStringNotContainsString('/../../', $path);
     }
 
     public function testDeleteRemovesData()

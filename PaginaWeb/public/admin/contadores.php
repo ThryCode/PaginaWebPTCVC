@@ -1,9 +1,9 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 0);
+
 require_once '../api/auth.php';
 require_once '../api/storage.php';
-
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 
 $auth = new Auth();
 $auth->requireLogin();

@@ -32,6 +32,16 @@ class AuthTest extends TestCase
                 }
             }
         }
+        $file = Storage::getFilePath('rate_limits');
+        if (file_exists($file)) {
+            $data = Storage::read('rate_limits');
+            foreach ($data as $key => $val) {
+                if (strpos($key, 'login_') === 0) {
+                    unset($data[$key]);
+                }
+            }
+            Storage::write('rate_limits', $data);
+        }
     }
 
     public function testLoginSuccess()
@@ -47,6 +57,33 @@ class AuthTest extends TestCase
     public function testLoginFailsWithUnknownEmail()
     {
         $this->assertFalse($this->auth->login('noexiste@test.cu', 'pass123'));
+    }
+
+    public function testLoginFailsForInactiveUser()
+    {
+        Storage::insert('usuarios', [
+            'nombre' => 'Inactive',
+            'email' => 'inactive@test.cu',
+            'password' => password_hash('pass123', PASSWORD_BCRYPT),
+            'rol' => 'editor',
+            'activo' => 0
+        ]);
+        $this->assertFalse($this->auth->login('inactive@test.cu', 'pass123'));
+        $users = Storage::read('usuarios');
+        foreach ($users as $u) {
+            if ($u['email'] === 'inactive@test.cu') {
+                Storage::delete('usuarios', $u['id']);
+            }
+        }
+    }
+
+    public function testLoginReturnsLockedAfterMaxAttempts()
+    {
+        for ($i = 0; $i < MAX_LOGIN_ATTEMPTS; $i++) {
+            $this->auth->login('test@test.cu', 'wrong');
+        }
+        $result = $this->auth->login('test@test.cu', 'pass123');
+        $this->assertEquals('locked', $result);
     }
 
     public function testIsLoggedInAfterLogin()
@@ -67,6 +104,14 @@ class AuthTest extends TestCase
     {
         $this->auth->login('test@test.cu', 'pass123');
         $this->assertTrue($this->auth->isAdmin());
+    }
+
+    public function testLogoutClearsSession()
+    {
+        $this->auth->login('test@test.cu', 'pass123');
+        $this->assertTrue($this->auth->isLoggedIn());
+        $this->auth->logout();
+        $this->assertFalse($this->auth->isLoggedIn());
     }
 
     public function testHashPassword()
