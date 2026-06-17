@@ -12,37 +12,61 @@
                 <div class="section-title">
                     <h3>Actividades Principales</h3>
                 </div>
-                <div class="check-list">
-                    <div class="check-item">
-                        <div class="check-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+                <div class="grid">
+                    <div class="card animate-on-scroll">
+                        <div class="card-icon">
+                            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><path d="m9 14 2 2 4-4"/></svg>
+                        </div>
+                        <h4>Formulaci&oacute;n de Proyectos</h4>
                         <p>Asistencia para la formulaci&oacute;n e implementaci&oacute;n de proyectos de innovaci&oacute;n; incluye la b&uacute;squeda de personal id&oacute;neo para la formaci&oacute;n de equipos de proyecto.</p>
                     </div>
-                    <div class="check-item">
-                        <div class="check-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+                    <div class="card animate-on-scroll delay-1">
+                        <div class="card-icon">
+                            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                        </div>
+                        <h4>Modelos de Negocio</h4>
                         <p>Asistencia para la definici&oacute;n de modelos de negocios.</p>
                     </div>
-                    <div class="check-item">
-                        <div class="check-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+                    <div class="card animate-on-scroll delay-2">
+                        <div class="card-icon">
+                            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                        </div>
+                        <h4>Cooperaci&oacute;n Corporativa</h4>
                         <p>Asistencia para el logro de adecuada interrelaci&oacute;n y cooperaci&oacute;n corporativa industrial, en las esferas de la ciencia, la tecnolog&iacute;a y la innovaci&oacute;n.</p>
                     </div>
-                    <div class="check-item">
-                        <div class="check-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+                    <div class="card animate-on-scroll delay-3">
+                        <div class="card-icon">
+                            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                        </div>
+                        <h4>Producciones Cooperadas</h4>
                         <p>Producciones cooperadas.</p>
                     </div>
-                    <div class="check-item">
-                        <div class="check-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+                    <div class="card animate-on-scroll delay-4">
+                        <div class="card-icon">
+                            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                        </div>
+                        <h4>Representaci&oacute;n Comercial</h4>
                         <p>Servicios de representaci&oacute;n comercial, contabilidad y asesor&iacute;a jur&iacute;dica.</p>
                     </div>
-                    <div class="check-item">
-                        <div class="check-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+                    <div class="card animate-on-scroll delay-5">
+                        <div class="card-icon">
+                            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M3 7v14"/><path d="M21 7v14"/><path d="M6 11h3v4H6z"/><path d="M15 11h3v4h-3z"/><path d="M9 3h6v4H9z"/></svg>
+                        </div>
+                        <h4>Alquiler de Locales</h4>
                         <p>Alquiler de locales con facilidades para negocios y proyectos, y acceso a Internet.</p>
                     </div>
-                    <div class="check-item">
-                        <div class="check-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+                    <div class="card animate-on-scroll delay-6">
+                        <div class="card-icon">
+                            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><path d="M8 7h8"/><path d="M8 11h6"/></svg>
+                        </div>
+                        <h4>Capacitaci&oacute;n</h4>
                         <p>Cursos generales de capacitaci&oacute;n y personalizados para miembros de los equipos de proyecto y los encargados del proceso de innovaci&oacute;n.</p>
                     </div>
-                    <div class="check-item">
-                        <div class="check-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+                    <div class="card animate-on-scroll delay-7">
+                        <div class="card-icon">
+                            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                        </div>
+                        <h4>B&uacute;squeda de Financiamiento</h4>
                         <p>Asistencia para la b&uacute;squeda de financiamiento para los procesos de incubaci&oacute;n.</p>
                     </div>
                 </div>
