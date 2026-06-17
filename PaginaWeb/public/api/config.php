@@ -25,6 +25,12 @@ if (version_compare(PHP_VERSION, '7.3.11', '<')) {
 
 define('ENV', 'production');
 
+// Autoloader de Composer (PHPMailer)
+$autoloadPath = __DIR__ . '/../../vendor/autoload.php';
+if (file_exists($autoloadPath)) {
+    require_once $autoloadPath;
+}
+
 // Directorio de datos
 define('DATA_DIR', __DIR__ . '/../data');
 
@@ -39,8 +45,16 @@ define('LOGIN_LOCKOUT_MINUTES', 15);
 
 // Email
 define('CONTACT_EMAIL', 'info@pctvc.cu');
-define('FROM_EMAIL', 'noreply@pctvc.cu');
+define('FROM_EMAIL', 'webpctvc@gmail.com');
 define('FROM_NAME', 'PCT Villa Clara');
+
+// SMTP (Gmail)
+define('SMTP_HOST', 'smtp.gmail.com');
+define('SMTP_PORT', 587);
+define('SMTP_USER', 'webpctvc@gmail.com');
+define('SMTP_PASS', 'webpctvc*2026');
+define('SMTP_ENCRYPTION', 'tls');
+define('SMTP_DEBUG', 0);
 
 // Timezone
 date_default_timezone_set('America/Havana');
