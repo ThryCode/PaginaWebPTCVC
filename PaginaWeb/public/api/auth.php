@@ -12,18 +12,47 @@ if (session_status() === PHP_SESSION_NONE) {
 class Auth {
 
     public function login($email, $password) {
+        $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+        $rateData = Storage::read('rate_limits');
+        $rateKey = 'login_' . $ip;
+        $attempts = isset($rateData[$rateKey]) ? $rateData[$rateKey] : array('count' => 0, 'time' => 0);
+
+        if ($attempts['count'] >= MAX_LOGIN_ATTEMPTS) {
+            $elapsed = time() - $attempts['time'];
+            if ($elapsed < LOGIN_LOCKOUT_MINUTES * 60) {
+                return 'locked';
+            }
+            $attempts = array('count' => 0, 'time' => 0);
+        }
+
         $users = Storage::findWhere('usuarios', array('email' => $email));
         if (empty($users)) {
+            $attempts['count']++;
+            $attempts['time'] = time();
+            $rateData[$rateKey] = $attempts;
+            Storage::write('rate_limits', $rateData);
             return false;
         }
 
         $user = $users[0];
         if (!isset($user['activo']) || !$user['activo']) {
+            $attempts['count']++;
+            $attempts['time'] = time();
+            $rateData[$rateKey] = $attempts;
+            Storage::write('rate_limits', $rateData);
             return false;
         }
 
         if (!password_verify($password, $user['password'])) {
+            $attempts['count']++;
+            $attempts['time'] = time();
+            $rateData[$rateKey] = $attempts;
+            Storage::write('rate_limits', $rateData);
             return false;
+        }
+
+        if (!headers_sent()) {
+            session_regenerate_id(true);
         }
 
         $_SESSION['user_id'] = $user['id'];
@@ -32,13 +61,19 @@ class Auth {
         $_SESSION['user_rol'] = $user['rol'];
         $_SESSION['logged_in'] = true;
 
+        $rateData[$rateKey] = array('count' => 0, 'time' => 0);
+        Storage::write('rate_limits', $rateData);
+
         return true;
     }
 
     public function logout() {
+        $_SESSION = array();
         session_destroy();
-        header('Location: login.php');
-        exit;
+        if (!headers_sent()) {
+            header('Location: login.php');
+            exit;
+        }
     }
 
     public function isLoggedIn() {

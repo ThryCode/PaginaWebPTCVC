@@ -4,6 +4,17 @@
  * Sin base de datos - todo en archivos JSON
  */
 
+// Seguridad de sesión
+ini_set('session.use_strict_mode', 1);
+ini_set('session.use_only_cookies', 1);
+ini_set('session.cookie_httponly', 1);
+if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
+    ini_set('session.cookie_secure', 1);
+}
+ini_set('session.cookie_samesite', 'Lax');
+ini_set('session.cookie_lifetime', 0);
+ini_set('session.gc_maxlifetime', 7200);
+
 if (version_compare(PHP_VERSION, '7.3.11', '<')) {
     http_response_code(500);
     die(json_encode(array(
@@ -21,6 +32,10 @@ define('DATA_DIR', __DIR__ . '/../data');
 define('CSRF_TOKEN_NAME', 'csrf_token');
 define('MAX_FORM_SUBMISSIONS', 5);
 define('FORM_SUBMISSION_WINDOW', 3600);
+
+// Login rate limiting
+define('MAX_LOGIN_ATTEMPTS', 5);
+define('LOGIN_LOCKOUT_MINUTES', 15);
 
 // Email
 define('CONTACT_EMAIL', 'info@pctvc.cu');

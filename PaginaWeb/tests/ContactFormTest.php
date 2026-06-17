@@ -25,19 +25,6 @@ class ContactFormTest extends TestCase
         }
     }
 
-    public function testContactFormValidationAllValid()
-    {
-        $errors = $this->validateContact([
-            'nombre' => 'Juan',
-            'correo' => 'juan@test.cu',
-            'telefono' => '+53 555 12345',
-            'asunto' => 'informacion',
-            'mensaje' => 'Hola, quiero información sobre sus servicios.',
-        ]);
-
-        $this->assertEmpty($errors);
-    }
-
     private function validateContact($data)
     {
         $errors = [];
@@ -65,6 +52,18 @@ class ContactFormTest extends TestCase
         }
 
         return $errors;
+    }
+
+    public function testValidContactPassesValidation()
+    {
+        $errors = $this->validateContact([
+            'nombre' => 'Juan',
+            'correo' => 'juan@test.cu',
+            'telefono' => '+53 555 12345',
+            'asunto' => 'informacion',
+            'mensaje' => 'Hola, quiero información sobre sus servicios.',
+        ]);
+        $this->assertEmpty($errors);
     }
 
     public function testNombreTooShort()
@@ -110,12 +109,41 @@ class ContactFormTest extends TestCase
         $this->assertEmpty($errors);
     }
 
-    public function testRateLimitTracksSubmissions()
+    public function testMultipleErrorsAtOnce()
     {
-        $rateData = array('contact_rate_test' => 5);
-        Storage::write('rate_limits', $rateData);
-        $rateDataRead = Storage::read('rate_limits');
-        $this->assertEquals(5, $rateDataRead['contact_rate_test']);
+        $errors = $this->validateContact(['nombre' => '', 'correo' => '', 'asunto' => '', 'mensaje' => '']);
+        $this->assertCount(4, $errors);
+    }
+
+    public function testAsuntoStoredEscaped()
+    {
+        Storage::insert('mensajes', array(
+            'nombre' => 'User',
+            'apellidos' => 'Test',
+            'correo' => 'user@test.cu',
+            'telefono' => '',
+            'asunto' => htmlspecialchars('<script>alert("xss")</script>', ENT_QUOTES, 'UTF-8'),
+            'mensaje' => 'Mensaje de prueba normal.',
+            'leido' => 0
+        ));
+        $mensajes = Storage::read('mensajes');
+        $this->assertStringContainsString('&lt;', $mensajes[0]['asunto']);
+        $this->assertStringNotContainsString('<script>', $mensajes[0]['asunto']);
+    }
+
+    public function testApellidosStoredCorrectly()
+    {
+        Storage::insert('mensajes', array(
+            'nombre' => 'Carlos',
+            'apellidos' => 'Perez Lopez',
+            'correo' => 'carlos@test.cu',
+            'telefono' => '',
+            'asunto' => 'Consulta',
+            'mensaje' => 'Mensaje de prueba para verificar apellidos.',
+            'leido' => 0
+        ));
+        $mensajes = Storage::read('mensajes');
+        $this->assertEquals('Perez Lopez', $mensajes[0]['apellidos']);
     }
 
     public function testDataPersistsAfterInsert()
@@ -126,9 +154,16 @@ class ContactFormTest extends TestCase
             'mensaje' => 'Mensaje de prueba para verificar persistencia.',
             'leido' => 0
         ));
-
         $mensajes = Storage::read('mensajes');
         $this->assertCount(1, $mensajes);
         $this->assertEquals('Test', $mensajes[0]['nombre']);
+    }
+
+    public function testRateLimitExceeded()
+    {
+        $rateData = array('contact_rate_test' => MAX_FORM_SUBMISSIONS);
+        Storage::write('rate_limits', $rateData);
+        $rateDataRead = Storage::read('rate_limits');
+        $this->assertEquals(MAX_FORM_SUBMISSIONS, $rateDataRead['contact_rate_test']);
     }
 }

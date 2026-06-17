@@ -1,6 +1,11 @@
 <?php
 $currentPage = basename($_SERVER['PHP_SELF']);
 require_once __DIR__ . '/../api/config.php';
+
+header("X-Frame-Options: DENY");
+header("X-Content-Type-Options: nosniff");
+header("Referrer-Policy: strict-origin-when-cross-origin");
+header("Permissions-Policy: geolocation=(), camera=(), microphone=(), midi=(), sync-xhr=()");
 ?>
 <!DOCTYPE html>
 <html lang="es">
