@@ -50,7 +50,7 @@
     {
         "titulo": "Aumenta calva",
         "slug": "aumenta-calva",
-        "resumen": "un proyecto q ayudara con la disminucion de calvicie",
+        "resumen": "El mejor proyecto del mundo enmanuel nues vdd????",
         "contenido": "El mejor proyecto del mundo enmanuel nues vdd????",
         "area": "Biotecnología",
         "estado": "propuesta",
@@ -61,6 +61,7 @@
         "publicada": 1,
         "destacada": 0,
         "id": 4,
-        "created_at": "2026-06-16 12:30"
+        "created_at": "2026-06-16 12:30",
+        "updated_at": "2026-06-17 11:26"
     }
 ]

@@ -53,17 +53,42 @@
                 </div>
                 <div class="grid">
                     <div class="card animate-on-scroll">
-                        <div class="card-icon">&#129309;</div>
+                        <div class="card-icon">
+                            <svg class="icon-alianza" width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M8 25C8 25 6 23 6 20C6 17 8 15 10 15C12 15 14 17 14 19V21" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M32 25C32 25 34 23 34 20C34 17 32 15 30 15C28 15 26 17 26 19V21" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M13 26L20 22L27 26" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M9 20L13 26L20 30L27 26L31 20" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M13 26C13 26 15 21 20 21C25 21 27 26 27 26" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                                <path d="M5 29L9 25" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M35 29L31 25" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
                         <h4>Alianza</h4>
                         <p>Trabajamos de la mano con empresas, universidades y gobierno para crear sinergias que impulsen el desarrollo.</p>
                     </div>
                     <div class="card animate-on-scroll delay-1">
-                        <div class="card-icon">&#128161;</div>
+                        <div class="card-icon">
+                            <svg class="icon-oportunidad" width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M13 24C13 24 10 20 10 15C10 10 14 6 20 6C26 6 30 10 30 15C30 20 27 24 27 24H13Z" stroke="white" stroke-width="2" stroke-linejoin="round" fill="none"/>
+                                <line x1="15" y1="28" x2="25" y2="28" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                                <line x1="17" y1="31" x2="23" y2="31" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                                <line x1="20" y1="24" x2="20" y2="28" stroke="white" stroke-width="2"/>
+                            </svg>
+                        </div>
                         <h4>Oportunidad</h4>
                         <p>Generamos espacios y oportunidades para el emprendimiento innovador basado en ciencia y tecnología.</p>
                     </div>
                     <div class="card animate-on-scroll delay-2">
-                        <div class="card-icon">&#128640;</div>
+                        <div class="card-icon">
+                            <svg class="icon-desarrollo" width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20 4L12 18L20 22L28 18L20 4Z" stroke="white" stroke-width="2" stroke-linejoin="round" fill="none"/>
+                                <circle cx="20" cy="13" r="2" stroke="white" stroke-width="1.5" fill="none"/>
+                                <path d="M12 18L8 24L16 20" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                                <path d="M28 18L32 24L24 20" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                                <path d="M18 22L16 30H24L22 22" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                            </svg>
+                        </div>
                         <h4>Desarrollo</h4>
                         <p>Fomentamos el crecimiento sostenible a través de la innovación y la transferencia de tecnología.</p>
                     </div>

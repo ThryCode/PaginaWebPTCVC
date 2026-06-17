@@ -2251,6 +2251,42 @@ body {
     box-shadow: 0 20px 40px rgba(0, 73, 102, 0.12);
 }
 
+.project-card:hover .project-card-icon svg.icon-proy-biotec {
+    animation: pulse-icon 1s ease-in-out infinite;
+}
+
+.project-card:hover .project-card-icon svg.icon-proy-tic {
+    animation: blink-icon 1.5s ease-in-out infinite;
+}
+
+.project-card:hover .project-card-icon svg.icon-proy-energia {
+    animation: float-icon 1.2s ease-in-out infinite;
+}
+
+.project-card:hover .project-card-icon svg.icon-proy-industria {
+    animation: bounce-icon 0.8s ease-in-out infinite;
+}
+
+.project-card:hover .project-card-icon svg.icon-proy-agricultura {
+    animation: float-icon 1.2s ease-in-out infinite;
+}
+
+.project-card:hover .project-card-icon svg.icon-proy-ambiente {
+    animation: pulse-icon 1s ease-in-out infinite;
+}
+
+.project-card:hover .project-card-icon svg.icon-proy-salud {
+    animation: pulse-icon 1s ease-in-out infinite;
+}
+
+.project-card:hover .project-card-icon svg.icon-proy-educacion {
+    animation: float-icon 1.2s ease-in-out infinite;
+}
+
+.project-card:hover .project-card-icon svg.icon-proy-otros {
+    animation: bounce-icon 0.8s ease-in-out infinite;
+}
+
 .project-card-top {
     height: 8px;
     background: linear-gradient(90deg, #00A0E1, #004966);
@@ -2269,17 +2305,11 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2rem;
+    background: #00A0E1;
 }
 
-.project-card-icon.icon-1 {
-    background: rgba(0, 160, 225, 0.1);
-}
-.project-card-icon.icon-2 {
-    background: rgba(0, 73, 102, 0.1);
-}
-.project-card-icon.icon-3 {
-    background: rgba(37, 99, 235, 0.1);
+.project-card-icon svg {
+    display: block;
 }
 
 .project-card h4 {
@@ -3665,6 +3695,18 @@ body {
 
 .card:hover .card-icon svg.icon-asesoramiento {
     animation: pulse-icon 1s ease-in-out infinite;
+}
+
+.card:hover .card-icon svg.icon-alianza {
+    animation: pulse-icon 1s ease-in-out infinite;
+}
+
+.card:hover .card-icon svg.icon-oportunidad {
+    animation: blink-icon 1.5s ease-in-out infinite;
+}
+
+.card:hover .card-icon svg.icon-desarrollo {
+    animation: float-icon 1.2s ease-in-out infinite;
 }
 
 .card:hover .card-icon svg.icon-recursos {
