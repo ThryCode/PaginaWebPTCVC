@@ -553,6 +553,78 @@ body {
     color: #004966;
 }
 
+/* ============================================
+    CHECK LIST
+    ============================================ */
+.check-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.check-list.cols-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 18px;
+    border-radius: 12px;
+    background: #fff;
+    transition: box-shadow 0.3s, transform 0.3s;
+}
+
+.check-item:hover {
+    box-shadow: 0 4px 16px rgba(0, 73, 102, 0.08);
+    transform: translateX(4px);
+}
+
+.check-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(0, 160, 225, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+    color: #00A0E1;
+}
+
+.check-item p {
+    margin: 0;
+    color: #555;
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+.tic-grid {
+    margin-top: 40px;
+    padding: 30px;
+    background: #fff;
+    border-radius: 20px;
+    border: 2px solid #E6F4FA;
+}
+
+.tic-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #004966;
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+@media (max-width: 768px) {
+    .check-list.cols-3 {
+        grid-template-columns: 1fr;
+    }
+}
+
 .card p {
     color: #646464;
     font-size: 0.95rem;
