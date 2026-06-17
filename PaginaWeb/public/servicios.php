@@ -130,69 +130,117 @@
                 <div class="section-title">
                     <h3>Actividades Secundarias</h3>
                 </div>
-                <div class="check-list">
-                    <div class="check-item">
-                        <div class="check-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+                <div class="grid">
+                    <div class="card animate-on-scroll">
+                        <div class="card-icon">
+                            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><path d="m9 14 2 2 4-4"/></svg>
+                        </div>
+                        <h4>Asesor&iacute;a y Consultor&iacute;a</h4>
                         <p>Brindar servicios de asesor&iacute;a y consultor&iacute;a especializada y otras asociadas al desarrollo de sistemas de gesti&oacute;n empresarial, sus componentes o procesos claves, tanto a los grupos de trabajo constituidos para ejecutar proyectos de desarrollo industrial y local, como a otras personas naturales y jur&iacute;dicas que lo soliciten.</p>
                     </div>
-                    <div class="check-item">
-                        <div class="check-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+                    <div class="card animate-on-scroll delay-1">
+                        <div class="card-icon">
+                            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 4.477 2 12s4.477 10 10 10z"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                        </div>
+                        <h4>Comercio Exterior</h4>
                         <p>Ejecutar las operaciones de Comercio Exterior relacionadas con los bienes y servicios seg&uacute;n nomenclatura aprobada por el MINCEX.</p>
                     </div>
-                    <div class="check-item">
-                        <div class="check-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+                    <div class="card animate-on-scroll delay-2">
+                        <div class="card-icon">
+                            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                        </div>
+                        <h4>Atenci&oacute;n a Delegaciones</h4>
                         <p>Brindar servicios de atenci&oacute;n a delegaciones extranjeras y nacionales, con la prestaci&oacute;n de servicios log&iacute;sticos tales como transportaci&oacute;n, alojamiento no tur&iacute;stico, seguro m&eacute;dico, servicios gastron&oacute;micos, traducci&oacute;n oficial y no oficial, elaboraci&oacute;n de documentos, protocolo, entre otros.</p>
                     </div>
-                    <div class="check-item">
-                        <div class="check-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+                    <div class="card animate-on-scroll delay-3">
+                        <div class="card-icon">
+                            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
+                        </div>
+                        <h4>Tr&aacute;mites</h4>
                         <p>Servicios de tr&aacute;mites a personas naturales nacionales o extranjeras vinculadas a actividades afines a la organizaci&oacute;n.</p>
                     </div>
-                    <div class="check-item">
-                        <div class="check-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+                    <div class="card animate-on-scroll delay-4">
+                        <div class="card-icon">
+                            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 9.5 9.5 2 12l7.5 2.5L12 22l2.5-7.5L22 12l-7.5-2.5z"/></svg>
+                        </div>
+                        <h4>Protocolo</h4>
                         <p>Brindar servicios de Protocolo.</p>
                     </div>
-                    <div class="check-item">
-                        <div class="check-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+                    <div class="card animate-on-scroll delay-5">
+                        <div class="card-icon">
+                            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M3 7v14"/><path d="M21 7v14"/><path d="M6 11h3v4H6z"/><path d="M15 11h3v4h-3z"/><path d="M9 3h6v4H9z"/></svg>
+                        </div>
+                        <h4>Alquiler de Espacios</h4>
                         <p>Prestar servicio de alquiler de parqueos, espacios, locales y salones pertenecientes a la Sociedad Mercantil.</p>
                     </div>
-                    <div class="check-item">
-                        <div class="check-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+                    <div class="card animate-on-scroll delay-6">
+                        <div class="card-icon">
+                            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><path d="M8 7h8"/><path d="M8 11h6"/></svg>
+                        </div>
+                        <h4>Capacitaci&oacute;n T&eacute;cnica</h4>
                         <p>Brindar servicios de capacitaci&oacute;n, entrenamiento y certificaci&oacute;n t&eacute;cnico-profesional especializada, en actividades de las organizaciones del Sector Industrial del pa&iacute;s, as&iacute; como otras asociadas al desarrollo de los sistemas de gesti&oacute;n empresarial.</p>
                     </div>
-                    <div class="check-item">
-                        <div class="check-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+                    <div class="card animate-on-scroll delay-7">
+                        <div class="card-icon">
+                            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                        </div>
+                        <h4>Representaci&oacute;n Comercial</h4>
                         <p>Brindar servicios de representaci&oacute;n comercial en el territorio nacional y en el exterior a personas naturales o jur&iacute;dicas, as&iacute; como a otros modelos de gesti&oacute;n.</p>
                     </div>
-                    <div class="check-item">
-                        <div class="check-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+                    <div class="card animate-on-scroll">
+                        <div class="card-icon">
+                            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"/><path d="M16 2v4"/><path d="M3 10h18"/><path d="M21 6v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                        </div>
+                        <h4>Eventos Cient&iacute;ficos</h4>
                         <p>Brindar servicios para la organizaci&oacute;n y desarrollo de eventos cient&iacute;ficos y t&eacute;cnicos, el montaje y habilitaci&oacute;n de espacios, ferias, f&oacute;rums empresariales, reuniones de negocio, y exposiciones afines.</p>
                     </div>
-                    <div class="check-item">
-                        <div class="check-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+                    <div class="card animate-on-scroll delay-1">
+                        <div class="card-icon">
+                            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                        </div>
+                        <h4>Promoci&oacute;n de Negocios</h4>
                         <p>Promocionar oportunidades de negocios mediante lanzamiento de proyectos, licitaciones institucionales, evento de negocio, entre otros.</p>
                     </div>
-                    <div class="check-item">
-                        <div class="check-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+                    <div class="card animate-on-scroll delay-2">
+                        <div class="card-icon">
+                            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5 12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><path d="M9 22V12h6v10"/></svg>
+                        </div>
+                        <h4>Alojamiento</h4>
                         <p>Gestionar y brindar servicios de alojamiento no tur&iacute;stico a personas naturales y jur&iacute;dicas que lo soliciten.</p>
                     </div>
-                    <div class="check-item">
-                        <div class="check-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+                    <div class="card animate-on-scroll delay-3">
+                        <div class="card-icon">
+                            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 17v2a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1v-2"/><path d="M5 7h14"/><path d="M3 7V4a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v3"/><path d="M19 7v8H5V7"/></svg>
+                        </div>
+                        <h4>Impresi&oacute;n</h4>
                         <p>Gestionar y prestar servicios de impresi&oacute;n de documentos y materiales en diferentes soportes que sean o no publicidad.</p>
                     </div>
-                    <div class="check-item">
-                        <div class="check-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+                    <div class="card animate-on-scroll delay-4">
+                        <div class="card-icon">
+                            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/><path d="M8 22h8"/><path d="M12 18v4"/></svg>
+                        </div>
+                        <h4>Servicios TIC</h4>
                         <p>Servicios asociados a las tecnolog&iacute;as de inform&aacute;tica y las comunicaciones (TIC).</p>
                     </div>
-                    <div class="check-item">
-                        <div class="check-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+                    <div class="card animate-on-scroll delay-5">
+                        <div class="card-icon">
+                            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                        </div>
+                        <h4>Venta de Productos</h4>
                         <p>Venta mayorista y minorista de productos no alimenticios y alimentos.</p>
                     </div>
-                    <div class="check-item">
-                        <div class="check-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+                    <div class="card animate-on-scroll delay-6">
+                        <div class="card-icon">
+                            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><path d="M6 1v3"/><path d="M10 1v3"/><path d="M14 1v3"/></svg>
+                        </div>
+                        <h4>Servicios Gastron&oacute;micos</h4>
                         <p>Servicios gastron&oacute;micos y/o de alimentaci&oacute;n a personas naturales y jur&iacute;dicas que sean o no de la organizaci&oacute;n.</p>
                     </div>
-                    <div class="check-item">
-                        <div class="check-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+                    <div class="card animate-on-scroll delay-7">
+                        <div class="card-icon">
+                            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+                        </div>
+                        <h4>Servicios Inmobiliarios</h4>
                         <p>Servicios inmobiliarios, limpieza, jardiner&iacute;a u otros que se demanden.</p>
                     </div>
                 </div>
