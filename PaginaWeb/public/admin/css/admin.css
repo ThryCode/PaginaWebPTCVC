@@ -154,6 +154,8 @@ body { font-family: 'Lato', 'Segoe UI', Tahoma, sans-serif; background: #E6F4FA;
 .btn-danger:hover { background: #C0392B; }
 .btn-secondary { background: #9B9B9B; color: #fff; }
 .btn-secondary:hover { background: #646464; }
+.btn-warning { background: #e67e22; color: #fff; }
+.btn-warning:hover { background: #d35400; }
 .btn-sm { padding: 5px 12px; font-size: 0.78rem; border-radius: 6px; }
 
 /* ============================================
