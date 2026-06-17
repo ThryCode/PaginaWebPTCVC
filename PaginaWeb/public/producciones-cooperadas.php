@@ -3,14 +3,14 @@
         <section class="page-header">
             <div class="container">
                 <h2>Producciones Cooperadas</h2>
-                <p>Alianzas estratÃ©gicas para el crecimiento empresarial</p>
+                <p>Alianzas estratégicas para el crecimiento empresarial</p>
             </div>
         </section>
 
         <section class="about-preview">
             <div class="container">
                 <div class="about-content">
-                    <h3>Â¿QuÃ© son las Producciones Cooperadas?</h3>
+                    <h3>¿Qué son las Producciones Cooperadas?</h3>
                     <p>Las producciones cooperadas entre empresas, tambi&eacute;n conocidas como cooperaci&oacute;n empresarial, son alianzas estrat&eacute;gicas donde dos o m&aacute;s empresas colaboran para alcanzar objetivos comunes. Este tipo de cooperaci&oacute;n puede tomar varias formas y tiene m&uacute;ltiples beneficios:</p>
                 </div>
                 <div class="about-image">
