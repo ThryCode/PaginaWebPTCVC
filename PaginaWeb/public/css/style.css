@@ -541,6 +541,11 @@ body {
     color: #fff;
 }
 
+.card-icon lord-icon,
+.card-icon svg {
+    display: block;
+}
+
 .card h4 {
     font-size: 1.3rem;
     font-weight: 700;
@@ -3639,4 +3644,25 @@ body {
         padding-left: 20px;
         padding-right: 20px;
     }
+}
+
+/* ============================================
+    ANIMACIONES SVG EN TARJETAS DE SERVICIO
+    ============================================ */
+@keyframes float-icon {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+@keyframes pulse-icon {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.card:hover .card-icon svg.icon-capacitacion {
+    animation: float-icon 1.2s ease-in-out infinite;
+}
+
+.card:hover .card-icon svg.icon-asesoramiento {
+    animation: pulse-icon 1s ease-in-out infinite;
 }
