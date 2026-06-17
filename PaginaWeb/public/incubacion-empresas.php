@@ -10,7 +10,7 @@
         <section class="about-preview">
             <div class="container">
                 <div class="about-content">
-                    <h3>Â¿QuÃ© es la incubaci&oacute;n de empresas?</h3>
+                    <h3>¿Qué es la incubaci&oacute;n de empresas?</h3>
                     <p>La incubaci&oacute;n de empresas es un proceso dise&ntilde;ado para apoyar a emprendedores y startups en sus etapas iniciales de desarrollo. Las incubadoras de empresas proporcionan una variedad de recursos y servicios.</p>
                 </div>
                 <div class="about-image">
