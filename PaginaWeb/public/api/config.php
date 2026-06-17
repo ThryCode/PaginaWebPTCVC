@@ -30,11 +30,13 @@ define('FROM_NAME', 'PCT Villa Clara');
 // Timezone
 date_default_timezone_set('America/Havana');
 
+// Session
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 // CSRF Token functions
 function generateCSRFToken() {
-    if (session_status() === PHP_SESSION_NONE) {
-        session_start();
-    }
     if (empty($_SESSION[CSRF_TOKEN_NAME])) {
         $_SESSION[CSRF_TOKEN_NAME] = bin2hex(random_bytes(32));
     }
@@ -42,9 +44,6 @@ function generateCSRFToken() {
 }
 
 function validateCSRFToken($token) {
-    if (session_status() === PHP_SESSION_NONE) {
-        session_start();
-    }
     return isset($_SESSION[CSRF_TOKEN_NAME]) && hash_equals($_SESSION[CSRF_TOKEN_NAME], $token);
 }
 
