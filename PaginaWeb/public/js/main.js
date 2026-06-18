@@ -40,13 +40,13 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        // Close menu when clicking a link (but not dropdown parent toggles)
+        // Close menu when clicking a link (skip dropdown parents on mobile)
         var navLinks = nav.querySelectorAll('a');
         navLinks.forEach(function(link) {
             link.addEventListener('click', function() {
                 if (window.innerWidth <= 768) {
-                    var parent = link.closest('.dropdown');
-                    if (parent && parent.querySelector('.dropdown-menu')) {
+                    var isDropdownParent = link.closest('.dropdown') && !link.closest('.dropdown-menu');
+                    if (isDropdownParent) {
                         return;
                     }
                     navToggle.classList.remove('active');
