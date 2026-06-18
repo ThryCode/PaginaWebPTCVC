@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
             nav.classList.toggle('active');
         });
 
-        var isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+        var isTouchDevice = /Mobi|Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
         // Mobile: toggle dropdown on parents, close nav on sub-items
         var navLinks = nav.querySelectorAll('a');
