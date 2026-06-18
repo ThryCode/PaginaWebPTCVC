@@ -40,11 +40,15 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        // Close menu when clicking a link
+        // Close menu when clicking a link (but not dropdown parent toggles)
         var navLinks = nav.querySelectorAll('a');
         navLinks.forEach(function(link) {
             link.addEventListener('click', function() {
                 if (window.innerWidth <= 768) {
+                    var parent = link.closest('.dropdown');
+                    if (parent && parent.querySelector('.dropdown-menu')) {
+                        return;
+                    }
                     navToggle.classList.remove('active');
                     nav.classList.remove('active');
                 }

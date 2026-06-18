@@ -193,7 +193,7 @@ body {
     list-style: none;
     margin: 0;
     z-index: 1001;
-    display: block !important;
+    display: block;
     flex-direction: column;
     gap: 2px !important;
 }
@@ -2464,6 +2464,8 @@ body {
 
     .nav.active {
         display: block;
+        max-height: calc(100vh - 80px);
+        overflow-y: auto;
     }
 
     .nav a {
@@ -2490,11 +2492,11 @@ body {
         margin-top: 8px;
         opacity: 1;
         visibility: visible;
-        display: none;
+        display: none !important;
     }
 
     .dropdown-menu.open {
-        display: block;
+        display: block !important;
     }
 
     .dropdown-menu li a {
