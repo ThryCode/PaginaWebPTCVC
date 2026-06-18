@@ -1,6 +1,7 @@
 <?php
 
 use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 $GLOBALS['_mail_errors'] = array();
 $GLOBALS['_mail_log'] = array();
@@ -14,7 +15,7 @@ function sendMail($to, $subject, $body) {
     _mailLog("Iniciando envio a $to");
     _mailLog("Subject: $subject");
 
-    if (!class_exists('PHPMailer')) {
+    if (!class_exists('PHPMailer\PHPMailer\PHPMailer')) {
         _mailLog('PHPMailer NO disponible, usando mail() nativo');
         $GLOBALS['_mail_errors'][] = 'PHPMailer no esta instalado o no se cargo el autoloader';
         $headers = "From: " . FROM_NAME . " <" . FROM_EMAIL . ">\r\n";
