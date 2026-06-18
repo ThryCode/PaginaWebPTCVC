@@ -3742,6 +3742,126 @@ body {
     animation: bounce-icon 0.8s ease-in-out infinite;
 }
 
+/* Animaciones hover cards servicios.php — Actividades Principales */
+.card:hover .card-icon svg.icon-formulacion {
+    animation: float-icon 1.2s ease-in-out infinite;
+}
+
+.card:hover .card-icon svg.icon-modelo {
+    animation: pulse-icon 1s ease-in-out infinite;
+}
+
+.card:hover .card-icon svg.icon-cooperacion {
+    animation: bounce-icon 0.8s ease-in-out infinite;
+}
+
+.card:hover .card-icon svg.icon-produccion {
+    animation: blink-icon 1.5s ease-in-out infinite;
+}
+
+.card:hover .card-icon svg.icon-representacion {
+    animation: float-icon 1.2s ease-in-out infinite;
+}
+
+.card:hover .card-icon svg.icon-alquiler {
+    animation: pulse-icon 1s ease-in-out infinite;
+}
+
+.card:hover .card-icon svg.icon-capacitacion-serv {
+    animation: bounce-icon 0.8s ease-in-out infinite;
+}
+
+.card:hover .card-icon svg.icon-financiamiento {
+    animation: blink-icon 1.5s ease-in-out infinite;
+}
+
+/* Animaciones hover cards servicios.php — Servicios Estratégicos */
+.card:hover .card-icon svg.icon-asesoria {
+    animation: pulse-icon 1s ease-in-out infinite;
+}
+
+.card:hover .card-icon svg.icon-inversionistas {
+    animation: float-icon 1.2s ease-in-out infinite;
+}
+
+.card:hover .card-icon svg.icon-arrendamiento {
+    animation: bounce-icon 0.8s ease-in-out infinite;
+}
+
+/* Animaciones hover cards servicios.php — Actividades Secundarias */
+.card:hover .card-icon svg.icon-consultoria {
+    animation: float-icon 1.2s ease-in-out infinite;
+}
+
+.card:hover .card-icon svg.icon-comercio {
+    animation: pulse-icon 1s ease-in-out infinite;
+}
+
+.card:hover .card-icon svg.icon-delegaciones {
+    animation: blink-icon 1.5s ease-in-out infinite;
+}
+
+.card:hover .card-icon svg.icon-tramites {
+    animation: bounce-icon 0.8s ease-in-out infinite;
+}
+
+.card:hover .card-icon svg.icon-protocolo {
+    animation: float-icon 1.2s ease-in-out infinite;
+}
+
+.card:hover .card-icon svg.icon-espacios {
+    animation: pulse-icon 1s ease-in-out infinite;
+}
+
+.card:hover .card-icon svg.icon-cap-tecnica {
+    animation: blink-icon 1.5s ease-in-out infinite;
+}
+
+.card:hover .card-icon svg.icon-rep-comercial {
+    animation: bounce-icon 0.8s ease-in-out infinite;
+}
+
+.card:hover .card-icon svg.icon-eventos {
+    animation: float-icon 1.2s ease-in-out infinite;
+}
+
+.card:hover .card-icon svg.icon-promocion {
+    animation: pulse-icon 1s ease-in-out infinite;
+}
+
+.card:hover .card-icon svg.icon-alojamiento {
+    animation: blink-icon 1.5s ease-in-out infinite;
+}
+
+.card:hover .card-icon svg.icon-impresion {
+    animation: bounce-icon 0.8s ease-in-out infinite;
+}
+
+.card:hover .card-icon svg.icon-servicios-tic {
+    animation: float-icon 1.2s ease-in-out infinite;
+}
+
+.card:hover .card-icon svg.icon-venta {
+    animation: pulse-icon 1s ease-in-out infinite;
+}
+
+.card:hover .card-icon svg.icon-gastronomia {
+    animation: blink-icon 1.5s ease-in-out infinite;
+}
+
+.card:hover .card-icon svg.icon-inmobiliaria {
+    animation: bounce-icon 0.8s ease-in-out infinite;
+}
+
+/* Animaciones hover cards servicios.php — Servicios Especializados */
+.card:hover .card-icon svg.icon-coop-estrategica {
+    animation: float-icon 1.2s ease-in-out infinite;
+}
+
+.card:hover .card-icon svg.icon-incubacion {
+    animation: pulse-icon 1s ease-in-out infinite;
+}
+
 @keyframes blink-icon {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.4; }
