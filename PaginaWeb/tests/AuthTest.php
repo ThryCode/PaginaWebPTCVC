@@ -6,117 +6,161 @@ use PHPUnit\Framework\TestCase;
 class AuthTest extends TestCase
 {
     private $auth;
-    private $testUser;
+    private $dataFile;
 
     protected function setUp(): void
     {
+        if (!defined('DATA_DIR')) {
+            define('DATA_DIR', __DIR__ . '/tmp_data');
+        }
+        if (!is_dir(DATA_DIR)) {
+            mkdir(DATA_DIR, 0755, true);
+        }
+
+        $this->dataFile = DATA_DIR . '/admin_auth.json';
+        $this->cleanData();
+
         $this->auth = new Auth();
-        Storage::insert('usuarios', [
-            'nombre' => 'Test',
-            'email' => 'test@test.cu',
-            'password' => password_hash('pass123', PASSWORD_BCRYPT),
-            'rol' => 'admin',
-            'activo' => 1
-        ]);
+        $userId = $this->auth->createUser('Test User', 'test@test.cu', 'admin');
+        $this->testUserId = $userId;
     }
 
     protected function tearDown(): void
     {
         $_SESSION = [];
-        $file = Storage::getFilePath('usuarios');
-        if (file_exists($file)) {
-            $users = Storage::read('usuarios');
-            foreach ($users as $u) {
-                if ($u['email'] === 'test@test.cu') {
-                    Storage::delete('usuarios', $u['id']);
-                }
-            }
+        if (session_status() === PHP_SESSION_ACTIVE) {
+            session_destroy();
         }
-        $file = Storage::getFilePath('rate_limits');
-        if (file_exists($file)) {
-            $data = Storage::read('rate_limits');
-            foreach ($data as $key => $val) {
-                if (strpos($key, 'login_') === 0) {
-                    unset($data[$key]);
-                }
+        $this->cleanData();
+    }
+
+    private function cleanData() {
+        if (file_exists($this->dataFile)) {
+            unlink($this->dataFile);
+        }
+        $dir = dirname($this->dataFile);
+        if (is_dir($dir) && strpos($dir, 'tmp_data') !== false) {
+            $files = glob($dir . '/*');
+            foreach ($files as $f) {
+                unlink($f);
             }
-            Storage::write('rate_limits', $data);
+            rmdir($dir);
         }
     }
 
-    public function testLoginSuccess()
+    public function testGeneratePAC()
     {
-        $this->assertTrue($this->auth->login('test@test.cu', 'pass123'));
+        $pac = $this->auth->generatePAC($this->testUserId, 'test-pac');
+        $this->assertEquals(10, strlen($pac));
+        $this->assertRegExp('/^[A-Za-z0-9]+$/', $pac);
     }
 
-    public function testLoginFailsWithWrongPassword()
+    public function testLoginWithValidPAC()
     {
-        $this->assertFalse($this->auth->login('test@test.cu', 'wrong'));
+        $pac = $this->auth->generatePAC($this->testUserId, 'login-test');
+        $result = $this->auth->loginWithPAC($pac);
+        $this->assertTrue($result);
+        $this->assertTrue($this->auth->isLoggedIn());
     }
 
-    public function testLoginFailsWithUnknownEmail()
+    public function testLoginFailsWithWrongPAC()
     {
-        $this->assertFalse($this->auth->login('noexiste@test.cu', 'pass123'));
+        $this->auth->generatePAC($this->testUserId, 'wrong-test');
+        $result = $this->auth->loginWithPAC('WrongPAC123');
+        $this->assertFalse($result);
+        $this->assertFalse($this->auth->isLoggedIn());
+    }
+
+    public function testLoginFailsWithShortPAC()
+    {
+        $result = $this->auth->loginWithPAC('short');
+        $this->assertFalse($result);
     }
 
     public function testLoginFailsForInactiveUser()
     {
-        Storage::insert('usuarios', [
-            'nombre' => 'Inactive',
-            'email' => 'inactive@test.cu',
-            'password' => password_hash('pass123', PASSWORD_BCRYPT),
-            'rol' => 'editor',
-            'activo' => 0
-        ]);
-        $this->assertFalse($this->auth->login('inactive@test.cu', 'pass123'));
-        $users = Storage::read('usuarios');
-        foreach ($users as $u) {
-            if ($u['email'] === 'inactive@test.cu') {
-                Storage::delete('usuarios', $u['id']);
-            }
-        }
-    }
-
-    public function testLoginReturnsLockedAfterMaxAttempts()
-    {
-        for ($i = 0; $i < MAX_LOGIN_ATTEMPTS; $i++) {
-            $this->auth->login('test@test.cu', 'wrong');
-        }
-        $result = $this->auth->login('test@test.cu', 'pass123');
-        $this->assertEquals('locked', $result);
+        $this->auth->updateUser($this->testUserId, ['activo' => false]);
+        $pac = $this->auth->generatePAC($this->testUserId, 'inactive-test');
+        $result = $this->auth->loginWithPAC($pac);
+        $this->assertFalse($result);
     }
 
     public function testIsLoggedInAfterLogin()
     {
-        $this->auth->login('test@test.cu', 'pass123');
+        $pac = $this->auth->generatePAC($this->testUserId, 'loggedin-test');
+        $this->auth->loginWithPAC($pac);
         $this->assertTrue($this->auth->isLoggedIn());
     }
 
     public function testGetUserReturnsData()
     {
-        $this->auth->login('test@test.cu', 'pass123');
+        $pac = $this->auth->generatePAC($this->testUserId, 'user-test');
+        $this->auth->loginWithPAC($pac);
         $user = $this->auth->getUser();
         $this->assertEquals('test@test.cu', $user['email']);
-        $this->assertEquals('Test', $user['nombre']);
+        $this->assertEquals('Test User', $user['nombre']);
+        $this->assertEquals('admin', $user['rol']);
     }
 
     public function testIsAdmin()
     {
-        $this->auth->login('test@test.cu', 'pass123');
+        $pac = $this->auth->generatePAC($this->testUserId, 'admin-test');
+        $this->auth->loginWithPAC($pac);
         $this->assertTrue($this->auth->isAdmin());
     }
 
     public function testLogoutClearsSession()
     {
-        $this->auth->login('test@test.cu', 'pass123');
+        $pac = $this->auth->generatePAC($this->testUserId, 'logout-test');
+        $this->auth->loginWithPAC($pac);
         $this->assertTrue($this->auth->isLoggedIn());
         $this->auth->logout();
         $this->assertFalse($this->auth->isLoggedIn());
     }
 
-    public function testHashPassword()
+    public function testRegeneratePAC()
     {
-        $hash = $this->auth->hashPassword('mypassword');
-        $this->assertTrue(password_verify('mypassword', $hash));
+        $oldPac = $this->auth->generatePAC($this->testUserId, 'old-test');
+        $this->assertTrue($this->auth->loginWithPAC($oldPac));
+        $this->auth->logout();
+
+        $newPac = $this->auth->regeneratePAC($this->testUserId, 'new-test');
+        $this->assertEquals(10, strlen($newPac));
+        $this->assertNotEquals($oldPac, $newPac);
+
+        $this->assertFalse($this->auth->loginWithPAC($oldPac));
+        $this->assertTrue($this->auth->loginWithPAC($newPac));
+    }
+
+    public function testRevokePAC()
+    {
+        $pac = $this->auth->generatePAC($this->testUserId, 'revoke-test');
+        $this->assertTrue($this->auth->loginWithPAC($pac));
+        $this->auth->logout();
+
+        $pacs = $this->auth->listPACs($this->testUserId);
+        foreach ($pacs as $p) {
+            if ($p['activo']) {
+                $this->auth->revokePAC($p['id']);
+                break;
+            }
+        }
+
+        $this->assertFalse($this->auth->loginWithPAC($pac));
+    }
+
+    public function testGetUsers()
+    {
+        $users = $this->auth->getUsers();
+        $this->assertCount(1, $users);
+        $this->assertEquals('Test User', $users[0]['nombre']);
+    }
+
+    public function testCreateUser()
+    {
+        $id = $this->auth->createUser('Editor', 'editor@test.cu', 'editor');
+        $user = $this->auth->getUserById($id);
+        $this->assertEquals('Editor', $user['nombre']);
+        $this->assertEquals('editor', $user['rol']);
     }
 }

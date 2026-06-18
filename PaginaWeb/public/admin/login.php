@@ -1,7 +1,5 @@
 <?php
 require_once '../api/auth.php';
-require_once '../api/mail.php';
-require_once '../api/storage.php';
 
 $auth = new Auth();
 
@@ -10,370 +8,141 @@ if ($auth->isLoggedIn()) {
     exit;
 }
 
-$tokenFile = __DIR__ . '/../data/admin_token.json';
-$tokenData = file_exists($tokenFile) ? json_decode(file_get_contents($tokenFile), true) : null;
-$validToken = $tokenData['token'] ?? '';
+$error = false;
 
-$inputToken = isset($_GET['token']) ? $_GET['token'] : '';
-$showRestricted = ($inputToken !== $validToken);
-
-$tokenSent = false;
-$tokenSentCount = 0;
-$tokenSendError = '';
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'send_token') {
-    $rateFile = __DIR__ . '/../data/rate_limits.json';
-    $rateData = file_exists($rateFile) ? json_decode(file_get_contents($rateFile), true) : [];
-    $rateKey = 'token_send_' . ($_SERVER['REMOTE_ADDR'] ?? 'unknown');
-    $lastSend = $rateData[$rateKey] ?? 0;
-    if (time() - $lastSend < 300) {
-        $tokenSendError = 'Ya se envió el token recientemente. Espere 5 minutos.';
-    } else {
-        $sent = sendTokenToAllUsers($validToken);
-        $tokenSent = true;
-        $tokenSentCount = $sent;
-        $rateData[$rateKey] = time();
-        file_put_contents($rateFile, json_encode($rateData));
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['pac'])) {
+    $result = $auth->loginWithPAC($_POST['pac']);
+    if ($result === true) {
+        header('Location: index.php');
+        exit;
     }
+    $error = true;
 }
+?>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página no encontrada</title>
+    <link rel="icon" type="image/x-icon" href="../assets/img/logo/favicon.ico">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f5f5f7;
+            color: #1d1d1f;
+        }
+        .container { text-align: center; padding: 40px 20px; max-width: 480px; }
+        .code { font-size: 80px; font-weight: 700; color: #86868b; letter-spacing: -4px; margin-bottom: 8px; user-select: none; }
+        .title { font-size: 20px; font-weight: 600; margin-bottom: 8px; }
+        .desc { font-size: 14px; color: #86868b; line-height: 1.5; margin-bottom: 32px; }
+        .pac-wrap { display: none; margin-top: 8px; }
+        .pac-wrap.visible { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .pac-input {
+            width: 100%; padding: 14px 16px; font-size: 18px;
+            font-family: 'SF Mono', 'Courier New', monospace;
+            letter-spacing: 2px; text-align: center;
+            border: 2px solid #d2d2d7; border-radius: 12px;
+            background: #fff; color: #1d1d1f;
+            outline: none; transition: border-color 0.2s;
+        }
+        .pac-input:focus { border-color: #0071e3; }
+        .pac-submit {
+            width: 100%; padding: 14px; margin-top: 10px;
+            background: #0071e3; color: #fff;
+            border: none; border-radius: 12px;
+            font-size: 15px; font-weight: 600; cursor: pointer;
+            transition: background 0.2s;
+        }
+        .pac-submit:hover { background: #0066cc; }
+        .pac-submit:active { background: #0055b3; }
+        .pac-error {
+            display: none; margin-top: 10px;
+            padding: 10px 14px; background: #fff2f0;
+            border: 1px solid #ffccc7; border-radius: 8px;
+            color: #cf1322; font-size: 13px;
+        }
+        .pac-error.visible { display: block; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="code" id="secretTrigger">404</div>
+        <div class="title">Página no encontrada</div>
+        <div class="desc">La página que buscas no existe o ha sido movida.<br>Verifica la dirección e intenta nuevamente.</div>
+        <div class="pac-wrap" id="pacWrap">
+            <form method="POST" autocomplete="off">
+                <input type="text" name="pac" class="pac-input" id="pacInput"
+                       placeholder="Clave de acceso" maxlength="20" autocomplete="off">
+                <button type="submit" class="pac-submit">Acceder</button>
+            </form>
+            <div class="pac-error <?php if ($error) echo 'visible'; ?>" id="pacError">
+                Clave incorrecta
+            </div>
+        </div>
+    </div>
 
-$error = '';
+    <script>
+    (function() {
+        var trigger = document.getElementById('secretTrigger');
+        var wrap = document.getElementById('pacWrap');
+        var input = document.getElementById('pacInput');
+        var error = document.getElementById('pacError');
 
-if (!$showRestricted && $_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['action'])) {
-    if (!validateCSRFToken($_POST[CSRF_TOKEN_NAME] ?? '')) {
-        $error = 'Token de seguridad inválido.';
-    } else {
-        $email = isset($_POST['email']) ? trim($_POST['email']) : '';
-        $password = isset($_POST['password']) ? $_POST['password'] : '';
+        var clicks = 0;
+        var clickTimer = null;
+        var startTouch = null;
+        var holdTimer = null;
+        var revealed = false;
 
-        if (empty($email) || empty($password)) {
-            $error = 'Por favor complete todos los campos.';
-        } else {
-            $loginResult = $auth->login($email, $password);
-            if ($loginResult === true) {
-                header('Location: index.php');
-                exit;
-            } elseif ($loginResult === 'locked') {
-                $error = 'Cuenta bloqueada temporalmente por demasiados intentos fallidos. Intente m&aacute;s tarde.';
-            } else {
-                $error = 'Email o contrase&ntilde;a incorrectos.';
+        function reveal() {
+            if (revealed) return;
+            revealed = true;
+            wrap.classList.add('visible');
+            setTimeout(function() { input.focus(); }, 100);
+        }
+
+        trigger.addEventListener('click', function(e) {
+            if (revealed) return;
+            clicks++;
+            if (clicks >= 5) {
+                reveal();
+                return;
             }
-        }
-    }
-}
+            clearTimeout(clickTimer);
+            clickTimer = setTimeout(function() {
+                clicks = 0;
+            }, 3000);
+        });
 
-$csrfToken = generateCSRFToken();
+        trigger.addEventListener('touchstart', function(e) {
+            if (revealed) return;
+            startTouch = Date.now();
+            holdTimer = setTimeout(function() {
+                reveal();
+            }, 5000);
+        }, { passive: true });
 
-if ($showRestricted):
-?>
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acceso restringido</title>
-    <link rel="icon" type="image/x-icon" href="../assets/img/logo/favicon.ico">
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Lato', sans-serif;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #003c6e 0%, #008674 100%);
-            position: relative;
-            overflow: hidden;
-        }
-        body::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px);
-            background-size: 40px 40px;
-        }
-        .card {
-            position: relative;
-            z-index: 1;
-            width: 100%;
-            max-width: 420px;
-            padding: 20px;
-        }
-        .card-inner {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 48px 40px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            text-align: center;
-            animation: fadeIn 0.6s ease-out;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(30px) scale(0.95); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        .icon-lock {
-            width: 64px;
-            height: 64px;
-            background: linear-gradient(135deg, #dc2626, #ef4444);
-            border-radius: 16px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 16px;
-        }
-        .icon-lock svg { width: 32px; height: 32px; stroke: #fff; }
-        h1 { color: #1a1a2e; font-size: 1.6rem; font-weight: 900; margin-bottom: 8px; }
-        p { color: #666; font-size: 0.95rem; margin-bottom: 24px; line-height: 1.5; }
-        .btn {
-            display: inline-block;
-            padding: 14px 32px;
-            background: linear-gradient(135deg, #003c6e, #005a9e);
-            color: #fff;
-            border: none;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-weight: 700;
-            font-family: inherit;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .btn:hover {
-            background: linear-gradient(135deg, #008674, #00a88e);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 134, 116, 0.4);
-        }
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-        .success {
-            background: #f0fdf4;
-            color: #16a34a;
-            padding: 12px 16px;
-            border-radius: 10px;
-            margin-bottom: 16px;
-            font-size: 0.9rem;
-            border: 1px solid #bbf7d0;
-        }
-        .error-msg {
-            background: #fef2f2;
-            color: #dc2626;
-            padding: 12px 16px;
-            border-radius: 10px;
-            margin-bottom: 16px;
-            font-size: 0.9rem;
-            border: 1px solid #fecaca;
-        }
-        .back-link { margin-top: 24px; }
-        .back-link a { color: rgba(255,255,255,0.8); text-decoration: none; font-size: 0.9rem; transition: color 0.3s; }
-        .back-link a:hover { color: #fff; }
-        @media (max-width: 480px) {
-            .card-inner { padding: 36px 24px; }
-        }
-    </style>
-</head>
-<body>
-    <div class="card">
-        <div class="card-inner">
-            <div class="icon-lock">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-            </div>
-            <h1>Acceso restringido</h1>
-            <p>Esta área es privada. Se requiere un token de acceso para continuar. Si eres administrador, solicita el token al correo registrado.</p>
+        trigger.addEventListener('touchend', function(e) {
+            if (revealed) return;
+            clearTimeout(holdTimer);
+            startTouch = null;
+        }, { passive: true });
 
-            <?php if ($tokenSent): ?>
-                <div class="success">Token enviado a <?php echo $tokenSentCount; ?> usuario(s).</div>
-                <?php $mailErrors = getMailErrors(); if (!empty($mailErrors)): ?>
-                    <div style="background:#fef2f2;color:#dc2626;padding:12px 16px;border-radius:10px;margin-bottom:16px;font-size:0.85rem;border:1px solid #fecaca;text-align:left;">
-                        <strong>Detalles del env&iacute;o:</strong>
-                        <?php foreach ($mailErrors as $err): ?>
-                            <div style="margin-top:4px;">&bull; <?php echo htmlspecialchars($err); ?></div>
-                        <?php endforeach; ?>
-                    </div>
-                <?php endif; ?>
-            <?php elseif (!empty($tokenSendError)): ?>
-                <div class="error-msg"><?php echo $tokenSendError; ?></div>
-            <?php endif; ?>
+        trigger.addEventListener('touchmove', function(e) {
+            clearTimeout(holdTimer);
+        }, { passive: true });
 
-            <form method="POST">
-                <input type="hidden" name="action" value="send_token">
-                <button type="submit" class="btn">Enviar token a todos los usuarios</button>
-            </form>
-        </div>
-        <div class="back-link">
-            <a href="../index.php">&larr; Volver al sitio</a>
-        </div>
-    </div>
-</body>
-</html>
-<?php
-exit;
-endif;
-?>
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Iniciar Sesión</title>
-    <link rel="icon" type="image/x-icon" href="../assets/img/logo/favicon.ico">
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Lato', sans-serif;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #003c6e 0%, #008674 100%);
-            position: relative;
-            overflow: hidden;
-        }
-        body::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px);
-            background-size: 40px 40px;
-            animation: bgShift 20s linear infinite;
-        }
-        @keyframes bgShift {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(40px, 40px); }
-        }
-        .login-container {
-            position: relative;
-            z-index: 1;
-            width: 100%;
-            max-width: 420px;
-            padding: 20px;
-        }
-        .login-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 48px 40px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            animation: cardIn 0.6s ease-out;
-        }
-        @keyframes cardIn {
-            from { opacity: 0; transform: translateY(30px) scale(0.95); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        .login-logo { text-align: center; margin-bottom: 8px; }
-        .login-logo-icon {
-            width: 64px; height: 64px;
-            background: linear-gradient(135deg, #003c6e, #008674);
-            border-radius: 16px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 8px;
-        }
-        .login-logo-icon svg { width: 32px; height: 32px; fill: #fff; }
-        .login-card h1 { text-align: center; color: #1a1a2e; font-size: 1.6rem; font-weight: 900; margin-bottom: 6px; }
-        .login-card .subtitle { text-align: center; color: #666; font-size: 0.9rem; margin-bottom: 32px; }
-        .form-group { margin-bottom: 22px; position: relative; }
-        .form-group label { display: block; margin-bottom: 8px; color: #444; font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; }
-        .input-wrap { position: relative; }
-        .input-wrap svg {
-            position: absolute; left: 14px; top: 50%;
-            transform: translateY(-50%); width: 18px; height: 18px;
-            stroke: #999; pointer-events: none; transition: stroke 0.3s;
-        }
-        .form-group input {
-            width: 100%; padding: 14px 14px 14px 44px;
-            border: 2px solid #e0e0e0; border-radius: 12px;
-            font-size: 1rem; font-family: inherit; color: #333;
-            background: #fafafa; transition: all 0.3s;
-        }
-        .form-group input:focus {
-            outline: none; border-color: #003c6e; background: #fff;
-            box-shadow: 0 0 0 4px rgba(0, 60, 110, 0.1);
-        }
-        .input-wrap:focus-within svg { stroke: #003c6e; }
-        .btn-login {
-            width: 100%; padding: 15px;
-            background: linear-gradient(135deg, #003c6e, #005a9e);
-            color: #fff; border: none; border-radius: 12px;
-            font-size: 1rem; font-weight: 700; font-family: inherit;
-            cursor: pointer; transition: all 0.3s; margin-top: 8px;
-        }
-        .btn-login:hover {
-            background: linear-gradient(135deg, #008674, #00a88e);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 134, 116, 0.4);
-        }
-        .error {
-            background: #fef2f2; color: #dc2626;
-            padding: 12px 16px; border-radius: 10px;
-            margin-bottom: 20px; text-align: center;
-            font-size: 0.9rem; border: 1px solid #fecaca;
-            animation: shake 0.4s ease;
-        }
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
-        }
-        .back-link { text-align: center; margin-top: 24px; }
-        .back-link a { color: rgba(255,255,255,0.8); text-decoration: none; font-size: 0.9rem; transition: color 0.3s; }
-        .back-link a:hover { color: #fff; }
-        @media (max-width: 480px) {
-            .login-card { padding: 36px 24px; }
-            .login-card h1 { font-size: 1.3rem; }
-        }
-    </style>
-</head>
-<body>
-    <div class="login-container">
-        <div class="login-card">
-            <div class="login-logo">
-                <div class="login-logo-icon">
-                    <svg viewBox="0 0 24 24"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/></svg>
-                </div>
-            </div>
-            <h1>Panel Admin</h1>
-            <p class="subtitle">Parque Científico Tecnológico de Villa Clara</p>
-
-            <?php if (!empty($error)): ?>
-                <div class="error"><?php echo $error; ?></div>
-            <?php endif; ?>
-
-            <form method="POST">
-                <input type="hidden" name="<?php echo CSRF_TOKEN_NAME; ?>" value="<?php echo $csrfToken; ?>">
-                <div class="form-group">
-                    <label for="email">Correo electrónico</label>
-                    <div class="input-wrap">
-                        <input type="email" id="email" name="email" required placeholder="admin@pctvc.cu">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="password">Contraseña</label>
-                    <div class="input-wrap">
-                        <input type="password" id="password" name="password" required placeholder="••••••••">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                    </div>
-                </div>
-                <button type="submit" class="btn-login">Iniciar Sesión</button>
-            </form>
-        </div>
-        <div class="back-link">
-            <a href="../index.php">&larr; Volver al sitio</a>
-        </div>
-    </div>
+        input.addEventListener('input', function() {
+            error.classList.remove('visible');
+        });
+    })();
+    </script>
 </body>
 </html>
