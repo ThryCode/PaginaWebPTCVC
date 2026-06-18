@@ -13,6 +13,7 @@ header("Permissions-Policy: geolocation=(), camera=(), microphone=(), midi=(), s
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script>(function(){var m=document.querySelector('meta[name="viewport"]'),w=1200,s=window.innerWidth||document.documentElement.clientWidth;if(s<w){var r=s/w;m.setAttribute('content','width='+w+', initial-scale='+r+', maximum-scale='+r+', minimum-scale='+r+', user-scalable=no')}})();</script>
     <title>pctvc</title>
     <link rel="icon" type="image/x-icon" href="assets/img/logo/favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
