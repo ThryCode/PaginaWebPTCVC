@@ -26,7 +26,7 @@ if (version_compare(PHP_VERSION, '7.3.11', '<')) {
 define('ENV', 'production');
 
 // Autoloader de Composer (PHPMailer)
-$autoloadPath = __DIR__ . '/../../vendor/autoload.php';
+$autoloadPath = __DIR__ . '/../vendor/autoload.php';
 if (file_exists($autoloadPath)) {
     require_once $autoloadPath;
 }
@@ -52,7 +52,7 @@ define('FROM_NAME', 'PCT Villa Clara');
 define('SMTP_HOST', 'smtp.gmail.com');
 define('SMTP_PORT', 587);
 define('SMTP_USER', 'webpctvc@gmail.com');
-define('SMTP_PASS', 'webpctvc*2026');
+define('SMTP_PASS', 'pctvc*2026');
 define('SMTP_ENCRYPTION', 'tls');
 define('SMTP_DEBUG', 0);
 
