@@ -653,10 +653,24 @@ function loadCalendarMonth() {
     var daysInMonth = new Date(year, month, 0).getDate();
     var startDay = (firstDay === 0) ? 6 : firstDay - 1;
 
+    var currentYear = new Date().getFullYear();
+    var yearOptions = '';
+    for (var y = currentYear - 5; y <= currentYear + 2; y++) {
+        yearOptions += '<option value="' + y + '"' + (y === year ? ' selected' : '') + '>' + y + '</option>';
+    }
+
+    var monthOptions = '';
+    for (var m = 0; m < 12; m++) {
+        monthOptions += '<option value="' + (m + 1) + '"' + ((m + 1) === month ? ' selected' : '') + '>' + monthNames[m] + '</option>';
+    }
+
     var html = '<div class="calendar">';
     html += '<div class="calendar-header">';
     html += '<button class="calendar-nav" onclick="calendarPrev()" aria-label="Mes anterior">&#9664;</button>';
-    html += '<span class="calendar-title">' + monthNames[month - 1] + ' ' + year + '</span>';
+    html += '<div class="calendar-selectors">';
+    html += '<select class="calendar-select calendar-month-select" onchange="calendarGoToMonth(parseInt(this.value))" aria-label="Mes">' + monthOptions + '</select>';
+    html += '<select class="calendar-select calendar-year-select" onchange="calendarGoToYear(parseInt(this.value))" aria-label="Año">' + yearOptions + '</select>';
+    html += '</div>';
     html += '<button class="calendar-nav" onclick="calendarNext()" aria-label="Mes siguiente">&#9654;</button>';
     html += '</div>';
 
@@ -771,6 +785,16 @@ function calendarNext() {
         calendarState.month = 1;
         calendarState.year++;
     }
+    loadCalendarMonth();
+}
+
+function calendarGoToMonth(month) {
+    calendarState.month = month;
+    loadCalendarMonth();
+}
+
+function calendarGoToYear(year) {
+    calendarState.year = year;
     loadCalendarMonth();
 }
 function loadGallery(containerId, options) {

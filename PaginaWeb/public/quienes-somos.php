@@ -1,4 +1,29 @@
-<?php include 'includes/header.php'; ?>
+<?php
+$pageTitle = 'Qui&eacute;nes Somos - Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara';
+$pageDescription = 'Conoce la historia, misi&oacute;n, visi&oacute;n y junta directiva del Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara. Alianza, oportunidad y desarrollo.';
+$canonicalUrl = 'https://pctvc.cu/quienes-somos.php';
+include 'includes/header.php';
+?>
+        <script type="application/ld+json">
+        <?php echo json_encode(array(
+            '@context' => 'https://schema.org',
+            '@type' => 'Organization',
+            'name' => 'Parque Científico Tecnológico de Villa Clara',
+            'url' => 'https://pctvc.cu',
+            'logo' => 'https://pctvc.cu/assets/img/logo/logo.png',
+            'foundingDate' => '2021',
+            'description' => 'Centro de innovación que promueve la colaboración entre gobierno, el sector del conocimiento y el sector empresarial para impulsar el desarrollo científico-tecnológico en Cuba.',
+            'address' => array(
+                '@type' => 'PostalAddress',
+                'streetAddress' => 'Carretera a Planta Mecánica, No. 39 B',
+                'addressLocality' => 'Santa Clara',
+                'addressRegion' => 'Villa Clara',
+                'addressCountry' => 'CU'
+            ),
+            'telephone' => '+53-42281551',
+            'email' => 'pctvillaclara@pctvc.cu'
+        ), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); ?>
+        </script>
 
         <section class="page-header">
             <div class="container">
@@ -32,14 +57,14 @@
                         <div class="mv-icon mission-icon">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/></svg>
                         </div>
-                        <h3>Nuestra Misión</h3>
+                        <h4>Nuestra Misión</h4>
                         <p>Contribuir al desarrollo industrial, participando y coadyuvando a la creaci&oacute;n, implantaci&oacute;n, funcionamiento, fortalecimiento, lanzamiento de nuevas entidades (productos nuevos o mejorados y empresas), adoptando sistemas de gesti&oacute;n integrada que incrementen el fondo de bienes exportables y la sustituci&oacute;n de importaciones en armon&iacute;a con el medio ambiente.</p>
                     </div>
                     <div class="mv-card animate-on-scroll delay-1">
                         <div class="mv-icon vision-icon">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                         </div>
-                        <h3>Nuestra Visión</h3>
+                        <h4>Nuestra Visión</h4>
                         <p>Ser un referente de ecosistema de innovaci&oacute;n y transferencia cient&iacute;fica en la rama de las industrias, con un m&iacute;nimo viable de industria 4.0, para promover la generaci&oacute;n y sostenibilidad de nuevas y exigentes empresas, proporcionando productos y servicios de alto valor agregado y un sistema de gesti&oacute;n alineado a la Pol&iacute;tica de Desarrollo Industrial.</p>
                     </div>
                 </div>

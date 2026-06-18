@@ -1,4 +1,9 @@
-﻿<?php include 'includes/header.php'; ?>
+﻿<?php
+$pageTitle = 'Incubaci&oacute;n de Empresas - Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara';
+$pageDescription = 'Programa de incubaci&oacute;n de empresas del Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara. Servicios de formaci&oacute;n, asesor&iacute;a y acompa&ntilde;amiento para emprendedores.';
+$canonicalUrl = 'https://pctvc.cu/incubacion-empresas.php';
+include 'includes/header.php';
+?>
 
         <section class="page-header">
             <div class="container">

@@ -1,4 +1,9 @@
-﻿<?php include 'includes/header.php'; ?>
+﻿<?php
+$pageTitle = 'Servicios - Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara';
+$pageDescription = 'Servicios de innovaci&oacute;n, transferencia tecnol&oacute;gica, incubaci&oacute;n de empresas, capacitaci&oacute;n y consultor&iacute;a del Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara.';
+$canonicalUrl = 'https://pctvc.cu/servicios.php';
+include 'includes/header.php';
+?>
 
         <section class="page-header">
             <div class="container">
