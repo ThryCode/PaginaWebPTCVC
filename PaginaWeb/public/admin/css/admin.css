@@ -200,28 +200,24 @@ body { font-family: 'Lato', 'Segoe UI', Tahoma, sans-serif; background: #E6F4FA;
 .sidebar-overlay.active { display: block; }
 
 /* ============================================
-   RESPONSIVE
+   MOBILE (is-mobile)
    ============================================ */
-@media (max-width: 1024px) {
-    .stats-grid { grid-template-columns: repeat(2, 1fr); }
-    .grid-2 { grid-template-columns: 1fr; }
-}
+.is-mobile .stats-grid { grid-template-columns: repeat(2, 1fr); }
+.is-mobile .grid-2 { grid-template-columns: 1fr; }
 
-@media (max-width: 768px) {
-    .sidebar { transform: translateX(-100%); z-index: 1000; }
-    .sidebar.open { transform: translateX(0); }
-    .sidebar-header .hamburger { display: block; position: absolute; top: 20px; right: 20px; background: none; border: none; color: #fff; font-size: 1.3rem; cursor: pointer; }
-    .main-content { margin-left: 0; }
-    .topbar { padding: 14px 16px; }
-    .topbar h1 { font-size: 1.1rem; }
-    .content { padding: 16px; }
-    .stats-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
-    .stat-card { padding: 16px; gap: 12px; }
-    .stat-icon { width: 42px; height: 42px; font-size: 1.2rem; border-radius: 10px; }
-    .stat-info h3 { font-size: 1.4rem; }
-    .stat-info p { font-size: 0.78rem; }
-    .form-row { grid-template-columns: 1fr; }
-    .table { font-size: 0.8rem; }
-    .table th, .table td { padding: 8px 8px; }
-    .hamburger { display: block; }
-}
+.is-mobile .sidebar { transform: translateX(-100%); z-index: 1000; }
+.is-mobile .sidebar.open { transform: translateX(0); }
+.is-mobile .sidebar-header .hamburger { display: block; position: absolute; top: 20px; right: 20px; background: none; border: none; color: #fff; font-size: 1.3rem; cursor: pointer; }
+.is-mobile .main-content { margin-left: 0; }
+.is-mobile .topbar { padding: 14px 16px; }
+.is-mobile .topbar h1 { font-size: 1.1rem; }
+.is-mobile .content { padding: 16px; }
+.is-mobile .stats-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+.is-mobile .stat-card { padding: 16px; gap: 12px; }
+.is-mobile .stat-icon { width: 42px; height: 42px; font-size: 1.2rem; border-radius: 10px; }
+.is-mobile .stat-info h3 { font-size: 1.4rem; }
+.is-mobile .stat-info p { font-size: 0.78rem; }
+.is-mobile .form-row { grid-template-columns: 1fr; }
+.is-mobile .table { font-size: 0.8rem; }
+.is-mobile .table th, .is-mobile .table td { padding: 8px 8px; }
+.is-mobile .hamburger { display: block; }
