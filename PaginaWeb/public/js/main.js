@@ -25,34 +25,14 @@ document.addEventListener('DOMContentLoaded', function() {
             nav.classList.toggle('active');
         });
 
-        // Mobile: replace href on dropdown parents to prevent navigation
-        function setupMobileDropdowns() {
-            var parents = nav.querySelectorAll('.dropdown > a');
-            parents.forEach(function(link) {
-                if (window.innerWidth <= 768) {
-                    if (!link.hasAttribute('data-href')) {
-                        link.setAttribute('data-href', link.getAttribute('href'));
-                        link.setAttribute('href', 'javascript:void(0)');
-                    }
-                } else {
-                    var stored = link.getAttribute('data-href');
-                    if (stored) {
-                        link.setAttribute('href', stored);
-                        link.removeAttribute('data-href');
-                    }
-                }
-            });
-        }
-        setupMobileDropdowns();
-        window.addEventListener('resize', setupMobileDropdowns);
-
         // Mobile: toggle dropdown on parents, close nav on sub-items
         var navLinks = nav.querySelectorAll('a');
         navLinks.forEach(function(link) {
-            link.addEventListener('click', function() {
+            link.addEventListener('click', function(e) {
                 if (window.innerWidth <= 768) {
                     var isDropdownParent = link.closest('.dropdown') && !link.closest('.dropdown-menu');
                     if (isDropdownParent) {
+                        e.preventDefault();
                         var menu = link.parentElement.querySelector('.dropdown-menu');
                         if (menu) {
                             menu.classList.toggle('open');
