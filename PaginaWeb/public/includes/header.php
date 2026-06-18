@@ -13,7 +13,7 @@ header("Permissions-Policy: geolocation=(), camera=(), microphone=(), midi=(), s
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <script>(function(){var w=window.innerWidth||document.documentElement.clientWidth,m=/Mobi|Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);if(m&&w<1200){var v=document.createElement('meta');v.name='viewport';v.content='width=1200, initial-scale='+(w/1200)+', maximum-scale=1, user-scalable=no';document.head.insertBefore(v,document.head.querySelector('meta[name="viewport"]'))}})();</script>
+    <script>(function(){var w=window.innerWidth||document.documentElement.clientWidth,m=/Mobi|Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);if(m&&w<1200){var v=document.createElement('meta');v.name='viewport';v.content='width=1200, initial-scale='+(w/1200)+', maximum-scale=1, user-scalable=no';document.head.insertBefore(v,document.head.querySelector('meta[name="viewport"]'))}document.documentElement.classList.toggle('is-mobile',m)})();</script>
     <title><?php echo isset($pageTitle) ? html_entity_decode($pageTitle, ENT_QUOTES, 'UTF-8') : 'Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara'; ?></title>
     <meta name="description" content="<?php echo isset($pageDescription) ? htmlspecialchars(html_entity_decode($pageDescription, ENT_QUOTES, 'UTF-8'), ENT_QUOTES, 'UTF-8') : ''; ?>">
     <meta name="robots" content="index, follow">
