@@ -938,6 +938,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (link.target === '_blank') return;
 
         link.addEventListener('click', function(e) {
+            if (link.closest('.dropdown') && !link.closest('.dropdown-menu')) return;
             var currentPath = window.location.pathname.split('/').pop();
             if (href === currentPath) return;
 
