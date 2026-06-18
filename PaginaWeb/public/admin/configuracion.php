@@ -165,6 +165,14 @@ $csrfToken = generateCSRFToken();
                     <?php if (!empty($tokenMessage)): ?>
                         <div class="alert alert-success"><?php echo $tokenMessage; ?></div>
                     <?php endif; ?>
+                    <?php $mailErrors = getMailErrors(); if (!empty($mailErrors)): ?>
+                        <div class="alert alert-error" style="text-align:left;">
+                            <strong>Detalles del env&iacute;o:</strong>
+                            <?php foreach ($mailErrors as $err): ?>
+                                <div style="margin-top:4px;">&bull; <?php echo htmlspecialchars($err); ?></div>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endif; ?>
                     <?php if (!empty($tokenError)): ?>
                         <div class="alert alert-error"><?php echo $tokenError; ?></div>
                     <?php endif; ?>

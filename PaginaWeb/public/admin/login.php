@@ -188,7 +188,15 @@ if ($showRestricted):
             <p>Esta área es privada. Se requiere un token de acceso para continuar. Si eres administrador, solicita el token al correo registrado.</p>
 
             <?php if ($tokenSent): ?>
-                <div class="success">Token enviado a <?php echo $tokenSentCount; ?> usuario(s). Revisa tu correo.</div>
+                <div class="success">Token enviado a <?php echo $tokenSentCount; ?> usuario(s).</div>
+                <?php $mailErrors = getMailErrors(); if (!empty($mailErrors)): ?>
+                    <div style="background:#fef2f2;color:#dc2626;padding:12px 16px;border-radius:10px;margin-bottom:16px;font-size:0.85rem;border:1px solid #fecaca;text-align:left;">
+                        <strong>Detalles del env&iacute;o:</strong>
+                        <?php foreach ($mailErrors as $err): ?>
+                            <div style="margin-top:4px;">&bull; <?php echo htmlspecialchars($err); ?></div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
             <?php elseif (!empty($tokenSendError)): ?>
                 <div class="error-msg"><?php echo $tokenSendError; ?></div>
             <?php endif; ?>
