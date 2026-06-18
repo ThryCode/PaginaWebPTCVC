@@ -1,11 +1,9 @@
 <?php include 'includes/header.php'; ?>
 
-        <section class="carousel" style="height: 400px;">
-            <div class="carousel-overlay">
-                <div class="carousel-content animate-fade-up">
-                    <h2>Contáctanos</h2>
-                    <p>Estamos aquí para ayudarte</p>
-                </div>
+        <section class="page-header">
+            <div class="container">
+                <h2>Contáctanos</h2>
+                <p>Estamos aquí para ayudarte</p>
             </div>
         </section>
 
