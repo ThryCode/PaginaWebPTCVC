@@ -25,28 +25,18 @@ document.addEventListener('DOMContentLoaded', function() {
             nav.classList.toggle('active');
         });
 
-        // Mobile dropdown toggle
-        var dropdowns = nav.querySelectorAll('.dropdown');
-        dropdowns.forEach(function(dropdown) {
-            var link = dropdown.querySelector('a');
-            var menu = dropdown.querySelector('.dropdown-menu');
-            if (link && menu) {
-                link.addEventListener('click', function(e) {
-                    if (window.innerWidth <= 768) {
-                        e.preventDefault();
-                        menu.classList.toggle('open');
-                    }
-                });
-            }
-        });
-
-        // Close menu when clicking a link (skip dropdown parents on mobile)
+        // Mobile: toggle dropdown on parents, close nav on sub-items
         var navLinks = nav.querySelectorAll('a');
         navLinks.forEach(function(link) {
-            link.addEventListener('click', function() {
+            link.addEventListener('click', function(e) {
                 if (window.innerWidth <= 768) {
                     var isDropdownParent = link.closest('.dropdown') && !link.closest('.dropdown-menu');
                     if (isDropdownParent) {
+                        e.preventDefault();
+                        var menu = link.parentElement.querySelector('.dropdown-menu');
+                        if (menu) {
+                            menu.classList.toggle('open');
+                        }
                         return;
                     }
                     navToggle.classList.remove('active');
