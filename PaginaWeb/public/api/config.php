@@ -45,14 +45,14 @@ define('LOGIN_LOCKOUT_MINUTES', 15);
 
 // Email
 define('CONTACT_EMAIL', 'info@pctvc.cu');
-define('FROM_EMAIL', 'webpctvc@gmail.com');
+define('FROM_EMAIL', 'pctvcweb@gmail.com');
 define('FROM_NAME', 'PCT Villa Clara');
 
 // SMTP (Gmail)
 define('SMTP_HOST', 'smtp.gmail.com');
 define('SMTP_PORT', 587);
-define('SMTP_USER', 'webpctvc@gmail.com');
-define('SMTP_PASS', 'pctvc*2026');
+define('SMTP_USER', 'pctvcweb@gmail.com');
+define('SMTP_PASS', 'gumevmofgxmtsyto');
 define('SMTP_ENCRYPTION', 'tls');
 define('SMTP_DEBUG', 0);
 
