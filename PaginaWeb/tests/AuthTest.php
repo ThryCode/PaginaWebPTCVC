@@ -8,6 +8,8 @@ class AuthTest extends TestCase
     private $auth;
     private $dataFile;
     private $tmpDir;
+    private $testUserId;
+    private $testPassword = 'testPass123';
 
     protected function setUp(): void
     {
@@ -21,7 +23,7 @@ class AuthTest extends TestCase
 
         $this->auth = new Auth();
         $this->auth->setDataFile($this->dataFile);
-        $userId = $this->auth->createUser('Test User', 'test@test.cu', 'admin');
+        $userId = $this->auth->createUser('Test User', 'test@test.cu', 'admin', $this->testPassword);
         $this->testUserId = $userId;
     }
 
@@ -56,6 +58,14 @@ class AuthTest extends TestCase
         }
     }
 
+    private function fullLogin()
+    {
+        $pac = $this->auth->generateSystemPAC();
+        $this->assertTrue($this->auth->loginWithPAC($pac));
+        $this->assertTrue($this->auth->loginWithCredentials('test@test.cu', $this->testPassword));
+        return $pac;
+    }
+
     public function testGeneratePAC()
     {
         $pac = $this->auth->generatePAC($this->testUserId, 'test-pac');
@@ -63,20 +73,17 @@ class AuthTest extends TestCase
         $this->assertRegExp('/^[A-Za-z0-9]+$/', $pac);
     }
 
-    public function testLoginWithValidPAC()
+    public function testLoginWithValidSystemPAC()
     {
-        $pac = $this->auth->generatePAC($this->testUserId, 'login-test');
+        $pac = $this->auth->generateSystemPAC();
         $result = $this->auth->loginWithPAC($pac);
         $this->assertTrue($result);
-        $this->assertTrue($this->auth->isLoggedIn());
     }
 
     public function testLoginFailsWithWrongPAC()
     {
-        $this->auth->generatePAC($this->testUserId, 'wrong-test');
         $result = $this->auth->loginWithPAC('WrongPAC123');
         $this->assertFalse($result);
-        $this->assertFalse($this->auth->isLoggedIn());
     }
 
     public function testLoginFailsWithShortPAC()
@@ -88,22 +95,21 @@ class AuthTest extends TestCase
     public function testLoginFailsForInactiveUser()
     {
         $this->auth->updateUser($this->testUserId, ['activo' => false]);
-        $pac = $this->auth->generatePAC($this->testUserId, 'inactive-test');
-        $result = $this->auth->loginWithPAC($pac);
+        $pac = $this->auth->generateSystemPAC();
+        $this->assertTrue($this->auth->loginWithPAC($pac));
+        $result = $this->auth->loginWithCredentials('test@test.cu', $this->testPassword);
         $this->assertFalse($result);
     }
 
-    public function testIsLoggedInAfterLogin()
+    public function testIsLoggedInAfterFullLogin()
     {
-        $pac = $this->auth->generatePAC($this->testUserId, 'loggedin-test');
-        $this->auth->loginWithPAC($pac);
+        $this->fullLogin();
         $this->assertTrue($this->auth->isLoggedIn());
     }
 
     public function testGetUserReturnsData()
     {
-        $pac = $this->auth->generatePAC($this->testUserId, 'user-test');
-        $this->auth->loginWithPAC($pac);
+        $this->fullLogin();
         $user = $this->auth->getUser();
         $this->assertEquals('test@test.cu', $user['email']);
         $this->assertEquals('Test User', $user['nombre']);
@@ -112,49 +118,128 @@ class AuthTest extends TestCase
 
     public function testIsAdmin()
     {
-        $pac = $this->auth->generatePAC($this->testUserId, 'admin-test');
-        $this->auth->loginWithPAC($pac);
+        $this->fullLogin();
         $this->assertTrue($this->auth->isAdmin());
     }
 
     public function testLogoutClearsSession()
     {
-        $pac = $this->auth->generatePAC($this->testUserId, 'logout-test');
-        $this->auth->loginWithPAC($pac);
+        $this->fullLogin();
         $this->assertTrue($this->auth->isLoggedIn());
         $this->auth->logout();
         $this->assertFalse($this->auth->isLoggedIn());
     }
 
-    public function testRegeneratePAC()
+    public function testLoginWithCredentialsValid()
+    {
+        $pac = $this->auth->generateSystemPAC();
+        $this->assertTrue($this->auth->loginWithPAC($pac));
+        $result = $this->auth->loginWithCredentials('test@test.cu', $this->testPassword);
+        $this->assertTrue($result);
+        $this->assertTrue($this->auth->isLoggedIn());
+    }
+
+    public function testLoginWithCredentialsWrongPassword()
+    {
+        $pac = $this->auth->generateSystemPAC();
+        $this->assertTrue($this->auth->loginWithPAC($pac));
+        $result = $this->auth->loginWithCredentials('test@test.cu', 'wrongPassword');
+        $this->assertFalse($result);
+    }
+
+    public function testLoginWithCredentialsByIdentifier()
+    {
+        $pac = $this->auth->generateSystemPAC();
+        $this->assertTrue($this->auth->loginWithPAC($pac));
+        $result = $this->auth->loginWithCredentials('Test User', $this->testPassword);
+        $this->assertTrue($result);
+        $this->assertTrue($this->auth->isLoggedIn());
+    }
+
+    public function testGenerateSystemPAC()
+    {
+        $pac = $this->auth->generateSystemPAC();
+        $this->assertEquals(10, strlen($pac));
+        $this->assertRegExp('/^[A-Za-z0-9]+$/', $pac);
+    }
+
+    public function testSetSystemPAC()
+    {
+        $customPac = 'MyCustomPAC123';
+        $result = $this->auth->setSystemPAC($customPac);
+        $this->assertTrue($result);
+        $this->assertTrue($this->auth->loginWithPAC($customPac));
+    }
+
+    public function testSetSystemPACTooShort()
+    {
+        $result = $this->auth->setSystemPAC('short');
+        $this->assertFalse($result);
+    }
+
+    public function testGetSystemPACInfo()
+    {
+        $this->auth->generateSystemPAC();
+        $info = $this->auth->getSystemPACInfo();
+        $this->assertTrue($info['exists']);
+        $this->assertNotNull($info['created_at']);
+    }
+
+    public function testSystemPACInfoWhenNotSet()
+    {
+        $info = $this->auth->getSystemPACInfo();
+        $this->assertFalse($info['exists']);
+    }
+
+    public function testChangePassword()
+    {
+        $newPassword = 'newPassword456';
+        $result = $this->auth->changePassword($this->testUserId, $newPassword);
+        $this->assertTrue($result);
+
+        $pac = $this->auth->generateSystemPAC();
+        $this->assertTrue($this->auth->loginWithPAC($pac));
+        $this->assertTrue($this->auth->loginWithCredentials('test@test.cu', $newPassword));
+    }
+
+    public function testChangePasswordTooShort()
+    {
+        $result = $this->auth->changePassword($this->testUserId, 'short');
+        $this->assertFalse($result);
+    }
+
+    public function testVerifyCurrentPassword()
+    {
+        $pac = $this->auth->generateSystemPAC();
+        $this->assertTrue($this->auth->loginWithPAC($pac));
+        $this->assertTrue($this->auth->verifyCurrentPassword($this->testUserId, $this->testPassword));
+    }
+
+    public function testVerifyCurrentPasswordWrong()
+    {
+        $this->assertFalse($this->auth->verifyCurrentPassword($this->testUserId, 'wrongPassword'));
+    }
+
+    public function testRegeneratePerUserPAC()
     {
         $oldPac = $this->auth->generatePAC($this->testUserId, 'old-test');
-        $this->assertTrue($this->auth->loginWithPAC($oldPac));
-        $this->auth->logout();
+        $this->assertEquals(10, strlen($oldPac));
 
         $newPac = $this->auth->regeneratePAC($this->testUserId, 'new-test');
         $this->assertEquals(10, strlen($newPac));
         $this->assertNotEquals($oldPac, $newPac);
-
-        $this->assertFalse($this->auth->loginWithPAC($oldPac));
-        $this->assertTrue($this->auth->loginWithPAC($newPac));
     }
 
-    public function testRevokePAC()
+    public function testRevokePerUserPAC()
     {
-        $pac = $this->auth->generatePAC($this->testUserId, 'revoke-test');
-        $this->assertTrue($this->auth->loginWithPAC($pac));
-        $this->auth->logout();
-
+        $this->auth->generatePAC($this->testUserId, 'revoke-test');
         $pacs = $this->auth->listPACs($this->testUserId);
-        foreach ($pacs as $p) {
-            if ($p['activo']) {
-                $this->auth->revokePAC($p['id']);
-                break;
-            }
-        }
+        $this->assertCount(1, $pacs);
+        $this->assertTrue($pacs[0]['activo']);
 
-        $this->assertFalse($this->auth->loginWithPAC($pac));
+        $this->auth->revokePAC($pacs[0]['id']);
+        $pacs2 = $this->auth->listPACs($this->testUserId);
+        $this->assertFalse($pacs2[0]['activo']);
     }
 
     public function testGetUsers()
@@ -164,11 +249,39 @@ class AuthTest extends TestCase
         $this->assertEquals('Test User', $users[0]['nombre']);
     }
 
-    public function testCreateUser()
+    public function testCreateUserWithPassword()
     {
-        $id = $this->auth->createUser('Editor', 'editor@test.cu', 'editor');
+        $id = $this->auth->createUser('Editor', 'editor@test.cu', 'editor', 'editorPass789');
         $user = $this->auth->getUserById($id);
         $this->assertEquals('Editor', $user['nombre']);
         $this->assertEquals('editor', $user['rol']);
+    }
+
+    public function testDeleteUser()
+    {
+        $id = $this->auth->createUser('ToDelete', 'delete@test.cu', 'editor', 'deletePass');
+        $this->assertCount(2, $this->auth->getUsers());
+        $this->auth->deleteUser($id);
+        $this->assertCount(1, $this->auth->getUsers());
+    }
+
+    public function testClearAuditLog()
+    {
+        $this->fullLogin();
+        $this->auth->logout();
+        $audit = $this->auth->getAuditLog();
+        $this->assertGreaterThan(0, count($audit));
+
+        $this->auth->clearAuditLog();
+        $audit2 = $this->auth->getAuditLog();
+        $this->assertCount(0, $audit2);
+    }
+
+    public function testLoginWithCredentialsWrongIdentifier()
+    {
+        $pac = $this->auth->generateSystemPAC();
+        $this->assertTrue($this->auth->loginWithPAC($pac));
+        $result = $this->auth->loginWithCredentials('nonexistent@test.cu', $this->testPassword);
+        $this->assertFalse($result);
     }
 }
