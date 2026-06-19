@@ -7,20 +7,20 @@ class AuthTest extends TestCase
 {
     private $auth;
     private $dataFile;
+    private $tmpDir;
 
     protected function setUp(): void
     {
-        if (!defined('DATA_DIR')) {
-            define('DATA_DIR', __DIR__ . '/tmp_data');
-        }
-        if (!is_dir(DATA_DIR)) {
-            mkdir(DATA_DIR, 0755, true);
+        $this->tmpDir = __DIR__ . '/tmp_data';
+        if (!is_dir($this->tmpDir)) {
+            mkdir($this->tmpDir, 0755, true);
         }
 
-        $this->dataFile = DATA_DIR . '/admin_auth.json';
+        $this->dataFile = $this->tmpDir . '/admin_auth.json';
         $this->cleanData();
 
         $this->auth = new Auth();
+        $this->auth->setDataFile($this->dataFile);
         $userId = $this->auth->createUser('Test User', 'test@test.cu', 'admin');
         $this->testUserId = $userId;
     }
@@ -35,14 +35,22 @@ class AuthTest extends TestCase
     }
 
     private function cleanData() {
-        if (file_exists($this->dataFile)) {
-            unlink($this->dataFile);
+        $resolved = realpath($this->dataFile);
+        $prefix = realpath($this->tmpDir);
+        if ($resolved === false || $prefix === false) {
+            return;
         }
-        $dir = dirname($this->dataFile);
-        if (is_dir($dir) && strpos($dir, 'tmp_data') !== false) {
+        if (strpos($resolved, $prefix) !== 0) {
+            return;
+        }
+        if (file_exists($resolved)) {
+            unlink($resolved);
+        }
+        $dir = dirname($resolved);
+        if (is_dir($dir) && strpos($dir, $prefix) === 0) {
             $files = glob($dir . '/*');
             foreach ($files as $f) {
-                unlink($f);
+                @unlink($f);
             }
             rmdir($dir);
         }

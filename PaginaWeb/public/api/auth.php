@@ -7,8 +7,13 @@ class Auth {
         $this->dataFile = defined('DATA_DIR') ? DATA_DIR . '/admin_auth.json' : __DIR__ . '/../data/admin_auth.json';
     }
 
+    public function setDataFile($path) {
+        $this->dataFile = $path;
+    }
+
     private function readData() {
         if (!file_exists($this->dataFile)) {
+            error_log('[AUTH] dataFile no existe: ' . $this->dataFile);
             return ['next_id' => 1, 'users' => [], 'audit' => []];
         }
         $content = file_get_contents($this->dataFile);
@@ -25,7 +30,11 @@ class Auth {
             mkdir($dir, 0755, true);
         }
         $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-        return file_put_contents($this->dataFile, $json, LOCK_EX) !== false;
+        $result = file_put_contents($this->dataFile, $json, LOCK_EX) !== false;
+        if (!$result) {
+            error_log('[AUTH] Error al escribir: ' . $this->dataFile);
+        }
+        return $result;
     }
 
     public function loginWithPAC($pac) {

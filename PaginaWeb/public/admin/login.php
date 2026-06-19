@@ -11,11 +11,14 @@ if ($auth->isLoggedIn()) {
 $error = false;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['pac'])) {
+    error_log('[LOGIN] Intento con PAC: ' . substr($_POST['pac'], 0, 3) . '***');
     $result = $auth->loginWithPAC($_POST['pac']);
     if ($result === true) {
+        error_log('[LOGIN] Exitoso');
         header('Location: index.php');
         exit;
     }
+    error_log('[LOGIN] Fallo');
     $error = true;
 }
 ?>
