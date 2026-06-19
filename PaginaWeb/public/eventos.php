@@ -1,4 +1,9 @@
-﻿<?php include 'includes/header.php'; ?>
+﻿<?php
+$pageTitle = 'Eventos - Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara';
+$pageDescription = 'Pr&oacute;ximos eventos, talleres y conferencias del Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara. Calendario de actividades de innovaci&oacute;n y tecnolog&iacute;a.';
+$canonicalUrl = 'https://pctvc.cu/eventos.php';
+include 'includes/header.php';
+?>
 
         <section class="page-header">
             <div class="container">
@@ -11,7 +16,6 @@
             <div class="container">
                 <div class="events-header">
                     <div class="events-subtitle">Calendario de Eventos</div>
-                    <h2>Próximos Eventos</h2>
                 </div>
                 <div id="calendarContainer" class="calendar-wrapper"></div>
                 <div class="search-bar" style="margin-bottom: 30px;">

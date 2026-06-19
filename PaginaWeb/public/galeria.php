@@ -1,4 +1,9 @@
-<?php include 'includes/header.php'; ?>
+<?php
+$pageTitle = 'Galer&iacute;a - Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara';
+$pageDescription = 'Galer&iacute;a de fotos y videos del Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara. Im&aacute;genes de eventos, instalaciones y actividades.';
+$canonicalUrl = 'https://pctvc.cu/galeria.php';
+include 'includes/header.php';
+?>
 
         <section class="page-header">
             <div class="container">

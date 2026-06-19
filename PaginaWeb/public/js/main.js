@@ -25,26 +25,22 @@ document.addEventListener('DOMContentLoaded', function() {
             nav.classList.toggle('active');
         });
 
-        // Mobile dropdown toggle
-        var dropdowns = nav.querySelectorAll('.dropdown');
-        dropdowns.forEach(function(dropdown) {
-            var link = dropdown.querySelector('a');
-            var menu = dropdown.querySelector('.dropdown-menu');
-            if (link && menu) {
-                link.addEventListener('click', function(e) {
-                    if (window.innerWidth <= 768) {
-                        e.preventDefault();
-                        menu.classList.toggle('open');
-                    }
-                });
-            }
-        });
+        var isTouchDevice = /Mobi|Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-        // Close menu when clicking a link
+        // Mobile: toggle dropdown on parents, close nav on sub-items
         var navLinks = nav.querySelectorAll('a');
         navLinks.forEach(function(link) {
-            link.addEventListener('click', function() {
-                if (window.innerWidth <= 768) {
+            link.addEventListener('click', function(e) {
+                if (isTouchDevice) {
+                    var isDropdownParent = link.closest('.dropdown') && !link.closest('.dropdown-menu');
+                    if (isDropdownParent) {
+                        e.preventDefault();
+                        var menu = link.parentElement.querySelector('.dropdown-menu');
+                        if (menu) {
+                            menu.classList.toggle('open');
+                        }
+                        return;
+                    }
                     navToggle.classList.remove('active');
                     nav.classList.remove('active');
                 }
@@ -657,10 +653,24 @@ function loadCalendarMonth() {
     var daysInMonth = new Date(year, month, 0).getDate();
     var startDay = (firstDay === 0) ? 6 : firstDay - 1;
 
+    var currentYear = new Date().getFullYear();
+    var yearOptions = '';
+    for (var y = currentYear - 5; y <= currentYear + 2; y++) {
+        yearOptions += '<option value="' + y + '"' + (y === year ? ' selected' : '') + '>' + y + '</option>';
+    }
+
+    var monthOptions = '';
+    for (var m = 0; m < 12; m++) {
+        monthOptions += '<option value="' + (m + 1) + '"' + ((m + 1) === month ? ' selected' : '') + '>' + monthNames[m] + '</option>';
+    }
+
     var html = '<div class="calendar">';
     html += '<div class="calendar-header">';
     html += '<button class="calendar-nav" onclick="calendarPrev()" aria-label="Mes anterior">&#9664;</button>';
-    html += '<span class="calendar-title">' + monthNames[month - 1] + ' ' + year + '</span>';
+    html += '<div class="calendar-selectors">';
+    html += '<select class="calendar-select calendar-month-select" onchange="calendarGoToMonth(parseInt(this.value))" aria-label="Mes">' + monthOptions + '</select>';
+    html += '<select class="calendar-select calendar-year-select" onchange="calendarGoToYear(parseInt(this.value))" aria-label="Año">' + yearOptions + '</select>';
+    html += '</div>';
     html += '<button class="calendar-nav" onclick="calendarNext()" aria-label="Mes siguiente">&#9654;</button>';
     html += '</div>';
 
@@ -775,6 +785,16 @@ function calendarNext() {
         calendarState.month = 1;
         calendarState.year++;
     }
+    loadCalendarMonth();
+}
+
+function calendarGoToMonth(month) {
+    calendarState.month = month;
+    loadCalendarMonth();
+}
+
+function calendarGoToYear(year) {
+    calendarState.year = year;
     loadCalendarMonth();
 }
 function loadGallery(containerId, options) {
@@ -944,6 +964,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (link.target === '_blank') return;
 
         link.addEventListener('click', function(e) {
+            if (link.closest('.dropdown') && !link.closest('.dropdown-menu')) return;
             var currentPath = window.location.pathname.split('/').pop();
             if (href === currentPath) return;
 

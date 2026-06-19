@@ -1,4 +1,7 @@
 <?php
+$pageTitle = 'Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara';
+$pageDescription = 'El PCTVC es un centro de innovaci&oacute;n y transferencia tecnol&oacute;gica en Villa Clara, Cuba. Servicios de incubaci&oacute;n, capacitaci&oacute;n y cooperaci&oacute;n empresarial.';
+$canonicalUrl = 'https://pctvc.cu/index.php';
 $countersFile = __DIR__ . '/data/counters.json';
 $counters = array();
 if (file_exists($countersFile)) {
@@ -11,32 +14,50 @@ if (file_exists($countersFile)) {
 }
 include 'includes/header.php';
 ?>
+        <script type="application/ld+json">
+        <?php echo json_encode(array(
+            '@context' => 'https://schema.org',
+            '@type' => 'Organization',
+            'name' => 'Parque Científico Tecnológico de Villa Clara',
+            'url' => 'https://pctvc.cu',
+            'logo' => 'https://pctvc.cu/assets/img/logo/logo.png',
+            'address' => array(
+                '@type' => 'PostalAddress',
+                'streetAddress' => 'Carretera a Planta Mecánica, No. 39 B',
+                'addressLocality' => 'Santa Clara',
+                'addressRegion' => 'Villa Clara',
+                'addressCountry' => 'CU'
+            ),
+            'telephone' => '+53-42281551',
+            'email' => 'pctvillaclara@pctvc.cu'
+        ), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); ?>
+        </script>
 
         <section class="carousel" id="carousel">
             <div class="carousel-inner">
                 <div class="carousel-slide active">
-                    <img src="assets/img/sliders/slider-01.jpg" alt="PCTVC 1">
+                    <img src="assets/img/sliders/slider-01.jpg" alt="Infraestructura del Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara">
                 </div>
                 <div class="carousel-slide">
-                    <img src="assets/img/sliders/slider-02.jpg" alt="PCTVC 2">
+                    <img src="assets/img/sliders/slider-02.jpg" alt="Edificios e instalaciones del Parque Cient&iacute;fico Tecnol&oacute;gico">
                 </div>
                 <div class="carousel-slide">
-                    <img src="assets/img/sliders/slider-03.jpg" alt="PCTVC 3">
+                    <img src="assets/img/sliders/slider-03.jpg" alt="Actividades de innovaci&oacute;n tecnol&oacute;gica en el PCTVC">
                 </div>
                 <div class="carousel-slide">
-                    <img src="assets/img/sliders/slider-04.jpg" alt="PCTVC 4">
+                    <img src="assets/img/sliders/slider-04.jpg" alt="Eventos y conferencias en el Parque Cient&iacute;fico Tecnol&oacute;gico">
                 </div>
                 <div class="carousel-slide">
-                    <img src="assets/img/sliders/slider-05.jpg" alt="PCTVC 5">
+                    <img src="assets/img/sliders/slider-05.jpg" alt="Espacios de trabajo colaborativo del PCTVC">
                 </div>
                 <div class="carousel-slide">
-                    <img src="assets/img/sliders/slider-06.jpg" alt="PCTVC 6">
+                    <img src="assets/img/sliders/slider-06.jpg" alt="Vista a&eacute;rea del Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara">
                 </div>
                 <div class="carousel-slide">
-                    <img src="assets/img/sliders/slider-07.jpg" alt="PCTVC 7">
+                    <img src="assets/img/sliders/slider-07.jpg" alt="Empresas y emprendedores del Parque Cient&iacute;fico Tecnol&oacute;gico">
                 </div>
                 <div class="carousel-slide">
-                    <img src="assets/img/sliders/slider-08.jpeg" alt="PCTVC 8">
+                    <img src="assets/img/sliders/slider-08.jpeg" alt="Servicios tecnol&oacute;gicos del Parque Cient&iacute;fico de Villa Clara">
                 </div>
             </div>
             <div class="carousel-overlay">
@@ -57,7 +78,7 @@ include 'includes/header.php';
                     <p>Nuestro compromiso es ser el puente entre la academia, la industria y el gobierno, facilitando la transferencia de conocimiento y tecnología que genere impacto positivo en la sociedad.</p>
                 </div>
                 <div class="intro-image animate-fade-right">
-                    <img src="assets/img/general/feriaC4.jpg" alt="PCTVC - Feria Cientifica">
+                    <img src="assets/img/general/feriaC4.jpg" alt="Feria Cient&iacute;fica del Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara">
                 </div>
             </div>
         </section>

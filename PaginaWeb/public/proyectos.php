@@ -1,4 +1,7 @@
 ﻿<?php
+$pageTitle = 'Proyectos - Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara';
+$pageDescription = 'Nuestros proyectos de innovaci&oacute;n, transferencia tecnol&oacute;gica y desarrollo empresarial en el Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara.';
+$canonicalUrl = 'https://pctvc.cu/proyectos.php';
 require_once 'api/storage.php';
 $proyectos = Storage::read('proyectos');
 $proyectos = array_filter($proyectos, function($p) { return !empty($p['publicada']); });

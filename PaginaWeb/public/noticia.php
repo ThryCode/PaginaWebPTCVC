@@ -7,12 +7,12 @@ if ($id > 0) {
     $item = Storage::findById('noticias', $id);
 }
 if (!$item || empty($item['publicada'])) {
-    include 'includes/header.php';
+include 'includes/header.php';
 ?>
         <section class="page-header">
             <div class="container">
-                <h2>Publicación no encontrada</h2>
-                <p>La publicación que buscas no existe o ha sido eliminada.</p>
+                <h2>Publicaci&oacute;n no encontrada</h2>
+                <p>La publicaci&oacute;n que buscas no existe o ha sido eliminada.</p>
                 <a href="noticias.php" class="btn btn-primary">&larr; Volver a Noticias</a>
             </div>
         </section>
@@ -30,8 +30,38 @@ if (isset($item['imagenes']) && is_array($item['imagenes'])) {
     $imagenes = array($item['imagen']);
 }
 
+$pageTitle = htmlspecialchars($item['titulo']) . ' - Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara';
+$pageDescription = !empty($item['resumen']) ? $item['resumen'] : $item['titulo'];
+$canonicalUrl = 'https://pctvc.cu/noticia.php?id=' . $id;
+$ogType = 'article';
+if (!empty($imagenes)) {
+    $ogImage = 'https://pctvc.cu/' . ltrim($imagenes[0], '/');
+}
+
 include 'includes/header.php';
 ?>
+        <script type="application/ld+json">
+        <?php echo json_encode(array(
+            '@context' => 'https://schema.org',
+            '@type' => 'NewsArticle',
+            'headline' => $item['titulo'],
+            'description' => !empty($item['resumen']) ? $item['resumen'] : '',
+            'datePublished' => $fechaRaw,
+            'author' => array(
+                '@type' => 'Organization',
+                'name' => 'Parque Científico Tecnológico de Villa Clara'
+            ),
+            'publisher' => array(
+                '@type' => 'Organization',
+                'name' => 'Parque Científico Tecnológico de Villa Clara',
+                'logo' => array(
+                    '@type' => 'ImageObject',
+                    'url' => 'https://pctvc.cu/assets/img/logo/logo.png'
+                )
+            ),
+            'image' => !empty($imagenes) ? array('https://pctvc.cu/' . ltrim($imagenes[0], '/')) : array()
+        ), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); ?>
+        </script>
         <section class="page-header">
             <div class="container">
                 <h2 class="animate-fade-down"><?php echo htmlspecialchars($item['titulo']); ?></h2>
