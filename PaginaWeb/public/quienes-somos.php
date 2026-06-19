@@ -1,4 +1,29 @@
-<?php include 'includes/header.php'; ?>
+<?php
+$pageTitle = 'Qui&eacute;nes Somos - Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara';
+$pageDescription = 'Conoce la historia, misi&oacute;n, visi&oacute;n y junta directiva del Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara. Alianza, oportunidad y desarrollo.';
+$canonicalUrl = 'https://pctvc.cu/quienes-somos.php';
+include 'includes/header.php';
+?>
+        <script type="application/ld+json">
+        <?php echo json_encode(array(
+            '@context' => 'https://schema.org',
+            '@type' => 'Organization',
+            'name' => 'Parque Científico Tecnológico de Villa Clara',
+            'url' => 'https://pctvc.cu',
+            'logo' => 'https://pctvc.cu/assets/img/logo/logo.png',
+            'foundingDate' => '2021',
+            'description' => 'Centro de innovación que promueve la colaboración entre gobierno, el sector del conocimiento y el sector empresarial para impulsar el desarrollo científico-tecnológico en Cuba.',
+            'address' => array(
+                '@type' => 'PostalAddress',
+                'streetAddress' => 'Carretera a Planta Mecánica, No. 39 B',
+                'addressLocality' => 'Santa Clara',
+                'addressRegion' => 'Villa Clara',
+                'addressCountry' => 'CU'
+            ),
+            'telephone' => '+53-42281551',
+            'email' => 'pctvillaclara@pctvc.cu'
+        ), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); ?>
+        </script>
 
         <section class="page-header">
             <div class="container">
@@ -11,8 +36,9 @@
             <div class="container">
                 <div class="about-content">
                     <h3>Nuestra Historia</h3>
-                    <p>El Parque Científico Tecnológico de Villa Clara fue fundado con la visión de crear un centro de innovación que impulsara el desarrollo tecnológico y científico de la región.</p>
-                    <p>A lo largo de los años, hemos consolidado un ecosistema de innovación que conecta a empresas, universidades y centros de investigación para fomentar el emprendimiento basado en ciencia.</p>
+                    <p>El Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara surge como respuesta a las necesidades de desarrollo industrial identificadas en la estrategia territorial de la provincia. La industria villaclare&ntilde;a aporta m&aacute;s del 50% de la producci&oacute;n mercantil del territorio y cuenta con f&aacute;bricas &uacute;nicas en el pa&iacute;s, como INPUD &quot;1ro de Mayo&quot;, la Productora de Buj&iacute;as &quot;Neftal&iacute; Mart&iacute;nez&quot; y la Empresa Electroqu&iacute;mica.</p>
+                    <p>A partir de las pol&iacute;ticas nacionales de ciencia, tecnolog&iacute;a e innovaci&oacute;n se estableci&oacute; un trabajo conjunto entre MINDUS, UCLV y CITMA para analizar la viabilidad de un parque tecnol&oacute;gico de corte industrial. Durante la visita gubernamental de octubre de 2020, la Vice Primera Ministra In&eacute;s Mar&iacute;a Chapman destac&oacute; la conveniencia de su creaci&oacute;n en Villa Clara, dada la madurez industrial y el potencial humano del territorio.</p>
+                    <p>La creaci&oacute;n del PCT Villa Clara busca dinamizar la innovaci&oacute;n, modernizar procesos industriales, atraer inversi&oacute;n, fomentar la creaci&oacute;n de nuevas empresas y fortalecer la articulaci&oacute;n entre el sector del conocimiento, el gobierno y las entidades productivas. Con esto, el territorio avanza hacia un modelo de desarrollo basado en la ciencia, la tecnolog&iacute;a y la innovaci&oacute;n como pilares transformadores.</p>
                 </div>
                 <div class="about-image">
                     <div class="placeholder-img">Nuestra Historia</div>
@@ -31,15 +57,15 @@
                         <div class="mv-icon mission-icon">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/></svg>
                         </div>
-                        <h3>Nuestra Misión</h3>
-                        <p>Fomentar la innovación y el desarrollo tecnológico a través de la colaboración entre empresas, universidades y centros de investigación, impulsando el emprendimiento basado en ciencia.</p>
+                        <h4>Nuestra Misión</h4>
+                        <p>Contribuir al desarrollo industrial, participando y coadyuvando a la creaci&oacute;n, implantaci&oacute;n, funcionamiento, fortalecimiento, lanzamiento de nuevas entidades (productos nuevos o mejorados y empresas), adoptando sistemas de gesti&oacute;n integrada que incrementen el fondo de bienes exportables y la sustituci&oacute;n de importaciones en armon&iacute;a con el medio ambiente.</p>
                     </div>
                     <div class="mv-card animate-on-scroll delay-1">
                         <div class="mv-icon vision-icon">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                         </div>
-                        <h3>Nuestra Visión</h3>
-                        <p>Ser reconocidos como el principal polo de innovación tecnológica del centro de Cuba, liderando la transformación digital y la transferencia de conocimiento hacia la sociedad.</p>
+                        <h4>Nuestra Visión</h4>
+                        <p>Ser un referente de ecosistema de innovaci&oacute;n y transferencia cient&iacute;fica en la rama de las industrias, con un m&iacute;nimo viable de industria 4.0, para promover la generaci&oacute;n y sostenibilidad de nuevas y exigentes empresas, proporcionando productos y servicios de alto valor agregado y un sistema de gesti&oacute;n alineado a la Pol&iacute;tica de Desarrollo Industrial.</p>
                     </div>
                 </div>
             </div>
@@ -96,6 +122,74 @@
             </div>
         </section>
 
+        <section class="colaboradores-section">
+            <div class="container">
+                <div class="section-title">
+                    <h3>Instituciones Colaboradoras</h3>
+                    <p>Entidades que forman parte de nuestro ecosistema de innovaci&oacute;n.</p>
+                </div>
+                <div class="colaboradores-grid">
+                    <div class="colaborador-item animate-on-scroll">
+                        <a href="https://www.tecnosime.cu/" target="_blank" rel="noopener noreferrer">
+                            <img src="assets/img/colaboradores/tecnosime.png" alt="TECNOSIME" loading="lazy">
+                        </a>
+                    </div>
+                    <div class="colaborador-item animate-on-scroll delay-1">
+                        <a href="https://www.facebook.com/p/CEDAI-Empresa-de-Automatizaci%C3%B3n-Integral-100064048390294/" target="_blank" rel="noopener noreferrer">
+                            <img src="assets/img/colaboradores/cedai.png" alt="CEDAI" loading="lazy">
+                        </a>
+                    </div>
+                    <div class="colaborador-item animate-on-scroll delay-2">
+                        <a href="https://www.plantamec.co.cu/" target="_blank" rel="noopener noreferrer">
+                            <img src="assets/img/colaboradores/planta-mecanica.png" alt="Planta Mec&aacute;nica" loading="lazy">
+                        </a>
+                    </div>
+                    <div class="colaborador-item animate-on-scroll delay-3">
+                        <a href="https://www.facebook.com/empresaindustrialminerva/" target="_blank" rel="noopener noreferrer">
+                            <img src="assets/img/colaboradores/minerva.png" alt="Minerva" loading="lazy">
+                        </a>
+                    </div>
+                    <div class="colaborador-item animate-on-scroll delay-4">
+                        <a href="http://www.ermpvc.co.cu/" target="_blank" rel="noopener noreferrer">
+                            <img src="assets/img/colaboradores/ermp.png" alt="ERMP Villa Clara" loading="lazy">
+                        </a>
+                    </div>
+                    <div class="colaborador-item animate-on-scroll delay-5">
+                        <a href="https://sicte.uclv.cu/" target="_blank" rel="noopener noreferrer">
+                            <img src="assets/img/colaboradores/sicte.png" alt="SICTE S.A." loading="lazy">
+                        </a>
+                    </div>
+                    <div class="colaborador-item animate-on-scroll delay-6">
+                        <a href="https://www.mindus.gob.cu/es" target="_blank" rel="noopener noreferrer">
+                            <img src="assets/img/colaboradores/mi.png" alt="Ministerio de Industrias" loading="lazy">
+                        </a>
+                    </div>
+                    <div class="colaborador-item animate-on-scroll delay-7">
+                        <a href="https://www.sime.cu/" target="_blank" rel="noopener noreferrer">
+                            <img src="assets/img/colaboradores/gesime.png" alt="GESIME" loading="lazy">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="membresia-section">
+            <div class="container">
+                <div class="section-title">
+                    <h3>Membres&iacute;a</h3>
+                    <p>Reconocimientos y afiliaciones internacionales.</p>
+                </div>
+                <div class="membresia-logos">
+                    <a href="https://www.iasp.ws/" target="_blank" rel="noopener noreferrer">
+                        <img src="assets/img/colaboradores/iasp.png" alt="IASP" loading="lazy">
+                    </a>
+                    <div>
+                        <img src="assets/img/colaboradores/iasp-latam.png" alt="IASP Latam" loading="lazy">
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section class="faq-section">
             <div class="container">
                 <div class="section-title">
@@ -147,15 +241,28 @@
             </div>
         </section>
 
-        <section class="about-preview">
+        <section class="directivos-section">
             <div class="container">
-                <div class="about-content">
-                    <h3>Nuestro Equipo</h3>
-                    <p>Contamos con un equipo de profesionales altamente capacitados y con amplia experiencia en diversas áreas de la ciencia y la tecnología. Trabajamos de la mano con nuestros socios para entender sus necesidades.</p>
-                    <a href="contacto.php" class="btn btn-primary">Contáctanos</a>
+                <div class="section-title">
+                    <h3>Junta Directiva</h3>
+                    <p>Conoce a nuestro equipo directivo.</p>
                 </div>
-                <div class="about-image">
-                    <div class="placeholder-img">Nuestro Equipo</div>
+                <div class="directivos-grid">
+                    <div class="directivo-card animate-on-scroll">
+                        <img src="assets/img/junta/edelys.jpg" alt="MSc. Edelys Ada Saavedra Rodr&iacute;guez" class="directivo-foto" loading="lazy">
+                        <h4>MSc. Edelys Ada Saavedra Rodr&iacute;guez</h4>
+                        <p>Presidenta de la Junta General de Accionistas y de la Junta Directiva</p>
+                    </div>
+                    <div class="directivo-card animate-on-scroll delay-1">
+                        <img src="assets/img/junta/danay.jpeg" alt="MSc. Danay Alvarez Mesa" class="directivo-foto" loading="lazy">
+                        <h4>MSc. Danay Alvarez Mesa</h4>
+                        <p>Vicepresidenta Primera</p>
+                    </div>
+                    <div class="directivo-card animate-on-scroll delay-2">
+                        <img src="assets/img/junta/dalgys.jpeg" alt="Ing. Dalgys La Rosa Morales" class="directivo-foto" loading="lazy">
+                        <h4>Ing. Dalgys La Rosa Morales</h4>
+                        <p>Vicepresidenta Cient&iacute;fica</p>
+                    </div>
                 </div>
             </div>
         </section>

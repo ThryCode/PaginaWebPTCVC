@@ -1,11 +1,46 @@
-<?php include 'includes/header.php'; ?>
+<?php
+$pageTitle = 'Contacto - Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara';
+$pageDescription = 'Cont&aacute;ctanos: direcci&oacute;n, tel&eacute;fono, correo electr&oacute;nico y horario del Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara.';
+$canonicalUrl = 'https://pctvc.cu/contacto.php';
+include 'includes/header.php';
+?>
+        <script type="application/ld+json">
+        <?php echo json_encode(array(
+            '@context' => 'https://schema.org',
+            '@type' => 'LocalBusiness',
+            'name' => 'Parque Científico Tecnológico de Villa Clara',
+            'url' => 'https://pctvc.cu',
+            'logo' => 'https://pctvc.cu/assets/img/logo/logo.png',
+            'address' => array(
+                '@type' => 'PostalAddress',
+                'streetAddress' => 'Carretera a Planta Mecánica, No. 39 B',
+                'addressLocality' => 'Santa Clara',
+                'addressRegion' => 'Villa Clara',
+                'addressCountry' => 'CU'
+            ),
+            'telephone' => '+53-42281551',
+            'email' => 'pctvillaclara@pctvc.cu',
+            'openingHoursSpecification' => array(
+                array(
+                    '@type' => 'OpeningHoursSpecification',
+                    'dayOfWeek' => array('Monday', 'Tuesday', 'Wednesday', 'Thursday'),
+                    'opens' => '08:00',
+                    'closes' => '17:00'
+                ),
+                array(
+                    '@type' => 'OpeningHoursSpecification',
+                    'dayOfWeek' => 'Friday',
+                    'opens' => '08:00',
+                    'closes' => '16:00'
+                )
+            )
+        ), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); ?>
+        </script>
 
-        <section class="carousel" style="height: 400px;">
-            <div class="carousel-overlay">
-                <div class="carousel-content animate-fade-up">
-                    <h2>Contáctanos</h2>
-                    <p>Estamos aquí para ayudarte</p>
-                </div>
+        <section class="page-header">
+            <div class="container">
+                <h2>Contáctanos</h2>
+                <p>Estamos aquí para ayudarte</p>
             </div>
         </section>
 
@@ -13,8 +48,7 @@
             <div class="container">
                 <div class="contact-grid">
                     <div class="contact-info animate-fade-left">
-                        <h2>Ponte en Contacto</h2>
-                        <p>No dudes en comunicarte. Simplemente complete el formulario de contacto y nos aseguraremos de responderle lo más rápido posible.</p>
+                        <p>No dudes en comunicarte. Simplemente complete el formulario de contacto y nos aseguraremos de responderle lo m&aacute;s r&aacute;pido posible.</p>
                         <div class="contact-items">
                             <div class="contact-item">
                                 <div class="contact-item-icon">

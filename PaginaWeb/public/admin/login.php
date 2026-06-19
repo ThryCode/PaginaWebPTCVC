@@ -71,6 +71,7 @@ if ($showRestricted):
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>(function(){var w=window.innerWidth||document.documentElement.clientWidth,m=/Mobi|Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);if(m&&w<1200){var v=document.createElement('meta');v.name='viewport';v.content='width=1200, initial-scale='+(w/1200)+', maximum-scale=1, user-scalable=no';document.head.insertBefore(v,document.head.querySelector('meta[name="viewport"]'))}document.documentElement.classList.toggle('is-mobile',m)})();</script>
     <title>Acceso restringido</title>
     <link rel="icon" type="image/x-icon" href="../assets/img/logo/favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
@@ -173,9 +174,7 @@ if ($showRestricted):
         .back-link { margin-top: 24px; }
         .back-link a { color: rgba(255,255,255,0.8); text-decoration: none; font-size: 0.9rem; transition: color 0.3s; }
         .back-link a:hover { color: #fff; }
-        @media (max-width: 480px) {
-            .card-inner { padding: 36px 24px; }
-        }
+        .is-mobile .card-inner { padding: 36px 24px; }
     </style>
 </head>
 <body>
@@ -221,6 +220,7 @@ endif;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>(function(){var w=window.innerWidth||document.documentElement.clientWidth,m=/Mobi|Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);if(m&&w<1200){var v=document.createElement('meta');v.name='viewport';v.content='width=1200, initial-scale='+(w/1200)+', maximum-scale=1, user-scalable=no';document.head.insertBefore(v,document.head.querySelector('meta[name="viewport"]'))}document.documentElement.classList.toggle('is-mobile',m)})();</script>
     <title>Admin - Iniciar Sesión</title>
     <link rel="icon" type="image/x-icon" href="../assets/img/logo/favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
@@ -331,10 +331,8 @@ endif;
         .back-link { text-align: center; margin-top: 24px; }
         .back-link a { color: rgba(255,255,255,0.8); text-decoration: none; font-size: 0.9rem; transition: color 0.3s; }
         .back-link a:hover { color: #fff; }
-        @media (max-width: 480px) {
-            .login-card { padding: 36px 24px; }
-            .login-card h1 { font-size: 1.3rem; }
-        }
+        .is-mobile .login-card { padding: 36px 24px; }
+        .is-mobile .login-card h1 { font-size: 1.3rem; }
     </style>
 </head>
 <body>

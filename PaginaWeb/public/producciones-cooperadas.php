@@ -1,4 +1,9 @@
-﻿<?php include 'includes/header.php'; ?>
+﻿<?php
+$pageTitle = 'Producciones Cooperadas - Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara';
+$pageDescription = 'Producciones cooperadas del Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara. Beneficios de la cooperaci&oacute;n empresarial para el desarrollo tecnol&oacute;gico.';
+$canonicalUrl = 'https://pctvc.cu/producciones-cooperadas.php';
+include 'includes/header.php';
+?>
 
         <section class="page-header">
             <div class="container">
