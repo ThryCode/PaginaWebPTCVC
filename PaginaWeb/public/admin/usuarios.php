@@ -18,12 +18,12 @@ $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!validateCSRFToken($_POST[CSRF_TOKEN_NAME] ?? '')) {
-        $error = 'Token de seguridad inválido.';
+        $error = 'Token de seguridad inv&aacute;lido.';
     } else {
         if ($action === 'delete') {
             $deleteId = intval($_POST['id'] ?? 0);
             if ($deleteId > 0 && $deleteId != $_SESSION['user_id']) {
-                Storage::delete('usuarios', $deleteId);
+                $auth->deleteUser($deleteId);
                 $message = 'Usuario eliminado.';
             } else {
                 $error = 'No puedes eliminar tu propia cuenta.';
@@ -33,47 +33,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $nombre = trim($_POST['nombre'] ?? '');
             $email = trim($_POST['email'] ?? '');
             $rol = $_POST['rol'] ?? 'editor';
-            $activo = isset($_POST['activo']) ? 1 : 0;
+            $activo = isset($_POST['activo']) ? true : false;
             $newPassword = trim($_POST['password'] ?? '');
 
             if (empty($nombre) || empty($email)) {
                 $error = 'Nombre y email son obligatorios.';
             } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $error = 'Email no válido.';
+                $error = 'Email no v&aacute;lido.';
             } else {
-                $data = array(
-                    'nombre' => htmlspecialchars($nombre),
-                    'email' => $email,
-                    'rol' => $rol,
-                    'activo' => $activo
-                );
-
-                if (!empty($newPassword)) {
-                    if (strlen($newPassword) < 6) {
-                        $error = 'Contraseña mínimo 6 caracteres.';
+                if ($action === 'new') {
+                    if (empty($newPassword)) {
+                        $error = 'Contrase&ntilde;a es obligatoria para nuevos usuarios.';
+                    } elseif (strlen($newPassword) < 8) {
+                        $error = 'Contrase&ntilde;a m&iacute;nimo 8 caracteres.';
                     } else {
-                        $data['password'] = $auth->hashPassword($newPassword);
+                        $auth->createUser($nombre, $email, $rol, $newPassword);
+                        $message = 'Usuario creado.';
+                        $action = 'list';
                     }
-                }
-
-                if (empty($error)) {
-                    if ($action === 'edit' && $id > 0) {
-                        if (empty($data['password'])) {
-                            $existing = Storage::findById('usuarios', $id);
-                            if ($existing) {
-                                $data['password'] = $existing['password'];
-                            }
-                        }
-                        Storage::update('usuarios', $id, $data);
-                        $message = 'Usuario actualizado.';
-                    } else {
-                        if (empty($data['password'])) {
-                            $error = 'Contraseña es obligatoria para nuevos usuarios.';
-                        } else {
-                            Storage::insert('usuarios', $data);
-                            $message = 'Usuario creado.';
-                        }
-                    }
+                } elseif ($action === 'edit' && $id > 0) {
+                    $auth->updateUser($id, array(
+                        'nombre' => $nombre,
+                        'email' => $email,
+                        'rol' => $rol,
+                        'activo' => $activo
+                    ));
+                    $message = 'Usuario actualizado.';
                     $action = 'list';
                 }
             }
@@ -83,7 +68,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $usuario = null;
 if ($action === 'edit' && $id > 0) {
-    $usuario = Storage::findById('usuarios', $id);
+    $usuarios = $auth->getUsers();
+    foreach ($usuarios as $u) {
+        if ($u['id'] == $id) {
+            $usuario = $u;
+            break;
+        }
+    }
     if (!$usuario) {
         $action = 'list';
         $error = 'Usuario no encontrado.';
@@ -92,7 +83,7 @@ if ($action === 'edit' && $id > 0) {
 
 $usuarios = null;
 if ($action === 'list') {
-    $usuarios = Storage::read('usuarios');
+    $usuarios = $auth->getUsers();
     usort($usuarios, function($a, $b) {
         return strcmp($b['created_at'] ?? '', $a['created_at'] ?? '');
     });
@@ -115,7 +106,7 @@ $csrfToken = generateCSRFToken();
 
         <main class="main-content">
             <header class="topbar">
-                <button class="hamburger" onclick="toggleSidebar()" aria-label="Menu" style="display:none;">☰</button>
+                <button class="hamburger" onclick="toggleSidebar()" aria-label="Menu" style="display:none;">&#9776;</button>
                 <h1>Usuarios</h1>
                 <?php if ($action === 'list'): ?>
                     <a href="?action=new" class="btn btn-primary">+ Nuevo</a>
@@ -142,7 +133,7 @@ $csrfToken = generateCSRFToken();
                                     <td>
                                         <a href="?action=edit&id=<?php echo $u['id']; ?>" class="btn btn-sm btn-primary">Editar</a>
                                         <?php if ($u['id'] != $_SESSION['user_id']): ?>
-                                            <form class="delete-form" method="POST" action="?action=delete" onsubmit="return confirm('¿Eliminar este usuario?')">
+                                            <form class="delete-form" method="POST" action="?action=delete" onsubmit="return confirm('&iquest;Eliminar este usuario?')">
                                                 <?php echo csrfField(); ?>
                                                 <input type="hidden" name="id" value="<?php echo $u['id']; ?>">
                                                 <button type="submit" class="btn btn-sm btn-danger">X</button>
@@ -170,11 +161,13 @@ $csrfToken = generateCSRFToken();
                                     <input type="email" id="email" name="email" required value="<?php echo $usuario ? htmlspecialchars($usuario['email']) : ''; ?>">
                                 </div>
                             </div>
+                            <?php if ($action === 'new'): ?>
+                            <div class="form-group">
+                                <label for="password">Contrase&ntilde;a *</label>
+                                <input type="password" id="password" name="password" required minlength="8">
+                            </div>
+                            <?php endif; ?>
                             <div class="form-row">
-                                <div class="form-group">
-                                    <label for="password"><?php echo $action === 'edit' ? 'Nueva Contraseña (dejar vacío para mantener)' : 'Contraseña *'; ?></label>
-                                    <input type="password" id="password" name="password" <?php echo $action === 'new' ? 'required' : ''; ?> minlength="6">
-                                </div>
                                 <div class="form-group">
                                     <label for="rol">Rol</label>
                                     <select id="rol" name="rol">
@@ -182,9 +175,9 @@ $csrfToken = generateCSRFToken();
                                         <option value="admin" <?php echo ($usuario && $usuario['rol'] === 'admin') ? 'selected' : ''; ?>>Admin</option>
                                     </select>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label><input type="checkbox" name="activo" value="1" <?php echo (!$usuario || $usuario['activo']) ? 'checked' : ''; ?>> Activo</label>
+                                <div class="form-group">
+                                    <label><input type="checkbox" name="activo" value="1" <?php echo (!$usuario || $usuario['activo']) ? 'checked' : ''; ?>> Activo</label>
+                                </div>
                             </div>
                             <div class="form-actions">
                                 <button type="submit" class="btn btn-success">Guardar</button>

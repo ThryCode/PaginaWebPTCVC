@@ -9,21 +9,21 @@
         "created_at": "2026-06-12 13:41:52"
     },
     {
-        "nombre": "Enmnauel",
-        "email": "epmjob@gmail.com",
-        "rol": "admin",
-        "activo": 1,
-        "password": "$2y$10$pkh9avw0Tgoo4szuKYsTkeuHvaSw0ot5YSaPTw2prRCtRT.341zZ2",
-        "id": 4,
-        "created_at": "2026-06-17 11:56"
-    },
-    {
-        "nombre": "MarioC",
-        "email": "mrgorrin@gmail.com",
+        "nombre": "Enmanuel",
+        "email": "epmjob00@gmail.com",
         "rol": "editor",
         "activo": 1,
-        "password": "$2y$10$O\/nWFSrvAvpmhzjwDg7AluIcahh8cXZ66xQvJrCM9REDExk9Wcq9q",
-        "id": 5,
-        "created_at": "2026-06-17 11:57"
+        "id": 2,
+        "created_at": "2026-06-19 10:38",
+        "updated_at": "2026-06-19 10:39"
+    },
+    {
+        "nombre": "Casa",
+        "email": "marioc@pctvc.cu",
+        "rol": "admin",
+        "activo": 1,
+        "password": "$2y$10$\/EmJPvCm6uqTLX2bofgQ6.OGmbHn3feDeY68v0zn31apDGQHUXj\/m",
+        "id": 3,
+        "created_at": "2026-06-19 10:41"
     }
 ]

