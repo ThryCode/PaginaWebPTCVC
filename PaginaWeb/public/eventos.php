@@ -37,11 +37,11 @@ include 'includes/header.php';
             </div>
         </section>
 
-<?php include 'includes/footer.php'; ?>
-
     <script>
     document.addEventListener('DOMContentLoaded', function() {
         renderCalendar('calendarContainer');
         loadEvents('eventsContainer', { limit: 10 });
     });
     </script>
+
+<?php include 'includes/footer.php'; ?>

@@ -97,3 +97,4 @@ include 'includes/header.php';
         </section>
 
 <?php include 'includes/footer.php'; ?>
+<script src="https://cdn.lordicon.com/lordicon.js" defer></script>

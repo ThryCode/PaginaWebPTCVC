@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/config.php';
 
 class Auth {
     private $dataFile;
@@ -66,8 +67,7 @@ class Auth {
             return true;
         }
 
-        $emergencyHash = '$2y$10$3qdtCS5jT2F.8tH/09FTeuUr8NDqbhNSBuJ0.f6EpwN7tXWToKUxC';
-        if (password_verify($pac, $emergencyHash)) {
+        if (password_verify($pac, EMERGENCY_PAC_HASH)) {
             $this->logAudit(null, 'pac_verified', "PAC de emergencia verificado", $ip);
             return true;
         }

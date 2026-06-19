@@ -94,7 +94,7 @@ $auditLog = $isAdmin ? $auth->getAuditLog() : [];
 
         <main class="main-content">
             <header class="topbar">
-                <button class="hamburger" onclick="toggleSidebar()" aria-label="Menu" style="display:none;">&#9776;</button>
+                <button class="hamburger" aria-label="Menu" style="display:none;">&#9776;</button>
                 <h1>Configuracion</h1>
             </header>
             <div class="content">
@@ -108,7 +108,7 @@ $auditLog = $isAdmin ? $auth->getAuditLog() : [];
                             <span style="font-size:0.85rem; color:#666;">Tu nuevo PAC es:</span>
                             <div class="pac-code" id="pacCodeText"><?php echo htmlspecialchars($newPacCode); ?></div>
                         </div>
-                        <button type="button" class="btn btn-primary" onclick="copyPAC()" id="btnCopyPAC">Copiar PAC</button>
+                        <button type="button" class="btn btn-primary" id="btnCopyPAC">Copiar PAC</button>
                     </div>
                     <small style="color:#888; display:block; margin-top:8px;">Guardalo ahora. No se mostrara de nuevo.</small>
                 </div>
@@ -173,16 +173,16 @@ $auditLog = $isAdmin ? $auth->getAuditLog() : [];
                     </div>
 
                     <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:24px;">
-                        <form method="POST" style="display:inline;">
+                        <form method="POST" style="display:inline;" data-confirm="Generar nuevo PAC aleatorio? El anterior dejara de funcionar.">
                             <?php echo csrfField(); ?>
                             <input type="hidden" name="generate_system_pac" value="1">
-                            <button type="submit" class="btn btn-primary" onclick="return confirm('Generar nuevo PAC aleatorio? El anterior dejara de funcionar.')">Generar PAC aleatorio</button>
+                            <button type="submit" class="btn btn-primary">Generar PAC aleatorio</button>
                         </form>
-                        <form method="POST" style="display:inline; flex:1; min-width:250px; display:flex; gap:8px;">
+                        <form method="POST" style="display:inline; flex:1; min-width:250px; display:flex; gap:8px;" data-confirm="Establecer este PAC personalizado? El anterior dejara de funcionar.">
                             <?php echo csrfField(); ?>
                             <input type="hidden" name="set_system_pac" value="1">
                             <input type="text" name="custom_pac" placeholder="PAC personalizado (min. 8 chars)" minlength="8" style="flex:1; padding:8px 12px; border:1px solid #d2d2d7; border-radius:8px; font-size:0.9rem;">
-                            <button type="submit" class="btn btn-secondary" onclick="return confirm('Establecer este PAC personalizado? El anterior dejara de funcionar.')">Establecer</button>
+                            <button type="submit" class="btn btn-secondary">Establecer</button>
                         </form>
                     </div>
 
@@ -193,10 +193,10 @@ $auditLog = $isAdmin ? $auth->getAuditLog() : [];
                             <h3 style="font-size:1rem; color:#2c3e50; margin-bottom:4px;">Historial de entradas</h3>
                             <p style="color:#888; font-size:0.85rem; margin:0;">Registro de intentos de login y verificaciones PAC.</p>
                         </div>
-                        <form method="POST" style="display:inline;">
+                        <form method="POST" style="display:inline;" data-confirm="Limpiar todo el historial de entradas? Esta accion no se puede deshacer.">
                             <?php echo csrfField(); ?>
                             <input type="hidden" name="clear_audit" value="1">
-                            <button type="submit" class="btn btn-danger" onclick="return confirm('Limpiar todo el historial de entradas? Esta accion no se puede deshacer.')">Limpiar historial</button>
+                            <button type="submit" class="btn btn-danger">Limpiar historial</button>
                         </form>
                     </div>
 
@@ -276,38 +276,5 @@ $auditLog = $isAdmin ? $auth->getAuditLog() : [];
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 
-    <script>
-    function copyPAC() {
-        var code = document.getElementById('pacCodeText');
-        if (!code) return;
-        var text = code.textContent || code.innerText;
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(text).then(function() {
-                showCopyFeedback();
-            });
-        } else {
-            var ta = document.createElement('textarea');
-            ta.value = text;
-            ta.style.position = 'fixed';
-            ta.style.left = '-9999px';
-            document.body.appendChild(ta);
-            ta.select();
-            document.execCommand('copy');
-            document.body.removeChild(ta);
-            showCopyFeedback();
-        }
-    }
-    function showCopyFeedback() {
-        var btn = document.getElementById('btnCopyPAC');
-        if (!btn) return;
-        var orig = btn.textContent;
-        btn.textContent = 'Copiado!';
-        btn.style.background = '#16a34a';
-        setTimeout(function() {
-            btn.textContent = orig;
-            btn.style.background = '';
-        }, 2000);
-    }
-    </script>
 </body>
 </html>

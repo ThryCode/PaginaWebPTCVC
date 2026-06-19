@@ -26,10 +26,10 @@ include 'includes/header.php';
             </div>
         </section>
 
-<?php include 'includes/footer.php'; ?>
-
     <script>
     document.addEventListener('DOMContentLoaded', function() {
         loadGallery('galleryContainer', { limit: 20 });
     });
     </script>
+
+<?php include 'includes/footer.php'; ?>

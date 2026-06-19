@@ -4,85 +4,13 @@
     "system_pac_created_at": "2026-06-19 17:55:49",
     "users": [
         {
-            "id": 1,
-            "nombre": "Administrador",
-            "email": "admin@pctvc.cu",
-            "rol": "admin",
-            "activo": true,
-            "password": "$2y$10$rlIgXEft14g6S5Lph9z1R.pwcC9Atp3Vo0TuJJcGIwLIrFMFtojaC",
-            "last_login": "2026-06-19 17:10:17",
-            "created_at": "2026-06-19 13:25:22",
-            "pacs": [
-                {
-                    "id": 1,
-                    "hash": "$2y$10$Dd9OxWjGP.hItAOUjpvUjOvBwsP3joDzEDQcFcZqRuKIQMQVGbMT.",
-                    "alias": "Inicial",
-                    "activo": false,
-                    "last_used": "2026-06-19 17:10:15",
-                    "created_at": "2026-06-19 13:25:22"
-                },
-                {
-                    "id": 4,
-                    "hash": "$2y$10$6nBWlCeyavX0GO6z6GuiD.ApkB7KGKuf.IjRQYu4mlLX.VuYkDoCu",
-                    "alias": "Enmanuel",
-                    "activo": false,
-                    "last_used": null,
-                    "created_at": "2026-06-19 16:51:27"
-                },
-                {
-                    "id": 5,
-                    "hash": "$2y$10$kk5PRLSp\/A4tKkuJDQA9CeY1U4ycO2PGH2UdWMwMGyHRUdCV5B9KO",
-                    "alias": "Casa",
-                    "activo": false,
-                    "last_used": null,
-                    "created_at": "2026-06-19 16:51:27"
-                },
-                {
-                    "id": 9,
-                    "hash": "$2y$10$BUHWjPb1Z7PH8kx\/ZrV5Suc5.9wFqiLgFZHxTy3kdp4naxygYzjSy",
-                    "alias": "",
-                    "activo": true,
-                    "last_used": null,
-                    "created_at": "2026-06-19 11:10:30"
-                },
-                {
-                    "id": 10,
-                    "hash": "$2y$10$GWPmgMVlIsMpSRYfzorhiOYo6DOKZPWUoyEFeddGAH7\/vqjTzyoEe",
-                    "alias": "",
-                    "activo": true,
-                    "last_used": null,
-                    "created_at": "2026-06-19 11:10:45"
-                }
-            ]
-        },
-        {
-            "id": 2,
-            "nombre": "Enmanuel",
-            "email": "epmjob00@gmail.com",
-            "rol": "editor",
-            "activo": true,
-            "password": "$2y$10$dQkWeQCqA\/i3SdtT\/hPTsOb\/8kwNDQm23ZjzZpVzeNx6fnbwsa90W",
-            "last_login": "2026-06-19 17:09:55",
-            "created_at": "2026-06-19 13:25:22",
-            "pacs": [
-                {
-                    "id": 6,
-                    "hash": "$2y$10$6.2vFCUcis\/RBx5P5z64oOrJOdTLSU0foyU5t6TDLGxIxYM5q\/p6W",
-                    "alias": "Enmanuel",
-                    "activo": true,
-                    "last_used": "2026-06-19 16:52:45",
-                    "created_at": "2026-06-19 16:51:51"
-                }
-            ]
-        },
-        {
             "id": 3,
             "nombre": "Casa",
             "email": "marioc@pctvc.cu",
             "rol": "admin",
             "activo": true,
-            "password": "$2y$10$KS2SSkFPiwflWPn9AKXFkOpWQsQ3XTPT8PX0xDaW1rcQb6CmDV6Qq",
-            "last_login": "2026-06-19 18:08:09",
+            "password": "$2y$10$foMALVa0w8XzaxIdvbikQumvbnuI5sC\/8gW1iPv4UixAmhQ7Dz5wC",
+            "last_login": "2026-06-19 14:30:07",
             "created_at": "2026-06-19 13:25:22",
             "pacs": [
                 {
@@ -94,103 +22,15 @@
                     "created_at": "2026-06-19 16:51:51"
                 }
             ]
-        },
-        {
-            "id": 8,
-            "nombre": "Hector",
-            "email": "hector@pctvc.cu",
-            "rol": "editor",
-            "activo": true,
-            "last_login": "2026-06-19 17:30:40",
-            "created_at": "2026-06-19 11:06:48",
-            "pacs": [],
-            "password": "$2y$10$cCVQ5kXKX3se76ppfhkt0ugIGb6vw5ZaPWx.p2SC4MapwsoiVKJcq"
         }
     ],
     "audit": [
         {
-            "user_id": null,
-            "action": "pac_verified",
-            "details": "PAC de emergencia verificado",
-            "ip_address": "unknown",
-            "created_at": "2026-06-19 18:04:32"
-        },
-        {
-            "user_id": null,
-            "action": "pac_verified",
-            "details": "PAC del sistema verificado",
-            "ip_address": "unknown",
-            "created_at": "2026-06-19 18:04:32"
-        },
-        {
-            "user_id": null,
-            "action": "login_failed",
-            "details": "Intento fallido con PAC",
-            "ip_address": "unknown",
-            "created_at": "2026-06-19 18:04:32"
-        },
-        {
             "user_id": 3,
             "action": "logout",
             "details": "marioc@pctvc.cu",
             "ip_address": "::1",
-            "created_at": "2026-06-19 18:05:27"
-        },
-        {
-            "user_id": null,
-            "action": "pac_verified",
-            "details": "PAC de emergencia verificado",
-            "ip_address": "::1",
-            "created_at": "2026-06-19 18:05:38"
-        },
-        {
-            "user_id": 3,
-            "action": "login",
-            "details": "marioc@pctvc.cu",
-            "ip_address": "::1",
-            "created_at": "2026-06-19 18:05:48"
-        },
-        {
-            "user_id": 3,
-            "action": "logout",
-            "details": "marioc@pctvc.cu",
-            "ip_address": "::1",
-            "created_at": "2026-06-19 18:06:43"
-        },
-        {
-            "user_id": null,
-            "action": "pac_verified",
-            "details": "PAC del sistema verificado",
-            "ip_address": "::1",
-            "created_at": "2026-06-19 18:07:04"
-        },
-        {
-            "user_id": 3,
-            "action": "login",
-            "details": "marioc@pctvc.cu",
-            "ip_address": "::1",
-            "created_at": "2026-06-19 18:07:05"
-        },
-        {
-            "user_id": 3,
-            "action": "logout",
-            "details": "marioc@pctvc.cu",
-            "ip_address": "::1",
-            "created_at": "2026-06-19 18:07:43"
-        },
-        {
-            "user_id": null,
-            "action": "pac_verified",
-            "details": "PAC del sistema verificado",
-            "ip_address": "::1",
-            "created_at": "2026-06-19 18:07:55"
-        },
-        {
-            "user_id": 3,
-            "action": "login",
-            "details": "marioc@pctvc.cu",
-            "ip_address": "::1",
-            "created_at": "2026-06-19 18:08:09"
+            "created_at": "2026-06-19 14:30:38"
         }
     ]
 }

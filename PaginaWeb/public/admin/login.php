@@ -1,4 +1,5 @@
 <?php
+require_once '../api/config.php';
 require_once '../api/auth.php';
 
 $auth = new Auth();
@@ -14,7 +15,10 @@ $timeoutMsg = isset($_GET['timeout']);
 $step = isset($_SESSION['pac_verified']) && $_SESSION['pac_verified'] === true ? 2 : 1;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['pac']) && $step === 1) {
+    if (!validateCSRFToken($_POST[CSRF_TOKEN_NAME] ?? '')) {
+        $error = true;
+        $errorMsg = 'Token de seguridad inv&aacute;lido.';
+    } elseif (isset($_POST['pac']) && $step === 1) {
         $result = $auth->loginWithPAC($_POST['pac']);
         if ($result === true) {
             $_SESSION['pac_verified'] = true;
@@ -149,6 +153,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="step-dot"></div>
             </div>
             <form method="POST" autocomplete="off">
+                <?php echo csrfField(); ?>
                 <input type="text" name="pac" class="pac-input" id="pacInput"
                        placeholder="Clave de acceso" maxlength="20" autocomplete="off">
                 <button type="submit" class="pac-submit">Verificar Clave</button>
@@ -168,6 +173,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <div class="login-title">Iniciar Sesi&oacute;n</div>
             <form method="POST" autocomplete="off">
+                <?php echo csrfField(); ?>
                 <label class="login-label" for="identifier">Correo o Usuario</label>
                 <input type="text" name="identifier" class="login-field" id="identifier"
                        placeholder="admin@pctvc.cu" autocomplete="username" required>

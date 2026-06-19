@@ -17,10 +17,8 @@ if (empty($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'
     exit;
 }
 
-session_start();
-
 $token = isset($_POST[CSRF_TOKEN_NAME]) ? $_POST[CSRF_TOKEN_NAME] : '';
-if (!empty($token) && !validateCSRFToken($token)) {
+if (!validateCSRFToken($token)) {
     http_response_code(403);
     echo json_encode(array('success' => false, 'message' => 'Token de seguridad inválido.'));
     exit;
@@ -30,11 +28,15 @@ $sessionId = session_id();
 
 $rateKey = 'contact_rate_' . $sessionId;
 $rateData = Storage::read('rate_limits');
-$submissions = isset($rateData[$rateKey]) ? $rateData[$rateKey] : 0;
+$currentEntry = isset($rateData[$rateKey]) ? $rateData[$rateKey] : array('count' => 0, 'first' => 0);
 
-if ($submissions >= MAX_FORM_SUBMISSIONS) {
-    echo json_encode(array('success' => false, 'message' => 'Ha excedido el límite de envíos. Intente más tarde.'));
-    exit;
+if ($currentEntry['count'] >= MAX_FORM_SUBMISSIONS) {
+    if (time() - $currentEntry['first'] > FORM_SUBMISSION_WINDOW) {
+        $currentEntry = array('count' => 0, 'first' => time());
+    } else {
+        echo json_encode(array('success' => false, 'message' => 'Ha excedido el límite de envíos. Intente más tarde.'));
+        exit;
+    }
 }
 
 $nombre = isset($_POST['nombre']) ? trim($_POST['nombre']) : '';
@@ -77,7 +79,9 @@ Storage::insert('mensajes', array(
     'leido' => 0
 ));
 
-$rateData[$rateKey] = $submissions + 1;
+$currentEntry['count']++;
+if ($currentEntry['first'] === 0) $currentEntry['first'] = time();
+$rateData[$rateKey] = $currentEntry;
 Storage::write('rate_limits', $rateData);
 
 echo json_encode(array(

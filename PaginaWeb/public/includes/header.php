@@ -44,13 +44,12 @@ header("Permissions-Policy: geolocation=(), camera=(), microphone=(), midi=(), s
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
-    <script src="https://cdn.lordicon.com/lordicon.js"></script>
 </head>
 <body>
     <header class="header" id="header">
         <div class="container">
             <a href="index.php" class="logo">
-                <img src="assets/img/logo/logo.png" alt="Logo Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara" class="logo-img" onerror="this.style.display='none'">
+                <img src="assets/img/logo/logo.png" alt="Logo Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara" class="logo-img" id="headerLogo">
                 <span class="logo-text">Parque Cient&iacute;fico Tecnol&oacute;gico<span>de Villa Clara</span></span>
             </a>
             <nav class="nav" id="nav">

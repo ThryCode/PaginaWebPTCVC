@@ -106,7 +106,7 @@ $csrfToken = generateCSRFToken();
 
         <main class="main-content">
             <header class="topbar">
-                <button class="hamburger" onclick="toggleSidebar()" aria-label="Menu" style="display:none;">&#9776;</button>
+                <button class="hamburger" aria-label="Menu" style="display:none;">&#9776;</button>
                 <h1>Usuarios</h1>
                 <?php if ($action === 'list'): ?>
                     <a href="?action=new" class="btn btn-primary">+ Nuevo</a>
@@ -133,7 +133,7 @@ $csrfToken = generateCSRFToken();
                                     <td>
                                         <a href="?action=edit&id=<?php echo $u['id']; ?>" class="btn btn-sm btn-primary">Editar</a>
                                         <?php if ($u['id'] != $_SESSION['user_id']): ?>
-                                            <form class="delete-form" method="POST" action="?action=delete" onsubmit="return confirm('&iquest;Eliminar este usuario?')">
+                                            <form class="delete-form" method="POST" action="?action=delete" data-confirm="¿Eliminar este usuario?">
                                                 <?php echo csrfField(); ?>
                                                 <input type="hidden" name="id" value="<?php echo $u['id']; ?>">
                                                 <button type="submit" class="btn btn-sm btn-danger">X</button>

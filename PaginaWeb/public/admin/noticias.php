@@ -2,7 +2,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 0);
 ini_set('log_errors', 1);
-ini_set('error_log', __DIR__ . '/data/error_log');
+ini_set('error_log', __DIR__ . '/../data/admin_error.log');
 
 require_once '../api/auth.php';
 require_once '../api/storage.php';
@@ -307,7 +307,7 @@ $csrfToken = generateCSRFToken();
 
         <main class="main-content">
             <header class="topbar">
-                <button class="hamburger" onclick="toggleSidebar()" aria-label="Menu" style="display:none;">☰</button>
+                <button class="hamburger" aria-label="Menu" style="display:none;">☰</button>
                 <h1><?php echo $action === 'list' ? 'Noticias' : ($action === 'edit' ? 'Editar Publicación' : 'Nueva Publicación'); ?></h1>
                 <?php if ($action === 'list'): ?>
                     <a href="?action=new" class="btn btn-primary">+ Nueva</a>
@@ -343,7 +343,7 @@ $csrfToken = generateCSRFToken();
                                     <td><?php echo date('d/m/Y', strtotime($n['fecha_evento'] ?? $n['created_at'])); ?></td>
                                     <td>
                                         <a href="?action=edit&id=<?php echo $n['id']; ?>" class="btn btn-sm btn-primary">Editar</a>
-                                        <form class="delete-form" method="POST" action="?action=delete" onsubmit="return confirm('¿Eliminar esta publicación?')">
+                                        <form class="delete-form" method="POST" action="?action=delete" data-confirm="¿Eliminar esta publicación?">
                                             <?php echo csrfField(); ?>
                                             <input type="hidden" name="id" value="<?php echo $n['id']; ?>">
                                             <button type="submit" class="btn btn-sm btn-danger">X</button>
@@ -382,7 +382,7 @@ $csrfToken = generateCSRFToken();
                                             <div style="position:relative;width:100px;height:80px;border-radius:8px;overflow:hidden;border:2px solid #E6F4FA;">
                                                 <img src="../<?php echo $ei; ?>" style="width:100%;height:100%;object-fit:cover;">
                                                 <label style="position:absolute;bottom:2px;left:2px;background:rgba(192,57,43,0.85);color:#fff;padding:2px 6px;border-radius:4px;font-size:0.7rem;cursor:pointer;">
-                                                    <input type="checkbox" name="delete_imagenes[]" value="<?php echo $ei; ?>" onchange="this.parentElement.style.background=this.checked?'rgba(192,57,43,1)':'rgba(192,57,43,0.85)'"> Eliminar
+                                                    <input type="checkbox" name="delete_imagenes[]" value="<?php echo $ei; ?>" data-delete-img> Eliminar
                                                 </label>
                                             </div>
                                         <?php endforeach; ?>

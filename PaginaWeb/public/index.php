@@ -367,7 +367,7 @@ include 'includes/header.php';
                         </div>
                     </div>
                     <div class="contact-form-wrap animate-fade-right">
-                        <form class="contact-form" id="contactForm" onsubmit="return handleSubmit(event)">
+                        <form class="contact-form" id="contactForm">
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="nombre">Nombre</label>
@@ -395,14 +395,13 @@ include 'includes/header.php';
                                 <textarea id="mensaje" name="mensaje" rows="5" required placeholder="Mensaje"></textarea>
                             </div>
                             <div id="formMessage" class="form-message"></div>
+                            <?= csrfField() ?>
                             <button type="submit" class="btn btn-primary" style="width:100%">Enviar Mensaje</button>
                         </form>
                     </div>
                 </div>
             </div>
         </section>
-
-<?php include 'includes/footer.php'; ?>
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -411,3 +410,5 @@ include 'includes/header.php';
         loadOpiniones('homeOpinionesContainer');
     });
     </script>
+
+<?php include 'includes/footer.php'; ?>

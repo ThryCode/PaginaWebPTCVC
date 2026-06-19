@@ -38,7 +38,7 @@ $csrfToken = generateCSRFToken();
 
         <main class="main-content">
             <header class="topbar">
-                <button class="hamburger" onclick="toggleSidebar()" aria-label="Menu" style="display:none;">☰</button>
+                <button class="hamburger" aria-label="Menu" style="display:none;">☰</button>
                 <h1>Categorías</h1>
             </header>
             <div class="content">
@@ -57,7 +57,7 @@ $csrfToken = generateCSRFToken();
                                 <td><?php echo htmlspecialchars($cat['nombre']); ?></td>
                                 <td><?php echo htmlspecialchars($cat['descripcion'] ?: '—'); ?></td>
                                 <td>
-                                    <form class="delete-form" method="POST" onsubmit="return confirm('¿Eliminar esta categoría?')">
+                                    <form class="delete-form" method="POST" data-confirm="¿Eliminar esta categoría?">
                                         <?php echo csrfField(); ?>
                                         <input type="hidden" name="id" value="<?php echo $cat['id']; ?>">
                                         <button type="submit" class="btn btn-sm btn-danger">X</button>

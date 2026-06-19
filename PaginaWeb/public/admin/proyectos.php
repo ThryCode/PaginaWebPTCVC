@@ -2,7 +2,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 0);
 ini_set('log_errors', 1);
-ini_set('error_log', __DIR__ . '/data/error_log');
+ini_set('error_log', __DIR__ . '/../data/admin_error.log');
 
 require_once '../api/auth.php';
 require_once '../api/storage.php';
@@ -26,9 +26,6 @@ if (isset($_GET['msg'])) {
     if ($msg === 'creado') $message = 'Proyecto creado correctamente.';
     elseif ($msg === 'editado') $message = 'Proyecto actualizado correctamente.';
     elseif ($msg === 'eliminado') $message = 'Proyecto eliminado.';
-    elseif ($msg === 'cont_creado') $message = 'Contador creado correctamente.';
-    elseif ($msg === 'cont_editado') $message = 'Contador actualizado correctamente.';
-    elseif ($msg === 'cont_eliminado') $message = 'Contador eliminado.';
 }
 
 $areas = array('Biotecnolog&iacute;a', 'TIC', 'Energ&iacute;a', 'Industria', 'Agricultura', 'Medio Ambiente', 'Salud', 'Educaci&oacute;n', 'Otros');
@@ -38,46 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!validateCSRFToken($_POST[CSRF_TOKEN_NAME] ?? '')) {
         $error = 'Token de seguridad inv&aacute;lido.';
     } else {
-        $counterAction = $_POST['counter_action'] ?? '';
-        if ($counterAction) {
-            $counters = Storage::read('proyectos_counters');
-            if ($counterAction === 'create') {
-                $newId = 1;
-                foreach ($counters as $c) {
-                    if ($c['id'] >= $newId) $newId = $c['id'] + 1;
-                }
-                $counters[] = array(
-                    'id' => $newId,
-                    'numero' => intval($_POST['numero'] ?? 0),
-                    'label' => trim($_POST['label'] ?? ''),
-                    'orden' => intval($_POST['orden'] ?? count($counters) + 1)
-                );
-                Storage::write('proyectos_counters', $counters);
-                header('Location: proyectos.php?msg=cont_creado');
-                exit;
-            } elseif ($counterAction === 'update') {
-                $cid = intval($_POST['id'] ?? 0);
-                foreach ($counters as &$c) {
-                    if ($c['id'] === $cid) {
-                        $c['numero'] = intval($_POST['numero'] ?? $c['numero']);
-                        $c['label'] = trim($_POST['label'] ?? $c['label']);
-                        $c['orden'] = intval($_POST['orden'] ?? $c['orden']);
-                        break;
-                    }
-                }
-                Storage::write('proyectos_counters', $counters);
-                header('Location: proyectos.php?msg=cont_editado');
-                exit;
-            } elseif ($counterAction === 'delete') {
-                $cid = intval($_POST['id'] ?? 0);
-                $counters = array_values(array_filter($counters, function($c) use ($cid) {
-                    return $c['id'] !== $cid;
-                }));
-                Storage::write('proyectos_counters', $counters);
-                header('Location: proyectos.php?msg=cont_eliminado');
-                exit;
-            }
-        } elseif ($action === 'delete') {
+        if ($action === 'delete') {
             $deleteId = intval($_POST['id'] ?? 0);
             if ($deleteId > 0) {
                 $existing = Storage::findById('proyectos', $deleteId);
@@ -108,16 +66,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $slug = substr($slug, 0, 280);
 
             $data = array(
-                'titulo' => htmlspecialchars($titulo),
+                'titulo' => trim($titulo),
                 'slug' => $slug,
                 'resumen' => $resumen,
                 'contenido' => $contenido,
-                'area' => htmlspecialchars($area),
-                'estado' => htmlspecialchars($estado),
-                'responsable' => htmlspecialchars($responsable),
+                'area' => trim($area),
+                'estado' => trim($estado),
+                'responsable' => trim($responsable),
                 'fecha_inicio' => $fecha_inicio,
                 'fecha_fin' => $fecha_fin,
-                'resultados' => htmlspecialchars($resultados),
+                'resultados' => trim($resultados),
                 'publicada' => $publicada,
                 'destacada' => $destacada
             );
@@ -200,7 +158,7 @@ $csrfToken = generateCSRFToken();
 
         <main class="main-content">
             <header class="topbar">
-                <button class="hamburger" onclick="toggleSidebar()" aria-label="Menu" style="display:none;">☰</button>
+                <button class="hamburger" aria-label="Menu" style="display:none;">☰</button>
                 <h1><?php echo $action === 'list' ? 'Proyectos' : ($action === 'edit' ? 'Editar Proyecto' : 'Nuevo Proyecto'); ?></h1>
                 <?php if ($action === 'list'): ?>
                     <a href="?action=new" class="btn btn-primary">+ Nuevo</a>
@@ -228,7 +186,7 @@ $csrfToken = generateCSRFToken();
                                     <td><span class="tag tag-<?php echo $p['publicada'] ? 'publicado' : 'borrador'; ?>"><?php echo $p['publicada'] ? 'Publicado' : 'Borrador'; ?></span></td>
                                     <td>
                                         <a href="?action=edit&id=<?php echo $p['id']; ?>" class="btn btn-sm btn-primary">Editar</a>
-                                        <form class="delete-form" method="POST" action="?action=delete" onsubmit="return confirm('¿Eliminar este proyecto?')">
+                                        <form class="delete-form" method="POST" action="?action=delete" data-confirm="¿Eliminar este proyecto?">
                                             <?php echo csrfField(); ?>
                                             <input type="hidden" name="id" value="<?php echo $p['id']; ?>">
                                             <button type="submit" class="btn btn-sm btn-danger">X</button>
@@ -240,95 +198,6 @@ $csrfToken = generateCSRFToken();
                             </table>
                         <?php endif; ?>
                     </div></div>
-
-                    <div class="panel" style="margin-top:30px;">
-                        <div class="panel-header">
-                            <h2>Contadores de la sección Proyectos</h2>
-                        </div>
-                        <div class="panel-body">
-                            <?php
-                            $proyCounters = Storage::read('proyectos_counters');
-                            usort($proyCounters, function($a, $b) {
-                                return ($a['orden'] ?? 0) - ($b['orden'] ?? 0);
-                            });
-                            ?>
-                            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;">
-                                <?php foreach ($proyCounters as $c): ?>
-                                <div style="background:linear-gradient(135deg,#00A0E1,#004966);color:#fff;padding:20px;border-radius:12px;text-align:center;">
-                                    <div style="font-size:2rem;font-weight:900;"><?php echo intval($c['numero']); ?>+</div>
-                                    <div style="font-size:0.85rem;opacity:0.85;"><?php echo htmlspecialchars($c['label']); ?></div>
-                                </div>
-                                <?php endforeach; ?>
-                            </div>
-                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
-                                <div>
-                                    <h3 style="font-size:1rem;color:#004966;margin-bottom:12px;">Nuevo contador</h3>
-                                    <form method="POST">
-                                        <input type="hidden" name="<?php echo CSRF_TOKEN_NAME; ?>" value="<?php echo $csrfToken; ?>">
-                                        <input type="hidden" name="counter_action" value="create">
-                                        <div class="form-group">
-                                            <label>Etiqueta</label>
-                                            <input type="text" name="label" required placeholder="Ej: Proyectos activos">
-                                        </div>
-                                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-                                            <div class="form-group">
-                                                <label>Número</label>
-                                                <input type="number" name="numero" required min="0" value="0">
-                                            </div>
-                                            <div class="form-group">
-                                                <label>Orden</label>
-                                                <input type="number" name="orden" required min="1" value="<?php echo count($proyCounters) + 1; ?>">
-                                            </div>
-                                        </div>
-                                        <button type="submit" class="btn btn-success">Crear</button>
-                                    </form>
-                                </div>
-                                <div>
-                                    <h3 style="font-size:1rem;color:#004966;margin-bottom:12px;">Contadores actuales</h3>
-                                    <?php foreach ($proyCounters as $c): ?>
-                                    <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:#fff;border-radius:8px;margin-bottom:8px;box-shadow:0 1px 4px rgba(0,0,0,0.05);">
-                                        <div style="flex:1;">
-                                            <strong><?php echo htmlspecialchars($c['label']); ?></strong>
-                                            <span style="color:#888;font-size:0.82rem;display:block;"><?php echo intval($c['numero']); ?> | Orden: <?php echo intval($c['orden']); ?></span>
-                                        </div>
-                                        <button class="btn btn-sm btn-primary" onclick="document.getElementById('edit-counter-<?php echo $c['id']; ?>').style.display=document.getElementById('edit-counter-<?php echo $c['id']; ?>').style.display==='none'?'block':'none'">Editar</button>
-                                        <form method="POST" onsubmit="return confirm('Eliminar este contador?')" style="margin:0;">
-                                            <input type="hidden" name="<?php echo CSRF_TOKEN_NAME; ?>" value="<?php echo $csrfToken; ?>">
-                                            <input type="hidden" name="counter_action" value="delete">
-                                            <input type="hidden" name="id" value="<?php echo $c['id']; ?>">
-                                            <button type="submit" class="btn btn-sm btn-danger">X</button>
-                                        </form>
-                                    </div>
-                                    <div id="edit-counter-<?php echo $c['id']; ?>" style="display:none;background:#f8f9fa;padding:16px;border-radius:10px;margin-bottom:12px;border:2px dashed #e0e0e0;">
-                                        <form method="POST">
-                                            <input type="hidden" name="<?php echo CSRF_TOKEN_NAME; ?>" value="<?php echo $csrfToken; ?>">
-                                            <input type="hidden" name="counter_action" value="update">
-                                            <input type="hidden" name="id" value="<?php echo $c['id']; ?>">
-                                            <div class="form-group">
-                                                <label>Etiqueta</label>
-                                                <input type="text" name="label" required value="<?php echo htmlspecialchars($c['label']); ?>">
-                                            </div>
-                                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-                                                <div class="form-group">
-                                                    <label>Número</label>
-                                                    <input type="number" name="numero" required min="0" value="<?php echo intval($c['numero']); ?>">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>Orden</label>
-                                                    <input type="number" name="orden" required min="1" value="<?php echo intval($c['orden']); ?>">
-                                                </div>
-                                            </div>
-                                            <div style="display:flex;gap:8px;">
-                                                <button type="submit" class="btn btn-sm btn-success">Guardar</button>
-                                                <button type="button" class="btn btn-sm btn-secondary" onclick="this.closest('#edit-counter-<?php echo $c['id']; ?>').style.display='none'">Cancelar</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <?php endforeach; ?>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
                 <?php elseif ($action === 'new' || $action === 'edit'): ?>
                     <div class="form-card">

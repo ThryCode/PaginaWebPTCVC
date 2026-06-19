@@ -1,14 +1,14 @@
 <?php
 $currentPage = basename($_SERVER['PHP_SELF']);
 $user = isset($user) ? $user : (isset($_SESSION['user_nombre']) ? array('nombre' => $_SESSION['user_nombre']) : array('nombre' => 'Admin'));
-$mensajesNoLeidos = isset($mensajesNoLeidos) ? $mensajesNoLeidos : Storage::count('mensajes', array('leido' => 0));
+$mensajesNoLeidos = isset($mensajesNoLeidos) ? $mensajesNoLeidos : Storage::count('mensajes');
 $isAdmin = isset($_SESSION['user_rol']) && $_SESSION['user_rol'] === 'admin';
 ?>
-<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
 <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
         <h2>Panel Admin</h2>
-        <button class="hamburger" onclick="toggleSidebar()" aria-label="Menu">☰</button>
+        <button class="hamburger" id="sidebarToggle" aria-label="Menu">☰</button>
     </div>
     <nav class="sidebar-nav">
         <ul>
@@ -61,9 +61,4 @@ $isAdmin = isset($_SESSION['user_rol']) && $_SESSION['user_rol'] === 'admin';
         <a href="logout.php" class="btn-logout">Cerrar sesión</a>
     </div>
 </aside>
-<script>
-function toggleSidebar() {
-    document.getElementById('sidebar').classList.toggle('open');
-    document.getElementById('sidebarOverlay').classList.toggle('active');
-}
-</script>
+<script src="js/admin.js" defer></script>

@@ -127,7 +127,7 @@ $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
         <main class="main-content">
             <header class="topbar">
                 <div style="display:flex;align-items:center;gap:12px;">
-                    <button class="hamburger" onclick="toggleSidebar()" aria-label="Menu">☰</button>
+                    <button class="hamburger" aria-label="Menu">☰</button>
                     <h1>Contadores</h1>
                 </div>
             </header>
@@ -198,8 +198,8 @@ $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
                                             <span>Número: <?php echo intval($c['numero']); ?> | Orden: <?php echo intval($c['orden']); ?></span>
                                         </div>
                                         <div class="actions">
-                                            <button class="btn btn-sm btn-primary" onclick="toggleEdit(<?php echo $c['id']; ?>)">Editar</button>
-                                            <form class="delete-form" method="POST" onsubmit="return confirm('Eliminar este contador?')">
+                                            <button class="btn btn-sm btn-primary" data-toggle-edit="<?php echo $c['id']; ?>">Editar</button>
+                                            <form class="delete-form" method="POST" data-confirm="Eliminar este contador?">
                                                 <input type="hidden" name="<?php echo CSRF_TOKEN_NAME; ?>" value="<?php echo $csrfToken; ?>">
                                                 <input type="hidden" name="action" value="delete">
                                                 <input type="hidden" name="id" value="<?php echo $c['id']; ?>">
@@ -228,7 +228,7 @@ $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
                                             </div>
                                             <div style="display:flex;gap:10px;">
                                                 <button type="submit" class="btn btn-sm btn-success">Guardar</button>
-                                                <button type="button" class="btn btn-sm btn-secondary" onclick="toggleEdit(<?php echo $c['id']; ?>)">Cancelar</button>
+                                                <button type="button" class="btn btn-sm btn-secondary" data-toggle-edit="<?php echo $c['id']; ?>">Cancelar</button>
                                             </div>
                                         </form>
                                     </div>
@@ -240,13 +240,5 @@ $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
             </div>
         </main>
     </div>
-    <script>
-    function toggleEdit(id) {
-        var el = document.getElementById('edit-' + id);
-        if (el) {
-            el.classList.toggle('active');
-        }
-    }
-    </script>
 </body>
 </html>

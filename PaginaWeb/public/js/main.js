@@ -2,6 +2,27 @@
 // NAVBAR - Scroll effect + Hamburger menu
 // ============================================
 document.addEventListener('DOMContentLoaded', function() {
+    var logo = document.getElementById('headerLogo');
+    if (logo) {
+        logo.addEventListener('error', function() { this.style.display = 'none'; });
+    }
+    document.addEventListener('click', function(e) {
+        var toggle = e.target.closest('.project-toggle');
+        if (toggle) {
+            e.preventDefault();
+            var parent = toggle.parentElement;
+            var content = parent.querySelector('.project-full');
+            if (content) {
+                var isOpen = content.style.display === 'block';
+                content.style.display = isOpen ? 'none' : 'block';
+                toggle.textContent = isOpen ? toggle.getAttribute('data-text-original') : 'Ocultar';
+            }
+        }
+    });
+    var contactForm = document.getElementById('contactForm');
+    if (contactForm) {
+        contactForm.addEventListener('submit', handleSubmit);
+    }
     var header = document.getElementById('header');
     var navToggle = document.getElementById('navToggle');
     var nav = document.getElementById('nav');
@@ -329,6 +350,9 @@ function renderCardImage(imagenes, titulo, tipo) {
 // HELPER - Iniciar carruseles
 // ============================================
 function initCardCarousels(container) {
+    if (container.dataset.cardCarouselInterval) {
+        clearInterval(Number(container.dataset.cardCarouselInterval));
+    }
     container.querySelectorAll('.card-carousel').forEach(function(carousel) {
         var track = carousel.querySelector('.carousel-track');
         var slides = track.querySelectorAll('.carousel-slide');
@@ -343,20 +367,19 @@ function initCardCarousels(container) {
             slides[i].style.width = cw + 'px';
         }
         var current = 0;
-        setInterval(function() {
+        var intervalId = setInterval(function() {
             current = (current + 1) % count;
             track.style.transform = 'translateX(-' + (current * cw) + 'px)';
             dots.forEach(function(d) { d.classList.remove('active'); });
             if (dots[current]) dots[current].classList.add('active');
         }, 4000);
+        container.dataset.cardCarouselInterval = String(intervalId);
     });
 }
 
 function escapeHtml(text) {
     if (!text) return '';
-    var div = document.createElement('div');
-    div.appendChild(document.createTextNode(text));
-    return div.innerHTML;
+    return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
 }
 
 // ============================================
@@ -387,6 +410,33 @@ function skeletonGallery(count) {
     return html;
 }
 
+function apiGet(url, onSuccess, onError) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                try {
+                    var response = JSON.parse(xhr.responseText);
+                    if (response.success) {
+                        onSuccess(response);
+                    } else {
+                        onError('api');
+                    }
+                } catch (e) {
+                    onError('parse');
+                }
+            } else {
+                onError('http');
+            }
+        }
+    };
+    xhr.onerror = function() {
+        onError('network');
+    };
+    xhr.send();
+}
+
 // ============================================
 // CARGAR NOTICIAS DESDE LA API
 // ============================================
@@ -397,67 +447,52 @@ function loadNews(containerId, options) {
     var limit = (options && options.limit) || 6;
     var tipo = (options && options.tipo) || '';
     var q = (options && options.q) || '';
-    var baseUrl = 'api/news.php';
 
-    var url = baseUrl + '?limit=' + limit;
+    var url = 'api/news.php?limit=' + limit;
     if (tipo) url += '&tipo=' + tipo;
     if (q) url += '&q=' + encodeURIComponent(q);
 
     container.innerHTML = skeletonCards(Math.min(limit, 6));
 
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', url, true);
+    apiGet(url, function(response) {
+        if (response.data.length > 0) {
+            var html = '';
+            response.data.forEach(function(item) {
+                var dateSource = ((item.fecha_evento || item.created_at) || '').split(' ')[0];
+                var fecha = new Date(dateSource + 'T12:00:00');
+                var fechaStr = fecha.toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' });
+                var tagClass = item.tipo === 'evento' ? 'news-tag-evento' : 'news-tag-noticia';
+                var imagenes = getImagenes(item);
 
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            try {
-                var response = JSON.parse(xhr.responseText);
-                if (response.success && response.data.length > 0) {
-                    var html = '';
-                    response.data.forEach(function(item) {
-                        var dateSource = (item.fecha_evento || item.created_at).split(' ')[0];
-                        var fecha = new Date(dateSource + 'T12:00:00');
-                        var fechaStr = fecha.toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' });
-                        var tagClass = item.tipo === 'evento' ? 'news-tag-evento' : 'news-tag-noticia';
-                        var imagenes = getImagenes(item);
-
-                        html += '<div class="news-card">';
-                        html += renderCardImage(imagenes, item.titulo, item.tipo);
-                        html += '<div class="news-card-body">';
-                        html += '<div class="news-card-meta">';
-                        html += '<span class="news-tag ' + tagClass + '">' + item.tipo.charAt(0).toUpperCase() + item.tipo.slice(1) + '</span>';
-                        if (item.categoria) {
-                            html += '<span class="news-card-date">' + escapeHtml(item.categoria) + '</span>';
-                        }
-                        html += '</div>';
-                        html += '<h4>' + escapeHtml(item.titulo) + '</h4>';
-                        html += '<p>' + escapeHtml(item.resumen || '') + '</p>';
-                        html += '<a href="noticia.php?id=' + item.id + '" class="news-read-more">Leer m&aacute;s <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>';
-                        html += '</div>';
-                        html += '<div class="news-card-footer">';
-                        html += '<span class="news-card-date">' + fechaStr + '</span>';
-                        if (item.ubicacion) {
-                            html += '<span class="news-card-location">&#128205; ' + escapeHtml(item.ubicacion) + '</span>';
-                        }
-                        html += '</div>';
-                        html += '</div>';
-                    });
-                    container.innerHTML = html;
-                    initCardCarousels(container);
-                } else {
-                    container.innerHTML = '<p class="empty" style="grid-column: 1/-1;">No hay publicaciones disponibles.</p>';
+                html += '<div class="news-card">';
+                html += renderCardImage(imagenes, item.titulo, item.tipo);
+                html += '<div class="news-card-body">';
+                html += '<div class="news-card-meta">';
+                html += '<span class="news-tag ' + tagClass + '">' + (item.tipo || '').charAt(0).toUpperCase() + (item.tipo || '').slice(1) + '</span>';
+                if (item.categoria) {
+                    html += '<span class="news-card-date">' + escapeHtml(item.categoria) + '</span>';
                 }
-            } catch (e) {
-                container.innerHTML = '<p class="empty" style="grid-column: 1/-1;">Error al cargar noticias.</p>';
-            }
+                html += '</div>';
+                html += '<h4>' + escapeHtml(item.titulo) + '</h4>';
+                html += '<p>' + escapeHtml(item.resumen || '') + '</p>';
+                html += '<a href="noticia.php?id=' + item.id + '" class="news-read-more">Leer m&aacute;s <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>';
+                html += '</div>';
+                html += '<div class="news-card-footer">';
+                html += '<span class="news-card-date">' + fechaStr + '</span>';
+                if (item.ubicacion) {
+                    html += '<span class="news-card-location">&#128205; ' + escapeHtml(item.ubicacion) + '</span>';
+                }
+                html += '</div>';
+                html += '</div>';
+            });
+            container.innerHTML = html;
+            initCardCarousels(container);
+        } else {
+            container.innerHTML = '<p class="empty" style="grid-column: 1/-1;">No hay publicaciones disponibles.</p>';
         }
-    };
-
-    xhr.onerror = function() {
-        container.innerHTML = '<p class="empty" style="grid-column: 1/-1;">Error de conexion.</p>';
-    };
-
-    xhr.send();
+    }, function() {
+        container.innerHTML = '<p class="empty" style="grid-column: 1/-1;">Error al cargar noticias.</p>';
+    });
 }
 
 // ============================================
@@ -469,65 +504,50 @@ function loadEvents(containerId, options) {
 
     var limit = (options && options.limit) || 10;
     var q = (options && options.q) || '';
-    var baseUrl = 'api/events.php';
 
-    var url = baseUrl + '?limit=' + limit;
+    var url = 'api/events.php?limit=' + limit;
     if (q) url += '&q=' + encodeURIComponent(q);
 
     container.innerHTML = skeletonCards(Math.min(limit, 6));
 
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', url, true);
+    apiGet(url, function(response) {
+        if (response.data.length > 0) {
+            var html = '';
+            response.data.forEach(function(item) {
+                var dateSource = ((item.fecha_evento || item.created_at) || '').split(' ')[0];
+                var fecha = new Date(dateSource + 'T12:00:00');
+                var fechaStr = fecha.toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' });
+                var imagenes = getImagenes(item);
 
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            try {
-                var response = JSON.parse(xhr.responseText);
-                if (response.success && response.data.length > 0) {
-                    var html = '';
-                    response.data.forEach(function(item) {
-                        var dateSource = (item.fecha_evento || item.created_at).split(' ')[0];
-                        var fecha = new Date(dateSource + 'T12:00:00');
-                        var fechaStr = fecha.toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' });
-                        var imagenes = getImagenes(item);
-
-                        html += '<div class="news-card">';
-                        html += renderCardImage(imagenes, item.titulo, 'evento');
-                        html += '<div class="news-card-body">';
-                        html += '<div class="news-card-meta">';
-                        html += '<span class="news-tag news-tag-evento">Evento</span>';
-                        if (item.categoria) {
-                            html += '<span class="news-card-date">' + escapeHtml(item.categoria) + '</span>';
-                        }
-                        html += '</div>';
-                        html += '<h4>' + escapeHtml(item.titulo) + '</h4>';
-                        html += '<p>' + escapeHtml(item.resumen || '') + '</p>';
-                        html += '<a href="noticia.php?id=' + item.id + '" class="news-read-more">Leer m&aacute;s <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>';
-                        html += '</div>';
-                        html += '<div class="news-card-footer">';
-                        html += '<span class="news-card-date">' + fechaStr + '</span>';
-                        if (item.ubicacion) {
-                            html += '<span class="news-card-location">&#128205; ' + escapeHtml(item.ubicacion) + '</span>';
-                        }
-                        html += '</div>';
-                        html += '</div>';
-                    });
-                    container.innerHTML = html;
-                    initCardCarousels(container);
-                } else {
-                    container.innerHTML = '<p class="empty" style="grid-column: 1/-1;">No hay eventos disponibles.</p>';
+                html += '<div class="news-card">';
+                html += renderCardImage(imagenes, item.titulo, 'evento');
+                html += '<div class="news-card-body">';
+                html += '<div class="news-card-meta">';
+                html += '<span class="news-tag news-tag-evento">Evento</span>';
+                if (item.categoria) {
+                    html += '<span class="news-card-date">' + escapeHtml(item.categoria) + '</span>';
                 }
-            } catch (e) {
-                container.innerHTML = '<p class="empty" style="grid-column: 1/-1;">Error al cargar eventos.</p>';
-            }
+                html += '</div>';
+                html += '<h4>' + escapeHtml(item.titulo) + '</h4>';
+                html += '<p>' + escapeHtml(item.resumen || '') + '</p>';
+                html += '<a href="noticia.php?id=' + item.id + '" class="news-read-more">Leer m&aacute;s <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>';
+                html += '</div>';
+                html += '<div class="news-card-footer">';
+                html += '<span class="news-card-date">' + fechaStr + '</span>';
+                if (item.ubicacion) {
+                    html += '<span class="news-card-location">&#128205; ' + escapeHtml(item.ubicacion) + '</span>';
+                }
+                html += '</div>';
+                html += '</div>';
+            });
+            container.innerHTML = html;
+            initCardCarousels(container);
+        } else {
+            container.innerHTML = '<p class="empty" style="grid-column: 1/-1;">No hay eventos disponibles.</p>';
         }
-    };
-
-    xhr.onerror = function() {
-        container.innerHTML = '<p class="empty" style="grid-column: 1/-1;">Error de conexion.</p>';
-    };
-
-    xhr.send();
+    }, function() {
+        container.innerHTML = '<p class="empty" style="grid-column: 1/-1;">Error al cargar eventos.</p>';
+    });
 }
 
 // ============================================
@@ -553,7 +573,7 @@ function loadOpiniones(containerId) {
                         if (item.imagen) {
                             html += '<img src="' + item.imagen + '" alt="' + escapeHtml(item.nombre) + '" class="opinion-img">';
                         } else {
-                            html += '<div class="opinion-img opinion-img-placeholder">' + escapeHtml(item.nombre.charAt(0)) + '</div>';
+                            html += '<div class="opinion-img opinion-img-placeholder">' + escapeHtml((item.nombre || '').charAt(0) || '?') + '</div>';
                         }
                         html += '<div class="opinion-info">';
                         html += '<strong>' + escapeHtml(item.nombre) + '</strong>';
@@ -599,12 +619,12 @@ function initOpinionesCarousel() {
             current = index;
             cards[current].classList.add('active');
         }, 600);
-        resetAutoPlay();
+        resetOpinionAutoPlay();
     }
     function nextOpinion() {
         showOpinion(current === cards.length - 1 ? 0 : current + 1);
     }
-    function resetAutoPlay() {
+    function resetOpinionAutoPlay() {
         clearInterval(autoPlay);
         autoPlay = setInterval(nextOpinion, 5000);
     }
@@ -618,7 +638,7 @@ function initOpinionesCarousel() {
             showOpinion(current === cards.length - 1 ? 0 : current + 1);
         };
     }
-    resetAutoPlay();
+    resetOpinionAutoPlay();
 }
 
 // ============================================
@@ -666,12 +686,12 @@ function loadCalendarMonth() {
 
     var html = '<div class="calendar">';
     html += '<div class="calendar-header">';
-    html += '<button class="calendar-nav" onclick="calendarPrev()" aria-label="Mes anterior">&#9664;</button>';
+    html += '<button class="calendar-nav" data-calendar-prev aria-label="Mes anterior">&#9664;</button>';
     html += '<div class="calendar-selectors">';
-    html += '<select class="calendar-select calendar-month-select" onchange="calendarGoToMonth(parseInt(this.value))" aria-label="Mes">' + monthOptions + '</select>';
-    html += '<select class="calendar-select calendar-year-select" onchange="calendarGoToYear(parseInt(this.value))" aria-label="Año">' + yearOptions + '</select>';
+    html += '<select class="calendar-select calendar-month-select" data-calendar-month aria-label="Mes">' + monthOptions + '</select>';
+    html += '<select class="calendar-select calendar-year-select" data-calendar-year aria-label="Año">' + yearOptions + '</select>';
     html += '</div>';
-    html += '<button class="calendar-nav" onclick="calendarNext()" aria-label="Mes siguiente">&#9654;</button>';
+    html += '<button class="calendar-nav" data-calendar-next aria-label="Mes siguiente">&#9654;</button>';
     html += '</div>';
 
     html += '<div class="calendar-grid">';
@@ -692,6 +712,27 @@ function loadCalendarMonth() {
     html += '</div>';
 
     container.innerHTML = html;
+
+    var prevBtn = container.querySelector('[data-calendar-prev]');
+    if (prevBtn) {
+        prevBtn.addEventListener('click', calendarPrev);
+    }
+    var monthSelect = container.querySelector('[data-calendar-month]');
+    if (monthSelect) {
+        monthSelect.addEventListener('change', function() {
+            calendarGoToMonth(parseInt(this.value));
+        });
+    }
+    var yearSelect = container.querySelector('[data-calendar-year]');
+    if (yearSelect) {
+        yearSelect.addEventListener('change', function() {
+            calendarGoToYear(parseInt(this.value));
+        });
+    }
+    var nextBtn = container.querySelector('[data-calendar-next]');
+    if (nextBtn) {
+        nextBtn.addEventListener('click', calendarNext);
+    }
 
     var xhr = new XMLHttpRequest();
     xhr.open('GET', 'api/events.php?calendar=1&year=' + year + '&month=' + month, true);
@@ -802,54 +843,52 @@ function loadGallery(containerId, options) {
     if (!container) return;
 
     var limit = (options && options.limit) || 20;
-    var baseUrl = 'api/gallery.php';
 
-    var url = baseUrl + '?limit=' + limit;
+    var url = 'api/gallery.php?limit=' + limit;
 
     container.innerHTML = skeletonGallery(Math.min(limit, 12));
 
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', url, true);
-
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            try {
-                var response = JSON.parse(xhr.responseText);
-                if (response.success && response.data.length > 0) {
-                    var html = '';
-                    response.data.forEach(function(item) {
-                        var src = item.imagen || item.url || '';
-                        var title = escapeHtml(item.titulo || item.descripcion || '');
-                        html += '<div class="gallery-item" onclick="openLightbox(\'' + src.replace(/'/g, "\\'") + '\', \'' + title.replace(/'/g, "\\'") + '\')">';
-                        html += '<img src="' + src + '" alt="' + title + '" loading="lazy">';
-                        if (title) {
-                            html += '<div class="gallery-overlay"><span>' + title + '</span></div>';
-                        }
-                        html += '</div>';
-                    });
-                    container.innerHTML = html;
-                } else {
-                    container.innerHTML = '<p class="empty" style="grid-column: 1/-1;">No hay fotos en la galeria.</p>';
+    apiGet(url, function(response) {
+        if (response.data.length > 0) {
+            var html = '';
+            response.data.forEach(function(item) {
+                var src = item.imagen || item.url || '';
+                var title = escapeHtml(item.titulo || item.descripcion || '');
+                html += '<div class="gallery-item" data-src="' + escapeHtml(src) + '" data-title="' + title + '">';
+                html += '<img src="' + src + '" alt="' + title + '" loading="lazy">';
+                if (title) {
+                    html += '<div class="gallery-overlay"><span>' + title + '</span></div>';
                 }
-            } catch (e) {
-                container.innerHTML = '<p class="empty" style="grid-column: 1/-1;">Error al cargar galeria.</p>';
+                html += '</div>';
+            });
+            container.innerHTML = html;
+            if (!container.dataset.galleryListener) {
+                container.dataset.galleryListener = '1';
+                container.addEventListener('click', function(e) {
+                    var item = e.target.closest('.gallery-item');
+                    if (item) openLightbox(item.dataset.src, item.dataset.title);
+                });
             }
+        } else {
+            container.innerHTML = '<p class="empty" style="grid-column: 1/-1;">No hay fotos en la galeria.</p>';
         }
-    };
-
-    xhr.onerror = function() {
-        container.innerHTML = '<p class="empty" style="grid-column: 1/-1;">Error de conexion.</p>';
-    };
-
-    xhr.send();
+    }, function() {
+        container.innerHTML = '<p class="empty" style="grid-column: 1/-1;">Error al cargar galeria.</p>';
+    });
 }
 
 // ============================================
 // LIGHTBOX
 // ============================================
+var lightboxImages = [];
+
 function openLightbox(src, alt) {
     var existing = document.getElementById('lightbox');
     if (existing) existing.remove();
+
+    var galleryImages = document.querySelectorAll('.gallery-item img');
+    lightboxImages = [];
+    galleryImages.forEach(function(el) { lightboxImages.push(el.src); });
 
     var lb = document.createElement('div');
     lb.id = 'lightbox';
@@ -886,17 +925,12 @@ function navigateLightbox(dir) {
     var img = lb.querySelector('.lightbox-content img');
     var currentSrc = img.src;
 
-    var galleryImages = document.querySelectorAll('.gallery-item img');
-    var srcs = [];
-    galleryImages.forEach(function(el) { srcs.push(el.src); });
-
+    var srcs = lightboxImages;
     if (srcs.length <= 1) return;
 
     var idx = srcs.indexOf(currentSrc);
     idx = (idx + dir + srcs.length) % srcs.length;
     img.src = srcs[idx];
-
-    var overlay = lb.querySelector('.lightbox-overlay');
     img.style.opacity = '0';
     setTimeout(function() { img.style.opacity = '1'; }, 50);
 }

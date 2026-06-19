@@ -184,7 +184,7 @@ include 'includes/header.php';
                         <img src="assets/img/colaboradores/iasp.png" alt="IASP" loading="lazy">
                     </a>
                     <div>
-                        <img src="assets/img/colaboradores/iasp-latam.png" alt="IASP Latam" loading="lazy">
+                        <img src="assets/img/colaboradores/iasp-latam.jpg" alt="IASP Latam" loading="lazy">
                     </div>
                 </div>
             </div>
@@ -199,43 +199,43 @@ include 'includes/header.php';
                 <div class="faq-list">
                     <div class="faq-item">
                         <button class="faq-question">¿Qu&eacute; es el Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara?</button>
-                        <div class="faq-answer"><p></p></div>
+                        <div class="faq-answer"><p>Es una instituci&oacute;n que integra la actividad cient&iacute;fica, tecnol&oacute;gica y productiva para fomentar la innovaci&oacute;n y el desarrollo sostenible en la regi&oacute;n central de Cuba, como espacio de colaboraci&oacute;n entre universidades, centros de investigaci&oacute;n y el sector empresarial.</p></div>
                     </div>
                     <div class="faq-item">
                         <button class="faq-question">¿Se obtiene alg&uacute;n beneficio econ&oacute;mico por participar en un proyecto?</button>
-                        <div class="faq-answer"><p></p></div>
+                        <div class="faq-answer"><p>S&iacute;, los proyectos pueden generar ingresos por venta de productos y servicios. Los participantes reciben compensaci&oacute;n econ&oacute;mica seg&uacute;n los acuerdos establecidos en el contrato del proyecto.</p></div>
                     </div>
                     <div class="faq-item">
                         <button class="faq-question">Tengo una idea de proyecto. ¿C&oacute;mo puedo desarrollarla en el PCTVC?</button>
-                        <div class="faq-answer"><p></p></div>
+                        <div class="faq-answer"><p>Puede presentar su propuesta a trav&eacute;s de la direcci&oacute;n del PCTVC. El equipo evaluar&aacute; la viabilidad t&eacute;cnica y econ&oacute;mica y le orientar&aacute; sobre los pasos a seguir, incluyendo la conformaci&oacute;n del equipo y la b&uacute;squeda de financiamiento.</p></div>
                     </div>
                     <div class="faq-item">
                         <button class="faq-question">¿Puedo inscribirme y participar en proyectos si vivo fuera de Villa Clara?</button>
-                        <div class="faq-answer"><p></p></div>
+                        <div class="faq-answer"><p>S&iacute;, el PCTVC est&aacute; abierto a colaboradores de cualquier provincia. La participaci&oacute;n a distancia es posible mediante herramientas de comunicaci&oacute;n y trabajo colaborativo.</p></div>
                     </div>
                     <div class="faq-item">
                         <button class="faq-question">¿Cu&aacute;les son los requisitos para pertenecer al PCTVC?</button>
-                        <div class="faq-answer"><p></p></div>
+                        <div class="faq-answer"><p>Los requisitos incluyen: tener una idea o proyecto con potencial innovador, contar con un equipo multidisciplinario, presentar una propuesta t&eacute;cnica y econ&oacute;mica viable, y comprometerse con las normativas del Parque.</p></div>
                     </div>
                     <div class="faq-item">
                         <button class="faq-question">¿Qu&eacute; tipo de apoyo brinda el PCTVC a las empresas y emprendedores?</button>
-                        <div class="faq-answer"><p></p></div>
+                        <div class="faq-answer"><p>Ofrecemos asesor&iacute;a t&eacute;cnica y legal, acceso a laboratorios y equipamiento, apoyo en gesti&oacute;n de financiamiento, capacitaci&oacute;n empresarial, vinculaci&oacute;n con el sector productivo y acompa&ntilde;amiento en todo el ciclo del proyecto.</p></div>
                     </div>
                     <div class="faq-item">
                         <button class="faq-question">¿Qu&eacute; tipos de proyectos se desarrollan en el PCTVC?</button>
-                        <div class="faq-answer"><p></p></div>
+                        <div class="faq-answer"><p>Trabajamos en &aacute;reas como biotecnolog&iacute;a, energ&iacute;as renovables, tecnolog&iacute;as de la informaci&oacute;n, producci&oacute;n de alimentos, desarrollo industrial y ciencias sociales aplicadas a la innovaci&oacute;n.</p></div>
                     </div>
                     <div class="faq-item">
                         <button class="faq-question">¿Qui&eacute;nes pueden participar en los proyectos del PCTVC?</button>
-                        <div class="faq-answer"><p></p></div>
+                        <div class="faq-answer"><p>Pueden participar investigadores, profesores, estudiantes, emprendedores, empresas estatales y privadas, y toda persona con inter&eacute;s y capacidad para contribuir al desarrollo de proyectos de ciencia, tecnolog&iacute;a e innovaci&oacute;n.</p></div>
                     </div>
                     <div class="faq-item">
                         <button class="faq-question">¿El PCTVC ofrece servicios de incubaci&oacute;n de empresas?</button>
-                        <div class="faq-answer"><p></p></div>
+                        <div class="faq-answer"><p>S&iacute;, contamos con un programa de incubaci&oacute;n que brinda acompa&ntilde;amiento integral a emprendedores para convertir ideas en negocios sostenibles, incluyendo espacio f&iacute;sico, mentor&iacute;a, capacitaci&oacute;n y redes de contacto.</p></div>
                     </div>
                     <div class="faq-item">
                         <button class="faq-question">¿C&oacute;mo puedo contactar con el PCTVC para obtener m&aacute;s informaci&oacute;n?</button>
-                        <div class="faq-answer"><p></p></div>
+                        <div class="faq-answer"><p>Puede contactarnos a trav&eacute;s del formulario en nuestra p&aacute;gina de contacto, por tel&eacute;fono o visitando nuestras instalaciones en la Universidad Central Marta Abreu de Las Villas. Tambi&eacute;n puede seguirnos en redes sociales.</p></div>
                     </div>
                 </div>
             </div>

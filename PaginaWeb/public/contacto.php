@@ -93,7 +93,7 @@ include 'includes/header.php';
                         </div>
                     </div>
                     <div class="contact-form-wrap animate-fade-right">
-                        <form class="contact-form" id="contactForm" onsubmit="return handleSubmit(event)">
+                        <form class="contact-form" id="contactForm">
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="nombre">Nombre</label>

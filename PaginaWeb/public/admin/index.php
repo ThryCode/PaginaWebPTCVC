@@ -59,7 +59,7 @@ if (!empty($user['nombre'])) {
         <main class="main-content">
             <header class="topbar">
                 <div style="display:flex;align-items:center;gap:12px;">
-                    <button class="hamburger" onclick="toggleSidebar()" aria-label="Menu">☰</button>
+                    <button class="hamburger" aria-label="Menu">☰</button>
                     <h1>Dashboard</h1>
                 </div>
                 <div class="user-info">

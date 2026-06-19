@@ -52,9 +52,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $opiniones[] = array(
                 'id' => $newId,
-                'nombre' => htmlspecialchars($nombre),
-                'cargo' => htmlspecialchars($cargo),
-                'texto' => htmlspecialchars($texto),
+                'nombre' => trim($nombre),
+                'cargo' => trim($cargo),
+                'texto' => trim($texto),
                 'imagen' => $imagen,
                 'orden' => $orden
             );
@@ -67,9 +67,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = intval($_POST['id'] ?? 0);
             foreach ($opiniones as &$o) {
                 if (isset($o['id']) && $o['id'] === $id) {
-                    $o['nombre'] = htmlspecialchars(trim($_POST['nombre'] ?? $o['nombre']));
-                    $o['cargo'] = htmlspecialchars(trim($_POST['cargo'] ?? $o['cargo']));
-                    $o['texto'] = htmlspecialchars(trim($_POST['texto'] ?? $o['texto']));
+                    $o['nombre'] = trim($_POST['nombre'] ?? $o['nombre']);
+                    $o['cargo'] = trim($_POST['cargo'] ?? $o['cargo']);
+                    $o['texto'] = trim($_POST['texto'] ?? $o['texto']);
                     $o['orden'] = intval($_POST['orden'] ?? $o['orden']);
 
                     if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
@@ -159,7 +159,7 @@ $csrfToken = generateCSRFToken();
         <main class="main-content">
             <header class="topbar">
                 <div style="display:flex;align-items:center;gap:12px;">
-                    <button class="hamburger" onclick="toggleSidebar()" aria-label="Menu">&#9776;</button>
+                    <button class="hamburger" aria-label="Menu">&#9776;</button>
                     <h1>Opiniones</h1>
                 </div>
             </header>
@@ -249,8 +249,8 @@ $csrfToken = generateCSRFToken();
                                             <span><?php echo htmlspecialchars($o['cargo']); ?> | Orden: <?php echo intval($o['orden']); ?></span>
                                         </div>
                                         <div class="actions">
-                                            <button class="btn btn-sm btn-primary" onclick="toggleEdit(<?php echo $o['id']; ?>)">Editar</button>
-                                            <form class="delete-form" method="POST" onsubmit="return confirm('Eliminar esta opinion?')">
+                                            <button class="btn btn-sm btn-primary" data-toggle-edit="<?php echo $o['id']; ?>">Editar</button>
+                                            <form class="delete-form" method="POST" data-confirm="Eliminar esta opinion?">
                                                 <input type="hidden" name="<?php echo CSRF_TOKEN_NAME; ?>" value="<?php echo $csrfToken; ?>">
                                                 <input type="hidden" name="action" value="delete">
                                                 <input type="hidden" name="id" value="<?php echo $o['id']; ?>">
@@ -287,7 +287,7 @@ $csrfToken = generateCSRFToken();
                                             </div>
                                             <div style="display:flex;gap:10px;">
                                                 <button type="submit" class="btn btn-sm btn-success">Guardar</button>
-                                                <button type="button" class="btn btn-sm btn-secondary" onclick="toggleEdit(<?php echo $o['id']; ?>)">Cancelar</button>
+                                                <button type="button" class="btn btn-sm btn-secondary" data-toggle-edit="<?php echo $o['id']; ?>">Cancelar</button>
                                             </div>
                                         </form>
                                     </div>
@@ -299,11 +299,5 @@ $csrfToken = generateCSRFToken();
             </div>
         </main>
     </div>
-    <script>
-    function toggleEdit(id) {
-        var el = document.getElementById('edit-' + id);
-        if (el) el.classList.toggle('active');
-    }
-    </script>
 </body>
 </html>

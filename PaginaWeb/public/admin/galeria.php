@@ -2,7 +2,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 0);
 ini_set('log_errors', 1);
-ini_set('error_log', __DIR__ . '/data/error_log');
+ini_set('error_log', __DIR__ . '/../data/admin_error.log');
 
 require_once '../api/auth.php';
 require_once '../api/storage.php';
@@ -135,7 +135,7 @@ $csrfToken = generateCSRFToken();
 
         <main class="main-content">
             <header class="topbar">
-                <button class="hamburger" onclick="toggleSidebar()" aria-label="Menu" style="display:none;">☰</button>
+                <button class="hamburger" aria-label="Menu" style="display:none;">☰</button>
                 <h1><?php echo $action === 'list' ? 'Galería' : 'Subir Imágenes'; ?></h1>
                 <?php if ($action === 'list'): ?>
                     <a href="?action=upload" class="btn btn-primary">+ Subir</a>
@@ -159,7 +159,7 @@ $csrfToken = generateCSRFToken();
                                 </div>
                                 <div class="gallery-item-actions">
                                     <a href="?action=edit&id=<?php echo $img['id']; ?>" class="btn btn-sm btn-primary">Editar</a>
-                                    <form class="delete-form" method="POST" action="?action=delete" onsubmit="return confirm('¿Eliminar esta imagen?')">
+                                    <form class="delete-form" method="POST" action="?action=delete" data-confirm="¿Eliminar esta imagen?">
                                         <?php echo csrfField(); ?>
                                         <input type="hidden" name="id" value="<?php echo $img['id']; ?>">
                                         <button type="submit" class="btn btn-sm btn-danger">X</button>

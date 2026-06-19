@@ -26,10 +26,10 @@ include 'includes/header.php';
             </div>
         </section>
 
-<?php include 'includes/footer.php'; ?>
-
     <script>
     document.addEventListener('DOMContentLoaded', function() {
         loadNews('allNewsContainer', { limit: 20, tipo: 'noticia' });
     });
     </script>
+
+<?php include 'includes/footer.php'; ?>

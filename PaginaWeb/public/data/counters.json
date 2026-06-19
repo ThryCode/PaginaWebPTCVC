@@ -22,23 +22,5 @@
         "numero": 50,
         "label": "Colaboraciones",
         "orden": 4
-    },
-    {
-        "id": 5,
-        "numero": 23,
-        "label": "Clientes",
-        "orden": 5
-    },
-    {
-        "id": 6,
-        "numero": 15,
-        "label": "Trabajadores",
-        "orden": 6
-    },
-    {
-        "id": 7,
-        "numero": 776,
-        "label": "Exe",
-        "orden": 7
     }
 ]

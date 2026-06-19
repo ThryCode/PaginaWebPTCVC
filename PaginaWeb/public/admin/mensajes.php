@@ -81,7 +81,7 @@ $csrfToken = generateCSRFToken();
 
         <main class="main-content">
             <header class="topbar">
-                <button class="hamburger" onclick="toggleSidebar()" aria-label="Menu" style="display:none;">☰</button>
+                <button class="hamburger" aria-label="Menu" style="display:none;">☰</button>
                 <h1>Mensajes de Contacto</h1>
                 <?php if ($action === 'list' && $noLeidos > 0): ?>
                     <form method="POST" action="?action=readall" style="display:inline;">
@@ -111,7 +111,7 @@ $csrfToken = generateCSRFToken();
                                     <td><?php echo date('d/m/Y H:i', strtotime($m['created_at'])); ?></td>
                                     <td>
                                         <a href="?action=view&id=<?php echo $m['id']; ?>" class="btn btn-sm btn-primary">Ver</a>
-                                        <form class="delete-form" method="POST" action="?action=delete" onsubmit="return confirm('¿Eliminar este mensaje?')">
+                                        <form class="delete-form" method="POST" action="?action=delete" data-confirm="¿Eliminar este mensaje?">
                                             <?php echo csrfField(); ?>
                                             <input type="hidden" name="id" value="<?php echo $m['id']; ?>">
                                             <button type="submit" class="btn btn-sm btn-danger">X</button>

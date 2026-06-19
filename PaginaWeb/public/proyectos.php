@@ -75,7 +75,13 @@ include 'includes/header.php'; ?>
                                 <div class="project-card-icon"><?php echo renderProyectoIcon($p['area'] ?? ''); ?></div>
                                 <h4><?php echo htmlspecialchars($p['titulo'] ?? ''); ?></h4>
                                 <p><?php echo htmlspecialchars($p['resumen'] ?? ''); ?></p>
-                                <a href="#" class="btn btn-outline-green">Conocer m&aacute;s</a>
+                                <a href="#" class="btn btn-outline-green project-toggle" data-text-original="Conocer m&aacute;s">Conocer m&aacute;s</a>
+                                <div class="project-full" style="display:none;margin-top:16px;padding-top:16px;border-top:1px solid #E6F4FA;">
+                                    <p style="color:#646464;font-size:0.9rem;line-height:1.6;"><?php echo nl2br(htmlspecialchars($p['contenido'] ?? '')); ?></p>
+                                    <?php if (!empty($p['resultados'])): ?>
+                                    <p style="color:#646464;font-size:0.9rem;line-height:1.6;margin-top:12px;"><strong>Resultados:</strong> <?php echo nl2br(htmlspecialchars($p['resultados'])); ?></p>
+                                    <?php endif; ?>
+                                </div>
                             </div>
                         </div>
                         <?php endforeach; ?>
@@ -83,24 +89,6 @@ include 'includes/header.php'; ?>
                 </div>
             </div>
         </section>
-
-        <section class="stats-section">
-            <div class="container">
-                <div class="stats-grid">
-                    <?php
-                    $counters = Storage::read('proyectos_counters');
-                    usort($counters, function($a, $b) {
-                        return ($a['orden'] ?? 0) - ($b['orden'] ?? 0);
-                    });
-                    foreach ($counters as $i => $c):
-                    ?>
-                    <div class="stat-item animate-on-scroll<?php echo $i > 0 ? ' delay-' . $i : ''; ?>">
-                        <div class="stat-number"><?php echo intval($c['numero']); ?>+</div>
-                        <div class="stat-label"><?php echo htmlspecialchars($c['label']); ?></div>
-                    </div>
-                    <?php endforeach; ?>
-                </div>
-            </div>
-        </section>
+    </div>
 
 <?php include 'includes/footer.php'; ?>

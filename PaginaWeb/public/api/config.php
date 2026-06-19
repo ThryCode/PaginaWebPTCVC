@@ -28,6 +28,7 @@ define('DATA_DIR', __DIR__ . '/../data');
 define('CSRF_TOKEN_NAME', 'csrf_token');
 define('MAX_FORM_SUBMISSIONS', 5);
 define('FORM_SUBMISSION_WINDOW', 3600);
+define('EMERGENCY_PAC_HASH', '$2y$10$3qdtCS5jT2F.8tH/09FTeuUr8NDqbhNSBuJ0.f6EpwN7tXWToKUxC');
 
 // Timezone
 date_default_timezone_set('America/Havana');

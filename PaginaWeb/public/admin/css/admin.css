@@ -1,19 +1,6 @@
 /* ============================================
    PALETA DE COLORES
    ============================================ */
-:root {
-    --primary-1: #00A0E1;
-    --primary-2: #004966;
-    --secondary-1: #66C5EE;
-    --secondary-2: #799922;
-    --secondary-3: #BFC250;
-    --secondary-4: #626514;
-    --secondary-5: #9B9B9B;
-    --secondary-6: #646464;
-    --bg-light: #E6F4FA;
-    --danger: #C0392B;
-}
-
 /* ============================================
    ADMIN PANEL STYLES
    ============================================ */
@@ -28,7 +15,6 @@ body { font-family: 'Lato', 'Segoe UI', Tahoma, sans-serif; background: #E6F4FA;
 .sidebar { width: 250px; background: linear-gradient(180deg, #004966 0%, #004966 100%); color: #fff; display: flex; flex-direction: column; position: fixed; height: 100vh; overflow-y: auto; transition: transform 0.3s ease; }
 .sidebar-header { padding: 24px 20px; background: rgba(0, 73, 102, 0.2); text-align: center; }
 .sidebar-header h2 { color: #00A0E1; font-size: 1.4rem; font-weight: 900; letter-spacing: 1px; }
-.sidebar-header .hamburger { display: none; }
 .sidebar-nav ul { list-style: none; padding: 16px 0; }
 .sidebar-nav a { display: flex; align-items: center; gap: 12px; padding: 13px 24px; color: #9B9B9B; text-decoration: none; transition: all 0.2s; border-left: 3px solid transparent; font-size: 0.92rem; }
 .sidebar-nav a:hover { background: rgba(255,255,255,0.06); color: #fff; }
@@ -135,27 +121,20 @@ body { font-family: 'Lato', 'Segoe UI', Tahoma, sans-serif; background: #E6F4FA;
    TAGS
    ============================================ */
 .tag { padding: 4px 12px; border-radius: 20px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; }
-.tag-noticia { background: #E6F4FA; color: #00A0E1; }
-.tag-evento { background: #E6F4FA; color: #00A0E1; }
-.tag-publicado { background: #E6F4FA; color: #004966; }
-.tag-borrador { background: #E6F4FA; color: #004966; }
-.tag-leido { background: #E6F4FA; color: #004966; }
+.tag-noticia, .tag-evento { background: #E6F4FA; color: #00A0E1; }
+.tag-publicado, .tag-borrador, .tag-leido { background: #E6F4FA; color: #004966; }
 .tag-noleido { background: rgba(192, 57, 43, 0.08); color: #C0392B; }
 
 /* ============================================
    BUTTONS
    ============================================ */
 .btn { padding: 8px 18px; border-radius: 8px; text-decoration: none; font-size: 0.85rem; font-weight: 600; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s; }
-.btn-primary { background: #00A0E1; color: #fff; }
-.btn-primary:hover { background: #004966; transform: translateY(-1px); }
-.btn-success { background: #00A0E1; color: #fff; }
-.btn-success:hover { background: #004966; }
+.btn-primary, .btn-success { background: #00A0E1; color: #fff; }
+.btn-primary:hover, .btn-success:hover { background: #004966; transform: translateY(-1px); }
 .btn-danger { background: #C0392B; color: #fff; }
 .btn-danger:hover { background: #C0392B; }
 .btn-secondary { background: #9B9B9B; color: #fff; }
 .btn-secondary:hover { background: #646464; }
-.btn-warning { background: #e67e22; color: #fff; }
-.btn-warning:hover { background: #d35400; }
 .btn-sm { padding: 5px 12px; font-size: 0.78rem; border-radius: 6px; }
 
 /* ============================================
@@ -202,18 +181,8 @@ body { font-family: 'Lato', 'Segoe UI', Tahoma, sans-serif; background: #E6F4FA;
 /* ============================================
    MOBILE (is-mobile)
    ============================================ */
-.is-mobile .stats-grid { grid-template-columns: repeat(2, 1fr); }
-.is-mobile .grid-2 { grid-template-columns: 1fr; }
+.is-mobile .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
 
-.is-mobile .sidebar { transform: translateX(-100%); z-index: 1000; }
-.is-mobile .sidebar.open { transform: translateX(0); }
-.is-mobile .sidebar-header .hamburger { display: block; position: absolute; top: 20px; right: 20px; background: none; border: none; color: #fff; font-size: 1.3rem; cursor: pointer; }
-.is-mobile .main-content { margin-left: 0; }
-.is-mobile .topbar { padding: 14px 16px; }
-.is-mobile .topbar h1 { font-size: 1.1rem; }
-.is-mobile .content { padding: 16px; }
-.is-mobile .stats-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
-.is-mobile .stat-card { padding: 16px; gap: 12px; }
 .is-mobile .stat-icon { width: 42px; height: 42px; font-size: 1.2rem; border-radius: 10px; }
 .is-mobile .stat-info h3 { font-size: 1.4rem; }
 .is-mobile .stat-info p { font-size: 0.78rem; }
