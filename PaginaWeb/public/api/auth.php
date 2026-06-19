@@ -4,6 +4,9 @@ class Auth {
     private $dataFile;
 
     public function __construct() {
+        if (session_status() === PHP_SESSION_NONE) {
+            @session_start();
+        }
         $this->dataFile = defined('DATA_DIR') ? DATA_DIR . '/admin_auth.json' : __DIR__ . '/../data/admin_auth.json';
     }
 
@@ -55,7 +58,7 @@ class Auth {
                     continue;
                 }
                 if (password_verify($pac, $p['hash'])) {
-                    if (!headers_sent()) {
+                    if (!headers_sent() && session_status() === PHP_SESSION_ACTIVE) {
                         session_regenerate_id(true);
                     }
 
@@ -86,7 +89,7 @@ class Auth {
         $ip = $this->getIP();
 
         $_SESSION = [];
-        if (!headers_sent()) {
+        if (!headers_sent() && session_status() === PHP_SESSION_ACTIVE) {
             if (ini_get('session.use_cookies')) {
                 $params = session_get_cookie_params();
                 setcookie(session_name(), '', time() - 42000,
