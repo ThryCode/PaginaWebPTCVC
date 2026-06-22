@@ -12,6 +12,13 @@ if (file_exists($countersFile)) {
         return ($a['orden'] ?? 0) - ($b['orden'] ?? 0);
     });
 }
+
+require_once __DIR__ . '/api/storage.php';
+$sliders = Storage::read('sliders');
+usort($sliders, function($a, $b) {
+    return ($a['orden'] ?? 0) - ($b['orden'] ?? 0);
+});
+
 include 'includes/header.php';
 ?>
         <script type="application/ld+json">
@@ -35,30 +42,13 @@ include 'includes/header.php';
 
         <section class="carousel" id="carousel">
             <div class="carousel-inner">
-                <div class="carousel-slide active">
-                    <img src="assets/img/sliders/slider-01.jpg" alt="Infraestructura del Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara">
+                <?php $first = true; ?>
+                <?php foreach ($sliders as $s): ?>
+                <div class="carousel-slide<?php echo $first ? ' active' : ''; ?>">
+                    <img src="<?php echo htmlspecialchars($s['imagen']); ?>" alt="<?php echo htmlspecialchars($s['titulo'] ?: 'Slider'); ?>">
                 </div>
-                <div class="carousel-slide">
-                    <img src="assets/img/sliders/slider-02.jpg" alt="Edificios e instalaciones del Parque Cient&iacute;fico Tecnol&oacute;gico">
-                </div>
-                <div class="carousel-slide">
-                    <img src="assets/img/sliders/slider-03.jpg" alt="Actividades de innovaci&oacute;n tecnol&oacute;gica en el PCTVC">
-                </div>
-                <div class="carousel-slide">
-                    <img src="assets/img/sliders/slider-04.jpg" alt="Eventos y conferencias en el Parque Cient&iacute;fico Tecnol&oacute;gico">
-                </div>
-                <div class="carousel-slide">
-                    <img src="assets/img/sliders/slider-05.jpg" alt="Espacios de trabajo colaborativo del PCTVC">
-                </div>
-                <div class="carousel-slide">
-                    <img src="assets/img/sliders/slider-06.jpg" alt="Vista a&eacute;rea del Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara">
-                </div>
-                <div class="carousel-slide">
-                    <img src="assets/img/sliders/slider-07.jpg" alt="Empresas y emprendedores del Parque Cient&iacute;fico Tecnol&oacute;gico">
-                </div>
-                <div class="carousel-slide">
-                    <img src="assets/img/sliders/slider-08.jpeg" alt="Servicios tecnol&oacute;gicos del Parque Cient&iacute;fico de Villa Clara">
-                </div>
+                <?php $first = false; ?>
+                <?php endforeach; ?>
             </div>
             <div class="carousel-overlay">
                 <div class="carousel-content">
