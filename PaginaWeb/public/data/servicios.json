@@ -1,0 +1,218 @@
+[
+    {
+        "id": 1,
+        "nombre": "Formulaci\u00f3n de Proyectos",
+        "descripcion": "Asistencia para la formulaci\u00f3n e implementaci\u00f3n de proyectos de innovaci\u00f3n; incluye la b\u00fasqueda de personal id\u00f3neo para la formaci\u00f3n de equipos de proyecto.",
+        "tipo": "primaria",
+        "icono": "proyectos",
+        "orden": 1,
+        "created_at": "2025-01-01 00:00"
+    },
+    {
+        "id": 2,
+        "nombre": "Modelos de Negocio",
+        "descripcion": "Asistencia para la definici\u00f3n de modelos de negocios.",
+        "tipo": "primaria",
+        "icono": "chart",
+        "orden": 2,
+        "created_at": "2025-01-01 00:00"
+    },
+    {
+        "id": 3,
+        "nombre": "Cooperaci\u00f3n Corporativa",
+        "descripcion": "Asistencia para el logro de adecuada interrelaci\u00f3n y cooperaci\u00f3n corporativa industrial, en las esferas de la ciencia, la tecnolog\u00eda y la innovaci\u00f3n.",
+        "tipo": "primaria",
+        "icono": "equipo",
+        "orden": 3,
+        "created_at": "2025-01-01 00:00"
+    },
+    {
+        "id": 4,
+        "nombre": "Producciones Cooperadas",
+        "descripcion": "Producciones cooperadas.",
+        "tipo": "primaria",
+        "icono": "enlace",
+        "orden": 4,
+        "created_at": "2025-01-01 00:00"
+    },
+    {
+        "id": 5,
+        "nombre": "Representaci\u00f3n Comercial",
+        "descripcion": "Servicios de representaci\u00f3n comercial, contabilidad y asesor\u00eda jur\u00eddica.",
+        "tipo": "primaria",
+        "icono": "carpeta",
+        "orden": 5,
+        "created_at": "2025-01-01 00:00"
+    },
+    {
+        "id": 6,
+        "nombre": "Alquiler de Locales",
+        "descripcion": "Alquiler de locales con facilidades para negocios y proyectos, y acceso a Internet.",
+        "tipo": "primaria",
+        "icono": "edificio",
+        "orden": 6,
+        "created_at": "2025-01-01 00:00"
+    },
+    {
+        "id": 7,
+        "nombre": "Capacitaci\u00f3n",
+        "descripcion": "Cursos generales de capacitaci\u00f3n y personalizados para miembros de los equipos de proyecto y los encargados del proceso de innovaci\u00f3n.",
+        "tipo": "primaria",
+        "icono": "libro",
+        "orden": 7,
+        "created_at": "2025-01-01 00:00"
+    },
+    {
+        "id": 8,
+        "nombre": "B\u00fasqueda de Financiamiento",
+        "descripcion": "Asistencia para la b\u00fasqueda de financiamiento para los procesos de incubaci\u00f3n.",
+        "tipo": "primaria",
+        "icono": "moneda",
+        "orden": 8,
+        "created_at": "2025-01-01 00:00"
+    },
+    {
+        "id": 9,
+        "nombre": "Asesor\u00eda y Consultor\u00eda",
+        "descripcion": "Brindar servicios de asesor\u00eda y consultor\u00eda especializada y otras asociadas al desarrollo de sistemas de gesti\u00f3n empresarial, sus componentes o procesos claves.",
+        "tipo": "secundaria",
+        "icono": "documento",
+        "orden": 1,
+        "created_at": "2025-01-01 00:00"
+    },
+    {
+        "id": 10,
+        "nombre": "Comercio Exterior",
+        "descripcion": "Ejecutar las operaciones de Comercio Exterior relacionadas con los bienes y servicios seg\u00fan nomenclatura aprobada por el MINCEX.",
+        "tipo": "secundaria",
+        "icono": "globo",
+        "orden": 2,
+        "created_at": "2025-01-01 00:00"
+    },
+    {
+        "id": 11,
+        "nombre": "Atenci\u00f3n a Delegaciones",
+        "descripcion": "Brindar servicios de atenci\u00f3n a delegaciones extranjeras y nacionales, con la prestaci\u00f3n de servicios log\u00edsticos.",
+        "tipo": "secundaria",
+        "icono": "personas",
+        "orden": 3,
+        "created_at": "2025-01-01 00:00"
+    },
+    {
+        "id": 12,
+        "nombre": "Tr\u00e1mites",
+        "descripcion": "Servicios de tr\u00e1mites a personas naturales nacionales o extranjeras vinculadas a actividades afines a la organizaci\u00f3n.",
+        "tipo": "secundaria",
+        "icono": "clipboard",
+        "orden": 4,
+        "created_at": "2025-01-01 00:00"
+    },
+    {
+        "id": 13,
+        "nombre": "Protocolo",
+        "descripcion": "Brindar servicios de Protocolo.",
+        "tipo": "secundaria",
+        "icono": "estrella",
+        "orden": 5,
+        "created_at": "2025-01-01 00:00"
+    },
+    {
+        "id": 14,
+        "nombre": "Alquiler de Espacios",
+        "descripcion": "Prestar servicio de alquiler de parqueos, espacios, locales y salones pertenecientes a la Sociedad Mercantil.",
+        "tipo": "secundaria",
+        "icono": "edificio",
+        "orden": 6,
+        "created_at": "2025-01-01 00:00"
+    },
+    {
+        "id": 15,
+        "nombre": "Capacitaci\u00f3n T\u00e9cnica",
+        "descripcion": "Brindar servicios de capacitaci\u00f3n, entrenamiento y certificaci\u00f3n t\u00e9cnico-profesional especializada.",
+        "tipo": "secundaria",
+        "icono": "libro",
+        "orden": 7,
+        "created_at": "2025-01-01 00:00"
+    },
+    {
+        "id": 16,
+        "nombre": "Representaci\u00f3n Comercial",
+        "descripcion": "Brindar servicios de representaci\u00f3n comercial en el territorio nacional y en el exterior.",
+        "tipo": "secundaria",
+        "icono": "carpeta",
+        "orden": 8,
+        "created_at": "2025-01-01 00:00"
+    },
+    {
+        "id": 17,
+        "nombre": "Eventos Cient\u00edficos",
+        "descripcion": "Brindar servicios para la organizaci\u00f3n y desarrollo de eventos cient\u00edficos y t\u00e9cnicos.",
+        "tipo": "secundaria",
+        "icono": "calendario",
+        "orden": 9,
+        "created_at": "2025-01-01 00:00"
+    },
+    {
+        "id": 18,
+        "nombre": "Promoci\u00f3n de Negocios",
+        "descripcion": "Promocionar oportunidades de negocios mediante lanzamiento de proyectos, licitaciones institucionales, evento de negocio, entre otros.",
+        "tipo": "secundaria",
+        "icono": "chart",
+        "orden": 10,
+        "created_at": "2025-01-01 00:00"
+    },
+    {
+        "id": 19,
+        "nombre": "Alojamiento",
+        "descripcion": "Gestionar y brindar servicios de alojamiento no tur\u00edstico a personas naturales y jur\u00eddicas que lo soliciten.",
+        "tipo": "secundaria",
+        "icono": "casa",
+        "orden": 11,
+        "created_at": "2025-01-01 00:00"
+    },
+    {
+        "id": 20,
+        "nombre": "Impresi\u00f3n",
+        "descripcion": "Gestionar y prestar servicios de impresi\u00f3n de documentos y materiales en diferentes soportes.",
+        "tipo": "secundaria",
+        "icono": "impresora",
+        "orden": 12,
+        "created_at": "2025-01-01 00:00"
+    },
+    {
+        "id": 21,
+        "nombre": "Servicios TIC",
+        "descripcion": "Servicios asociados a las tecnolog\u00edas de inform\u00e1tica y las comunicaciones (TIC).",
+        "tipo": "secundaria",
+        "icono": "monitor",
+        "orden": 13,
+        "created_at": "2025-01-01 00:00"
+    },
+    {
+        "id": 22,
+        "nombre": "Venta de Productos",
+        "descripcion": "Venta mayorista y minorista de productos no alimenticios y alimentos.",
+        "tipo": "secundaria",
+        "icono": "carrito",
+        "orden": 14,
+        "created_at": "2025-01-01 00:00"
+    },
+    {
+        "id": 23,
+        "nombre": "Servicios Gastron\u00f3micos",
+        "descripcion": "Servicios gastron\u00f3micos y/o de alimentaci\u00f3n a personas naturales y jur\u00eddicas.",
+        "tipo": "secundaria",
+        "icono": "restaurante",
+        "orden": 15,
+        "created_at": "2025-01-01 00:00"
+    },
+    {
+        "id": 24,
+        "nombre": "Servicios Inmobiliarios",
+        "descripcion": "Servicios inmobiliarios, limpieza, jardiner\u00eda u otros que se demanden.",
+        "tipo": "secundaria",
+        "icono": "llave",
+        "orden": 16,
+        "created_at": "2025-01-01 00:00"
+    }
+]
