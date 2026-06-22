@@ -1131,16 +1131,19 @@ document.addEventListener('DOMContentLoaded', function() {
             var item = this.parentElement;
             var answer = item.querySelector('.faq-answer');
             var isOpen = item.classList.contains('faq-open');
-            // Cerrar todos los abiertos
-            document.querySelectorAll('.faq-item.faq-open').forEach(function(i) {
-                var ans = i.querySelector('.faq-answer');
-                ans.style.maxHeight = null;
-                i.classList.remove('faq-open');
-            });
-            // Abrir el clickeado
+            // Cerrar todos
+            var openItems = document.querySelectorAll('.faq-item.faq-open');
+            for (var k = 0; k < openItems.length; k++) {
+                var openAns = openItems[k].querySelector('.faq-answer');
+                openAns.style.maxHeight = openAns.scrollHeight + 20 + 'px';
+                void openAns.offsetHeight;
+                openAns.style.maxHeight = '0';
+                openItems[k].classList.remove('faq-open');
+            }
+            // Abrir
             if (!isOpen) {
                 item.classList.add('faq-open');
-                answer.style.maxHeight = answer.scrollHeight + 'px';
+                answer.style.maxHeight = answer.scrollHeight + 20 + 'px';
             }
         });
     });
