@@ -2950,12 +2950,11 @@ body {
 .faq-answer {
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.5s ease, padding 0.4s ease;
+    transition: max-height 0.4s ease;
     padding: 0 24px;
 }
 
 .faq-item.faq-open .faq-answer {
-    max-height: 1200px;
     padding: 0 24px 20px;
 }
 

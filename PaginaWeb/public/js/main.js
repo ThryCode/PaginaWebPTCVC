@@ -1129,12 +1129,18 @@ document.addEventListener('DOMContentLoaded', function() {
     faqQuestions.forEach(function(btn) {
         btn.addEventListener('click', function() {
             var item = this.parentElement;
+            var answer = item.querySelector('.faq-answer');
             var isOpen = item.classList.contains('faq-open');
+            // Cerrar todos los abiertos
             document.querySelectorAll('.faq-item.faq-open').forEach(function(i) {
+                var ans = i.querySelector('.faq-answer');
+                ans.style.maxHeight = null;
                 i.classList.remove('faq-open');
             });
+            // Abrir el clickeado
             if (!isOpen) {
                 item.classList.add('faq-open');
+                answer.style.maxHeight = answer.scrollHeight + 'px';
             }
         });
     });
