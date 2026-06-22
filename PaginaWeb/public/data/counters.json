@@ -22,5 +22,11 @@
         "numero": 50,
         "label": "Colaboraciones",
         "orden": 4
+    },
+    {
+        "id": 5,
+        "numero": 20,
+        "label": "Trabajadores",
+        "orden": 5
     }
 ]
