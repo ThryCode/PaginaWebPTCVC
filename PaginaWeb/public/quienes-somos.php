@@ -199,43 +199,137 @@ include 'includes/header.php';
                 <div class="faq-list">
                     <div class="faq-item">
                         <button class="faq-question">¿Qu&eacute; es el Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara?</button>
-                        <div class="faq-answer"><p>Es una instituci&oacute;n que integra la actividad cient&iacute;fica, tecnol&oacute;gica y productiva para fomentar la innovaci&oacute;n y el desarrollo sostenible en la regi&oacute;n central de Cuba, como espacio de colaboraci&oacute;n entre universidades, centros de investigaci&oacute;n y el sector empresarial.</p></div>
+                        <div class="faq-answer">
+                            <p>El Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara (PCT Villa Clara) es una empresa cubana que apoya a otras empresas y emprendedores a desarrollar proyectos innovadores y a insertar sus productos en el mercado internacional.</p>
+                            <p>Es un espacio donde la ciencia, la tecnolog&iacute;a y los negocios se unen para crear nuevas oportunidades, generar divisas para el pa&iacute;s y fortalecer la industria cubana.</p>
+                        </div>
                     </div>
                     <div class="faq-item">
                         <button class="faq-question">¿Se obtiene alg&uacute;n beneficio econ&oacute;mico por participar en un proyecto?</button>
-                        <div class="faq-answer"><p>S&iacute;, los proyectos pueden generar ingresos por venta de productos y servicios. Los participantes reciben compensaci&oacute;n econ&oacute;mica seg&uacute;n los acuerdos establecidos en el contrato del proyecto.</p></div>
+                        <div class="faq-answer">
+                            <p>S&iacute;, participar en un proyecto en el PCT Villa Clara tiene importantes beneficios econ&oacute;micos.</p>
+                            <p>Durante los primeros <strong>cinco (5) a&ntilde;os</strong> de funcionamiento de tu proyecto o empresa incubada las ventajas son:</p>
+                            <ul>
+                                <li>Exenci&oacute;n de impuestos sobre las utilidades.</li>
+                                <li>Exenci&oacute;n de aranceles de importaci&oacute;n de partes, piezas y equipamiento necesario para tu proyecto.</li>
+                            </ul>
+                            <p>Esto te permite ahorrar dinero desde el inicio y hacer tu proyecto m&aacute;s competitivo, especialmente si planeas exportar. Adem&aacute;s, puedes enfocarte en innovar y crecer sin la presi&oacute;n de los costos tributarios iniciales.</p>
+                        </div>
                     </div>
                     <div class="faq-item">
-                        <button class="faq-question">Tengo una idea de proyecto. ¿C&oacute;mo puedo desarrollarla en el PCTVC?</button>
-                        <div class="faq-answer"><p>Puede presentar su propuesta a trav&eacute;s de la direcci&oacute;n del PCTVC. El equipo evaluar&aacute; la viabilidad t&eacute;cnica y econ&oacute;mica y le orientar&aacute; sobre los pasos a seguir, incluyendo la conformaci&oacute;n del equipo y la b&uacute;squeda de financiamiento.</p></div>
+                        <button class="faq-question">Tengo una idea de proyecto. ¿C&oacute;mo puedo desarrollarla en el PCT Villa Clara?</button>
+                        <div class="faq-answer">
+                            <p>Desarrollar tu idea de proyecto en el PCT Villa Clara es un proceso que te gu&iacute;a desde el concepto inicial hasta su lanzamiento.</p>
+                            <p><strong>Pasos para desarrollar tu proyecto:</strong></p>
+                            <ul>
+                                <li><strong>Reuni&oacute;n inicial:</strong> Puedes contactar al PCT a trav&eacute;s de sus canales oficiales para presentar tu idea de forma general y explorar las posibilidades de colaboraci&oacute;n.</li>
+                                <li><strong>Presenta tu propuesta formalmente:</strong> Deber&aacute;s presentar la informaci&oacute;n de tu proyecto, el cual ser&aacute; evaluado por el Consejo T&eacute;cnico Asesor (CTA), el &oacute;rgano consultivo que avala los proyectos del PCT Villa Clara.</li>
+                                <li><strong>Firma del contrato y fase de incubaci&oacute;n:</strong> Una vez aprobado, se firma un contrato y tu proyecto entra en la fase de incubaci&oacute;n. Aqu&iacute; recibir&aacute;s acompa&ntilde;amiento personalizado para desarrollar tu modelo de negocio, acceder a talento y gestionar tu proyecto.</li>
+                                <li><strong>Desarrollo y lanzamiento:</strong> Con el apoyo del PCT, tu idea se convierte en un producto o servicio listo para el mercado, aprovechando un ecosistema que fomenta la innovaci&oacute;n.</li>
+                            </ul>
+                            <p><strong>¿C&oacute;mo empezar?</strong> Puedes iniciar el proceso contactando al PCT a trav&eacute;s de los siguientes medios:</p>
+                            <ul>
+                                <li>Correo electr&oacute;nico: dalgys@pctvc.cu</li>
+                                <li>Tel&eacute;fono: +42281551</li>
+                                <li>Visita: Puedes acercarte a sus instalaciones en la zona industrial de Santa Clara.</li>
+                            </ul>
+                        </div>
                     </div>
                     <div class="faq-item">
                         <button class="faq-question">¿Puedo inscribirme y participar en proyectos si vivo fuera de Villa Clara?</button>
-                        <div class="faq-answer"><p>S&iacute;, el PCTVC est&aacute; abierto a colaboradores de cualquier provincia. La participaci&oacute;n a distancia es posible mediante herramientas de comunicaci&oacute;n y trabajo colaborativo.</p></div>
+                        <div class="faq-answer">
+                            <p>S&iacute;, absolutamente. Puedes inscribirte y participar en proyectos del PCT Villa Clara aunque vivas fuera de la provincia. <strong>No hay ning&uacute;n requisito de residencia.</strong></p>
+                            <p>En cualquier lugar se puede hacer un proyecto y el PCT ofrece acompa&ntilde;amiento t&eacute;cnico hasta que se decida crear una empresa. El PCT est&aacute; abierto a personas de todo el pa&iacute;s, sin importar de qu&eacute; provincia vengas.</p>
+                        </div>
                     </div>
                     <div class="faq-item">
-                        <button class="faq-question">¿Cu&aacute;les son los requisitos para pertenecer al PCTVC?</button>
-                        <div class="faq-answer"><p>Los requisitos incluyen: tener una idea o proyecto con potencial innovador, contar con un equipo multidisciplinario, presentar una propuesta t&eacute;cnica y econ&oacute;mica viable, y comprometerse con las normativas del Parque.</p></div>
+                        <button class="faq-question">¿Cu&aacute;les son los requisitos para pertenecer al PCT Villa Clara?</button>
+                        <div class="faq-answer">
+                            <p>Los requisitos para pertenecer al PCT Villa Clara son flexibles y se adaptan al tipo de participaci&oacute;n que busques. No existen barreras geogr&aacute;ficas ni requisitos excluyentes.</p>
+                            <p><strong>¿Qui&eacute;nes pueden pertenecer?</strong></p>
+                            <ul>
+                                <li><strong>Empresas cubanas:</strong> tanto estatales como privadas.</li>
+                                <li><strong>Empresas extranjeras:</strong> que deseen desarrollar proyectos en Cuba.</li>
+                                <li><strong>Trabajadores por cuenta propia y personas naturales:</strong> incluyendo estudiantes y j&oacute;venes emprendedores.</li>
+                            </ul>
+                            <p>Si tienes una idea o proyecto con potencial innovador, eres bienvenido.</p>
+                            <p><strong>El proceso de incorporaci&oacute;n:</strong></p>
+                            <ul>
+                                <li><strong>Contacto Inicial:</strong> Te acercas al PCT para presentar tu idea.</li>
+                                <li><strong>Evaluaci&oacute;n:</strong> Tu propuesta es analizada por el Consejo T&eacute;cnico Asesor (CTA), que eval&uacute;a su viabilidad y potencial innovador.</li>
+                                <li><strong>Incubaci&oacute;n y Desarrollo:</strong> Una vez aprobada, firmas un contrato y tu proyecto entra en una fase de incubaci&oacute;n, donde recibir&aacute;s todo el apoyo del parque.</li>
+                            </ul>
+                            <p>En esencia, el principal &ldquo;requisito&rdquo; es tener una idea o proyecto con potencial innovador y la voluntad de desarrollarlo en un ecosistema de colaboraci&oacute;n.</p>
+                        </div>
                     </div>
                     <div class="faq-item">
-                        <button class="faq-question">¿Qu&eacute; tipo de apoyo brinda el PCTVC a las empresas y emprendedores?</button>
-                        <div class="faq-answer"><p>Ofrecemos asesor&iacute;a t&eacute;cnica y legal, acceso a laboratorios y equipamiento, apoyo en gesti&oacute;n de financiamiento, capacitaci&oacute;n empresarial, vinculaci&oacute;n con el sector productivo y acompa&ntilde;amiento en todo el ciclo del proyecto.</p></div>
+                        <button class="faq-question">¿Qu&eacute; tipo de apoyo brinda el PCT Villa Clara a las empresas y emprendedores?</button>
+                        <div class="faq-answer">
+                            <p>El PCT Villa Clara ofrece un sistema de apoyo integral que abarca desde el momento en que tienes una idea hasta que tu producto o servicio llega al mercado. Su objetivo es ser un &ldquo;puente&rdquo; entre el conocimiento, la industria y el gobierno para que puedas innovar y crecer.</p>
+                            <p><strong>Principales tipos de apoyo:</strong></p>
+                            <ul>
+                                <li>Apoyo a la innovaci&oacute;n, al desarrollo de proyectos y empresas.</li>
+                                <li>Apoyo legal, comercial y de gesti&oacute;n.</li>
+                                <li>Formaci&oacute;n, talento y networking.</li>
+                                <li>Infraestructura y espacios de trabajo.</li>
+                                <li>Incentivos fiscales y financieros.</li>
+                                <li>Apoyo a la internacionalizaci&oacute;n y el comercio exterior.</li>
+                            </ul>
+                        </div>
                     </div>
                     <div class="faq-item">
-                        <button class="faq-question">¿Qu&eacute; tipos de proyectos se desarrollan en el PCTVC?</button>
-                        <div class="faq-answer"><p>Trabajamos en &aacute;reas como biotecnolog&iacute;a, energ&iacute;as renovables, tecnolog&iacute;as de la informaci&oacute;n, producci&oacute;n de alimentos, desarrollo industrial y ciencias sociales aplicadas a la innovaci&oacute;n.</p></div>
+                        <button class="faq-question">¿Qu&eacute; tipos de proyectos se desarrollan en el PCT Villa Clara?</button>
+                        <div class="faq-answer">
+                            <p>En el PCT Villa Clara se desarrollan proyectos de innovaci&oacute;n con perfil industrial, que abarcan desde la creaci&oacute;n de nuevos productos hasta la mejora de los ya existentes.</p>
+                            <p><strong>Categor&iacute;as principales:</strong></p>
+                            <ul>
+                                <li><strong>Industriales y de Manufactura:</strong> Nuevos procesos y productos para la industria cubana.</li>
+                                <li><strong>Agroindustriales y de Biotecnolog&iacute;a:</strong> Soluciones para el sector agropecuario y la salud.</li>
+                                <li><strong>Energ&iacute;as Renovables y Eficiencia Energ&eacute;tica:</strong> Proyectos que promueven el uso de fuentes limpias.</li>
+                                <li><strong>Transformaci&oacute;n Digital y Comercio Electr&oacute;nico:</strong> Soluciones tecnol&oacute;gicas para la digitalizaci&oacute;n.</li>
+                                <li><strong>Innovaci&oacute;n y Nuevos Productos:</strong> Desarrollo de productos con alto valor agregado.</li>
+                            </ul>
+                            <p>El objetivo es siempre impulsar la innovaci&oacute;n, la sustituci&oacute;n de importaciones y la generaci&oacute;n de exportaciones.</p>
+                        </div>
                     </div>
                     <div class="faq-item">
-                        <button class="faq-question">¿Qui&eacute;nes pueden participar en los proyectos del PCTVC?</button>
-                        <div class="faq-answer"><p>Pueden participar investigadores, profesores, estudiantes, emprendedores, empresas estatales y privadas, y toda persona con inter&eacute;s y capacidad para contribuir al desarrollo de proyectos de ciencia, tecnolog&iacute;a e innovaci&oacute;n.</p></div>
+                        <button class="faq-question">¿Qui&eacute;nes pueden participar en los proyectos del PCT Villa Clara?</button>
+                        <div class="faq-answer">
+                            <p>En el PCT Villa Clara pueden participar personas y organizaciones de todo tipo:</p>
+                            <ul>
+                                <li><strong>Personas naturales:</strong> emprendedores, estudiantes, trabajadores por cuenta propia.</li>
+                                <li><strong>Empresas y organizaciones:</strong> tanto estatales como privadas, nacionales o internacionales.</li>
+                                <li><strong>Formas de gesti&oacute;n no estatal:</strong> incluye cooperativas, PDL, MIPYMES, etc.</li>
+                                <li><strong>Sector del conocimiento:</strong> investigadores, universidades y centros de I+D.</li>
+                            </ul>
+                            <p>El parque est&aacute; abierto a todo tipo de actores que tengan una idea innovadora o un proyecto con potencial de desarrollo tecnol&oacute;gico e industrial.</p>
+                        </div>
                     </div>
                     <div class="faq-item">
-                        <button class="faq-question">¿El PCTVC ofrece servicios de incubaci&oacute;n de empresas?</button>
-                        <div class="faq-answer"><p>S&iacute;, contamos con un programa de incubaci&oacute;n que brinda acompa&ntilde;amiento integral a emprendedores para convertir ideas en negocios sostenibles, incluyendo espacio f&iacute;sico, mentor&iacute;a, capacitaci&oacute;n y redes de contacto.</p></div>
+                        <button class="faq-question">¿El PCT Villa Clara ofrece servicios de incubaci&oacute;n de empresas?</button>
+                        <div class="faq-answer">
+                            <p>S&iacute;, el PCT Villa Clara ofrece servicios de incubaci&oacute;n de empresas. Es, de hecho, una de sus actividades principales.</p>
+                            <p><strong>¿En qu&eacute; consiste?</strong></p>
+                            <p>La incubaci&oacute;n es un proceso de acompa&ntilde;amiento para ayudar a convertir una idea en un negocio real y sostenible. El parque fue creado con el objetivo de incubar nuevos productos y empresas que dinamicen la econom&iacute;a del pa&iacute;s.</p>
+                            <p><strong>El PCT Villa Clara te proporciona:</strong></p>
+                            <ul>
+                                <li>Un entorno especializado.</li>
+                                <li>Asesor&iacute;a y acompa&ntilde;amiento.</li>
+                                <li>Incentivos fiscales.</li>
+                                <li>Infraestructura.</li>
+                                <li>Conexiones estrat&eacute;gicas.</li>
+                            </ul>
+                        </div>
                     </div>
                     <div class="faq-item">
-                        <button class="faq-question">¿C&oacute;mo puedo contactar con el PCTVC para obtener m&aacute;s informaci&oacute;n?</button>
-                        <div class="faq-answer"><p>Puede contactarnos a trav&eacute;s del formulario en nuestra p&aacute;gina de contacto, por tel&eacute;fono o visitando nuestras instalaciones en la Universidad Central Marta Abreu de Las Villas. Tambi&eacute;n puede seguirnos en redes sociales.</p></div>
+                        <button class="faq-question">¿C&oacute;mo puedo contactar con el PCT Villa Clara para obtener m&aacute;s informaci&oacute;n?</button>
+                        <div class="faq-answer">
+                            <p>Si est&aacute;s interesado en incubar tu proyecto o en otro servicio del PCT, puedes contactarnos directamente.</p>
+                            <ul>
+                                <li>Correo electr&oacute;nico: dalgys@pctvc.cu</li>
+                                <li>Tel&eacute;fono: 42281551</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
