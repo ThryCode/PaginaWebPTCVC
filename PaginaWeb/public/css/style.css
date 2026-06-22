@@ -523,6 +523,8 @@ body {
     border-color: #00A0E1;
 }
 
+.card-icon { transition: transform 0.3s ease; }
+.card:hover .card-icon { transform: scale(1.12); }
 .card-icon {
     width: 70px;
     height: 70px;
@@ -540,6 +542,86 @@ body {
 .card-icon svg {
     display: block;
 }
+
+.card-icon svg.anim-doc-stamp { animation:docStamp 4s cubic-bezier(0.34,1.56,0.64,1) infinite; transform-origin:center; }
+.card-icon svg.anim-chart-rise { animation:chartRise 3.5s ease-in-out infinite; }
+.card-icon svg.anim-hand-shake { animation:handShake 2.8s ease-in-out infinite; transform-origin:center; }
+.card-icon svg.anim-gear-spin { animation:gearSpin 4s linear infinite; transform-origin:center; }
+.card-icon svg.anim-bag-toss { animation:bagToss 3.2s cubic-bezier(0.34,1.56,0.64,1) infinite; transform-origin:center; }
+.card-icon svg.anim-building-pop { animation:buildingPop 3.6s cubic-bezier(0.34,1.56,0.64,1) infinite; }
+.card-icon svg.anim-book-breathe { animation:bookBreathe 4.5s ease-in-out infinite; transform-origin:center; }
+.card-icon svg.anim-money-grow { animation:moneyGrow 3s cubic-bezier(0.34,1.56,0.64,1) infinite; transform-origin:center; }
+.card-icon svg.anim-check-orbit { animation:checkOrbit 3.8s ease-in-out infinite; }
+.card-icon svg.anim-tree-sway { animation:treeSway 3.3s ease-in-out infinite; transform-origin:bottom center; }
+.card-icon svg.anim-home-bob { animation:homeBob 3.7s ease-in-out infinite; }
+.card-icon svg.anim-clip-nod { animation:clipNod 3.4s ease-in-out infinite; transform-origin:center; }
+.card-icon svg.anim-globe-spin { animation:globeSpin 4.2s ease-in-out infinite; transform-origin:center; }
+.card-icon svg.anim-people-bob { animation:peopleBob 3.1s ease-in-out infinite; }
+.card-icon svg.anim-flip-doc { animation:flipDoc 3.9s ease-in-out infinite; transform-origin:center; }
+.card-icon svg.anim-star-sparkle { animation:starSparkle 2.5s cubic-bezier(0.34,1.56,0.64,1) infinite; transform-origin:center; }
+.card-icon svg.anim-expand-pop { animation:expandPop 3.2s cubic-bezier(0.34,1.56,0.64,1) infinite; }
+.card-icon svg.anim-know-pulse { animation:knowPulse 3.8s ease-in-out infinite; }
+.card-icon svg.anim-bag-swing { animation:bagSwing 2.6s ease-in-out infinite; transform-origin:top center; }
+.card-icon svg.anim-cal-flip { animation:calFlip 3.6s ease-in-out infinite; transform-origin:center; }
+.card-icon svg.anim-slide-up { animation:slideUp 3.4s cubic-bezier(0.34,1.56,0.64,1) infinite; }
+.card-icon svg.anim-home-settle { animation:homeSettle 3.5s cubic-bezier(0.25,0.46,0.45,0.94) infinite; }
+.card-icon svg.anim-print-shake { animation:printShake 2s ease-in-out infinite; }
+.card-icon svg.anim-scan-line { animation:scanLine 3s ease-in-out infinite; }
+.card-icon svg.anim-cart-wiggle { animation:cartWiggle 3.3s cubic-bezier(0.34,1.56,0.64,1) infinite; transform-origin:center; }
+.card-icon svg.anim-steam-rise { animation:steamRise 3.6s ease-in-out infinite; }
+.card-icon svg.anim-wrench-tight { animation:wrenchTight 2.8s cubic-bezier(0.34,1.56,0.64,1) infinite; transform-origin:center; }
+.card-icon svg.anim-spark-shake { animation:sparkShake 2.4s ease-in-out infinite; transform-origin:center; }
+.card-icon svg.anim-hatch-pulse { animation:hatchPulse 4s cubic-bezier(0.34,1.56,0.64,1) infinite; }
+.card-icon svg.anim-target-lock { animation:targetLock 3.2s cubic-bezier(0.34,1.56,0.64,1) infinite; }
+.card-icon svg.anim-confirm-nod { animation:confirmNod 3.5s ease-in-out infinite; transform-origin:center; }
+.card-icon svg.anim-bubble-talk { animation:bubbleTalk 2.8s ease-in-out infinite; transform-origin:center; }
+.card-icon svg.anim-node-connect { animation:nodeConnect 3.3s ease-in-out infinite; }
+.card-icon svg.anim-gather-pop { animation:gatherPop 3.7s cubic-bezier(0.34,1.56,0.64,1) infinite; }
+.card-icon svg.anim-load-pulse { animation:loadPulse 2.5s ease-in-out infinite; }
+.card-icon svg.anim-unbox-pop { animation:unboxPop 3.8s cubic-bezier(0.34,1.56,0.64,1) infinite; }
+.card-icon svg.anim-orbit-pulse { animation:orbitPulse 3.5s ease-in-out infinite; transform-origin:center; }
+.card-icon svg.anim-bulb-glow { animation:bulbGlow 3s ease-in-out infinite; }
+.card-icon svg.anim-shield-block { animation:shieldBlock 2.2s ease-in-out infinite; transform-origin:center; }
+
+@keyframes docStamp { 0%,100%{transform:scale(1) rotate(0)} 12%{transform:scale(0.85) rotate(-2deg)} 22%{transform:scale(1.12) rotate(1.5deg)} 32%{transform:scale(0.95) rotate(-1deg)} 46%{transform:scale(1.02) rotate(0)} 62%{transform:scale(1)} }
+@keyframes chartRise { 0%,100%{transform:translateY(0) scale(1)} 18%{transform:translateY(-6px) scale(1.06)} 32%{transform:translateY(-3px) scale(0.97)} 48%{transform:translateY(-5px) scale(1.03)} 66%{transform:translateY(-1px) scale(0.99)} 82%{transform:translateY(-2px) scale(1)} }
+@keyframes handShake { 0%,100%{transform:rotate(0)} 8%{transform:rotate(10deg)} 16%{transform:rotate(-7deg)} 24%{transform:rotate(5deg)} 34%{transform:rotate(-3deg)} 44%{transform:rotate(2deg)} 55%{transform:rotate(0)} }
+@keyframes gearSpin { 0%{transform:rotate(0deg) scale(1)} 25%{transform:rotate(90deg) scale(1.03)} 50%{transform:rotate(180deg) scale(0.97)} 75%{transform:rotate(270deg) scale(1.02)} 100%{transform:rotate(360deg) scale(1)} }
+@keyframes bagToss { 0%,100%{transform:translateY(0) rotate(0)} 15%{transform:translateY(-8px) rotate(12deg)} 30%{transform:translateY(-2px) rotate(-8deg)} 45%{transform:translateY(-5px) rotate(5deg)} 62%{transform:translateY(-1px) rotate(-2deg)} 78%{transform:translateY(-2px) rotate(1deg)} }
+@keyframes buildingPop { 0%,100%{transform:scaleY(1) scaleX(1)} 12%{transform:scaleY(0.85) scaleX(1.08)} 22%{transform:scaleY(1.15) scaleX(0.95)} 35%{transform:scaleY(0.97) scaleX(1.03)} 50%{transform:scaleY(1.04) scaleX(0.98)} 66%{transform:scaleY(0.99) scaleX(1)} }
+@keyframes bookBreathe { 0%,100%{transform:scaleX(1) skewX(0deg)} 18%{transform:scaleX(1.12) skewX(-2deg)} 36%{transform:scaleX(0.9) skewX(1.5deg)} 55%{transform:scaleX(1.06) skewX(-1deg)} 75%{transform:scaleX(0.97) skewX(0.5deg)} 90%{transform:scaleX(1.02) skewX(0)} }
+@keyframes moneyGrow { 0%,100%{transform:scale(1) translateY(0)} 10%{transform:scale(1.18) translateY(-4px)} 22%{transform:scale(0.92) translateY(2px)} 35%{transform:scale(1.1) translateY(-2px)} 50%{transform:scale(0.98) translateY(0)} 66%{transform:scale(1.04) translateY(-1px)} 82%{transform:scale(1)} }
+@keyframes checkOrbit { 0%,100%{transform:translateX(0) translateY(0)} 20%{transform:translateX(5px) translateY(-5px)} 40%{transform:translateX(-3px) translateY(-7px)} 60%{transform:translateX(4px) translateY(-3px)} 80%{transform:translateX(-2px) translateY(-1px)} }
+@keyframes treeSway { 0%,100%{transform:rotate(0) scaleX(1)} 15%{transform:rotate(5deg) scaleX(1.03)} 30%{transform:rotate(-3deg) scaleX(0.97)} 45%{transform:rotate(4deg) scaleX(1.02)} 60%{transform:rotate(-2deg) scaleX(0.99)} 76%{transform:rotate(2deg) scaleX(1)} }
+@keyframes homeBob { 0%,100%{transform:translateY(0)} 12%{transform:translateY(-6px)} 25%{transform:translateY(-2px)} 38%{transform:translateY(-4px)} 52%{transform:translateY(-1px)} 66%{transform:translateY(-3px)} 82%{transform:translateY(0)} }
+@keyframes clipNod { 0%,100%{transform:rotate(0) scale(1)} 18%{transform:rotate(-6deg) scale(1.05)} 35%{transform:rotate(4deg) scale(0.96)} 52%{transform:rotate(-3deg) scale(1.03)} 68%{transform:rotate(2deg) scale(0.99)} 82%{transform:rotate(-1deg) scale(1)} }
+@keyframes globeSpin { 0%,100%{transform:rotate(0) scale(1)} 15%{transform:rotate(30deg) scale(1.06)} 30%{transform:rotate(-10deg) scale(0.94)} 45%{transform:rotate(20deg) scale(1.04)} 60%{transform:rotate(-5deg) scale(0.97)} 76%{transform:rotate(8deg) scale(1)} }
+@keyframes peopleBob { 0%,100%{transform:translateY(0)} 8%{transform:translateY(-5px)} 16%{transform:translateY(0)} 24%{transform:translateY(-3px)} 34%{transform:translateY(0)} 44%{transform:translateY(-4px)} 56%{transform:translateY(0)} 70%{transform:translateY(-2px)} 85%{transform:translateY(0)} }
+@keyframes flipDoc { 0%,100%{transform:translateY(0) rotateX(0)} 15%{transform:translateY(-4px) rotateX(25deg)} 30%{transform:translateY(0) rotateX(-8deg)} 45%{transform:translateY(-2px) rotateX(12deg)} 60%{transform:translateY(0) rotateX(-3deg)} 76%{transform:translateY(-1px) rotateX(5deg)} 90%{transform:translateY(0) rotateX(0)} }
+@keyframes starSparkle { 0%,100%{transform:rotate(0) scale(1)} 12%{transform:rotate(-15deg) scale(1.18)} 24%{transform:rotate(10deg) scale(0.85)} 36%{transform:rotate(-6deg) scale(1.1)} 48%{transform:rotate(4deg) scale(0.95)} 62%{transform:rotate(-2deg) scale(1.05)} 76%{transform:rotate(1deg) scale(1)} }
+@keyframes expandPop { 0%,100%{transform:scale(1) translateX(0)} 12%{transform:scale(1.18) translateX(2px)} 25%{transform:scale(0.88) translateX(-1px)} 38%{transform:scale(1.1) translateX(1px)} 52%{transform:scale(0.96) translateX(0)} 66%{transform:scale(1.04)} 82%{transform:scale(0.99)} }
+@keyframes knowPulse { 0%,100%{transform:scale(1);opacity:1} 18%{transform:scale(1.12);opacity:0.8} 36%{transform:scale(0.94);opacity:1} 54%{transform:scale(1.06)} 72%{transform:scale(0.98)} 88%{transform:scale(1.02)} }
+@keyframes bagSwing { 0%,100%{transform:rotate(0)} 15%{transform:rotate(12deg)} 30%{transform:rotate(-8deg)} 45%{transform:rotate(5deg)} 60%{transform:rotate(-3deg)} 76%{transform:rotate(2deg)} 90%{transform:rotate(-1deg)} }
+@keyframes calFlip { 0%,100%{transform:rotateX(0) scale(1)} 12%{transform:rotateX(35deg) scale(1.05)} 25%{transform:rotateX(-10deg) scale(0.95)} 38%{transform:rotateX(18deg) scale(1.03)} 52%{transform:rotateX(-5deg) scale(0.98)} 66%{transform:rotateX(8deg) scale(1)} 82%{transform:rotateX(0)} }
+@keyframes slideUp { 0%,100%{transform:translateY(0) scale(1)} 8%{transform:translateY(-9px) scale(1.1)} 20%{transform:translateY(-3px) scale(0.94)} 32%{transform:translateY(-6px) scale(1.04)} 45%{transform:translateY(-1px) scale(0.98)} 58%{transform:translateY(-4px) scale(1.02)} 72%{transform:translateY(0) scale(1)} }
+@keyframes homeSettle { 0%,100%{transform:translateY(0) scale(1)} 15%{transform:translateY(-5px) scale(0.95)} 30%{transform:translateY(0) scale(1.08)} 45%{transform:translateY(-3px) scale(0.97)} 60%{transform:translateY(-1px) scale(1.03)} 76%{transform:translateY(0) scale(1)} }
+@keyframes printShake { 0%,100%{transform:translateX(0) translateY(0)} 20%{transform:translateX(-2px) translateY(1px)} 40%{transform:translateX(2px) translateY(-1px)} 60%{transform:translateX(-1px) translateY(0)} 80%{transform:translateX(1px) translateY(0)} }
+@keyframes scanLine { 0%,100%{transform:scaleY(1) translateY(0)} 20%{transform:scaleY(1.1) translateY(-3px)} 40%{transform:scaleY(0.92) translateY(2px)} 60%{transform:scaleY(1.06) translateY(-1px)} 80%{transform:scaleY(0.97) translateY(1px)} }
+@keyframes cartWiggle { 0%,100%{transform:rotate(0) translateX(0)} 12%{transform:rotate(-10deg) translateX(-4px)} 24%{transform:rotate(8deg) translateX(3px)} 36%{transform:rotate(-5deg) translateX(-2px)} 50%{transform:rotate(3deg) translateX(1px)} 64%{transform:rotate(-2deg) translateX(0)} 78%{transform:rotate(1deg)} }
+@keyframes steamRise { 0%,100%{transform:translateY(0) scale(1);opacity:1} 25%{transform:translateY(-6px) scale(1.08);opacity:0.65} 50%{transform:translateY(-3px) scale(0.93);opacity:0.85} 75%{transform:translateY(-5px) scale(1.04);opacity:0.7} }
+@keyframes wrenchTight { 0%,100%{transform:rotate(0) scale(1)} 8%{transform:rotate(18deg) scale(1.08)} 18%{transform:rotate(-6deg) scale(0.94)} 28%{transform:rotate(12deg) scale(1.04)} 40%{transform:rotate(-4deg) scale(0.97)} 52%{transform:rotate(6deg) scale(1.02)} 66%{transform:rotate(-2deg) scale(1)} 82%{transform:rotate(3deg)} }
+@keyframes sparkShake { 0%,100%{transform:rotate(0) scale(1)} 8%{transform:rotate(-8deg) scale(1.1)} 16%{transform:rotate(7deg) scale(0.92)} 24%{transform:rotate(-5deg) scale(1.06)} 36%{transform:rotate(3deg) scale(0.97)} 48%{transform:rotate(-2deg) scale(1.03)} 62%{transform:rotate(1deg) scale(1)} }
+@keyframes hatchPulse { 0%,100%{transform:scale(1) rotate(0)} 8%{transform:scale(1.1) rotate(-4deg)} 18%{transform:scale(0.88) rotate(3deg)} 30%{transform:scale(1.15) rotate(-2deg)} 42%{transform:scale(0.94) rotate(1deg)} 55%{transform:scale(1.06) rotate(0)} 68%{transform:scale(0.97)} 82%{transform:scale(1.03)} }
+@keyframes targetLock { 0%,100%{transform:scale(1)} 6%{transform:scale(1.25) rotate(-3deg)} 14%{transform:scale(0.85) rotate(2deg)} 24%{transform:scale(1.12) rotate(-1deg)} 36%{transform:scale(0.94)} 50%{transform:scale(1.06)} 66%{transform:scale(0.97)} 82%{transform:scale(1.02)} }
+@keyframes confirmNod { 0%,100%{transform:translateY(0) rotate(0)} 12%{transform:translateY(-4px) rotate(-5deg)} 26%{transform:translateY(0) rotate(3deg)} 40%{transform:translateY(-2px) rotate(-2deg)} 55%{transform:translateY(0) rotate(1deg)} 70%{transform:translateY(-1px) rotate(0)} }
+@keyframes bubbleTalk { 0%,100%{transform:scaleX(1) scaleY(1)} 15%{transform:scaleX(1.1) scaleY(0.93)} 30%{transform:scaleX(0.9) scaleY(1.08)} 45%{transform:scaleX(1.06) scaleY(0.96)} 60%{transform:scaleX(0.96) scaleY(1.04)} 76%{transform:scaleX(1.02) scaleY(0.98)} }
+@keyframes nodeConnect { 0%,100%{transform:scale(1);opacity:1} 12%{transform:scale(1.12);opacity:0.75} 25%{transform:scale(0.9);opacity:1} 38%{transform:scale(1.08);opacity:0.85} 52%{transform:scale(0.95)} 66%{transform:scale(1.04)} 82%{transform:scale(0.98)} }
+@keyframes gatherPop { 0%,100%{transform:scale(1) translateY(0)} 12%{transform:scale(1.15) translateY(-4px)} 25%{transform:scale(0.88) translateY(2px)} 38%{transform:scale(1.08) translateY(-2px)} 52%{transform:scale(0.95) translateY(0)} 66%{transform:scale(1.04)} 82%{transform:scale(0.98)} }
+@keyframes loadPulse { 0%,100%{opacity:1;transform:scale(1)} 8%{opacity:0.55;transform:scale(0.94)} 18%{opacity:1;transform:scale(1.07)} 30%{opacity:0.65;transform:scale(0.96)} 42%{opacity:1;transform:scale(1.04)} 56%{opacity:0.75;transform:scale(0.98)} 70%{opacity:1;transform:scale(1.02)} 85%{opacity:0.9;transform:scale(1)} }
+@keyframes unboxPop { 0%,100%{transform:scale(1) translateY(0)} 8%{transform:scale(1.18) translateY(-5px)} 20%{transform:scale(0.82) translateY(3px)} 32%{transform:scale(1.12) translateY(-3px)} 45%{transform:scale(0.93) translateY(1px)} 58%{transform:scale(1.05) translateY(-1px)} 72%{transform:scale(0.97)} 85%{transform:scale(1.02)} }
+@keyframes orbitPulse { 0%,100%{transform:scale(1) rotate(0)} 15%{transform:scale(1.1) rotate(6deg)} 30%{transform:scale(0.92) rotate(-4deg)} 45%{transform:scale(1.06) rotate(3deg)} 60%{transform:scale(0.96) rotate(-2deg)} 76%{transform:scale(1.02) rotate(1deg)} }
+@keyframes bulbGlow { 0%,100%{transform:scale(1);opacity:1} 10%{transform:scale(1.15);opacity:0.7} 22%{transform:scale(0.88);opacity:1} 35%{transform:scale(1.1);opacity:0.8} 48%{transform:scale(0.94)} 62%{transform:scale(1.05)} 76%{transform:scale(0.97)} 88%{transform:scale(1.02)} }
+@keyframes shieldBlock { 0%,100%{transform:translateX(0) rotate(0)} 4%{transform:translateX(-5px) rotate(-6deg)} 8%{transform:translateX(5px) rotate(6deg)} 12%{transform:translateX(-3px) rotate(-3deg)} 16%{transform:translateX(3px) rotate(2deg)} 22%{transform:translateX(-1px) rotate(-1deg)} 28%{transform:translateX(0) rotate(0)} }
 
 .card h4 {
     font-size: 1.3rem;
