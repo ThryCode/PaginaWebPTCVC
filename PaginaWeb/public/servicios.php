@@ -33,8 +33,10 @@ function getIcono($key, $iconos) {
 }
 
 $serviciosFile = __DIR__ . '/data/servicios.json';
+$flyersFile = __DIR__ . '/data/flyers.json';
 $primarias = array();
 $secundarias = array();
+$flyers = array();
 
 if (file_exists($serviciosFile)) {
     $raw = file_get_contents($serviciosFile);
@@ -53,6 +55,17 @@ if (file_exists($serviciosFile)) {
                 $secundarias[] = $s;
             }
         }
+    }
+}
+
+if (file_exists($flyersFile)) {
+    $rawF = file_get_contents($flyersFile);
+    $allF = json_decode($rawF, true);
+    if (is_array($allF)) {
+        usort($allF, function($a, $b) {
+            return $a['orden'] - $b['orden'];
+        });
+        $flyers = $allF;
     }
 }
 ?>
@@ -185,6 +198,34 @@ if (file_exists($serviciosFile)) {
             </div>
         </section>
 
+        <?php if (!empty($flyers)): ?>
+        <section class="flyers-section">
+            <div class="container">
+                <div class="section-title">
+                    <h3>Flyers</h3>
+                    <p>Conoce nuestros eventos y actividades destacadas.</p>
+                </div>
+                <div class="flyers-carousel" id="flyersCarousel">
+                    <button class="flyers-arrow flyers-prev" id="flyersPrev" aria-label="Anterior">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+                    </button>
+                    <div class="flyers-track" id="flyersTrack">
+                        <?php foreach ($flyers as $f): ?>
+                        <div class="flyers-slide">
+                            <img src="<?php echo htmlspecialchars($f['imagen']); ?>" alt="<?php echo htmlspecialchars($f['titulo']); ?>" loading="lazy">
+                            <div class="flyers-caption"><?php echo htmlspecialchars($f['titulo']); ?></div>
+                        </div>
+                        <?php endforeach; ?>
+                    </div>
+                    <button class="flyers-arrow flyers-next" id="flyersNext" aria-label="Siguiente">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+                    </button>
+                    <div class="flyers-dots" id="flyersDots"></div>
+                </div>
+            </div>
+        </section>
+        <?php endif; ?>
+
         <section class="cta-section">
             <div class="cta-blob cta-blob-1"></div>
             <div class="cta-blob cta-blob-2"></div>
@@ -210,5 +251,66 @@ if (file_exists($serviciosFile)) {
                 </div>
             </div>
         </section>
+
+        <?php if (!empty($flyers)): ?>
+        <style>
+            .flyers-section { padding: 60px 0; background: #fff; }
+            .flyers-carousel { position: relative; max-width: 700px; margin: 0 auto; overflow: hidden; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+            .flyers-track { display: flex; transition: transform 0.4s ease; }
+            .flyers-slide { min-width: 100%; position: relative; }
+            .flyers-slide img { width: 100%; height: 420px; object-fit: cover; display: block; }
+            .flyers-caption { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.7)); color: #fff; padding: 20px 24px 16px; font-size: 1rem; font-weight: 600; }
+            .flyers-arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; border-radius: 50%; border: none; background: rgba(255,255,255,0.9); color: #004966; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.2); z-index: 10; transition: background 0.2s, transform 0.2s; }
+            .flyers-arrow:hover { background: #00A0E1; color: #fff; }
+            .flyers-prev { left: 12px; }
+            .flyers-next { right: 12px; }
+            .flyers-dots { display: flex; justify-content: center; gap: 8px; padding: 14px 0; background: #fff; }
+            .flyers-dot { width: 10px; height: 10px; border-radius: 50%; border: 2px solid #00A0E1; background: transparent; cursor: pointer; padding: 0; transition: background 0.2s; }
+            .flyers-dot.active { background: #00A0E1; }
+            @media (max-width: 768px) {
+                .flyers-slide img { height: 260px; }
+                .flyers-arrow { width: 36px; height: 36px; }
+                .flyers-prev { left: 6px; }
+                .flyers-next { right: 6px; }
+                .flyers-caption { font-size: 0.88rem; padding: 14px 16px 10px; }
+            }
+        </style>
+        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var track = document.getElementById('flyersTrack');
+            var prevBtn = document.getElementById('flyersPrev');
+            var nextBtn = document.getElementById('flyersNext');
+            var dotsContainer = document.getElementById('flyersDots');
+            if (!track) return;
+            var slides = track.querySelectorAll('.flyers-slide');
+            var total = slides.length;
+            var current = 0;
+            if (total === 0) return;
+            for (var i = 0; i < total; i++) {
+                var dot = document.createElement('button');
+                dot.className = 'flyers-dot' + (i === 0 ? ' active' : '');
+                dot.setAttribute('aria-label', 'Slide ' + (i + 1));
+                dot.addEventListener('click', (function(idx) {
+                    return function() { goTo(idx); };
+                })(i));
+                dotsContainer.appendChild(dot);
+            }
+            function goTo(idx) {
+                current = idx;
+                track.style.transform = 'translateX(-' + (current * 100) + '%)';
+                var dots = dotsContainer.querySelectorAll('.flyers-dot');
+                for (var j = 0; j < dots.length; j++) {
+                    dots[j].classList.toggle('active', j === current);
+                }
+            }
+            prevBtn.addEventListener('click', function() {
+                goTo(current === 0 ? total - 1 : current - 1);
+            });
+            nextBtn.addEventListener('click', function() {
+                goTo(current === total - 1 ? 0 : current + 1);
+            });
+        });
+        </script>
+        <?php endif; ?>
 
 <?php include 'includes/footer.php'; ?>

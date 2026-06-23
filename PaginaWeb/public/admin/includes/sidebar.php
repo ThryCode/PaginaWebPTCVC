@@ -40,6 +40,10 @@ $isAdmin = isset($_SESSION['user_rol']) && $_SESSION['user_rol'] === 'admin';
                 <svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
                 Servicios
             </a></li>
+            <li><a href="flyers.php" class="<?php echo $currentPage === 'flyers.php' ? 'active' : ''; ?>">
+                <svg viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+                Flyers
+            </a></li>
             <li><a href="mensajes.php" class="<?php echo $currentPage === 'mensajes.php' ? 'active' : ''; ?>">
                 <svg viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
                 Mensajes<?php if ($mensajesNoLeidos > 0): ?><span class="badge"><?php echo $mensajesNoLeidos; ?></span><?php endif; ?>
