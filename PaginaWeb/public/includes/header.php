@@ -71,6 +71,7 @@ header("Permissions-Policy: geolocation=(), camera=(), microphone=(), midi=(), s
                             <li><a href="servicios.php">Todos los Servicios</a></li>
                             <li><a href="producciones-cooperadas.php">Producciones Cooperadas</a></li>
                             <li><a href="incubacion-empresas.php">Incubaci&oacute;n de Empresas</a></li>
+                            <li><a href="flyers.php">Flyers</a></li>
                         </ul>
                     </li>
                     <li><a href="contacto.php" class="<?php echo $currentPage === 'contacto.php' ? 'active' : ''; ?>">Contacto</a></li>
