@@ -1,14 +1,6 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 0);
-ini_set('log_errors', 1);
-ini_set('error_log', __DIR__ . '/../data/admin_error.log');
-
-require_once '../api/auth.php';
-require_once '../api/storage.php';
-
-$auth = new Auth();
-$auth->requireLogin();
+header('Location: informacion.php?tab=proyectos');
+exit;
 
 function autoResumen($texto, $max = 200) {
     $limpio = trim(strip_tags($texto));
