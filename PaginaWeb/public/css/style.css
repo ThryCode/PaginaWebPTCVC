@@ -653,16 +653,133 @@ body {
     line-height: 1.8;
 }
 
-.placeholder-img {
-    background: linear-gradient(135deg, #004966, #00A0E1);
+.about-intro {
+    margin-bottom: 35px;
+}
+
+/* =========== TIMELINE =========== */
+.timeline {
+    position: relative;
+    padding-left: 90px;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 55px;
+    top: 10px;
+    bottom: 10px;
+    width: 2px;
+    background: linear-gradient(to bottom, #00A0E1, #E6F4FA);
+    border-radius: 1px;
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.timeline-item:last-child {
+    margin-bottom: 0;
+}
+
+.timeline-marker {
+    position: absolute;
+    left: -90px;
+    top: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.timeline-year {
+    background: #004966;
     color: #fff;
-    height: 350px;
+    padding: 3px 14px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    white-space: nowrap;
+    letter-spacing: 0.3px;
+}
+
+.timeline-dot {
+    width: 12px;
+    height: 12px;
+    background: #00A0E1;
+    border-radius: 50%;
+    border: 3px solid #fff;
+    box-shadow: 0 0 0 2px #00A0E1;
+    flex-shrink: 0;
+}
+
+.timeline-card {
+    background: #f8fbfe;
+    border: 1px solid #E6F4FA;
+    border-radius: 12px;
+    padding: 18px 22px;
+    transition: box-shadow 0.3s ease;
+}
+
+.timeline-card:hover {
+    box-shadow: 0 4px 16px rgba(0, 73, 102, 0.08);
+}
+
+.timeline-card h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #004966;
+    margin-bottom: 6px;
+}
+
+.timeline-card p {
+    font-size: 0.92rem;
+    color: #646464;
+    margin-bottom: 0;
+    line-height: 1.6;
+}
+
+/* =========== IMAGE CARD =========== */
+.about-image-card {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    height: 380px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 16px;
-    font-size: 1.2rem;
-    box-shadow: 0 10px 30px rgba(0, 73, 102, 0.15);
+    box-shadow: 0 15px 40px rgba(0, 73, 102, 0.18);
+}
+
+.about-image-bg {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(145deg, #004966 0%, #0076a8 50%, #00A0E1 100%);
+}
+
+.about-image-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 30px;
+    text-align: center;
+}
+
+.about-image-icon {
+    width: 80px;
+    height: 80px;
+    opacity: 0.9;
+}
+
+.about-image-label {
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: 700;
+    line-height: 1.4;
+    max-width: 240px;
 }
 
 /* ============================================
@@ -2344,6 +2461,36 @@ body {
 
     .about-preview .about-image {
         order: -1;
+    }
+
+    .timeline {
+        padding-left: 60px;
+    }
+
+    .timeline::before {
+        left: 28px;
+    }
+
+    .timeline-marker {
+        left: -60px;
+    }
+
+    .timeline-year {
+        font-size: 0.7rem;
+        padding: 2px 10px;
+    }
+
+    .timeline-dot {
+        width: 10px;
+        height: 10px;
+    }
+
+    .timeline-card {
+        padding: 14px 16px;
+    }
+
+    .about-image-card {
+        height: 260px;
     }
 
     .intro-section .container {

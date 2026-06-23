@@ -36,12 +36,57 @@ include 'includes/header.php';
             <div class="container">
                 <div class="about-content">
                     <h3>Nuestra Historia</h3>
-                    <p>El Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara surge como respuesta a las necesidades de desarrollo industrial identificadas en la estrategia territorial de la provincia. La industria villaclare&ntilde;a aporta m&aacute;s del 50% de la producci&oacute;n mercantil del territorio y cuenta con f&aacute;bricas &uacute;nicas en el pa&iacute;s, como INPUD &quot;1ro de Mayo&quot;, la Productora de Buj&iacute;as &quot;Neftal&iacute; Mart&iacute;nez&quot; y la Empresa Electroqu&iacute;mica.</p>
-                    <p>A partir de las pol&iacute;ticas nacionales de ciencia, tecnolog&iacute;a e innovaci&oacute;n se estableci&oacute; un trabajo conjunto entre MINDUS, UCLV y CITMA para analizar la viabilidad de un parque tecnol&oacute;gico de corte industrial. Durante la visita gubernamental de octubre de 2020, la Vice Primera Ministra In&eacute;s Mar&iacute;a Chapman destac&oacute; la conveniencia de su creaci&oacute;n en Villa Clara, dada la madurez industrial y el potencial humano del territorio.</p>
-                    <p>La creaci&oacute;n del PCT Villa Clara busca dinamizar la innovaci&oacute;n, modernizar procesos industriales, atraer inversi&oacute;n, fomentar la creaci&oacute;n de nuevas empresas y fortalecer la articulaci&oacute;n entre el sector del conocimiento, el gobierno y las entidades productivas. Con esto, el territorio avanza hacia un modelo de desarrollo basado en la ciencia, la tecnolog&iacute;a y la innovaci&oacute;n como pilares transformadores.</p>
+                    <p class="about-intro">El Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara surge como respuesta a las necesidades de desarrollo industrial identificadas en la estrategia territorial de la provincia. La industria villaclare&ntilde;a aporta m&aacute;s del 50% de la producci&oacute;n mercantil del territorio y cuenta con f&aacute;bricas &uacute;nicas en el pa&iacute;s.</p>
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-marker">
+                                <span class="timeline-year">Oct 2020</span>
+                                <span class="timeline-dot"></span>
+                            </div>
+                            <div class="timeline-card">
+                                <h4>Visita Gubernamental</h4>
+                                <p>La Vice Primera Ministra In&eacute;s Mar&iacute;a Chapman destaca la conveniencia de crear el PCT en Villa Clara, dada su madurez industrial y potencial humano del territorio.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-marker">
+                                <span class="timeline-year">2021</span>
+                                <span class="timeline-dot"></span>
+                            </div>
+                            <div class="timeline-card">
+                                <h4>Creaci&oacute;n del PCT</h4>
+                                <p>MINDUS, UCLV y CITMA establecen un trabajo conjunto para analizar la viabilidad y se constituye el Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-marker">
+                                <span class="timeline-year">Hoy</span>
+                                <span class="timeline-dot"></span>
+                            </div>
+                            <div class="timeline-card">
+                                <h4>Innovaci&oacute;n y Desarrollo</h4>
+                                <p>El PCT impulsa la modernizaci&oacute;n industrial, la incubaci&oacute;n de nuevas empresas y la articulaci&oacute;n entre el conocimiento, el gobierno y las entidades productivas.</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="about-image">
-                    <div class="placeholder-img">Nuestra Historia</div>
+                    <div class="about-image-card">
+                        <div class="about-image-bg"></div>
+                        <div class="about-image-content">
+                            <svg class="about-image-icon" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="8" y="28" width="64" height="44" rx="4" stroke="white" stroke-width="2.5" fill="none"/>
+                                <path d="M28 28V18C28 15.8 29.8 14 32 14H48C50.2 14 52 15.8 52 18V28" stroke="white" stroke-width="2.5" fill="none"/>
+                                <circle cx="40" cy="42" r="6" stroke="white" stroke-width="2.5" fill="none"/>
+                                <path d="M40 48V54" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+                                <path d="M30 58H50" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+                                <path d="M34 62H46" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+                                <path d="M20 34H24" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M56 34H60" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                            <span class="about-image-label">Parque Científico Tecnológico de Villa Clara</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
