@@ -1,17 +1,17 @@
 {
     "next_id": 2,
-    "system_pac_hash": "$2y$10$NBmia8AeN7XJLAnZoVGFbu732Cyid5BIdGKzHTTekwS3AWyJAO51e",
-    "system_pac_created_at": "2026-06-23 12:00:00",
+    "system_pac_hash": "$2y$10$Cq09mWeZOjVt3wOAQAwXfuMdBu6A2zqqfI5Xmq7EUl.nGAt/QXXNa",
+    "system_pac_created_at": "2026-06-19 17:55:49",
     "users": [
         {
             "id": 1,
-            "nombre": "Administrador",
-            "email": "admin@pctvc.cu",
+            "nombre": "marioc@pctvc.cu",
+            "email": "marioc@pctvc.cu",
             "rol": "admin",
             "activo": true,
-            "password": "$2y$10$kfXnOWMLduvCJWj3g1l57Or8tk6tL1De8CzmRS42TP7Alo3UCunRW",
+            "password": "$2y$10$VcwgGfNiSNnSAfU5XznSduDw17N2.GD8agvgA66tKh6pU/OvMSg9i",
             "last_login": null,
-            "created_at": "2026-06-23 12:00:00",
+            "created_at": "2026-06-23 16:06:35",
             "pacs": []
         }
     ],
