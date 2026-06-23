@@ -55,6 +55,7 @@ if (isset($_GET['msg'])) {
     if ($msg === 'creado') $message = 'Creado correctamente.';
     elseif ($msg === 'editado') $message = 'Actualizado correctamente.';
     elseif ($msg === 'eliminado') $message = 'Eliminado correctamente.';
+    elseif ($msg === 'stats_guardados') $message = 'Estadísticas guardadas correctamente.';
 }
 
 $categorias = Storage::read('categorias');
@@ -248,19 +249,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         // --- PROYECTOS ---
         elseif ($tab === 'proyectos') {
-            if ($action === 'save_stats') {
-                $stats = isset($_POST['stats']) ? $_POST['stats'] : array();
-                $filtered = array();
-                if (is_array($stats)) {
-                    foreach ($stats as $s) {
-                        $label = trim($s['label'] ?? '');
-                        $count = intval($s['count'] ?? 0);
-                        if ($label !== '') $filtered[] = array('label' => $label, 'count' => $count);
+            if (isset($_POST['stat_action'])) {
+                $stats = Storage::read('proyectos_stats');
+                $statAction = $_POST['stat_action'];
+
+                if ($statAction === 'create') {
+                    $newId = 1;
+                    foreach ($stats as $s) { if (($s['id'] ?? 0) >= $newId) $newId = $s['id'] + 1; }
+                    $stats[] = array('id' => $newId, 'label' => trim($_POST['stat_label'] ?? ''), 'count' => intval($_POST['stat_count'] ?? 0));
+                    Storage::write('proyectos_stats', $stats);
+                    header('Location: informacion.php?tab=proyectos&msg=creado');
+                    exit;
+
+                } elseif ($statAction === 'update') {
+                    $updateId = intval($_POST['stat_id'] ?? 0);
+                    foreach ($stats as &$s) {
+                        if (($s['id'] ?? 0) === $updateId) {
+                            $s['label'] = trim($_POST['stat_label'] ?? $s['label']);
+                            $s['count'] = intval($_POST['stat_count'] ?? $s['count']);
+                            break;
+                        }
                     }
+                    unset($s);
+                    Storage::write('proyectos_stats', $stats);
+                    header('Location: informacion.php?tab=proyectos&msg=editado');
+                    exit;
+
+                } elseif ($statAction === 'delete') {
+                    $deleteId = intval($_POST['stat_id'] ?? 0);
+                    $stats = array_values(array_filter($stats, function($s) use ($deleteId) { return ($s['id'] ?? 0) !== $deleteId; }));
+                    Storage::write('proyectos_stats', $stats);
+                    header('Location: informacion.php?tab=proyectos&msg=eliminado');
+                    exit;
                 }
-                Storage::write('proyectos_stats', $filtered);
-                header('Location: informacion.php?tab=proyectos&msg=stats_guardados');
-                exit;
             }
 
             $titulo = trim($_POST['titulo'] ?? '');
@@ -341,6 +362,7 @@ $noticia = null;
 $evento = null;
 $imagen = null;
 $proyecto = null;
+$proyectosStats = Storage::read('proyectos_stats');
 
 if ($action === 'edit' && $id > 0) {
     if ($tab === 'galeria') {
@@ -572,42 +594,102 @@ $csrfToken = generateCSRFToken();
                         <?php endif; ?>
                     </div></div>
 
+                    <?php if (!empty($proyectosStats)): ?>
+                    <h3 style="margin-bottom:16px;color:#1a1a2e;">Vista previa</h3>
+                    <div class="stats-grid">
+                        <?php foreach ($proyectosStats as $s): ?>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
+                            </div>
+                            <div class="stat-info">
+                                <h3><?php echo intval($s['count']); ?></h3>
+                                <p><?php echo htmlspecialchars($s['label']); ?></p>
+                            </div>
+                        </div>
+                        <?php endforeach; ?>
+                    </div>
+                    <?php endif; ?>
+
                     <div class="panel" style="margin-top:30px;">
                         <div class="panel-header"><h2>Estadísticas</h2></div>
                         <div class="panel-body">
-                            <?php $stats = Storage::read('proyectos_stats'); ?>
-                            <form method="POST" action="?action=save_stats&tab=proyectos">
-                                <?php echo csrfField(); ?>
-                                <table class="table" id="stats-table">
-                                    <thead><tr><th>Etiqueta</th><th>Valor</th><th></th></tr></thead>
-                                    <tbody>
-                                        <?php foreach ($stats as $i => $s): ?>
-                                        <tr>
-                                            <td><input type="text" name="stats[<?php echo $i; ?>][label]" value="<?php echo htmlspecialchars($s['label']); ?>" class="form-input" style="width:100%;" required></td>
-                                            <td><input type="number" name="stats[<?php echo $i; ?>][count]" value="<?php echo intval($s['count']); ?>" class="form-input" style="width:100px;" required></td>
-                                            <td><button type="button" class="btn btn-sm btn-danger" onclick="this.closest('tr').remove()">X</button></td>
-                                        </tr>
-                                        <?php endforeach; ?>
-                                    </tbody>
-                                </table>
-                                <div style="margin-top:12px;display:flex;gap:12px;align-items:center;">
-                                    <button type="button" class="btn btn-secondary" onclick="addStatRow()">+ Añadir</button>
-                                    <button type="submit" class="btn btn-success">Guardar Estadísticas</button>
+                            <div class="grid-2">
+                                <div class="panel" style="box-shadow:none;padding:0;">
+                                    <h3 style="color:#004966;font-size:1rem;margin-bottom:12px;">Añadir estadística</h3>
+                                    <form method="POST">
+                                        <?php echo csrfField(); ?>
+                                        <input type="hidden" name="stat_action" value="create">
+                                        <div class="form-group">
+                                            <label for="stat_label">Etiqueta</label>
+                                            <input type="text" id="stat_label" name="stat_label" required placeholder="Ej: Proyectos exitosos">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="stat_count">Valor</label>
+                                            <input type="number" id="stat_count" name="stat_count" required min="0" value="0">
+                                        </div>
+                                        <button type="submit" class="btn btn-success">Crear</button>
+                                    </form>
                                 </div>
-                            </form>
-                            <script>
-                            function addStatRow() {
-                                var tbody = document.querySelector('#stats-table tbody');
-                                var idx = tbody.children.length;
-                                var tr = document.createElement('tr');
-                                tr.innerHTML = '<td><input type="text" name="stats['+idx+'][label]" class="form-input" style="width:100%;" required></td>' +
-                                    '<td><input type="number" name="stats['+idx+'][count]" value="0" class="form-input" style="width:100px;" required></td>' +
-                                    '<td><button type="button" class="btn btn-sm btn-danger" onclick="this.closest(\'tr\').remove()">X</button></td>';
-                                tbody.appendChild(tr);
-                            }
-                            </script>
+
+                                <div>
+                                    <h3 style="color:#004966;font-size:1rem;margin-bottom:12px;">Estadísticas actuales</h3>
+                                    <?php if (empty($proyectosStats)): ?>
+                                        <p class="empty">No hay estadísticas.</p>
+                                    <?php else: ?>
+                                        <?php foreach ($proyectosStats as $s): ?>
+                                        <div class="counter-row" style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:#f8f9fa;border-radius:10px;margin-bottom:8px;">
+                                            <div style="flex:1;">
+                                                <strong style="color:#1a1a2e;"><?php echo htmlspecialchars($s['label']); ?></strong>
+                                                <span style="color:#888;font-size:0.85rem;margin-left:8px;">Valor: <?php echo intval($s['count']); ?></span>
+                                            </div>
+                                            <div style="display:flex;gap:6px;">
+                                                <button class="btn btn-sm btn-primary" data-toggle-edit-stat="<?php echo $s['id']; ?>">Editar</button>
+                                                <form method="POST" data-confirm="Eliminar esta estadística?" style="display:inline;">
+                                                    <?php echo csrfField(); ?>
+                                                    <input type="hidden" name="stat_action" value="delete">
+                                                    <input type="hidden" name="stat_id" value="<?php echo $s['id']; ?>">
+                                                    <button type="submit" class="btn btn-sm btn-danger">X</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <div class="edit-form" id="edit-stat-<?php echo $s['id']; ?>" style="background:#fff;padding:16px;border-radius:10px;border:2px dashed #e0e0e0;display:none;margin-bottom:12px;">
+                                            <form method="POST">
+                                                <?php echo csrfField(); ?>
+                                                <input type="hidden" name="stat_action" value="update">
+                                                <input type="hidden" name="stat_id" value="<?php echo $s['id']; ?>">
+                                                <div class="form-group">
+                                                    <label>Etiqueta</label>
+                                                    <input type="text" name="stat_label" required value="<?php echo htmlspecialchars($s['label']); ?>">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Valor</label>
+                                                    <input type="number" name="stat_count" required min="0" value="<?php echo intval($s['count']); ?>">
+                                                </div>
+                                                <div style="display:flex;gap:10px;">
+                                                    <button type="submit" class="btn btn-sm btn-success">Guardar</button>
+                                                    <button type="button" class="btn btn-sm btn-secondary" data-toggle-edit-stat="<?php echo $s['id']; ?>">Cancelar</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <?php endforeach; ?>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                    <script>
+                    (function() {
+                        var btns = document.querySelectorAll('[data-toggle-edit-stat]');
+                        btns.forEach(function(btn) {
+                            btn.addEventListener('click', function() {
+                                var id = this.dataset.toggleEditStat;
+                                var form = document.getElementById('edit-stat-' + id);
+                                if (form) form.style.display = form.style.display === 'block' ? 'none' : 'block';
+                            });
+                        });
+                    })();
+                    </script>
                     <?php endif; ?>
 
                 <?php elseif ($action === 'upload' && $tab === 'galeria'): ?>
