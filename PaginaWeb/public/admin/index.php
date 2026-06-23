@@ -110,7 +110,7 @@ if (!empty($user['nombre'])) {
                     <div class="panel">
                         <div class="panel-header">
                             <h2>Últimas Publicaciones</h2>
-                            <a href="noticias.php" class="btn btn-sm btn-primary">Ver todas</a>
+                            <a href="informacion.php?tab=noticias" class="btn btn-sm btn-primary">Ver todas</a>
                         </div>
                         <div class="panel-body">
                             <?php if (empty($ultimasNoticias)): ?>

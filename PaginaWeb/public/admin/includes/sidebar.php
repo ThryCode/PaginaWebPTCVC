@@ -16,21 +16,13 @@ $isAdmin = isset($_SESSION['user_rol']) && $_SESSION['user_rol'] === 'admin';
                 <svg viewBox="0 0 24 24"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
                 Dashboard
             </a></li>
-            <li><a href="noticias.php" class="<?php echo $currentPage === 'noticias.php' ? 'active' : ''; ?>">
+            <li><a href="informacion.php" class="<?php echo $currentPage === 'informacion.php' ? 'active' : ''; ?>">
                 <svg viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
-                Noticias
-            </a></li>
-            <li><a href="eventos.php" class="<?php echo $currentPage === 'eventos.php' ? 'active' : ''; ?>">
-                <svg viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
-                Eventos
+                Información
             </a></li>
             <li><a href="proyectos.php" class="<?php echo $currentPage === 'proyectos.php' ? 'active' : ''; ?>">
                 <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
                 Proyectos
-            </a></li>
-            <li><a href="galeria.php" class="<?php echo $currentPage === 'galeria.php' ? 'active' : ''; ?>">
-                <svg viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
-                Galería
             </a></li>
             <li><a href="sliders.php" class="<?php echo $currentPage === 'sliders.php' ? 'active' : ''; ?>">
                 <svg viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
