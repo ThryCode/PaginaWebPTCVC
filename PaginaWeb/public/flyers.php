@@ -62,8 +62,8 @@ if (file_exists($flyersFile)) {
             .flyers-carousel-wrapper { display: flex; align-items: center; gap: 16px; max-width: 700px; margin: 0 auto; }
             .flyers-carousel { flex: 1; overflow: hidden; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
             .flyers-track { display: flex; transition: transform 0.4s ease; }
-            .flyers-slide { min-width: 100%; position: relative; }
-            .flyers-slide img { width: 100%; height: auto; display: block; }
+            .flyers-slide { min-width: 100%; position: relative; display: flex; align-items: center; justify-content: center; background: #f5f5f5; }
+            .flyers-slide img { max-width: 100%; max-height: 500px; height: auto; display: block; object-fit: contain; }
             .flyers-arrow { flex-shrink: 0; width: 44px; height: 44px; border-radius: 50%; border: none; background: rgba(255,255,255,0.9); color: #004966; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.2); transition: background 0.2s, transform 0.2s; }
             .flyers-arrow:hover { background: #00A0E1; color: #fff; }
             .flyers-dots { display: flex; justify-content: center; gap: 8px; padding: 14px 0; }
