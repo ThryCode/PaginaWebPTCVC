@@ -3663,172 +3663,63 @@ body {
     50% { transform: scale(1.1); }
 }
 
-.card:hover .card-icon svg.icon-capacitacion {
-    animation: float-icon 1.2s ease-in-out infinite;
+.services-preview .grid .card:hover .card-icon svg.icon-proyectos,
+.services-preview .grid .card:hover .card-icon svg.icon-carpeta,
+.services-preview .grid .card:hover .card-icon svg.icon-edificio,
+.services-preview .grid .card:hover .card-icon svg.icon-documento,
+.services-preview .grid .card:hover .card-icon svg.icon-casa,
+.services-preview .grid .card:hover .card-icon svg.icon-calendario {
+    animation: float-icon 1.3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
-
-.card:hover .card-icon svg.icon-asesoramiento {
-    animation: pulse-icon 1s ease-in-out infinite;
+.services-preview .grid .card:hover .card-icon svg.icon-chart,
+.services-preview .grid .card:hover .card-icon svg.icon-equipo,
+.services-preview .grid .card:hover .card-icon svg.icon-personas,
+.services-preview .grid .card:hover .card-icon svg.icon-estrella,
+.services-preview .grid .card:hover .card-icon svg.icon-checked,
+.services-preview .grid .card:hover .card-icon svg.icon-libro {
+    animation: pulse-icon 1.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
-
-.card:hover .card-icon svg.icon-alianza {
-    animation: pulse-icon 1s ease-in-out infinite;
+.services-preview .grid .card:hover .card-icon svg.icon-moneda,
+.services-preview .grid .card:hover .card-icon svg.icon-carrito,
+.services-preview .grid .card:hover .card-icon svg.icon-restaurante {
+    animation: bounce-icon 0.9s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
-
-.card:hover .card-icon svg.icon-oportunidad {
-    animation: blink-icon 1.5s ease-in-out infinite;
+.services-preview .grid .card:hover .card-icon svg.icon-impresora,
+.services-preview .grid .card:hover .card-icon svg.icon-monitor,
+.services-preview .grid .card:hover .card-icon svg.icon-clipboard {
+    animation: blink-icon 1.8s ease-in-out infinite;
 }
-
-.card:hover .card-icon svg.icon-desarrollo {
-    animation: float-icon 1.2s ease-in-out infinite;
+.services-preview .grid .card:hover .card-icon svg.icon-globo,
+.services-preview .grid .card:hover .card-icon svg.icon-enlace {
+    animation: spin-icon 2s linear infinite;
 }
-
-.card:hover .card-icon svg.icon-recursos {
-    animation: float-icon 1.2s ease-in-out infinite;
-}
-
-.card:hover .card-icon svg.icon-mercados {
-    animation: pulse-icon 1s ease-in-out infinite;
-}
-
-.card:hover .card-icon svg.icon-innovacion {
-    animation: blink-icon 1.5s ease-in-out infinite;
-}
-
-.card:hover .card-icon svg.icon-riesgos {
-    animation: bounce-icon 0.8s ease-in-out infinite;
-}
-
-/* Animaciones hover cards servicios.php — Actividades Principales */
-.card:hover .card-icon svg.icon-formulacion {
-    animation: float-icon 1.2s ease-in-out infinite;
-}
-
-.card:hover .card-icon svg.icon-modelo {
-    animation: pulse-icon 1s ease-in-out infinite;
-}
-
-.card:hover .card-icon svg.icon-cooperacion {
-    animation: bounce-icon 0.8s ease-in-out infinite;
-}
-
-.card:hover .card-icon svg.icon-produccion {
-    animation: blink-icon 1.5s ease-in-out infinite;
-}
-
-.card:hover .card-icon svg.icon-representacion {
-    animation: float-icon 1.2s ease-in-out infinite;
-}
-
-.card:hover .card-icon svg.icon-alquiler {
-    animation: pulse-icon 1s ease-in-out infinite;
-}
-
-.card:hover .card-icon svg.icon-capacitacion-serv {
-    animation: bounce-icon 0.8s ease-in-out infinite;
-}
-
-.card:hover .card-icon svg.icon-financiamiento {
-    animation: blink-icon 1.5s ease-in-out infinite;
-}
-
-/* Animaciones hover cards servicios.php — Servicios Estratégicos */
-.card:hover .card-icon svg.icon-asesoria {
-    animation: pulse-icon 1s ease-in-out infinite;
-}
-
-.card:hover .card-icon svg.icon-inversionistas {
-    animation: float-icon 1.2s ease-in-out infinite;
-}
-
-.card:hover .card-icon svg.icon-arrendamiento {
-    animation: bounce-icon 0.8s ease-in-out infinite;
-}
-
-/* Animaciones hover cards servicios.php — Actividades Secundarias */
-.card:hover .card-icon svg.icon-consultoria {
-    animation: float-icon 1.2s ease-in-out infinite;
-}
-
-.card:hover .card-icon svg.icon-comercio {
-    animation: pulse-icon 1s ease-in-out infinite;
-}
-
-.card:hover .card-icon svg.icon-delegaciones {
-    animation: blink-icon 1.5s ease-in-out infinite;
-}
-
-.card:hover .card-icon svg.icon-tramites {
-    animation: bounce-icon 0.8s ease-in-out infinite;
-}
-
-.card:hover .card-icon svg.icon-protocolo {
-    animation: float-icon 1.2s ease-in-out infinite;
-}
-
-.card:hover .card-icon svg.icon-espacios {
-    animation: pulse-icon 1s ease-in-out infinite;
-}
-
-.card:hover .card-icon svg.icon-cap-tecnica {
-    animation: blink-icon 1.5s ease-in-out infinite;
-}
-
-.card:hover .card-icon svg.icon-rep-comercial {
-    animation: bounce-icon 0.8s ease-in-out infinite;
-}
-
-.card:hover .card-icon svg.icon-eventos {
-    animation: float-icon 1.2s ease-in-out infinite;
-}
-
-.card:hover .card-icon svg.icon-promocion {
-    animation: pulse-icon 1s ease-in-out infinite;
-}
-
-.card:hover .card-icon svg.icon-alojamiento {
-    animation: blink-icon 1.5s ease-in-out infinite;
-}
-
-.card:hover .card-icon svg.icon-impresion {
-    animation: bounce-icon 0.8s ease-in-out infinite;
-}
-
-.card:hover .card-icon svg.icon-servicios-tic {
-    animation: float-icon 1.2s ease-in-out infinite;
-}
-
-.card:hover .card-icon svg.icon-venta {
-    animation: pulse-icon 1s ease-in-out infinite;
-}
-
-.card:hover .card-icon svg.icon-gastronomia {
-    animation: blink-icon 1.5s ease-in-out infinite;
-}
-
-.card:hover .card-icon svg.icon-inmobiliaria {
-    animation: bounce-icon 0.8s ease-in-out infinite;
-}
-
-/* Animaciones hover cards servicios.php — Servicios Especializados */
-.card:hover .card-icon svg.icon-coop-estrategica {
-    animation: float-icon 1.2s ease-in-out infinite;
-}
-
-.card:hover .card-icon svg.icon-incubacion {
-    animation: pulse-icon 1s ease-in-out infinite;
+.services-preview .grid .card:hover .card-icon svg.icon-llave {
+    animation: shake-icon 0.6s ease-in-out infinite;
 }
 
 @keyframes blink-icon {
     0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
+    50% { opacity: 0.3; }
 }
 
 @keyframes bounce-icon {
-    0%, 100% { transform: translateY(0); }
-    30% { transform: translateY(-5px); }
-    50% { transform: translateY(0); }
-    70% { transform: translateY(-3px); }
+    0%, 100% { transform: translateY(0) scale(1, 1); }
+    25% { transform: translateY(-6px) scale(1, 1); }
+    50% { transform: translateY(0) scale(1.05, 0.95); }
+    75% { transform: translateY(-3px) scale(1, 1); }
+}
+
+@keyframes spin-icon {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes shake-icon {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-3px) rotate(-3deg); }
+    40% { transform: translateX(3px) rotate(3deg); }
+    60% { transform: translateX(-2px) rotate(-2deg); }
+    80% { transform: translateX(2px) rotate(2deg); }
 }
 
 .directivos-section {

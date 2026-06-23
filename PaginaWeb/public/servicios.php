@@ -29,12 +29,14 @@ $iconos = array(
 );
 
 function getIcono($key, $iconos) {
-    return isset($iconos[$key]) ? $iconos[$key] : $iconos['documento'];
+    $svg = isset($iconos[$key]) ? $iconos[$key] : $iconos['documento'];
+    return str_replace('<svg ', '<svg class="icon-' . $key . '" ', $svg);
 }
 
 $serviciosFile = __DIR__ . '/data/servicios.json';
 $primarias = array();
 $secundarias = array();
+$estrategicos = array();
 
 if (file_exists($serviciosFile)) {
     $raw = file_get_contents($serviciosFile);
@@ -49,11 +51,24 @@ if (file_exists($serviciosFile)) {
         foreach ($all as $s) {
             if ($s['tipo'] === 'primaria') {
                 $primarias[] = $s;
+            } elseif ($s['tipo'] === 'estrategico') {
+                $estrategicos[] = $s;
             } else {
                 $secundarias[] = $s;
             }
         }
     }
+}
+
+$ticFile = __DIR__ . '/data/tic.json';
+$ticItems = array();
+if (file_exists($ticFile)) {
+    $raw = file_get_contents($ticFile);
+    $ticItems = json_decode($raw, true);
+    if (!is_array($ticItems)) $ticItems = array();
+    usort($ticItems, function($a, $b) {
+        return ($a['orden'] ?? 0) - ($b['orden'] ?? 0);
+    });
 }
 ?>
 
@@ -85,57 +100,36 @@ if (file_exists($serviciosFile)) {
         </section>
         <?php endif; ?>
 
+        <?php if (!empty($estrategicos)): ?>
         <section class="services-preview" style="background: #E6F4FA;">
             <div class="container">
                 <div class="section-title">
                     <h3>Servicios Estrat&eacute;gicos y Tecnol&oacute;gicos</h3>
                 </div>
                 <div class="grid">
-                    <div class="card animate-on-scroll">
+                    <?php foreach ($estrategicos as $i => $s): ?>
+                    <div class="card animate-on-scroll<?php echo ($i % 4 > 0) ? ' delay-' . ($i % 4) : ''; ?>">
                         <div class="card-icon">
-                            <svg class="icon-asesoria" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
+                            <?php echo getIcono($s['icono'], $iconos); ?>
                         </div>
-                        <h4>Asesor&iacute;a t&eacute;cnica y legal</h4>
-                        <p>Acompa&ntilde;amiento integral a empresas de reciente creaci&oacute;n o en proceso de incubaci&oacute;n, orientado a la toma de decisiones t&eacute;cnicas, jur&iacute;dicas y organizacionales.</p>
+                        <h4><?php echo htmlspecialchars($s['nombre']); ?></h4>
+                        <p><?php echo htmlspecialchars($s['descripcion']); ?></p>
                     </div>
-                    <div class="card animate-on-scroll delay-1">
-                        <div class="card-icon">
-                            <svg class="icon-inversionistas" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9a3 3 0 0 1 3-3h14a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V9Z"/><path d="m8 14 2 2 4-4"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-                        </div>
-                        <h4>Acceso a redes de inversionistas</h4>
-                        <p>Vinculaci&oacute;n con redes de inversionistas y actores estrat&eacute;gicos que facilitan el financiamiento y escalamiento de proyectos innovadores.</p>
-                    </div>
-                    <div class="card animate-on-scroll delay-2">
-                        <div class="card-icon">
-                            <svg class="icon-arrendamiento" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5 12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5Z"/><path d="M9 22V12h6v10"/></svg>
-                        </div>
-                        <h4>Arrendamiento de espacios tecnol&oacute;gicos</h4>
-                        <p>Arrendamiento de espacios con servicios de conectividad, suministro el&eacute;ctrico y condiciones adecuadas para el desarrollo empresarial y tecnol&oacute;gico.</p>
-                    </div>
+                    <?php endforeach; ?>
                 </div>
+                <?php if (!empty($ticItems)): ?>
                 <div class="tic-grid">
                     <h4 class="tic-title">Servicios vinculados a las Tecnolog&iacute;as de la Informaci&oacute;n y las Comunicaciones (TIC)</h4>
                     <div class="check-list cols-3">
-                        <div class="check-item"><div class="check-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00A0E1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div><p>Desarrollo de sitios web.</p></div>
-                        <div class="check-item"><div class="check-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00A0E1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div><p>Sistemas de informaci&oacute;n a la medida.</p></div>
-                        <div class="check-item"><div class="check-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00A0E1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div><p>Implementaci&oacute;n de t&eacute;cnicas y modelos de Inteligencia Artificial.</p></div>
-                        <div class="check-item"><div class="check-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00A0E1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div><p>Ecosistemas inteligentes.</p></div>
-                        <div class="check-item"><div class="check-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00A0E1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div><p>Formaci&oacute;n y capacitaci&oacute;n en sistemas de gesti&oacute;n de la informaci&oacute;n.</p></div>
-                        <div class="check-item"><div class="check-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00A0E1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div><p>Formaci&oacute;n y capacitaci&oacute;n en IA para empresarios.</p></div>
-                        <div class="check-item"><div class="check-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00A0E1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div><p>Gesti&oacute;n de plataformas ORM y ERP.</p></div>
-                        <div class="check-item"><div class="check-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00A0E1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div><p>An&aacute;lisis cienciom&eacute;trico y estad&iacute;stico.</p></div>
-                        <div class="check-item"><div class="check-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00A0E1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div><p>Dise&ntilde;o y gesti&oacute;n de bases de datos.</p></div>
-                        <div class="check-item"><div class="check-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00A0E1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div><p>Sistemas de informaci&oacute;n geogr&aacute;fica (SIG).</p></div>
-                        <div class="check-item"><div class="check-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00A0E1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div><p>Computaci&oacute;n gr&aacute;fica.</p></div>
-                        <div class="check-item"><div class="check-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00A0E1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div><p>Dise&ntilde;o de interfaces visuales Backend y Frontend.</p></div>
-                        <div class="check-item"><div class="check-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00A0E1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div><p>Gesti&oacute;n de repositorios.</p></div>
-                        <div class="check-item"><div class="check-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00A0E1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div><p>Web 3.0 y 4.0.</p></div>
-                        <div class="check-item"><div class="check-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00A0E1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div><p>An&aacute;lisis de datos.</p></div>
-                        <div class="check-item"><div class="check-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00A0E1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div><p>Ciencia de datos.</p></div>
+                        <?php foreach ($ticItems as $it): ?>
+                        <div class="check-item"><div class="check-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00A0E1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div><p><?php echo htmlspecialchars($it['texto']); ?></p></div>
+                        <?php endforeach; ?>
                     </div>
                 </div>
+                <?php endif; ?>
             </div>
         </section>
+        <?php endif; ?>
 
         <?php if (!empty($secundarias)): ?>
         <section class="services-preview">

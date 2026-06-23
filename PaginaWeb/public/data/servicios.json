@@ -209,10 +209,37 @@
     {
         "id": 24,
         "nombre": "Servicios Inmobiliarios",
-        "descripcion": "Servicios inmobiliarios, limpieza, jardinería u otros que se demanden.",
+        "descripcion": "Servicios inmobiliarios, limpieza, jardiner\u00eda u otros que se demanden.",
         "tipo": "secundaria",
         "icono": "llave",
         "orden": 16,
+        "created_at": "2025-01-01 00:00"
+    },
+    {
+        "id": 25,
+        "nombre": "Asesor\u00eda t\u00e9cnica y legal",
+        "descripcion": "Acompa\u00f1amiento integral a empresas de reciente creaci\u00f3n o en proceso de incubaci\u00f3n, orientado a la toma de decisiones t\u00e9cnicas, jur\u00eddicas y organizacionales.",
+        "tipo": "estrategico",
+        "icono": "checked",
+        "orden": 1,
+        "created_at": "2025-01-01 00:00"
+    },
+    {
+        "id": 26,
+        "nombre": "Acceso a redes de inversionistas",
+        "descripcion": "Vinculaci\u00f3n con redes de inversionistas y actores estrat\u00e9gicos que facilitan el financiamiento y escalamiento de proyectos innovadores.",
+        "tipo": "estrategico",
+        "icono": "personas",
+        "orden": 2,
+        "created_at": "2025-01-01 00:00"
+    },
+    {
+        "id": 27,
+        "nombre": "Arrendamiento de espacios tecnol\u00f3gicos",
+        "descripcion": "Arrendamiento de espacios con servicios de conectividad, suministro el\u00e9ctrico y condiciones adecuadas para el desarrollo empresarial y tecnol\u00f3gico.",
+        "tipo": "estrategico",
+        "icono": "casa",
+        "orden": 3,
         "created_at": "2025-01-01 00:00"
     }
 ]

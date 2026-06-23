@@ -1,0 +1,18 @@
+[
+  { "id": 1, "texto": "Desarrollo de sitios web.", "orden": 1 },
+  { "id": 2, "texto": "Sistemas de informaci\u00f3n a la medida.", "orden": 2 },
+  { "id": 3, "texto": "Implementaci\u00f3n de t\u00e9cnicas y modelos de Inteligencia Artificial.", "orden": 3 },
+  { "id": 4, "texto": "Ecosistemas inteligentes.", "orden": 4 },
+  { "id": 5, "texto": "Formaci\u00f3n y capacitaci\u00f3n en sistemas de gesti\u00f3n de la informaci\u00f3n.", "orden": 5 },
+  { "id": 6, "texto": "Formaci\u00f3n y capacitaci\u00f3n en IA para empresarios.", "orden": 6 },
+  { "id": 7, "texto": "Gesti\u00f3n de plataformas ORM y ERP.", "orden": 7 },
+  { "id": 8, "texto": "An\u00e1lisis cienciom\u00e9trico y estad\u00edstico.", "orden": 8 },
+  { "id": 9, "texto": "Dise\u00f1o y gesti\u00f3n de bases de datos.", "orden": 9 },
+  { "id": 10, "texto": "Sistemas de informaci\u00f3n geogr\u00e1fica (SIG).", "orden": 10 },
+  { "id": 11, "texto": "Computaci\u00f3n gr\u00e1fica.", "orden": 11 },
+  { "id": 12, "texto": "Dise\u00f1o de interfaces visuales Backend y Frontend.", "orden": 12 },
+  { "id": 13, "texto": "Gesti\u00f3n de repositorios.", "orden": 13 },
+  { "id": 14, "texto": "Web 3.0 y 4.0.", "orden": 14 },
+  { "id": 15, "texto": "An\u00e1lisis de datos.", "orden": 15 },
+  { "id": 16, "texto": "Ciencia de datos.", "orden": 16 }
+]

@@ -16,11 +16,29 @@ $tab = isset($_GET['tab']) ? $_GET['tab'] : 'primaria';
 $message = '';
 $error = '';
 
+$ticFile = DATA_DIR . '/tic.json';
+
+function loadTIC($file) {
+    if (!file_exists($file)) return array();
+    $json = file_get_contents($file);
+    $data = json_decode($json, true);
+    return is_array($data) ? $data : array();
+}
+
+function saveTIC($file, $data) {
+    $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+    file_put_contents($file, $json);
+}
+
 if (isset($_GET['msg'])) {
     $msg = $_GET['msg'];
     if ($msg === 'creado') $message = 'Servicio creado correctamente.';
     elseif ($msg === 'editado') $message = 'Servicio actualizado correctamente.';
     elseif ($msg === 'eliminado') $message = 'Servicio eliminado.';
+    elseif ($msg === 'tic_creado') $message = 'Ítem TIC agregado correctamente.';
+    elseif ($msg === 'tic_editado') $message = 'Ítem TIC actualizado correctamente.';
+    elseif ($msg === 'tic_eliminado') $message = 'Ítem TIC eliminado correctamente.';
+    elseif ($msg === 'tic_reordenado') $message = 'Ítems TIC reordenados correctamente.';
 }
 
 $iconos = array(
@@ -58,6 +76,67 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 header('Location: servicios.php?tab=' . $tab . '&msg=eliminado');
                 exit;
             }
+        } elseif ($action === 'tic_create') {
+            $texto = trim($_POST['tic_texto'] ?? '');
+            $orden = intval($_POST['tic_orden'] ?? count(loadTIC($ticFile)) + 1);
+            if (!empty($texto)) {
+                $items = loadTIC($ticFile);
+                $newId = 1;
+                foreach ($items as $it) {
+                    if ($it['id'] >= $newId) $newId = $it['id'] + 1;
+                }
+                $items[] = array('id' => $newId, 'texto' => $texto, 'orden' => $orden);
+                saveTIC($ticFile, $items);
+                header('Location: servicios.php?tab=estrategico&msg=tic_creado');
+                exit;
+            } else {
+                $error = 'El texto del ítem TIC es obligatorio.';
+            }
+        } elseif ($action === 'tic_update') {
+            $id = intval($_POST['id'] ?? 0);
+            $texto = trim($_POST['tic_texto'] ?? '');
+            $orden = intval($_POST['tic_orden'] ?? 1);
+            if ($id > 0 && !empty($texto)) {
+                $items = loadTIC($ticFile);
+                foreach ($items as &$it) {
+                    if ($it['id'] === $id) {
+                        $it['texto'] = $texto;
+                        $it['orden'] = $orden;
+                        break;
+                    }
+                }
+                saveTIC($ticFile, $items);
+                header('Location: servicios.php?tab=estrategico&msg=tic_editado');
+                exit;
+            } else {
+                $error = 'Datos inválidos para actualizar ítem TIC.';
+            }
+        } elseif ($action === 'tic_delete') {
+            $deleteId = intval($_POST['id'] ?? 0);
+            if ($deleteId > 0) {
+                $items = loadTIC($ticFile);
+                $items = array_filter($items, function($it) use ($deleteId) {
+                    return $it['id'] !== $deleteId;
+                });
+                $items = array_values($items);
+                saveTIC($ticFile, $items);
+                header('Location: servicios.php?tab=estrategico&msg=tic_eliminado');
+                exit;
+            }
+        } elseif ($action === 'tic_reorder') {
+            $order = $_POST['order'] ?? array();
+            $items = loadTIC($ticFile);
+            foreach ($order as $idx => $idVal) {
+                foreach ($items as &$it) {
+                    if ($it['id'] === intval($idVal)) {
+                        $it['orden'] = $idx + 1;
+                        break;
+                    }
+                }
+            }
+            saveTIC($ticFile, $items);
+            header('Location: servicios.php?tab=estrategico&msg=tic_reordenado');
+            exit;
         } else {
             $nombre = trim($_POST['nombre'] ?? '');
             $descripcion = trim($_POST['descripcion'] ?? '');
@@ -107,6 +186,7 @@ if ($action === 'edit' && $id > 0) {
 
 $primarias = array();
 $secundarias = array();
+$estrategicos = array();
 if ($action === 'list') {
     $all = Storage::read('servicios');
     usort($all, function($a, $b) {
@@ -118,11 +198,18 @@ if ($action === 'list') {
     foreach ($all as $s) {
         if ($s['tipo'] === 'primaria') {
             $primarias[] = $s;
+        } elseif ($s['tipo'] === 'estrategico') {
+            $estrategicos[] = $s;
         } else {
             $secundarias[] = $s;
         }
     }
 }
+
+$ticItems = loadTIC($ticFile);
+usort($ticItems, function($a, $b) {
+    return ($a['orden'] ?? 0) - ($b['orden'] ?? 0);
+});
 
 $csrfToken = generateCSRFToken();
 ?>
@@ -151,6 +238,24 @@ $csrfToken = generateCSRFToken();
         .servicio-icono { width:36px; height:36px; color:#00A0E1; flex-shrink:0; }
         .servicio-icono svg { width:100%; height:100%; }
         .servicio-row { display:flex; align-items:center; gap:10px; }
+
+        .tic-section { margin-top:32px; border-top:2px solid #e0e0e0; padding-top:24px; }
+        .tic-section h3 { color:#1a1a2e; margin-bottom:16px; font-size:1.1rem; }
+        .tic-form { display:flex; gap:12px; align-items:flex-end; margin-bottom:20px; flex-wrap:wrap; }
+        .tic-form .form-group { margin-bottom:0; flex:1; min-width:200px; }
+        .tic-form .form-group label { font-size:0.82rem; }
+        .tic-list { }
+        .tic-row { display:flex; align-items:center; gap:12px; padding:10px 14px; background:#fff; border-radius:8px; margin-bottom:6px; box-shadow:0 1px 4px rgba(0,0,0,0.05); cursor:grab; }
+        .tic-row.dragging { opacity:0.5; }
+        .tic-row .drag-handle { cursor:grab; color:#ccc; font-size:1rem; user-select:none; }
+        .tic-row .tic-text { flex:1; font-size:0.9rem; }
+        .tic-row .tic-orden { color:#888; font-size:0.78rem; min-width:40px; text-align:center; }
+        .tic-row .actions { display:flex; gap:4px; }
+        .tic-inline-edit { margin-bottom:10px; }
+        .tic-inline-edit form { display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap; }
+        .tic-inline-edit .form-group { margin-bottom:0; }
+        .tic-inline-edit input[type="text"] { min-width:250px; }
+        @media (max-width:768px) { .tic-form { flex-direction:column; } }
     </style>
 </head>
 <body>
@@ -171,12 +276,17 @@ $csrfToken = generateCSRFToken();
 
                 <?php if ($action === 'list'): ?>
                     <div class="tabs-nav">
-                        <a href="?tab=primaria" class="<?php echo $tab === 'primaria' ? 'active' : ''; ?>">Actividades Primarias</a>
-                        <a href="?tab=secundaria" class="<?php echo $tab === 'secundaria' ? 'active' : ''; ?>">Actividades Secundarias</a>
+                        <a href="?tab=primaria" class="<?php echo $tab === 'primaria' ? 'active' : ''; ?>">Primarias</a>
+                        <a href="?tab=secundaria" class="<?php echo $tab === 'secundaria' ? 'active' : ''; ?>">Secundarias</a>
+                        <a href="?tab=estrategico" class="<?php echo $tab === 'estrategico' ? 'active' : ''; ?>">Estratégicos</a>
                     </div>
 
                     <div class="panel"><div class="panel-body">
-                        <?php $items = $tab === 'primaria' ? $primarias : $secundarias; ?>
+                        <?php
+                        if ($tab === 'primaria') $items = $primarias;
+                        elseif ($tab === 'estrategico') $items = $estrategicos;
+                        else $items = $secundarias;
+                        ?>
                         <?php if (empty($items)): ?>
                             <p class="empty">No hay servicios en esta categor&iacute;a.</p>
                         <?php else: ?>
@@ -208,6 +318,63 @@ $csrfToken = generateCSRFToken();
                         <?php endif; ?>
                     </div></div>
 
+                    <?php if ($tab === 'estrategico'): ?>
+                    <div class="tic-section">
+                        <h3>Servicios TIC</h3>
+                        <p style="color:#888;font-size:0.85rem;margin-bottom:16px;">Ítems que aparecen en la lista "Servicios vinculados a las Tecnologías de la Información y las Comunicaciones".</p>
+
+                        <form class="tic-form" method="POST" action="?action=tic_create">
+                            <?php echo csrfField(); ?>
+                            <div class="form-group">
+                                <label for="tic_texto">Texto del servicio</label>
+                                <input type="text" id="tic_texto" name="tic_texto" required placeholder="Ej: Desarrollo de sitios web.">
+                            </div>
+                            <div class="form-group" style="min-width:80px;flex:0 0 80px;">
+                                <label for="tic_orden">Orden</label>
+                                <input type="number" id="tic_orden" name="tic_orden" min="1" value="<?php echo count($ticItems) + 1; ?>">
+                            </div>
+                            <button type="submit" class="btn btn-success">Agregar</button>
+                        </form>
+
+                        <?php if (empty($ticItems)): ?>
+                            <p class="empty">No hay ítems TIC. Agrega el primero.</p>
+                        <?php else: ?>
+                            <div class="tic-list" id="ticList">
+                                <?php foreach ($ticItems as $it): ?>
+                                <div class="tic-row" data-id="<?php echo $it['id']; ?>">
+                                    <span class="drag-handle">☰</span>
+                                    <span class="tic-text"><?php echo htmlspecialchars($it['texto']); ?></span>
+                                    <span class="tic-orden">Ord. <?php echo intval($it['orden']); ?></span>
+                                    <div class="actions">
+                                        <button class="btn btn-sm btn-primary" data-tic-edit="<?php echo $it['id']; ?>">Editar</button>
+                                        <form class="delete-form" method="POST" action="?action=tic_delete" data-confirm="Eliminar este ítem TIC?">
+                                            <?php echo csrfField(); ?>
+                                            <input type="hidden" name="id" value="<?php echo $it['id']; ?>">
+                                            <button type="submit" class="btn btn-sm btn-danger">X</button>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="tic-inline-edit" id="ticEdit-<?php echo $it['id']; ?>" style="display:none;">
+                                    <form method="POST" action="?action=tic_update">
+                                        <?php echo csrfField(); ?>
+                                        <input type="hidden" name="id" value="<?php echo $it['id']; ?>">
+                                        <div class="form-group">
+                                            <input type="text" name="tic_texto" required value="<?php echo htmlspecialchars($it['texto']); ?>">
+                                        </div>
+                                        <div class="form-group" style="min-width:70px;flex:0 0 70px;">
+                                            <input type="number" name="tic_orden" min="1" value="<?php echo intval($it['orden']); ?>">
+                                        </div>
+                                        <button type="submit" class="btn btn-sm btn-success">Guardar</button>
+                                        <button type="button" class="btn btn-sm btn-secondary" data-tic-cancel="<?php echo $it['id']; ?>">Cancelar</button>
+                                    </form>
+                                </div>
+                                <?php endforeach; ?>
+                            </div>
+                            <p style="color:#aaa;font-size:0.78rem;margin-top:8px;">Arrastra los ítems para reordenar (el orden se guarda automáticamente).</p>
+                        <?php endif; ?>
+                    </div>
+                    <?php endif; ?>
+
                 <?php elseif ($action === 'new' || $action === 'edit'): ?>
                     <div class="form-card">
                         <form method="POST">
@@ -222,6 +389,7 @@ $csrfToken = generateCSRFToken();
                                     <select id="tipo" name="tipo" required>
                                         <option value="primaria" <?php echo ($servicio && $servicio['tipo'] === 'primaria') ? 'selected' : ($tab === 'primaria' ? 'selected' : ''); ?>>Actividad Primaria</option>
                                         <option value="secundaria" <?php echo ($servicio && $servicio['tipo'] === 'secundaria') ? 'selected' : ($tab === 'secundaria' ? 'selected' : ''); ?>>Actividad Secundaria</option>
+                                        <option value="estrategico" <?php echo ($servicio && $servicio['tipo'] === 'estrategico') ? 'selected' : ($tab === 'estrategico' ? 'selected' : ''); ?>>Estratégico</option>
                                     </select>
                                 </div>
                             </div>
@@ -254,5 +422,86 @@ $csrfToken = generateCSRFToken();
             </div>
         </main>
     </div>
+
+    <script>
+    (function() {
+        var ticEditBtns = document.querySelectorAll('[data-tic-edit]');
+        ticEditBtns.forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var id = this.dataset.ticEdit;
+                var form = document.getElementById('ticEdit-' + id);
+                if (form) form.style.display = form.style.display === 'none' ? 'flex' : 'none';
+            });
+        });
+
+        var ticCancelBtns = document.querySelectorAll('[data-tic-cancel]');
+        ticCancelBtns.forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var id = this.dataset.ticCancel;
+                var form = document.getElementById('ticEdit-' + id);
+                if (form) form.style.display = 'none';
+            });
+        });
+
+        var ticList = document.getElementById('ticList');
+        if (ticList) {
+            var dragItem = null;
+            var csrf = '<?php echo $csrfToken; ?>';
+
+            ticList.addEventListener('dragstart', function(e) {
+                var row = e.target.closest('.tic-row');
+                if (!row) return;
+                dragItem = row;
+                row.classList.add('dragging');
+                e.dataTransfer.effectAllowed = 'move';
+            });
+
+            ticList.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                var row = e.target.closest('.tic-row');
+                if (!row || row === dragItem) return;
+                var rect = row.getBoundingClientRect();
+                var midY = rect.top + rect.height / 2;
+                if (e.clientY < midY) {
+                    ticList.insertBefore(dragItem, row);
+                } else {
+                    ticList.insertBefore(dragItem, row.nextSibling);
+                }
+            });
+
+            ticList.addEventListener('dragend', function() {
+                if (!dragItem) return;
+                dragItem.classList.remove('dragging');
+
+                var rows = ticList.querySelectorAll('.tic-row');
+                var order = [];
+                rows.forEach(function(r) { order.push(r.dataset.id); });
+
+                var form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '?action=tic_reorder';
+                var inp = document.createElement('input');
+                inp.type = 'hidden';
+                inp.name = '<?php echo CSRF_TOKEN_NAME; ?>';
+                inp.value = csrf;
+                form.appendChild(inp);
+                order.forEach(function(id) {
+                    var o = document.createElement('input');
+                    o.type = 'hidden';
+                    o.name = 'order[]';
+                    o.value = id;
+                    form.appendChild(o);
+                });
+                document.body.appendChild(form);
+                form.submit();
+                dragItem = null;
+            });
+
+            ticList.querySelectorAll('.tic-row').forEach(function(el) {
+                el.draggable = true;
+            });
+        }
+    })();
+    </script>
 </body>
 </html>
