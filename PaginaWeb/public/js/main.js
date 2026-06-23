@@ -28,11 +28,18 @@ document.addEventListener('DOMContentLoaded', function() {
     var nav = document.getElementById('nav');
 
     // Navbar: transparente sobre carrusel, blanco al hacer scroll
+    var ticking = false;
     function handleScroll() {
-        if (window.scrollY > 100) {
-            header.classList.add('scrolled');
-        } else {
-            header.classList.remove('scrolled');
+        if (!ticking) {
+            window.requestAnimationFrame(function() {
+                if (window.scrollY > 100) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+                ticking = false;
+            });
+            ticking = true;
         }
     }
 
@@ -1019,11 +1026,18 @@ document.addEventListener('DOMContentLoaded', function() {
     var backToTop = document.getElementById('backToTop');
     if (!backToTop) return;
 
+    var backToTopTicking = false;
     window.addEventListener('scroll', function() {
-        if (window.scrollY > 400) {
-            backToTop.classList.add('visible');
-        } else {
-            backToTop.classList.remove('visible');
+        if (!backToTopTicking) {
+            window.requestAnimationFrame(function() {
+                if (window.scrollY > 400) {
+                    backToTop.classList.add('visible');
+                } else {
+                    backToTop.classList.remove('visible');
+                }
+                backToTopTicking = false;
+            });
+            backToTopTicking = true;
         }
     });
 
