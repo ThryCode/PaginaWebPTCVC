@@ -141,6 +141,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $nombre = trim($_POST['nombre'] ?? '');
             $descripcion = trim($_POST['descripcion'] ?? '');
             $tipo = trim($_POST['tipo'] ?? 'primaria');
+            $pagina = trim($_POST['pagina'] ?? 'servicios');
             $icono = trim($_POST['icono'] ?? 'documento');
             $orden = intval($_POST['orden'] ?? 0);
 
@@ -150,7 +151,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $data = array(
                     'nombre' => $nombre,
                     'descripcion' => $descripcion,
-                    'tipo' => $tipo,
+                    'pagina' => $pagina,
+                    'tipo' => $pagina === 'servicios' ? $tipo : '',
                     'icono' => $icono,
                     'orden' => $orden
                 );
@@ -158,11 +160,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 try {
                     if ($action === 'edit' && $id > 0) {
                         Storage::update('servicios', $id, $data);
-                        header('Location: servicios.php?tab=' . $tipo . '&msg=editado');
+                        header('Location: servicios.php?tab=' . $tab . '&msg=editado');
                         exit;
                     } else {
                         Storage::insert('servicios', $data);
-                        header('Location: servicios.php?tab=' . $tipo . '&msg=creado');
+                        header('Location: servicios.php?tab=' . $tab . '&msg=creado');
                         exit;
                     }
                 } catch (Exception $e) {
@@ -180,30 +182,44 @@ if ($action === 'edit' && $id > 0) {
         $action = 'list';
         $error = 'Servicio no encontrado.';
     } else {
-        $tab = $servicio['tipo'] ?? 'primaria';
+        $pag = $servicio['pagina'] ?? 'servicios';
+        if ($pag === 'servicios') {
+            $tab = $servicio['tipo'] ?? 'primaria';
+        } else {
+            $tab = $pag;
+        }
     }
 }
 
 $primarias = array();
 $secundarias = array();
 $estrategicos = array();
+$prodCoop = array();
+$incEmp = array();
 if ($action === 'list') {
     $all = Storage::read('servicios');
-    usort($all, function($a, $b) {
-        if ($a['tipo'] === $b['tipo']) {
-            return $a['orden'] - $b['orden'];
-        }
-        return strcmp($a['tipo'], $b['tipo']);
-    });
     foreach ($all as $s) {
-        if ($s['tipo'] === 'primaria') {
-            $primarias[] = $s;
-        } elseif ($s['tipo'] === 'estrategico') {
-            $estrategicos[] = $s;
-        } else {
-            $secundarias[] = $s;
+        $pag = $s['pagina'] ?? 'servicios';
+        if ($pag === 'servicios') {
+            $t = $s['tipo'] ?? 'secundaria';
+            if ($t === 'primaria') {
+                $primarias[] = $s;
+            } elseif ($t === 'estrategico') {
+                $estrategicos[] = $s;
+            } else {
+                $secundarias[] = $s;
+            }
+        } elseif ($pag === 'producciones-cooperadas') {
+            $prodCoop[] = $s;
+        } elseif ($pag === 'incubacion-empresas') {
+            $incEmp[] = $s;
         }
     }
+    usort($primarias, function($a, $b) { return $a['orden'] - $b['orden']; });
+    usort($secundarias, function($a, $b) { return $a['orden'] - $b['orden']; });
+    usort($estrategicos, function($a, $b) { return $a['orden'] - $b['orden']; });
+    usort($prodCoop, function($a, $b) { return $a['orden'] - $b['orden']; });
+    usort($incEmp, function($a, $b) { return $a['orden'] - $b['orden']; });
 }
 
 $ticItems = loadTIC($ticFile);
@@ -265,7 +281,16 @@ $csrfToken = generateCSRFToken();
         <main class="main-content">
             <header class="topbar">
                 <button class="hamburger" aria-label="Menu" style="display:none;">☰</button>
-                <h1><?php echo $action === 'list' ? 'Servicios' : ($action === 'edit' ? 'Editar Servicio' : 'Nuevo Servicio'); ?></h1>
+                <h1><?php
+                    $pagTitles = array('primaria'=>'Servicios - Primarias', 'secundaria'=>'Servicios - Secundarias', 'estrategico'=>'Servicios - Estratégicos', 'producciones-cooperadas'=>'Producciones Cooperadas', 'incubacion-empresas'=>'Incubación de Empresas');
+                    $listTitle = $pagTitles[$tab] ?? 'Servicios';
+                    if ($action === 'list') {
+                        echo $listTitle;
+                    } else {
+                        $isServicios = in_array($tab, array('primaria','secundaria','estrategico'));
+                        echo ($action === 'edit' ? 'Editar ' : 'Nuevo ') . ($isServicios ? 'Servicio' : 'Elemento');
+                    }
+                ?></h1>
                 <?php if ($action === 'list'): ?>
                     <a href="?action=new&tab=<?php echo $tab; ?>" class="btn btn-primary">+ Nuevo</a>
                 <?php endif; ?>
@@ -279,13 +304,18 @@ $csrfToken = generateCSRFToken();
                         <a href="?tab=primaria" class="<?php echo $tab === 'primaria' ? 'active' : ''; ?>">Primarias</a>
                         <a href="?tab=secundaria" class="<?php echo $tab === 'secundaria' ? 'active' : ''; ?>">Secundarias</a>
                         <a href="?tab=estrategico" class="<?php echo $tab === 'estrategico' ? 'active' : ''; ?>">Estratégicos</a>
+                        <a href="?tab=producciones-cooperadas" class="<?php echo $tab === 'producciones-cooperadas' ? 'active' : ''; ?>">Prod. Cooperadas</a>
+                        <a href="?tab=incubacion-empresas" class="<?php echo $tab === 'incubacion-empresas' ? 'active' : ''; ?>">Incubación</a>
                     </div>
 
                     <div class="panel"><div class="panel-body">
                         <?php
                         if ($tab === 'primaria') $items = $primarias;
+                        elseif ($tab === 'secundaria') $items = $secundarias;
                         elseif ($tab === 'estrategico') $items = $estrategicos;
-                        else $items = $secundarias;
+                        elseif ($tab === 'producciones-cooperadas') $items = $prodCoop;
+                        elseif ($tab === 'incubacion-empresas') $items = $incEmp;
+                        else $items = array();
                         ?>
                         <?php if (empty($items)): ?>
                             <p class="empty">No hay servicios en esta categor&iacute;a.</p>
@@ -375,23 +405,42 @@ $csrfToken = generateCSRFToken();
                     </div>
                     <?php endif; ?>
 
-                <?php elseif ($action === 'new' || $action === 'edit'): ?>
+                <?php elseif ($action === 'new' || $action === 'edit'):
+                    $currentPagina = 'servicios';
+                    $currentTipo = 'primaria';
+                    if ($servicio) {
+                        $currentPagina = $servicio['pagina'] ?? 'servicios';
+                        $currentTipo = $servicio['tipo'] ?? 'primaria';
+                    } else {
+                        $servTabs = array('primaria','secundaria','estrategico');
+                        if (in_array($tab, $servTabs)) {
+                            $currentPagina = 'servicios';
+                            $currentTipo = $tab;
+                        } else {
+                            $currentPagina = $tab;
+                        }
+                    }
+                    $isServiciosForm = $currentPagina === 'servicios';
+                ?>
                     <div class="form-card">
                         <form method="POST">
                             <?php echo csrfField(); ?>
+                            <input type="hidden" name="pagina" value="<?php echo $currentPagina; ?>">
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="nombre">Nombre *</label>
                                     <input type="text" id="nombre" name="nombre" required value="<?php echo $servicio ? htmlspecialchars($servicio['nombre']) : ''; ?>">
                                 </div>
+                                <?php if ($isServiciosForm): ?>
                                 <div class="form-group">
                                     <label for="tipo">Tipo *</label>
                                     <select id="tipo" name="tipo" required>
-                                        <option value="primaria" <?php echo ($servicio && $servicio['tipo'] === 'primaria') ? 'selected' : ($tab === 'primaria' ? 'selected' : ''); ?>>Actividad Primaria</option>
-                                        <option value="secundaria" <?php echo ($servicio && $servicio['tipo'] === 'secundaria') ? 'selected' : ($tab === 'secundaria' ? 'selected' : ''); ?>>Actividad Secundaria</option>
-                                        <option value="estrategico" <?php echo ($servicio && $servicio['tipo'] === 'estrategico') ? 'selected' : ($tab === 'estrategico' ? 'selected' : ''); ?>>Estratégico</option>
+                                        <option value="primaria" <?php echo ($servicio && $currentTipo === 'primaria') ? 'selected' : ($currentTipo === 'primaria' ? 'selected' : ''); ?>>Actividad Primaria</option>
+                                        <option value="secundaria" <?php echo ($servicio && $currentTipo === 'secundaria') ? 'selected' : ($currentTipo === 'secundaria' ? 'selected' : ''); ?>>Actividad Secundaria</option>
+                                        <option value="estrategico" <?php echo ($servicio && $currentTipo === 'estrategico') ? 'selected' : ($currentTipo === 'estrategico' ? 'selected' : ''); ?>>Estratégico</option>
                                     </select>
                                 </div>
+                                <?php endif; ?>
                             </div>
                             <div class="form-group">
                                 <label for="descripcion">Descripci&oacute;n *</label>

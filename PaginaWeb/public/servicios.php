@@ -51,6 +51,8 @@ if (file_exists($serviciosFile)) {
             return strcmp($a['tipo'], $b['tipo']);
         });
         foreach ($all as $s) {
+            $pag = $s['pagina'] ?? 'servicios';
+            if ($pag !== 'servicios') continue;
             if ($s['tipo'] === 'primaria') {
                 $primarias[] = $s;
             } elseif ($s['tipo'] === 'estrategico') {

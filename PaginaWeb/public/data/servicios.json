@@ -4,6 +4,7 @@
         "nombre": "Formulación de Proyectos",
         "descripcion": "Asistencia para la formulación e implementación de proyectos de innovación; incluye la búsqueda de personal idóneo para la formación de equipos de proyecto.",
         "tipo": "primaria",
+        "pagina": "servicios",
         "icono": "proyectos",
         "orden": 1,
         "created_at": "2025-01-01 00:00"
@@ -13,6 +14,7 @@
         "nombre": "Modelos de Negocio",
         "descripcion": "Asistencia para la definición de modelos de negocios.",
         "tipo": "primaria",
+        "pagina": "servicios",
         "icono": "chart",
         "orden": 2,
         "created_at": "2025-01-01 00:00"
@@ -22,6 +24,7 @@
         "nombre": "Cooperación Corporativa",
         "descripcion": "Asistencia para el logro de adecuada interrelación y cooperación corporativa industrial, en las esferas de la ciencia, la tecnología y la innovación.",
         "tipo": "primaria",
+        "pagina": "servicios",
         "icono": "equipo",
         "orden": 3,
         "created_at": "2025-01-01 00:00"
@@ -31,6 +34,7 @@
         "nombre": "Producciones Cooperadas",
         "descripcion": "Producciones cooperadas.",
         "tipo": "primaria",
+        "pagina": "servicios",
         "icono": "enlace",
         "orden": 4,
         "created_at": "2025-01-01 00:00"
@@ -40,6 +44,7 @@
         "nombre": "Representación Comercial",
         "descripcion": "Servicios de representación comercial, contabilidad y asesoría jurídica.",
         "tipo": "primaria",
+        "pagina": "servicios",
         "icono": "carpeta",
         "orden": 5,
         "created_at": "2025-01-01 00:00"
@@ -49,6 +54,7 @@
         "nombre": "Alquiler de Locales",
         "descripcion": "Alquiler de locales con facilidades para negocios y proyectos, y acceso a Internet.",
         "tipo": "primaria",
+        "pagina": "servicios",
         "icono": "edificio",
         "orden": 6,
         "created_at": "2025-01-01 00:00"
@@ -58,6 +64,7 @@
         "nombre": "Capacitación",
         "descripcion": "Cursos generales de capacitación y personalizados para miembros de los equipos de proyecto y los encargados del proceso de innovación.",
         "tipo": "primaria",
+        "pagina": "servicios",
         "icono": "libro",
         "orden": 7,
         "created_at": "2025-01-01 00:00"
@@ -67,6 +74,7 @@
         "nombre": "Búsqueda de Financiamiento",
         "descripcion": "Asistencia para la búsqueda de financiamiento para los procesos de incubación.",
         "tipo": "primaria",
+        "pagina": "servicios",
         "icono": "moneda",
         "orden": 8,
         "created_at": "2025-01-01 00:00"
@@ -76,6 +84,7 @@
         "nombre": "Asesoría y Consultoría",
         "descripcion": "Brindar servicios de asesoría y consultoría especializada y otras asociadas al desarrollo de sistemas de gestión empresarial, sus componentes o procesos claves.",
         "tipo": "secundaria",
+        "pagina": "servicios",
         "icono": "documento",
         "orden": 1,
         "created_at": "2025-01-01 00:00"
@@ -85,6 +94,7 @@
         "nombre": "Comercio Exterior",
         "descripcion": "Ejecutar las operaciones de Comercio Exterior relacionadas con los bienes y servicios según nomenclatura aprobada por el MINCEX.",
         "tipo": "secundaria",
+        "pagina": "servicios",
         "icono": "globo",
         "orden": 2,
         "created_at": "2025-01-01 00:00"
@@ -94,6 +104,7 @@
         "nombre": "Atención a Delegaciones",
         "descripcion": "Brindar servicios de atención a delegaciones extranjeras y nacionales, con la prestación de servicios logísticos.",
         "tipo": "secundaria",
+        "pagina": "servicios",
         "icono": "personas",
         "orden": 3,
         "created_at": "2025-01-01 00:00"
@@ -103,6 +114,7 @@
         "nombre": "Trámites",
         "descripcion": "Servicios de trámites a personas naturales nacionales o extranjeras vinculadas a actividades afines a la organización.",
         "tipo": "secundaria",
+        "pagina": "servicios",
         "icono": "clipboard",
         "orden": 4,
         "created_at": "2025-01-01 00:00"
@@ -112,6 +124,7 @@
         "nombre": "Protocolo",
         "descripcion": "Brindar servicios de Protocolo.",
         "tipo": "secundaria",
+        "pagina": "servicios",
         "icono": "estrella",
         "orden": 5,
         "created_at": "2025-01-01 00:00"
@@ -121,6 +134,7 @@
         "nombre": "Alquiler de Espacios",
         "descripcion": "Prestar servicio de alquiler de parqueos, espacios, locales y salones pertenecientes a la Sociedad Mercantil.",
         "tipo": "secundaria",
+        "pagina": "servicios",
         "icono": "edificio",
         "orden": 6,
         "created_at": "2025-01-01 00:00"
@@ -130,6 +144,7 @@
         "nombre": "Capacitación Técnica",
         "descripcion": "Brindar servicios de capacitación, entrenamiento y certificación técnico-profesional especializada.",
         "tipo": "secundaria",
+        "pagina": "servicios",
         "icono": "libro",
         "orden": 7,
         "created_at": "2025-01-01 00:00"
@@ -139,6 +154,7 @@
         "nombre": "Representación Comercial",
         "descripcion": "Brindar servicios de representación comercial en el territorio nacional y en el exterior.",
         "tipo": "secundaria",
+        "pagina": "servicios",
         "icono": "carpeta",
         "orden": 8,
         "created_at": "2025-01-01 00:00"
@@ -148,6 +164,7 @@
         "nombre": "Eventos Científicos",
         "descripcion": "Brindar servicios para la organización y desarrollo de eventos científicos y técnicos.",
         "tipo": "secundaria",
+        "pagina": "servicios",
         "icono": "calendario",
         "orden": 9,
         "created_at": "2025-01-01 00:00"
@@ -157,6 +174,7 @@
         "nombre": "Promoción de Negocios",
         "descripcion": "Promocionar oportunidades de negocios mediante lanzamiento de proyectos, licitaciones institucionales, evento de negocio, entre otros.",
         "tipo": "secundaria",
+        "pagina": "servicios",
         "icono": "chart",
         "orden": 10,
         "created_at": "2025-01-01 00:00"
@@ -166,6 +184,7 @@
         "nombre": "Alojamiento",
         "descripcion": "Gestionar y brindar servicios de alojamiento no turístico a personas naturales y jurídicas que lo soliciten.",
         "tipo": "secundaria",
+        "pagina": "servicios",
         "icono": "casa",
         "orden": 11,
         "created_at": "2025-01-01 00:00"
@@ -175,6 +194,7 @@
         "nombre": "Impresión",
         "descripcion": "Gestionar y prestar servicios de impresión de documentos y materiales en diferentes soportes.",
         "tipo": "secundaria",
+        "pagina": "servicios",
         "icono": "impresora",
         "orden": 12,
         "created_at": "2025-01-01 00:00"
@@ -184,6 +204,7 @@
         "nombre": "Servicios TIC",
         "descripcion": "Servicios asociados a las tecnologías de informática y las comunicaciones (TIC).",
         "tipo": "secundaria",
+        "pagina": "servicios",
         "icono": "monitor",
         "orden": 13,
         "created_at": "2025-01-01 00:00"
@@ -193,6 +214,7 @@
         "nombre": "Venta de Productos",
         "descripcion": "Venta mayorista y minorista de productos no alimenticios y alimentos.",
         "tipo": "secundaria",
+        "pagina": "servicios",
         "icono": "carrito",
         "orden": 14,
         "created_at": "2025-01-01 00:00"
@@ -202,6 +224,7 @@
         "nombre": "Servicios Gastronómicos",
         "descripcion": "Servicios gastronómicos y\/o de alimentación a personas naturales y jurídicas.",
         "tipo": "secundaria",
+        "pagina": "servicios",
         "icono": "restaurante",
         "orden": 15,
         "created_at": "2025-01-01 00:00"
@@ -209,17 +232,19 @@
     {
         "id": 24,
         "nombre": "Servicios Inmobiliarios",
-        "descripcion": "Servicios inmobiliarios, limpieza, jardiner\u00eda u otros que se demanden.",
+        "descripcion": "Servicios inmobiliarios, limpieza, jardinería u otros que se demanden.",
         "tipo": "secundaria",
+        "pagina": "servicios",
         "icono": "llave",
         "orden": 16,
         "created_at": "2025-01-01 00:00"
     },
     {
         "id": 25,
-        "nombre": "Asesor\u00eda t\u00e9cnica y legal",
-        "descripcion": "Acompa\u00f1amiento integral a empresas de reciente creaci\u00f3n o en proceso de incubaci\u00f3n, orientado a la toma de decisiones t\u00e9cnicas, jur\u00eddicas y organizacionales.",
+        "nombre": "Asesoría técnica y legal",
+        "descripcion": "Acompañamiento integral a empresas de reciente creación o en proceso de incubación, orientado a la toma de decisiones técnicas, jurídicas y organizacionales.",
         "tipo": "estrategico",
+        "pagina": "servicios",
         "icono": "checked",
         "orden": 1,
         "created_at": "2025-01-01 00:00"
@@ -227,19 +252,111 @@
     {
         "id": 26,
         "nombre": "Acceso a redes de inversionistas",
-        "descripcion": "Vinculaci\u00f3n con redes de inversionistas y actores estrat\u00e9gicos que facilitan el financiamiento y escalamiento de proyectos innovadores.",
+        "descripcion": "Vinculación con redes de inversionistas y actores estratégicos que facilitan el financiamiento y escalamiento de proyectos innovadores.",
         "tipo": "estrategico",
+        "pagina": "servicios",
         "icono": "personas",
         "orden": 2,
         "created_at": "2025-01-01 00:00"
     },
     {
         "id": 27,
-        "nombre": "Arrendamiento de espacios tecnol\u00f3gicos",
-        "descripcion": "Arrendamiento de espacios con servicios de conectividad, suministro el\u00e9ctrico y condiciones adecuadas para el desarrollo empresarial y tecnol\u00f3gico.",
+        "nombre": "Arrendamiento de espacios tecnológicos",
+        "descripcion": "Arrendamiento de espacios con servicios de conectividad, suministro eléctrico y condiciones adecuadas para el desarrollo empresarial y tecnológico.",
         "tipo": "estrategico",
+        "pagina": "servicios",
         "icono": "casa",
         "orden": 3,
+        "created_at": "2025-01-01 00:00"
+    },
+    {
+        "id": 28,
+        "nombre": "Compartir Recursos",
+        "descripcion": "Las empresas pueden compartir instalaciones, equipos y materias primas, lo que reduce costos y optimiza el uso de recursos.",
+        "pagina": "producciones-cooperadas",
+        "icono": "edificio",
+        "orden": 1,
+        "created_at": "2025-01-01 00:00"
+    },
+    {
+        "id": 29,
+        "nombre": "Acceso a Nuevos Mercados",
+        "descripcion": "Al cooperar, las empresas pueden acceder a mercados que de otra manera serían difíciles de alcanzar, aumentando su competitividad.",
+        "pagina": "producciones-cooperadas",
+        "icono": "globo",
+        "orden": 2,
+        "created_at": "2025-01-01 00:00"
+    },
+    {
+        "id": 30,
+        "nombre": "Innovación y Desarrollo",
+        "descripcion": "Permite el intercambio de conocimientos y tecnologías, fomentando la innovación y el desarrollo de nuevos productos o servicios.",
+        "pagina": "producciones-cooperadas",
+        "icono": "estrella",
+        "orden": 3,
+        "created_at": "2025-01-01 00:00"
+    },
+    {
+        "id": 31,
+        "nombre": "Reducción de Riesgos",
+        "descripcion": "Compartir los riesgos asociados con nuevos proyectos o mercados puede hacer que las inversiones sean más seguras y manejables.",
+        "pagina": "producciones-cooperadas",
+        "icono": "checked",
+        "orden": 4,
+        "created_at": "2025-01-01 00:00"
+    },
+    {
+        "id": 32,
+        "nombre": "Objetivo",
+        "descripcion": "Aumentar las probabilidades de éxito de las nuevas empresas, ayudándolas a superar los desafíos iniciales y a crecer de manera sostenible.",
+        "pagina": "incubacion-empresas",
+        "icono": "proyectos",
+        "orden": 1,
+        "created_at": "2025-01-01 00:00"
+    },
+    {
+        "id": 33,
+        "nombre": "Capacitación y talleres",
+        "descripcion": "Proveen formación en áreas clave como marketing, finanzas y gestión empresarial.",
+        "pagina": "incubacion-empresas",
+        "icono": "libro",
+        "orden": 2,
+        "created_at": "2025-01-01 00:00"
+    },
+    {
+        "id": 34,
+        "nombre": "Asesoramiento y mentoría",
+        "descripcion": "Expertos en negocios ayudan a los emprendedores a desarrollar sus ideas y estrategias.",
+        "pagina": "incubacion-empresas",
+        "icono": "personas",
+        "orden": 3,
+        "created_at": "2025-01-01 00:00"
+    },
+    {
+        "id": 35,
+        "nombre": "Redes de contactos",
+        "descripcion": "Facilitan conexiones con otros emprendedores, inversores y profesionales del sector.",
+        "pagina": "incubacion-empresas",
+        "icono": "enlace",
+        "orden": 4,
+        "created_at": "2025-01-01 00:00"
+    },
+    {
+        "id": 36,
+        "nombre": "Espacio de trabajo",
+        "descripcion": "Ofrecen oficinas y espacios compartidos donde los emprendedores pueden trabajar y colaborar.",
+        "pagina": "incubacion-empresas",
+        "icono": "edificio",
+        "orden": 5,
+        "created_at": "2025-01-01 00:00"
+    },
+    {
+        "id": 37,
+        "nombre": "Acceso a Financiamiento",
+        "descripcion": "Ayudan a las startups a conseguir fondos a través de inversores, subvenciones y otros medios.",
+        "pagina": "incubacion-empresas",
+        "icono": "moneda",
+        "orden": 6,
         "created_at": "2025-01-01 00:00"
     }
 ]
