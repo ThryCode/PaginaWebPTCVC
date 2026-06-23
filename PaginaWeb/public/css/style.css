@@ -686,9 +686,13 @@ body {
     position: absolute;
     left: -90px;
     top: 0;
+    width: 90px;
     display: flex;
     align-items: center;
-    gap: 12px;
+    justify-content: flex-end;
+    padding-right: 28px;
+    gap: 10px;
+    box-sizing: border-box;
 }
 
 .timeline-year {
@@ -2482,6 +2486,9 @@ body {
 
     .timeline-marker {
         left: -60px;
+        width: 60px;
+        padding-right: 26px;
+        gap: 6px;
     }
 
     .timeline-year {
