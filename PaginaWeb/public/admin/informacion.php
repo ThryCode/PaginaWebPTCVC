@@ -595,7 +595,7 @@ $csrfToken = generateCSRFToken();
                     </div></div>
 
                     <?php if (!empty($proyectosStats)): ?>
-                    <h3 style="margin-bottom:16px;color:#1a1a2e;">Vista previa</h3>
+                    <h3 style="margin-top:32px;margin-bottom:16px;color:#1a1a2e;">Vista previa</h3>
                     <div class="stats-grid">
                         <?php foreach ($proyectosStats as $s): ?>
                         <div class="stat-card">
