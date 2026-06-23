@@ -1,9 +1,6 @@
 <?php
-require_once '../api/auth.php';
-require_once '../api/storage.php';
-
-$auth = new Auth();
-$auth->requireLogin();
+header('Location: inicio.php?tab=opiniones');
+exit;
 
 $opiniones = Storage::read('opiniones');
 usort($opiniones, function($a, $b) {

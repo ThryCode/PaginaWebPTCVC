@@ -1,12 +1,6 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 0);
-
-require_once '../api/auth.php';
-require_once '../api/storage.php';
-
-$auth = new Auth();
-$auth->requireLogin();
+header('Location: inicio.php?tab=contadores');
+exit;
 
 $countersFile = DATA_DIR . '/counters.json';
 
