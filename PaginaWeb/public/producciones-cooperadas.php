@@ -64,7 +64,21 @@ include 'includes/header.php';
                     <p>Las producciones cooperadas entre empresas, tambi&eacute;n conocidas como cooperaci&oacute;n empresarial, son alianzas estrat&eacute;gicas donde dos o m&aacute;s empresas colaboran para alcanzar objetivos comunes. Este tipo de cooperaci&oacute;n puede tomar varias formas y tiene m&uacute;ltiples beneficios:</p>
                 </div>
                 <div class="about-image">
-                    <div class="placeholder-img">Producciones Cooperadas</div>
+                    <div class="about-image-card">
+                        <div class="about-image-bg"></div>
+                        <div class="about-image-content">
+                            <svg class="about-image-icon" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 56L40 20L68 56" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                                <path d="M24 56H56" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+                                <circle cx="26" cy="40" r="6" stroke="white" stroke-width="2" fill="none"/>
+                                <circle cx="54" cy="40" r="6" stroke="white" stroke-width="2" fill="none"/>
+                                <path d="M32 40H48" stroke="white" stroke-width="2" stroke-linecap="round" stroke-dasharray="4 3"/>
+                                <path d="M40 48V56" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M36 62H44" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                            <span class="about-image-label">Cooperaci&oacute;n e Innovaci&oacute;n Empresarial</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>

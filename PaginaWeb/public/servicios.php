@@ -43,17 +43,20 @@ if (file_exists($serviciosFile)) {
     $all = json_decode($raw, true);
     if (is_array($all)) {
         usort($all, function($a, $b) {
-            if ($a['tipo'] === $b['tipo']) {
+            $tipoA = $a['tipo'] ?? '';
+            $tipoB = $b['tipo'] ?? '';
+            if ($tipoA === $tipoB) {
                 return $a['orden'] - $b['orden'];
             }
-            return strcmp($a['tipo'], $b['tipo']);
+            return strcmp($tipoA, $tipoB);
         });
         foreach ($all as $s) {
             $pag = $s['pagina'] ?? 'servicios';
             if ($pag !== 'servicios') continue;
-            if ($s['tipo'] === 'primaria') {
+            $tipo = $s['tipo'] ?? '';
+            if ($tipo === 'primaria') {
                 $primarias[] = $s;
-            } elseif ($s['tipo'] === 'estrategico') {
+            } elseif ($tipo === 'estrategico') {
                 $estrategicos[] = $s;
             } else {
                 $secundarias[] = $s;

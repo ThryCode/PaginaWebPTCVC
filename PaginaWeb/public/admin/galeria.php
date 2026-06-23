@@ -44,7 +44,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $allowedTypes = array('image/jpeg', 'image/png', 'image/gif', 'image/webp');
                 $uploaded = 0;
                 $titulo = trim($_POST['titulo'] ?? '');
-                $descripcion = trim($_POST['descripcion'] ?? '');
 
                 foreach ($_FILES['imagenes']['tmp_name'] as $key => $tmpName) {
                     if ($_FILES['imagenes']['error'][$key] !== UPLOAD_ERR_OK) {
@@ -65,7 +64,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $item = array(
                             'imagen' => 'uploads/galeria/' . $filename,
                             'titulo' => htmlspecialchars($titulo),
-                            'descripcion' => htmlspecialchars($descripcion),
                             'orden' => $uploaded
                         );
                         Storage::insert('galeria', $item);
@@ -84,8 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $updateId = intval($_POST['id'] ?? 0);
             if ($updateId > 0) {
                 $data = array(
-                    'titulo' => htmlspecialchars(trim($_POST['titulo'] ?? '')),
-                    'descripcion' => htmlspecialchars(trim($_POST['descripcion'] ?? ''))
+                    'titulo' => htmlspecialchars(trim($_POST['titulo'] ?? ''))
                 );
                 Storage::update('galeria', $updateId, $data);
                 $message = 'Imagen actualizada.';
@@ -157,7 +154,6 @@ $csrfToken = generateCSRFToken();
                                 <img src="../<?php echo htmlspecialchars($img['imagen']); ?>" alt="<?php echo htmlspecialchars($img['titulo'] ?? ''); ?>">
                                 <div class="gallery-item-info">
                                     <h4><?php echo htmlspecialchars($img['titulo'] ?: 'Sin título'); ?></h4>
-                                    <small><?php echo htmlspecialchars(substr($img['descripcion'] ?? '', 0, 50)); ?></small>
                                 </div>
                                 <div class="gallery-item-actions">
                                     <a href="?action=edit&id=<?php echo $img['id']; ?>" class="btn btn-sm btn-primary">Editar</a>
@@ -181,10 +177,6 @@ $csrfToken = generateCSRFToken();
                                 <div class="form-group">
                                     <label for="titulo">Título</label>
                                     <input type="text" id="titulo" name="titulo">
-                                </div>
-                                <div class="form-group">
-                                    <label for="descripcion">Descripción</label>
-                                    <input type="text" id="descripcion" name="descripcion">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -211,10 +203,6 @@ $csrfToken = generateCSRFToken();
                             <div class="form-group">
                                 <label for="titulo">Título</label>
                                 <input type="text" id="titulo" name="titulo" value="<?php echo htmlspecialchars($imagen['titulo'] ?? ''); ?>">
-                            </div>
-                            <div class="form-group">
-                                <label for="descripcion">Descripción</label>
-                                <textarea id="descripcion" name="descripcion" rows="3"><?php echo htmlspecialchars($imagen['descripcion'] ?? ''); ?></textarea>
                             </div>
                             <div class="form-actions">
                                 <button type="submit" class="btn btn-success">Guardar</button>

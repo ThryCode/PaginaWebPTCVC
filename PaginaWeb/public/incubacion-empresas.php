@@ -64,7 +64,21 @@ include 'includes/header.php';
                     <p>La incubaci&oacute;n de empresas es un proceso dise&ntilde;ado para apoyar a emprendedores y startups en sus etapas iniciales de desarrollo. Las incubadoras de empresas proporcionan una variedad de recursos y servicios.</p>
                 </div>
                 <div class="about-image">
-                    <div class="placeholder-img">Incubaci&oacute;n de Empresas</div>
+                    <div class="about-image-card">
+                        <div class="about-image-bg"></div>
+                        <div class="about-image-content">
+                            <svg class="about-image-icon" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M40 16V28" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+                                <path d="M28 36H52V64C52 66.2 50.2 68 48 68H32C29.8 68 28 66.2 28 64V36Z" stroke="white" stroke-width="2.5" fill="none"/>
+                                <path d="M22 36H58" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+                                <path d="M32 46H48" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M32 54H44" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M40 28C44.4 28 48 31.6 48 36" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                                <path d="M40 28C35.6 28 32 31.6 32 36" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                            </svg>
+                            <span class="about-image-label">Incubaci&oacute;n de Empresas</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>

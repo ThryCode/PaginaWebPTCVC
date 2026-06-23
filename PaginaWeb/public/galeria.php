@@ -18,7 +18,7 @@ include 'includes/header.php';
             </div>
         </section>
 
-        <section class="gallery-section">
+        <section class="gallery-section" style="padding-bottom: 120px;">
             <div class="container">
                 <div id="galleryContainer" class="gallery-grid">
                     <p class="empty">Cargando galería...</p>
