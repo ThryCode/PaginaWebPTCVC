@@ -1,21 +1,21 @@
 {
-    "next_id": 11,
-    "system_pac_hash": "$2y$10$Cq09mWeZOjVt3wOAQAwXfuMdBu6A2zqqfI5Xmq7EUl.nGAt\/QXXNa",
+    "next_id": 12,
+    "system_pac_hash": "$2y$10$Cq09mWeZOjVt3wOAQAwXfuMdBu6A2zqqfI5Xmq7EUl.nGAt/QXXNa",
     "system_pac_created_at": "2026-06-19 17:55:49",
     "users": [
         {
             "id": 3,
-            "nombre": "Casa",
+            "nombre": "marioc@pctvc.cu",
             "email": "marioc@pctvc.cu",
             "rol": "admin",
             "activo": true,
-            "password": "$2a$10$jPJ\/IRCENcfdfLL0GU9Wxud2P1GvT6TJJo9\/r\/Vl\/DsGUSt\/B7uya",
-            "last_login": "2026-06-23 11:48:50",
+            "password": "$2y$10$PiQqtW9I9Rn2kJ6rzlqzVOdgNqi3XOghk6XqJYG.iUtN0fsXocFl2",
+            "last_login": null,
             "created_at": "2026-06-19 13:25:22",
             "pacs": [
                 {
                     "id": 7,
-                    "hash": "$2y$10$uAdIzi7ot\/9DOSrkYnKDH.2U5fK2DoAZ7yVcyIROZGieCplsgXDSm",
+                    "hash": "$2y$10$uAdIzi7ot/9DOSrkYnKDH.2U5fK2DoAZ7yVcyIROZGieCplsgXDSm",
                     "alias": "Casa",
                     "activo": true,
                     "last_used": "2026-06-19 16:52:44",
@@ -80,20 +80,6 @@
             "details": "marioc@pctvc.cu",
             "ip_address": "::1",
             "created_at": "2026-06-22 15:22:21"
-        },
-        {
-            "user_id": null,
-            "action": "pac_verified",
-            "details": "PAC de emergencia verificado",
-            "ip_address": "::1",
-            "created_at": "2026-06-23 10:36:50"
-        },
-        {
-            "user_id": 3,
-            "action": "login",
-            "details": "marioc@pctvc.cu",
-            "ip_address": "::1",
-            "created_at": "2026-06-23 10:36:59"
         },
         {
             "user_id": 3,
