@@ -183,8 +183,8 @@ include 'includes/header.php';
                     <a href="https://www.iasp.ws/" target="_blank" rel="noopener noreferrer">
                         <img src="assets/img/colaboradores/iasp.png" alt="IASP" loading="lazy">
                     </a>
-                    <div>
-                        <img src="assets/img/colaboradores/iasp-latam.jpg" alt="IASP Latam" loading="lazy">
+                    <div class="iasp-latam-logo">
+                        <img src="assets/img/colaboradores/iasp-latam.png" alt="IASP Latam" loading="lazy">
                     </div>
                 </div>
             </div>

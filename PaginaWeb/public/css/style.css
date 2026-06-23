@@ -3855,6 +3855,10 @@ body {
     opacity: 0.7;
 }
 
+.membresia-logos .iasp-latam-logo {
+    background: #ffffff;
+}
+
 .membresia-logos img {
     height: 80px;
     width: auto;
