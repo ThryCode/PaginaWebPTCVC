@@ -10,6 +10,6 @@ Write-Host "  Presiona Ctrl+C para detener." -ForegroundColor Yellow
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host ""
 
-& "G:\Proyects\php\php.exe" -d upload_max_filesize=5M -d post_max_size=8M -S localhost:8000 -t "$PSScriptRoot\public"
+& "E:\Hector\php\php.exe" -d upload_max_filesize=5M -d post_max_size=8M -S localhost:8000 -t "$PSScriptRoot\public"
 
 Read-Host "Presiona Enter para cerrar"
