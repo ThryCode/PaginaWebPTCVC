@@ -55,8 +55,12 @@ include 'includes/header.php';
                     <h2>Alianza, Oportunidad y Desarrollo</h2>
                 </div>
             </div>
-            <button class="carousel-arrow prev" id="carouselPrev">&#10094;</button>
-            <button class="carousel-arrow next" id="carouselNext">&#10095;</button>
+            <button class="carousel-arrow prev" id="carouselPrev" aria-label="Anterior">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="20" height="20"><path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <button class="carousel-arrow next" id="carouselNext" aria-label="Siguiente">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="20" height="20"><path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
             <div class="carousel-dots" id="carouselDots"></div>
         </section>
 

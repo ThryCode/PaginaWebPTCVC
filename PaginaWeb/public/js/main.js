@@ -263,7 +263,10 @@ function handleSubmit(event) {
     var formData = new FormData(form);
 
     submitBtn.disabled = true;
-    submitBtn.textContent = 'Enviando...';
+    var btnText = document.getElementById('contactBtnText');
+    var btnSpinner = document.getElementById('contactBtnSpinner');
+    if (btnText) btnText.style.display = 'none';
+    if (btnSpinner) btnSpinner.style.display = 'inline';
 
     var xhr = new XMLHttpRequest();
     xhr.open('POST', 'api/contact.php', true);
@@ -272,7 +275,8 @@ function handleSubmit(event) {
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
             submitBtn.disabled = false;
-            submitBtn.textContent = 'Enviar Mensaje';
+            if (btnText) btnText.style.display = 'inline';
+            if (btnSpinner) btnSpinner.style.display = 'none';
 
             if (xhr.status === 200) {
                 try {

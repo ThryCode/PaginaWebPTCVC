@@ -122,9 +122,17 @@ include 'includes/header.php';
                             </div>
                             <div id="formMessage" class="form-message"></div>
                             <?= csrfField() ?>
-                            <button type="submit" class="btn btn-primary" style="width:100%">
-                                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="margin-right:8px"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5"/></svg>
-                                Enviar Mensaje
+                            <button type="submit" class="btn btn-primary" id="contactSubmitBtn" style="width:100%">
+                                <span id="contactBtnText">
+                                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="margin-right:8px;vertical-align:middle"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5"/></svg>
+                                    Enviar Mensaje
+                                </span>
+                                <span id="contactBtnSpinner" style="display:none;">
+                                    <svg class="spin" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:8px;vertical-align:middle">
+                                        <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" stroke-linecap="round"/>
+                                    </svg>
+                                    Enviando...
+                                </span>
                             </button>
                         </form>
                     </div>
