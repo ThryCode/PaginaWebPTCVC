@@ -52,7 +52,7 @@ include 'includes/header.php';
 
         <section class="page-header">
             <div class="container">
-                <h2>Producciones Cooperadas</h2>
+                <h1>Producciones Cooperadas</h1>
                 <p>Alianzas estratégicas para el crecimiento empresarial</p>
             </div>
         </section>

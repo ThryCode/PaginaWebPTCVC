@@ -27,7 +27,7 @@ include 'includes/header.php';
 
         <section class="page-header">
             <div class="container">
-                <h2>Quiénes Somos</h2>
+                <h1>Quiénes Somos</h1>
                 <p>Conoce más sobre el Parque Científico Tecnológico de Villa Clara</p>
             </div>
         </section>
@@ -234,6 +234,25 @@ include 'includes/header.php';
                 </div>
             </div>
         </section>
+
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {"@type":"Question","name":"¿Qué es el Parque Científico Tecnológico de Villa Clara?","acceptedAnswer":{"@type":"Answer","text":"El Parque Científico Tecnológico de Villa Clara (PCT Villa Clara) es una empresa cubana que apoya a otras empresas y emprendedores a desarrollar proyectos innovadores y a insertar sus productos en el mercado internacional."}},
+                {"@type":"Question","name":"¿Se obtiene algún beneficio económico por participar en un proyecto?","acceptedAnswer":{"@type":"Answer","text":"Sí, durante los primeros cinco años de funcionamiento de tu proyecto o empresa incubada hay exención de impuestos sobre las utilidades y exención de aranceles de importación de partes, piezas y equipamiento necesario."}},
+                {"@type":"Question","name":"Tengo una idea de proyecto. ¿Cómo puedo desarrollarla en el PCT Villa Clara?","acceptedAnswer":{"@type":"Answer","text":"Debes contactar al PCT para una reunión inicial, presentar tu propuesta formalmente al Consejo Técnico Asesor y, una vez aprobada, firmar un contrato para la fase de incubación."}},
+                {"@type":"Question","name":"¿Puedo inscribirme y participar en proyectos si vivo fuera de Villa Clara?","acceptedAnswer":{"@type":"Answer","text":"Sí, absolutamente. No hay ningún requisito de residencia. Puedes inscribirte y participar en proyectos del PCT Villa Clara aunque vivas fuera de la provincia."}},
+                {"@type":"Question","name":"¿Cuáles son los requisitos para pertenecer al PCT Villa Clara?","acceptedAnswer":{"@type":"Answer","text":"Los requisitos son flexibles. El principal requisito es tener una idea o proyecto con potencial innovador y la voluntad de desarrollarlo en un ecosistema de colaboración."}},
+                {"@type":"Question","name":"¿Qué tipo de apoyo brinda el PCT Villa Clara a las empresas y emprendedores?","acceptedAnswer":{"@type":"Answer","text":"El PCT ofrece apoyo a la innovación y desarrollo de proyectos, apoyo legal y comercial, formación y networking, infraestructura, incentivos fiscales y apoyo a la internacionalización."}},
+                {"@type":"Question","name":"¿Qué tipos de proyectos se desarrollan en el PCT Villa Clara?","acceptedAnswer":{"@type":"Answer","text":"Se desarrollan proyectos industriales, agroindustriales y de biotecnología, energías renovables, transformación digital, e innovación de nuevos productos con alto valor agregado."}},
+                {"@type":"Question","name":"¿Quiénes pueden participar en los proyectos del PCT Villa Clara?","acceptedAnswer":{"@type":"Answer","text":"Personas naturales (emprendedores, estudiantes), empresas estatales y privadas, formas de gestión no estatal, y el sector del conocimiento como investigadores y universidades."}},
+                {"@type":"Question","name":"¿El PCT Villa Clara ofrece servicios de incubación de empresas?","acceptedAnswer":{"@type":"Answer","text":"Sí, la incubación de empresas es una de sus actividades principales, proporcionando un entorno especializado, asesoría, incentivos fiscales, infraestructura y conexiones estratégicas."}},
+                {"@type":"Question","name":"¿Cómo puedo contactar con el PCT Villa Clara para obtener más información?","acceptedAnswer":{"@type":"Answer","text":"Puedes contactar por correo electrónico a dalgys@pctvc.cu o por teléfono al 42281551."}}
+            ]
+        }
+        </script>
 
         <section class="faq-section">
             <div class="container">

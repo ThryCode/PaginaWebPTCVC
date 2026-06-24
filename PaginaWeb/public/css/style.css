@@ -8,7 +8,7 @@
     --secondary-2: #799922;
     --secondary-3: #BFC250;
     --secondary-4: #626514;
-    --secondary-5: #9B9B9B;
+    --secondary-5: #757575;
     --secondary-6: #646464;
     --bg-light: #E6F4FA;
     --danger: #C0392B;
@@ -42,6 +42,21 @@ body {
     margin: 0 auto;
     padding: 0 20px;
 }
+
+.sr-only {
+    position: absolute; width: 1px; height: 1px;
+    padding: 0; margin: -1px; overflow: hidden;
+    clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+
+.skip-link {
+    position: absolute; top: -100%; left: 0; z-index: 10000;
+    padding: 8px 16px; background: #004966; color: #fff;
+    font-weight: 700; text-decoration: none; font-size: 14px;
+}
+.skip-link:focus { top: 0; }
+
+*:focus-visible { outline: 2px solid #00A0E1; outline-offset: 2px; }
 
 /* ============================================
    HEADER / NAVBAR - Transparente sobre carrusel, solido al scroll
@@ -136,7 +151,7 @@ body {
 
 .nav a:hover,
 .nav a.active {
-    background-color: #00A0E1;
+    background-color: #0077B3;
     color: #ffffff !important;
 }
 
@@ -202,7 +217,8 @@ body {
     gap: 2px !important;
 }
 
-.dropdown:hover > .dropdown-menu {
+.dropdown:hover > .dropdown-menu,
+.dropdown:focus-within > .dropdown-menu {
     opacity: 1;
     visibility: visible;
 }
@@ -446,12 +462,12 @@ body {
 
 .btn-outline-green {
     background-color: transparent;
-    color: #00A0E1;
-    border: 2px solid #00A0E1;
+    color: #0077B3;
+    border: 2px solid #0077B3;
 }
 
 .btn-outline-green:hover {
-    background-color: #00A0E1;
+    background-color: #0077B3;
     color: #ffffff;
     transform: translateY(-1px);
 }
@@ -517,7 +533,7 @@ body {
 .card:hover {
     transform: translateY(-10px);
     box-shadow: 0 25px 50px rgba(0, 73, 102, 0.14);
-    border-color: #00A0E1;
+    border-color: #0077B3;
 }
 
 .card-icon {
@@ -533,7 +549,6 @@ body {
     color: #fff;
 }
 
-.card-icon lord-icon,
 .card-icon svg {
     display: block;
 }
@@ -585,7 +600,7 @@ body {
     justify-content: center;
     flex-shrink: 0;
     margin-top: 1px;
-    color: #00A0E1;
+    color: #0077B3;
 }
 
 .check-item p {
@@ -1352,7 +1367,7 @@ body {
 .ventaja-card:hover {
     transform: translateY(-8px);
     box-shadow: 0 18px 40px rgba(0, 73, 102, 0.12);
-    border-color: #00A0E1;
+    border-color: #0077B3;
 }
 
 .ventaja-icon {
@@ -1372,7 +1387,7 @@ body {
 
 .ventaja-icon.bg-blue {
     background: #E0F2FF;
-    color: #00A0E1;
+    color: #0077B3;
 }
 
 .ventaja-icon.bg-emerald {
@@ -1422,7 +1437,7 @@ body {
 .news-subtitle {
     font-size: 0.85rem;
     font-weight: 700;
-    color: #00A0E1;
+    color: #0077B3;
     text-transform: uppercase;
     letter-spacing: 1px;
     margin-bottom: 8px;
@@ -1470,7 +1485,7 @@ body {
 .events-subtitle {
     font-size: 0.85rem;
     font-weight: 700;
-    color: #00A0E1;
+    color: #0077B3;
     text-transform: uppercase;
     letter-spacing: 1px;
     margin-bottom: 8px;
@@ -1580,7 +1595,7 @@ body {
     min-width: 70px;
     border-radius: 14px;
     background: #E6F4FA;
-    color: #00A0E1;
+    color: #0077B3;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1672,7 +1687,7 @@ body {
 
 .news-tag-noticia {
     background: #E0F2FF;
-    color: #00A0E1;
+    color: #0077B3;
 }
 
 .news-tag-evento {
@@ -1792,7 +1807,7 @@ body {
 .form-group textarea:focus,
 .form-group select:focus {
     outline: none;
-    border-color: #00A0E1;
+    border-color: #0077B3;
     background-color: #fff;
     box-shadow: 0 0 0 4px rgba(26, 111, 181, 0.1);
 }
@@ -1876,7 +1891,7 @@ body {
     font-size: 1.2rem;
     font-weight: 700;
     margin-bottom: 25px;
-    color: #00A0E1;
+    color: #66C5EE;
 }
 
 .footer-col ul {
@@ -1895,7 +1910,7 @@ body {
 }
 
 .footer-col a:hover {
-    color: #00A0E1;
+    color: #66C5EE;
 }
 
 .footer-col p {
@@ -2048,6 +2063,11 @@ body {
 .delay-2 { transition-delay: 0.2s !important; }
 .delay-3 { transition-delay: 0.3s !important; }
 .delay-4 { transition-delay: 0.4s !important; }
+.delay-5 { transition-delay: 0.5s !important; }
+.delay-6 { transition-delay: 0.6s !important; }
+.delay-7 { transition-delay: 0.7s !important; }
+
+.empty { color: #757575; text-align: center; padding: 40px 0; font-size: 1rem; }
 
 /* ============================================
    TRANSICION DE PAGINA
@@ -2180,7 +2200,7 @@ body {
 
 .mv-icon.mission-icon {
     background: rgba(0, 160, 225, 0.1);
-    color: #00A0E1;
+    color: #0077B3;
 }
 
 .mv-icon.vision-icon {
@@ -2260,100 +2280,6 @@ body {
 /* ============================================
     PROJECT CARDS (Enhanced)
     ============================================ */
-.project-card {
-    background: #fff;
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 8px 28px rgba(0, 73, 102, 0.07);
-    border: 1px solid #E6F4FA;
-    transition: all 0.4s ease;
-}
-
-.project-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 45px rgba(0, 73, 102, 0.13);
-}
-
-.project-card:hover .project-card-icon svg.icon-proy-biotec {
-    animation: pulse-icon 1s ease-in-out infinite;
-}
-
-.project-card:hover .project-card-icon svg.icon-proy-tic {
-    animation: blink-icon 1.5s ease-in-out infinite;
-}
-
-.project-card:hover .project-card-icon svg.icon-proy-energia {
-    animation: float-icon 1.2s ease-in-out infinite;
-}
-
-.project-card:hover .project-card-icon svg.icon-proy-industria {
-    animation: bounce-icon 0.8s ease-in-out infinite;
-}
-
-.project-card:hover .project-card-icon svg.icon-proy-agricultura {
-    animation: float-icon 1.2s ease-in-out infinite;
-}
-
-.project-card:hover .project-card-icon svg.icon-proy-ambiente {
-    animation: pulse-icon 1s ease-in-out infinite;
-}
-
-.project-card:hover .project-card-icon svg.icon-proy-salud {
-    animation: pulse-icon 1s ease-in-out infinite;
-}
-
-.project-card:hover .project-card-icon svg.icon-proy-educacion {
-    animation: float-icon 1.2s ease-in-out infinite;
-}
-
-.project-card:hover .project-card-icon svg.icon-proy-otros {
-    animation: bounce-icon 0.8s ease-in-out infinite;
-}
-
-.project-card-top {
-    height: 8px;
-    background: linear-gradient(90deg, #00A0E1, #004966);
-}
-
-.project-card-body {
-    padding: 30px 25px;
-    text-align: center;
-}
-
-.project-card-icon {
-    width: 70px;
-    height: 70px;
-    margin: 0 auto 20px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #00A0E1;
-}
-
-.project-card-icon svg {
-    display: block;
-}
-
-.project-card h4 {
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: #004966;
-    margin-bottom: 12px;
-}
-
-.project-card p {
-    color: #646464;
-    font-size: 0.95rem;
-    line-height: 1.7;
-    margin-bottom: 20px;
-}
-
-.project-card .btn {
-    font-size: 0.85rem;
-    padding: 8px 20px;
-}
-
 /* ============================================
     CTA SECTION
     ============================================ */
@@ -2535,7 +2461,7 @@ body {
     }
 
     .footer-col a:hover {
-        color: #00A0E1;
+        color: #0077B3;
     }
 
     .whatsapp-float .tooltip {
@@ -2651,6 +2577,7 @@ body {
     .stat-number {
         font-size: 2rem;
     }
+    .parallax-bg { background-attachment: scroll; }
 }
 
 /* ============================================
@@ -3094,7 +3021,7 @@ body {
     content: '+';
     font-size: 1.4rem;
     font-weight: 300;
-    color: #00A0E1;
+    color: #0077B3;
     transition: transform 0.3s ease;
     flex-shrink: 0;
     margin-left: 16px;
@@ -3105,7 +3032,7 @@ body {
 }
 
 .faq-question:hover {
-    color: #00A0E1;
+    color: #0077B3;
 }
 
 .faq-answer {
@@ -3207,7 +3134,7 @@ body {
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1px;
-    color: #00A0E1;
+    color: #0077B3;
     margin-bottom: 8px;
 }
 
@@ -3244,7 +3171,7 @@ body {
     width: 44px;
     height: 44px;
     font-size: 1.2rem;
-    color: #00A0E1;
+    color: #0077B3;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -3306,7 +3233,7 @@ body {
     top: -20px;
     right: -10px;
     font-size: 18rem;
-    color: #00A0E1;
+    color: #0077B3;
     opacity: 0.04;
     line-height: 1;
     font-family: Georgia, serif;
@@ -3354,7 +3281,7 @@ body {
     top: -20px;
     left: -5px;
     font-size: 5rem;
-    color: #00A0E1;
+    color: #0077B3;
     opacity: 0.7;
     line-height: 1;
     font-style: normal;
@@ -3368,7 +3295,7 @@ body {
     bottom: -10px;
     right: -5px;
     font-size: 4rem;
-    color: #00A0E1;
+    color: #0077B3;
     opacity: 0.5;
     line-height: 1;
     font-style: normal;
@@ -3488,12 +3415,12 @@ body {
 
 .calendar-select:focus {
     outline: none;
-    border-color: #00A0E1;
+    border-color: #0077B3;
     box-shadow: 0 0 0 3px rgba(0, 160, 225, 0.15);
 }
 
 .calendar-select:hover {
-    border-color: #00A0E1;
+    border-color: #0077B3;
 }
 
 .calendar-month-select {
@@ -3517,7 +3444,7 @@ body {
 
 .calendar-nav:hover {
     background: #00A0E1;
-    border-color: #00A0E1;
+    border-color: #0077B3;
     color: #fff;
 }
 
@@ -3554,7 +3481,7 @@ body {
 
 .calendar-day.today {
     font-weight: 700;
-    color: #00A0E1;
+    color: #0077B3;
     box-shadow: inset 0 0 0 2px #00A0E1;
 }
 
@@ -3626,7 +3553,7 @@ body {
 .calendar-event-time {
     font-size: 0.85rem;
     font-weight: 700;
-    color: #00A0E1;
+    color: #0077B3;
     min-width: 45px;
 }
 
@@ -3909,7 +3836,7 @@ body {
 .directivo-card:hover {
     transform: translateY(-8px);
     box-shadow: 0 20px 40px rgba(0, 73, 102, 0.12);
-    border-color: #00A0E1;
+    border-color: #0077B3;
 }
 
 .directivo-foto {
@@ -3924,7 +3851,7 @@ body {
 }
 
 .directivo-card:hover .directivo-foto {
-    border-color: #00A0E1;
+    border-color: #0077B3;
 }
 
 .directivo-card h4 {
@@ -3970,7 +3897,7 @@ body {
 .colaborador-item:hover {
     transform: translateY(-4px);
     box-shadow: 0 10px 25px rgba(0, 73, 102, 0.1);
-    border-color: #00A0E1;
+    border-color: #0077B3;
 }
 
 .colaborador-item img {
@@ -4295,7 +4222,7 @@ body {
 .proy-card:hover {
     transform: translateY(-6px);
     box-shadow: 0 16px 40px rgba(0,73,102,0.13);
-    border-color: #00A0E1;
+    border-color: #0077B3;
 }
 .proy-card-img {
     width: 100%;
@@ -4403,7 +4330,7 @@ body {
     border: 2px solid #00A0E1;
     border-radius: 20px;
     background: transparent;
-    color: #00A0E1;
+    color: #0077B3;
     font-size: 0.82rem;
     font-weight: 700;
     font-family: inherit;
@@ -4474,6 +4401,18 @@ body {
 }
 @media (max-width: 480px) {
     .proyectos-hero-content h1 { font-size: 1.8rem; }
+}
+
+.flyers-section { padding: 60px 0; background: #f9fafb; }
+.flyers-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.flyers-grid .gallery-item { aspect-ratio: 3/4; }
+.empty-state { padding: 80px 0; text-align: center; color: #757575; font-size: 1.1rem; }
+@media (max-width: 768px) {
+    .flyers-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .flyers-section { padding: 40px 0; }
+}
+@media (max-width: 480px) {
+    .flyers-grid { grid-template-columns: 1fr; }
 }
 
 

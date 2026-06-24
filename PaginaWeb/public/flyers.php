@@ -21,7 +21,7 @@ if (file_exists($flyersFile)) {
 
         <section class="page-header">
             <div class="container">
-                <h2>Flyers</h2>
+                <h1>Flyers</h1>
                 <p>Explora nuestra colecci&oacute;n de flyers de eventos y actividades destacadas.</p>
             </div>
         </section>
@@ -49,19 +49,7 @@ if (file_exists($flyersFile)) {
         </section>
         <?php endif; ?>
 
-        <style>
-            .flyers-section { padding: 60px 0; background: #f9fafb; }
-            .flyers-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-            .flyers-grid .gallery-item { aspect-ratio: 3/4; }
-            .empty-state { padding: 80px 0; text-align: center; color: #666; font-size: 1.1rem; }
-            @media (max-width: 768px) {
-                .flyers-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
-                .flyers-section { padding: 40px 0; }
-            }
-            @media (max-width: 480px) {
-                .flyers-grid { grid-template-columns: 1fr; }
-            }
-        </style>
+
         <script>
         document.addEventListener('DOMContentLoaded', function() {
             var items = document.querySelectorAll('.flyers-grid .gallery-item');

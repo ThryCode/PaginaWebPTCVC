@@ -11,7 +11,7 @@ include 'includes/header.php';
 ?>
         <section class="page-header">
             <div class="container">
-                <h2>Publicaci&oacute;n no encontrada</h2>
+                <h1>Publicaci&oacute;n no encontrada</h1>
                 <p>La publicaci&oacute;n que buscas no existe o ha sido eliminada.</p>
                 <a href="noticias.php" class="btn btn-primary">&larr; Volver a Noticias</a>
             </div>
@@ -64,7 +64,7 @@ include 'includes/header.php';
         </script>
         <section class="page-header">
             <div class="container">
-                <h2 class="animate-fade-down"><?php echo htmlspecialchars($item['titulo']); ?></h2>
+                <h1 class="animate-fade-down"><?php echo htmlspecialchars($item['titulo']); ?></h1>
                 <p class="animate-fade-up"><?php echo $tipoLabel; ?> &mdash; <?php echo $fechaStr; ?></p>
             </div>
         </section>

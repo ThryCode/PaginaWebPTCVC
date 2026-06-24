@@ -52,7 +52,7 @@ include 'includes/header.php';
 
         <section class="page-header">
             <div class="container">
-                <h2>Incubaci&oacute;n de Empresas</h2>
+                <h1>Incubaci&oacute;n de Empresas</h1>
                 <p>Apoyo integral para emprendedores y startups</p>
             </div>
         </section>

@@ -64,10 +64,12 @@ include 'includes/header.php';
             <div class="carousel-dots" id="carouselDots"></div>
         </section>
 
+        <h1 class="sr-only">Parque Científico Tecnológico de Villa Clara</h1>
+
         <section class="intro-section">
             <div class="container">
                 <div class="intro-content animate-fade-left">
-                    <h3>Parque Científico Tecnológico de Villa Clara</h3>
+                    <h2>Parque Científico Tecnológico de Villa Clara</h2>
                     <p>El Parque Científico Tecnológico de Villa Clara es un centro de innovación que promueve la colaboración entre gobierno, el sector del conocimiento y el sector empresarial para impulsar el desarrollo científico-tecnológico en Cuba. Ofrece un entorno dinámico para crear y hacer crecer empresas tecnológicas, facilitando la transferencia de conocimientos y tecnologías.</p>
                     <p>Nuestro compromiso es ser el puente entre la academia, la industria y el gobierno, facilitando la transferencia de conocimiento y tecnología que genere impacto positivo en la sociedad.</p>
                 </div>
@@ -248,13 +250,13 @@ include 'includes/header.php';
                     <h2>Opiniones</h2>
                 </div>
                 <div class="opiniones-wrapper">
-                    <button class="opiniones-arrow opiniones-prev" id="opinionesPrev">&#10094;</button>
+                    <button class="opiniones-arrow opiniones-prev" id="opinionesPrev" aria-label="Anterior opini&oacute;n">&#10094;</button>
                     <div class="opiniones-carousel">
                         <div id="homeOpinionesContainer" class="opiniones-track">
                             <p class="empty">Cargando opiniones...</p>
                         </div>
                     </div>
-                    <button class="opiniones-arrow opiniones-next" id="opinionesNext">&#10095;</button>
+                    <button class="opiniones-arrow opiniones-next" id="opinionesNext" aria-label="Siguiente opini&oacute;n">&#10095;</button>
                 </div>
             </div>
         </section>

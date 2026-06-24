@@ -80,11 +80,11 @@ include 'includes/header.php'; ?>
         <?php if (!empty($categorias)): ?>
         <div class="proyectos-tabs" role="tablist">
             <?php foreach ($categorias as $i => $cat): ?>
-            <button class="proy-tab<?php echo $i === 0 ? ' active' : ''; ?>" role="tab" data-tab="tab-<?php echo $i; ?>"><?php echo htmlspecialchars($cat); ?></button>
+            <button class="proy-tab<?php echo $i === 0 ? ' active' : ''; ?>" id="tab-<?php echo $i; ?>-btn" role="tab" data-tab="tab-<?php echo $i; ?>" aria-selected="<?php echo $i === 0 ? 'true' : 'false'; ?>" aria-controls="tab-<?php echo $i; ?>" tabindex="<?php echo $i === 0 ? '0' : '-1'; ?>"><?php echo htmlspecialchars($cat); ?></button>
             <?php endforeach; ?>
         </div>
         <?php foreach ($categorias as $i => $cat): ?>
-        <div class="proy-panel<?php echo $i === 0 ? ' active' : ''; ?>" id="tab-<?php echo $i; ?>" role="tabpanel">
+        <div class="proy-panel<?php echo $i === 0 ? ' active' : ''; ?>" id="tab-<?php echo $i; ?>" role="tabpanel" aria-labelledby="tab-<?php echo $i; ?>-btn">
             <div class="proy-grid">
                 <?php foreach ($proyectos as $p): ?>
                 <?php if (trim($p['categoria'] ?? '') === $cat): ?>
@@ -126,13 +126,22 @@ include 'includes/header.php'; ?>
 (function() {
     var tabs = document.querySelectorAll('.proy-tab');
     var panels = document.querySelectorAll('.proy-panel');
+    function activateTab(tab) {
+        tabs.forEach(function(t) { t.classList.remove('active'); t.setAttribute('aria-selected','false'); t.setAttribute('tabindex','-1'); });
+        panels.forEach(function(p) { p.classList.remove('active'); });
+        tab.classList.add('active');
+        tab.setAttribute('aria-selected','true');
+        tab.setAttribute('tabindex','0');
+        var target = document.getElementById(tab.getAttribute('aria-controls'));
+        if (target) target.classList.add('active');
+        tab.focus();
+    }
     tabs.forEach(function(tab) {
-        tab.addEventListener('click', function() {
-            tabs.forEach(function(t) { t.classList.remove('active'); });
-            panels.forEach(function(p) { p.classList.remove('active'); });
-            tab.classList.add('active');
-            var target = document.getElementById(tab.getAttribute('data-tab'));
-            if (target) target.classList.add('active');
+        tab.addEventListener('click', function() { activateTab(tab); });
+        tab.addEventListener('keydown', function(e) {
+            var idx = Array.prototype.indexOf.call(tabs, tab);
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); activateTab(tabs[(idx+1)%tabs.length]); }
+            if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); activateTab(tabs[(idx-1+tabs.length)%tabs.length]); }
         });
     });
     var animEls = document.querySelectorAll('.anim-scroll');

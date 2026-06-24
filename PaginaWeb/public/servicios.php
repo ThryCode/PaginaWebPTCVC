@@ -80,7 +80,7 @@ if (file_exists($ticFile)) {
 
         <section class="page-header">
             <div class="container">
-                <h2>Servicios</h2>
+                <h1>Servicios</h1>
                 <p>Descubre nuestros servicios de innovaci&oacute;n, transferencia de tecnolog&iacute;a, incubaci&oacute;n y capacitaci&oacute;n empresarial.</p>
             </div>
         </section>

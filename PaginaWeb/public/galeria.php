@@ -7,7 +7,7 @@ include 'includes/header.php';
 
         <section class="page-header">
             <div class="container">
-                <h2 class="animate-fade-down">Galería</h2>
+                <h1 class="animate-fade-down">Galería</h1>
                 <p class="animate-fade-up">Los mejores momentos del PCTVC</p>
             </div>
         </section>
