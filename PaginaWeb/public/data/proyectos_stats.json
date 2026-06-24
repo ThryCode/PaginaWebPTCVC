@@ -1,6 +1,18 @@
 [
-    {"label": "Proyectos gestionados", "count": 31},
-    {"label": "Empresariales", "count": 28},
-    {"label": "Cooperaci\u00f3n", "count": 1},
-    {"label": "Innovaci\u00f3n tecnol\u00f3gica", "count": 9}
+    {
+        "label": "Proyectos gestionados",
+        "count": 31
+    },
+    {
+        "label": "Empresariales",
+        "count": 28
+    },
+    {
+        "label": "Cooperación",
+        "count": 1
+    },
+    {
+        "label": "Innovación tecnológica",
+        "count": 9
+    }
 ]

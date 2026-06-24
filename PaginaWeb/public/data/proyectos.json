@@ -37,8 +37,8 @@
     },
     {
         "titulo": "SFV con acumulación – UEB Vista Hermosa",
-        "slug": "sfv-con-acumulacion-ueb-vista-hermosa",
-        "resumen": "Ingeniería básica y ejecución de sistema fotovoltaico con acumulación de energía (10 kW).",
+        "slug": "sfv-con-acumulaci-n-ueb-vista-hermosa",
+        "resumen": "Proyecto de instalación de sistema fotovoltaico para la UEB Vista Hermosa con capacidad de 10 kW y acumulación de energía.",
         "contenido": "Proyecto de instalación de sistema fotovoltaico para la UEB Vista Hermosa con capacidad de 10 kW y acumulación de energía.",
         "area": "Energía",
         "categoria": "Fuentes renovables de energía",
@@ -51,7 +51,8 @@
         "destacada": 0,
         "imagenes": [],
         "id": 3,
-        "created_at": "2026-06-23 11:05"
+        "created_at": "2026-06-23 11:05",
+        "updated_at": "2026-06-24 08:29"
     },
     {
         "titulo": "Dessarrollo Web",
@@ -86,11 +87,12 @@
         "publicada": 1,
         "destacada": 0,
         "imagenes": [
-            "uploads\/proyecto_1782226596_5635.jpg",
-            "uploads\/proyecto_1782226596_9248.jpg",
-            "uploads\/proyecto_1782226596_2521.jpg"
+            "uploads/proyectos/proyecto_5/img_1782226596_5635.jpg",
+            "uploads/proyectos/proyecto_5/img_1782226596_9248.jpg",
+            "uploads/proyectos/proyecto_5/img_1782226596_2521.jpg"
         ],
         "id": 5,
-        "created_at": "2026-06-23 10:56"
+        "created_at": "2026-06-23 10:56",
+        "imagen": "uploads/proyectos/proyecto_5/img_1782226596_5635.jpg"
     }
 ]

@@ -16,10 +16,12 @@ function autoResumen($texto, $max = 200) {
     return mb_substr($limpio, 0, $max) . '…';
 }
 
-function getNoticiaFolder($id) { return '../uploads/noticia_' . $id . '/'; }
-function getNoticiaFolderUrl($id) { return 'uploads/noticia_' . $id . '/'; }
-function getEventoFolder($id) { return '../uploads/evento_' . $id . '/'; }
-function getEventoFolderUrl($id) { return 'uploads/evento_' . $id . '/'; }
+function getNoticiaFolder($id) { return '../uploads/noticias/noticia_' . $id . '/'; }
+function getNoticiaFolderUrl($id) { return 'uploads/noticias/noticia_' . $id . '/'; }
+function getEventoFolder($id) { return '../uploads/eventos/evento_' . $id . '/'; }
+function getEventoFolderUrl($id) { return 'uploads/eventos/evento_' . $id . '/'; }
+function getProyectoFolder($id) { return '../uploads/proyectos/proyecto_' . $id . '/'; }
+function getProyectoFolderUrl($id) { return 'uploads/proyectos/proyecto_' . $id . '/'; }
 function ensureFolder($dir) { if (!is_dir($dir)) { mkdir($dir, 0755, true); } }
 function deleteFolder($dir) {
     if (!is_dir($dir)) return;
@@ -87,6 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         if (!empty($existing['imagenes']) && is_array($existing['imagenes'])) $imgs = $existing['imagenes'];
                         elseif (!empty($existing['imagen'])) $imgs = array($existing['imagen']);
                         foreach ($imgs as $img) { $imgPath = '../' . $img; if (file_exists($imgPath)) unlink($imgPath); }
+                        deleteFolder(getProyectoFolder($deleteId));
                     }
                     Storage::delete('proyectos', $deleteId);
                 } else {
@@ -320,20 +323,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     if (in_array($img, $keepArr)) $imagenes[] = $img;
                     else { $delPath = '../' . $img; if (file_exists($delPath)) unlink($delPath); }
                 }
+                $folderDir = getProyectoFolder($id);
+                $folderUrl = getProyectoFolderUrl($id);
+                ensureFolder($folderDir);
+                migrateOldImages($imagenes, $folderDir, $folderUrl);
             }
 
             if (isset($_FILES['imagenes'])) {
-                $uploadDir = '../uploads/';
-                if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
                 $allowedExts = array('jpg', 'jpeg', 'png', 'gif', 'webp');
                 $files = $_FILES['imagenes'];
                 $cnt = is_array($files['tmp_name']) ? count($files['tmp_name']) : 0;
+                if ($action === 'edit' && $id > 0) {
+                    $folderDir = getProyectoFolder($id);
+                    $folderUrl = getProyectoFolderUrl($id);
+                }
                 for ($i = 0; $i < $cnt; $i++) {
                     if ($files['error'][$i] !== UPLOAD_ERR_OK) continue;
                     $ext = strtolower(pathinfo($files['name'][$i], PATHINFO_EXTENSION));
                     if (!in_array($ext, $allowedExts) || $files['size'][$i] > 5 * 1024 * 1024) { $error = 'Imagen no válida (máx 5MB, JPG/PNG/GIF/WEBP).'; continue; }
-                    $filename = 'proyecto_' . time() . '_' . rand(1000, 9999) . '.' . $ext;
-                    if (move_uploaded_file($files['tmp_name'][$i], $uploadDir . $filename)) $imagenes[] = 'uploads/' . $filename;
+                    $filename = 'img_' . time() . '_' . rand(1000, 9999) . '.' . $ext;
+                    if ($action === 'edit' && $id > 0 && move_uploaded_file($files['tmp_name'][$i], $folderDir . $filename)) {
+                        $imagenes[] = $folderUrl . $filename;
+                    }
                 }
             }
 
@@ -347,7 +358,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         header('Location: informacion.php?tab=proyectos&msg=editado');
                         exit;
                     } else {
-                        Storage::insert('proyectos', $data);
+                        $saved = Storage::insert('proyectos', $data);
+                        $newId = $saved['id'];
+                        $folderDir = getProyectoFolder($newId);
+                        $folderUrl = getProyectoFolderUrl($newId);
+                        ensureFolder($folderDir);
+                        $newImagenes = array();
+                        if (isset($_FILES['imagenes'])) {
+                            $allowedExts = array('jpg', 'jpeg', 'png', 'gif', 'webp');
+                            $files = $_FILES['imagenes'];
+                            $cnt = is_array($files['tmp_name']) ? count($files['tmp_name']) : 0;
+                            for ($i = 0; $i < $cnt; $i++) {
+                                if ($files['error'][$i] !== UPLOAD_ERR_OK) continue;
+                                $ext = strtolower(pathinfo($files['name'][$i], PATHINFO_EXTENSION));
+                                if (!in_array($ext, $allowedExts) || $files['size'][$i] > 5 * 1024 * 1024) { $error = 'Imagen no válida (máx 5MB, JPG/PNG/GIF/WEBP).'; continue; }
+                                $filename = 'img_' . time() . '_' . rand(1000, 9999) . '.' . $ext;
+                                if (move_uploaded_file($files['tmp_name'][$i], $folderDir . $filename)) $newImagenes[] = $folderUrl . $filename;
+                            }
+                        }
+                        $saved['imagenes'] = $newImagenes;
+                        $saved['imagen'] = !empty($newImagenes) ? $newImagenes[0] : '';
+                        Storage::update('proyectos', $newId, $saved);
                         header('Location: informacion.php?tab=proyectos&msg=creado');
                         exit;
                     }

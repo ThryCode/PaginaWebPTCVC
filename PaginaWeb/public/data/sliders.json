@@ -1,56 +1,56 @@
 [
     {
         "id": 1,
-        "imagen": "assets\/img\/sliders\/slider-01.jpg",
+        "imagen": "uploads\/sliders\/slider-01.jpg",
         "titulo": "Infraestructura del Parque Científico Tecnológico de Villa Clara",
         "orden": 1,
         "created_at": "2025-01-01 00:00"
     },
     {
         "id": 2,
-        "imagen": "assets\/img\/sliders\/slider-02.jpg",
+        "imagen": "uploads\/sliders\/slider-02.jpg",
         "titulo": "Edificios e instalaciones del Parque Científico Tecnológico",
         "orden": 2,
         "created_at": "2025-01-01 00:00"
     },
     {
         "id": 3,
-        "imagen": "assets\/img\/sliders\/slider-03.jpg",
+        "imagen": "uploads\/sliders\/slider-03.jpg",
         "titulo": "Actividades de innovación tecnológica en el PCTVC",
         "orden": 3,
         "created_at": "2025-01-01 00:00"
     },
     {
         "id": 4,
-        "imagen": "assets\/img\/sliders\/slider-04.jpg",
+        "imagen": "uploads\/sliders\/slider-04.jpg",
         "titulo": "Eventos y conferencias en el Parque Científico Tecnológico",
         "orden": 4,
         "created_at": "2025-01-01 00:00"
     },
     {
         "id": 5,
-        "imagen": "assets\/img\/sliders\/slider-05.jpg",
+        "imagen": "uploads\/sliders\/slider-05.jpg",
         "titulo": "Espacios de trabajo colaborativo del PCTVC",
         "orden": 5,
         "created_at": "2025-01-01 00:00"
     },
     {
         "id": 6,
-        "imagen": "assets\/img\/sliders\/slider-06.jpg",
+        "imagen": "uploads\/sliders\/slider-06.jpg",
         "titulo": "Vista aérea del Parque Científico Tecnológico de Villa Clara",
         "orden": 6,
         "created_at": "2025-01-01 00:00"
     },
     {
         "id": 7,
-        "imagen": "assets\/img\/sliders\/slider-07.jpg",
+        "imagen": "uploads\/sliders\/slider-07.jpg",
         "titulo": "Empresas y emprendedores del Parque Científico Tecnológico",
-        "orden": 8,
+        "orden": 7,
         "created_at": "2025-01-01 00:00"
     },
     {
         "id": 8,
-        "imagen": "assets\/img\/sliders\/slider-08.jpeg",
+        "imagen": "uploads\/sliders\/slider-08.jpeg",
         "titulo": "Servicios tecnológicos del Parque Científico de Villa Clara",
         "orden": 8,
         "created_at": "2025-01-01 00:00"

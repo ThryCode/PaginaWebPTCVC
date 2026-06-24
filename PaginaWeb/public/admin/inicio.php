@@ -60,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $action = 'list';
 
             } elseif ($action === 'upload') {
-                $sliderDir = '../assets/img/sliders/';
+                $sliderDir = '../uploads/sliders/';
                 if (!is_dir($sliderDir)) mkdir($sliderDir, 0755, true);
                 $allowedExts = array('jpg', 'jpeg', 'png', 'gif', 'webp');
                 $uploaded = 0;
@@ -73,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $allSliders = Storage::read('sliders');
                         $maxOrden = 0;
                         foreach ($allSliders as $s) { if (($s['orden'] ?? 0) > $maxOrden) $maxOrden = $s['orden']; }
-                        Storage::insert('sliders', array('imagen' => 'assets/img/sliders/' . $filename, 'titulo' => trim($_POST['titulo'] ?? ''), 'orden' => $maxOrden + 1));
+                        Storage::insert('sliders', array('imagen' => 'uploads/sliders/' . $filename, 'titulo' => trim($_POST['titulo'] ?? ''), 'orden' => $maxOrden + 1));
                         $uploaded++;
                     }
                 }
@@ -151,14 +151,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $orden = intval($_POST['orden'] ?? count($allOpiniones) + 1);
                 $imagen = '';
                 if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
-                    $uploadDir = '../uploads/';
+                    $uploadDir = '../uploads/opiniones/';
                     if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
                     $allowedExts = array('jpg', 'jpeg', 'png', 'gif', 'webp');
                     $ext = strtolower(pathinfo($_FILES['imagen']['name'], PATHINFO_EXTENSION));
                     if (in_array($ext, $allowedExts) && $_FILES['imagen']['size'] <= 5 * 1024 * 1024) {
                         $filename = 'opinion_' . time() . '_' . rand(1000, 9999) . '.' . $ext;
                         if (move_uploaded_file($_FILES['imagen']['tmp_name'], $uploadDir . $filename)) {
-                            $imagen = 'uploads/' . $filename;
+                            $imagen = 'uploads/opiniones/' . $filename;
                         }
                     }
                 }
@@ -179,7 +179,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $o['texto'] = trim($_POST['texto'] ?? $o['texto']);
                         $o['orden'] = intval($_POST['orden'] ?? $o['orden']);
                         if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
-                            $uploadDir = '../uploads/';
+                            $uploadDir = '../uploads/opiniones/';
                             if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
                             $allowedExts = array('jpg', 'jpeg', 'png', 'gif', 'webp');
                             $ext = strtolower(pathinfo($_FILES['imagen']['name'], PATHINFO_EXTENSION));
@@ -187,7 +187,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 $filename = 'opinion_' . time() . '_' . rand(1000, 9999) . '.' . $ext;
                                 if (move_uploaded_file($_FILES['imagen']['tmp_name'], $uploadDir . $filename)) {
                                     if (!empty($o['imagen'])) { $oldPath = '../' . $o['imagen']; if (file_exists($oldPath)) unlink($oldPath); }
-                                    $o['imagen'] = 'uploads/' . $filename;
+                                    $o['imagen'] = 'uploads/opiniones/' . $filename;
                                 }
                             }
                         }
@@ -476,8 +476,12 @@ $csrfToken = generateCSRFToken();
                             <?php endif; ?>
                         </div>
 
-                        <div class="grid-2">
-                            <div class="panel">
+                        <div style="display:flex;justify-content:flex-end;margin-bottom:16px;">
+                            <button class="btn btn-primary" onclick="toggleCreateOpinion()">+ Nueva opinión</button>
+                        </div>
+
+                        <div class="edit-form" id="create-opinion-form" style="margin-bottom:20px;">
+                            <div class="panel" style="box-shadow:none;padding:0;">
                                 <div class="panel-header"><h2>Crear nueva opinion</h2></div>
                                 <div class="panel-body">
                                     <form method="POST" enctype="multipart/form-data">
@@ -505,12 +509,16 @@ $csrfToken = generateCSRFToken();
                                                 <input type="number" id="new_orden" name="orden" min="1" value="<?php echo count($opinionesList) + 1; ?>">
                                             </div>
                                         </div>
-                                        <button type="submit" class="btn btn-success">Crear Opinion</button>
+                                        <div style="display:flex;gap:10px;">
+                                            <button type="submit" class="btn btn-success">Crear Opinion</button>
+                                            <button type="button" class="btn btn-sm btn-secondary" onclick="toggleCreateOpinion()">Cancelar</button>
+                                        </div>
                                     </form>
                                 </div>
                             </div>
+                        </div>
 
-                            <div class="panel">
+                        <div class="panel">
                                 <div class="panel-header"><h2>Opiniones actuales</h2></div>
                                 <div class="panel-body">
                                     <?php if (empty($opinionesList)): ?>
@@ -528,7 +536,7 @@ $csrfToken = generateCSRFToken();
                                                     <span><?php echo htmlspecialchars($o['cargo']); ?> | Orden: <?php echo intval($o['orden']); ?></span>
                                                 </div>
                                                 <div class="actions">
-                                                    <button class="btn btn-sm btn-primary" data-toggle-edit="<?php echo $o['id']; ?>">Editar</button>
+                                                    <button class="btn btn-sm btn-primary" onclick="toggleOpinionEdit(<?php echo $o['id']; ?>)">Editar</button>
                                                     <form class="delete-form" method="POST" data-confirm="Eliminar esta opinion?" style="display:inline;">
                                                         <?php echo csrfField(); ?>
                                                         <input type="hidden" name="action" value="delete">
@@ -537,7 +545,7 @@ $csrfToken = generateCSRFToken();
                                                     </form>
                                                 </div>
                                             </div>
-                                            <div class="edit-form" id="edit-<?php echo $o['id']; ?>">
+                                            <div class="edit-form" id="edit-opinion-<?php echo $o['id']; ?>">
                                                 <form method="POST" enctype="multipart/form-data">
                                                     <?php echo csrfField(); ?>
                                                     <input type="hidden" name="action" value="update">
@@ -566,7 +574,7 @@ $csrfToken = generateCSRFToken();
                                                     </div>
                                                     <div style="display:flex;gap:10px;">
                                                         <button type="submit" class="btn btn-sm btn-success">Guardar</button>
-                                                        <button type="button" class="btn btn-sm btn-secondary" data-toggle-edit="<?php echo $o['id']; ?>">Cancelar</button>
+                                                        <button type="button" class="btn btn-sm btn-secondary" onclick="toggleOpinionEdit(<?php echo $o['id']; ?>)">Cancelar</button>
                                                     </div>
                                                 </form>
                                             </div>
@@ -574,7 +582,6 @@ $csrfToken = generateCSRFToken();
                                     <?php endif; ?>
                                 </div>
                             </div>
-                        </div>
                     <?php endif; ?>
 
                 <?php elseif ($action === 'upload' && $tab === 'portada'): ?>
@@ -590,7 +597,7 @@ $csrfToken = generateCSRFToken();
                             <div class="form-group">
                                 <label for="imagenes">Imágenes (seleccione varias)</label>
                                 <input type="file" id="imagenes" name="imagenes[]" accept="image/*" multiple required>
-                                <small>Se guardan en assets/img/sliders/. Máx 5MB cada una.</small>
+                                <small>Se guardan en uploads/sliders/. Máx 5MB cada una.</small>
                             </div>
                             <div class="form-actions">
                                 <button type="submit" class="btn btn-success">Subir</button>
@@ -626,6 +633,10 @@ $csrfToken = generateCSRFToken();
     </div>
 
     <script>
+    // --- Opinion inline toggles (globales para onclick) ---
+    function toggleOpinionEdit(id) { var form = document.getElementById('edit-opinion-' + id); if (form) form.style.display = form.style.display === 'block' ? 'none' : 'block'; }
+    function toggleCreateOpinion() { var form = document.getElementById('create-opinion-form'); if (form) form.style.display = form.style.display === 'block' ? 'none' : 'block'; }
+
     (function() {
         // --- Slider drag-reorder ---
         var grid = document.getElementById('sliderGrid');

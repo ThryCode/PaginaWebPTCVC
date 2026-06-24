@@ -12,9 +12,9 @@
         "publicada": 1,
         "destacada": 0,
         "imagenes": [
-            "uploads\/noticia_1\/img_1781623484_7322.jpg"
+            "uploads/noticias/noticia_1\/img_1781623484_7322.jpg"
         ],
-        "imagen": "uploads\/noticia_1\/img_1781623484_7322.jpg",
+        "imagen": "uploads/noticias/noticia_1\/img_1781623484_7322.jpg",
         "id": 1,
         "created_at": "2026-06-16 11:24",
         "updated_at": "2026-06-16 12:49"
@@ -32,10 +32,10 @@
         "publicada": 1,
         "destacada": 0,
         "imagenes": [
-            "uploads\/noticia_2\/img_1781623711_6351.jpg",
-            "uploads\/noticia_2\/img_1781623711_1566.jpg"
+            "uploads/noticias/noticia_2\/img_1781623711_6351.jpg",
+            "uploads/noticias/noticia_2\/img_1781623711_1566.jpg"
         ],
-        "imagen": "uploads\/noticia_2\/img_1781623711_6351.jpg",
+        "imagen": "uploads/noticias/noticia_2\/img_1781623711_6351.jpg",
         "id": 2,
         "created_at": "2026-06-16 11:27",
         "updated_at": "2026-06-16 12:57"
@@ -53,12 +53,12 @@
         "publicada": 1,
         "destacada": 0,
         "imagenes": [
-            "uploads\/noticia_3\/img_1781623828_3260.jpg",
-            "uploads\/noticia_3\/img_1781623828_6980.jpg",
-            "uploads\/noticia_3\/img_1781623828_2262.jpg",
-            "uploads\/noticia_3\/img_1781623828_4802.jpg"
+            "uploads/noticias/noticia_3\/img_1781623828_3260.jpg",
+            "uploads/noticias/noticia_3\/img_1781623828_6980.jpg",
+            "uploads/noticias/noticia_3\/img_1781623828_2262.jpg",
+            "uploads/noticias/noticia_3\/img_1781623828_4802.jpg"
         ],
-        "imagen": "uploads\/noticia_3\/img_1781623828_3260.jpg",
+        "imagen": "uploads/noticias/noticia_3\/img_1781623828_3260.jpg",
         "id": 3,
         "created_at": "2026-06-16 11:30",
         "updated_at": "2026-06-16 12:49"
@@ -76,15 +76,15 @@
         "publicada": 1,
         "destacada": 0,
         "imagenes": [
-            "uploads\/noticia_4\/img_1781623938_8039.jpg",
-            "uploads\/noticia_4\/img_1781623938_6220.jpg",
-            "uploads\/noticia_4\/img_1781623938_5157.jpg",
-            "uploads\/noticia_4\/img_1781623938_4679.jpg",
-            "uploads\/noticia_4\/img_1781623938_6626.jpg",
-            "uploads\/noticia_4\/img_1781623938_7569.jpg",
-            "uploads\/noticia_4\/img_1781623938_5851.jpg"
+            "uploads/noticias/noticia_4\/img_1781623938_8039.jpg",
+            "uploads/noticias/noticia_4\/img_1781623938_6220.jpg",
+            "uploads/noticias/noticia_4\/img_1781623938_5157.jpg",
+            "uploads/noticias/noticia_4\/img_1781623938_4679.jpg",
+            "uploads/noticias/noticia_4\/img_1781623938_6626.jpg",
+            "uploads/noticias/noticia_4\/img_1781623938_7569.jpg",
+            "uploads/noticias/noticia_4\/img_1781623938_5851.jpg"
         ],
-        "imagen": "uploads\/noticia_4\/img_1781623938_8039.jpg",
+        "imagen": "uploads/noticias/noticia_4\/img_1781623938_8039.jpg",
         "id": 4,
         "created_at": "2026-06-16 11:32",
         "updated_at": "2026-06-16 12:50"
@@ -102,11 +102,11 @@
         "publicada": 1,
         "destacada": 0,
         "imagenes": [
-            "uploads\/noticia_6\/img_1781628716_5743.jpg",
-            "uploads\/noticia_6\/img_1781628716_5154.jpg",
-            "uploads\/noticia_6\/img_1781628716_2836.jpg"
+            "uploads/noticias/noticia_6\/img_1781628716_5743.jpg",
+            "uploads/noticias/noticia_6\/img_1781628716_5154.jpg",
+            "uploads/noticias/noticia_6\/img_1781628716_2836.jpg"
         ],
-        "imagen": "uploads\/noticia_6\/img_1781628716_5743.jpg",
+        "imagen": "uploads/noticias/noticia_6\/img_1781628716_5743.jpg",
         "id": 6,
         "created_at": "2026-06-16 12:51",
         "updated_at": "2026-06-16 12:51"
@@ -124,13 +124,13 @@
         "publicada": 1,
         "destacada": 0,
         "imagenes": [
-            "uploads\/noticia_7\/img_1781628760_5120.jpg",
-            "uploads\/noticia_7\/img_1781628760_2677.jpg",
-            "uploads\/noticia_7\/img_1781628760_8353.jpg",
-            "uploads\/noticia_7\/img_1781628760_9757.jpg",
-            "uploads\/noticia_7\/img_1781628760_6348.jpg"
+            "uploads/noticias/noticia_7\/img_1781628760_5120.jpg",
+            "uploads/noticias/noticia_7\/img_1781628760_2677.jpg",
+            "uploads/noticias/noticia_7\/img_1781628760_8353.jpg",
+            "uploads/noticias/noticia_7\/img_1781628760_9757.jpg",
+            "uploads/noticias/noticia_7\/img_1781628760_6348.jpg"
         ],
-        "imagen": "uploads\/noticia_7\/img_1781628760_5120.jpg",
+        "imagen": "uploads/noticias/noticia_7\/img_1781628760_5120.jpg",
         "id": 7,
         "created_at": "2026-06-16 12:52",
         "updated_at": "2026-06-16 12:52"
@@ -148,9 +148,9 @@
         "publicada": 1,
         "destacada": 0,
         "imagenes": [
-            "uploads\/noticia_8\/img_1781628834_1664.jpg"
+            "uploads/noticias/noticia_8\/img_1781628834_1664.jpg"
         ],
-        "imagen": "uploads\/noticia_8\/img_1781628834_1664.jpg",
+        "imagen": "uploads/noticias/noticia_8\/img_1781628834_1664.jpg",
         "id": 8,
         "created_at": "2026-06-16 12:53",
         "updated_at": "2026-06-16 12:53"
@@ -168,14 +168,14 @@
         "publicada": 1,
         "destacada": 0,
         "imagenes": [
-            "uploads\/noticia_9\/img_1781628892_3680.jpg",
-            "uploads\/noticia_9\/img_1781628892_7128.jpg",
-            "uploads\/noticia_9\/img_1781628892_2336.jpg",
-            "uploads\/noticia_9\/img_1781628892_1197.jpg",
-            "uploads\/noticia_9\/img_1781628892_8068.jpg",
-            "uploads\/noticia_9\/img_1781628892_4458.jpg"
+            "uploads/noticias/noticia_9\/img_1781628892_3680.jpg",
+            "uploads/noticias/noticia_9\/img_1781628892_7128.jpg",
+            "uploads/noticias/noticia_9\/img_1781628892_2336.jpg",
+            "uploads/noticias/noticia_9\/img_1781628892_1197.jpg",
+            "uploads/noticias/noticia_9\/img_1781628892_8068.jpg",
+            "uploads/noticias/noticia_9\/img_1781628892_4458.jpg"
         ],
-        "imagen": "uploads\/noticia_9\/img_1781628892_3680.jpg",
+        "imagen": "uploads/noticias/noticia_9\/img_1781628892_3680.jpg",
         "id": 9,
         "created_at": "2026-06-16 12:54",
         "updated_at": "2026-06-16 12:54"
@@ -193,10 +193,10 @@
         "publicada": 1,
         "destacada": 0,
         "imagenes": [
-            "uploads\/noticia_10\/img_1781629013_6435.jpg",
-            "uploads\/noticia_10\/img_1781629014_1146.jpg"
+            "uploads/noticias/noticia_10\/img_1781629013_6435.jpg",
+            "uploads/noticias/noticia_10\/img_1781629014_1146.jpg"
         ],
-        "imagen": "uploads\/noticia_10\/img_1781629013_6435.jpg",
+        "imagen": "uploads/noticias/noticia_10\/img_1781629013_6435.jpg",
         "id": 10,
         "created_at": "2026-06-16 12:56",
         "updated_at": "2026-06-17 11:14"
