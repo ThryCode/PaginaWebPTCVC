@@ -47,7 +47,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; <?= date('Y') ?> Parque Científico Tecnológico de Villa Clara. Todos los derechos reservados.</p>
+                <p>&copy; <?= date('Y') ?> Parque Científico Tecnológico de Villa Clara. Desarrollado por ThryCode.</p>
             </div>
         </div>
     </footer>
