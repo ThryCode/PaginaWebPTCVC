@@ -29,7 +29,7 @@ $iconos = array(
 
 function getIcono($key, $iconos) {
     $svg = isset($iconos[$key]) ? $iconos[$key] : $iconos['documento'];
-    return str_replace('<svg ', '<svg class="icon-' . $key . '" ', $svg);
+    return str_replace('<svg ', '<svg aria-hidden="true" class="icon-' . $key . '" ', $svg);
 }
 
 $items = array();
@@ -67,7 +67,7 @@ include 'includes/header.php';
                     <div class="about-image-card">
                         <div class="about-image-bg"></div>
                         <div class="about-image-content">
-                            <svg class="about-image-icon" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <svg aria-hidden="true" class="about-image-icon" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M40 16V28" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
                                 <path d="M28 36H52V64C52 66.2 50.2 68 48 68H32C29.8 68 28 66.2 28 64V36Z" stroke="white" stroke-width="2.5" fill="none"/>
                                 <path d="M22 36H58" stroke="white" stroke-width="2.5" stroke-linecap="round"/>

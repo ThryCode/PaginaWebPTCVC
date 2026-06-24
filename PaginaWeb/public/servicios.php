@@ -4,6 +4,15 @@ $pageDescription = 'Servicios de innovaci&oacute;n, transferencia tecnol&oacute;
 $canonicalUrl = 'https://pctvc.cu/servicios.php';
 include 'includes/header.php';
 
+$jsonLd = array(
+    '@context' => 'https://schema.org',
+    '@type' => 'ItemList',
+    'name' => 'Servicios del Parque Científico Tecnológico de Villa Clara',
+    'description' => $pageDescription,
+    'url' => $canonicalUrl,
+    'itemListElement' => array()
+);
+
 $iconos = array(
     'proyectos'    => '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>',
     'chart'        => '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>',
@@ -30,7 +39,7 @@ $iconos = array(
 
 function getIcono($key, $iconos) {
     $svg = isset($iconos[$key]) ? $iconos[$key] : $iconos['documento'];
-    return str_replace('<svg ', '<svg class="icon-' . $key . '" ', $svg);
+    return str_replace('<svg ', '<svg aria-hidden="true" class="icon-' . $key . '" ', $svg);
 }
 
 $serviciosFile = __DIR__ . '/data/servicios.json';
@@ -61,6 +70,12 @@ if (file_exists($serviciosFile)) {
             } else {
                 $secundarias[] = $s;
             }
+            $jsonLd['itemListElement'][] = array(
+                '@type' => 'Service',
+                'position' => $s['orden'] ?? 0,
+                'name' => $s['nombre'],
+                'description' => $s['descripcion'] ?? ''
+            );
         }
     }
 }
@@ -210,5 +225,9 @@ if (file_exists($ticFile)) {
                 </div>
             </div>
         </section>
+
+<script type="application/ld+json">
+<?php echo json_encode($jsonLd, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); ?>
+</script>
 
 <?php include 'includes/footer.php'; ?>

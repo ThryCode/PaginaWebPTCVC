@@ -73,7 +73,7 @@ header("Permissions-Policy: geolocation=(), camera=(), microphone=(), midi=(), s
     <link rel="icon" type="image/x-icon" href="assets/img/logo/favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="preload" href="css/style.css" as="style">
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -82,14 +82,18 @@ header("Permissions-Policy: geolocation=(), camera=(), microphone=(), midi=(), s
     <header class="header" id="header">
         <div class="container">
             <a href="index.php" class="logo">
-                <img src="assets/img/logo/logo.png" alt="Logo Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara" class="logo-img" id="headerLogo">
+                <img src="assets/img/logo/logo.png" alt="Logo Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara" width="50" height="50" loading="lazy" class="logo-img" id="headerLogo">
                 <span class="logo-text">Parque Cient&iacute;fico Tecnol&oacute;gico<span>de Villa Clara</span></span>
             </a>
             <nav class="nav" id="nav">
                 <ul>
-                    <li><a href="index.php" class="<?php echo $currentPage === 'index.php' ? 'active' : ''; ?>">Inicio</a></li>
+                    <li><a href="index.php" class="<?php echo $currentPage === 'index.php' ? 'active' : ''; ?>"<?php echo $currentPage === 'index.php' ? ' aria-current="page"' : ''; ?>>Inicio</a></li>
+                    <?php
+                    $infoPages = array('quienes-somos.php','proyectos.php','eventos.php','noticias.php','galeria.php');
+                    $servPages = array('servicios.php','producciones-cooperadas.php','incubacion-empresas.php','flyers.php');
+                    ?>
                     <li class="dropdown">
-                        <a href="quienes-somos.php">Informaci&oacute;n</a>
+                        <a href="quienes-somos.php"<?php echo in_array($currentPage, $infoPages) ? ' aria-current="page"' : ''; ?>>Informaci&oacute;n</a>
                         <ul class="dropdown-menu">
                             <li><a href="quienes-somos.php">Qui&eacute;nes somos</a></li>
                             <li><a href="proyectos.php">Proyectos</a></li>
@@ -99,7 +103,7 @@ header("Permissions-Policy: geolocation=(), camera=(), microphone=(), midi=(), s
                         </ul>
                     </li>
                     <li class="dropdown">
-                        <a href="servicios.php">Servicios</a>
+                        <a href="servicios.php"<?php echo in_array($currentPage, $servPages) ? ' aria-current="page"' : ''; ?>>Servicios</a>
                         <ul class="dropdown-menu">
                             <li><a href="servicios.php">Todos los Servicios</a></li>
                             <li><a href="producciones-cooperadas.php">Producciones Cooperadas</a></li>
@@ -107,7 +111,7 @@ header("Permissions-Policy: geolocation=(), camera=(), microphone=(), midi=(), s
                             <li><a href="flyers.php">Flyers</a></li>
                         </ul>
                     </li>
-                    <li><a href="contacto.php" class="<?php echo $currentPage === 'contacto.php' ? 'active' : ''; ?>">Contacto</a></li>
+                    <li><a href="contacto.php" class="<?php echo $currentPage === 'contacto.php' ? 'active' : ''; ?>"<?php echo $currentPage === 'contacto.php' ? ' aria-current="page"' : ''; ?>>Contacto</a></li>
                 </ul>
             </nav>
             <button class="nav-toggle" id="navToggle" aria-label="Abrir men&uacute;">

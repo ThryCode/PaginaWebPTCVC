@@ -4,7 +4,20 @@ $pageDescription = 'Noticias t&eacute;cnicas, entrevistas y art&iacute;culos del
 $canonicalUrl = 'https://pctvc.cu/noticias.php';
 include 'includes/header.php';
 ?>
-
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Noticias - Parque Científico Tecnológico de Villa Clara",
+    "description": "<?php echo $pageDescription; ?>",
+    "url": "<?php echo $canonicalUrl; ?>",
+    "mainEntity": {
+        "@type": "ItemList",
+        "name": "Últimas noticias",
+        "itemListElement": []
+    }
+}
+</script>
         <section class="page-header">
             <div class="container">
                 <h1 class="animate-fade-down">Noticias</h1>
@@ -18,7 +31,7 @@ include 'includes/header.php';
                     <label for="searchInput" class="sr-only">Buscar noticias, eventos</label>
                     <input type="text" id="searchInput" placeholder="Buscar noticias, eventos..." data-container="allNewsContainer" data-type="">
                     <button type="button" aria-label="Buscar">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                        <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
                     </button>
                 </div>
                 <div id="allNewsContainer" class="grid">

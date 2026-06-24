@@ -74,7 +74,7 @@ include 'includes/header.php';
                     <div class="about-image-card">
                         <div class="about-image-bg"></div>
                         <div class="about-image-content">
-                            <svg class="about-image-icon" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <svg aria-hidden="true" class="about-image-icon" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <rect x="8" y="28" width="64" height="44" rx="4" stroke="white" stroke-width="2.5" fill="none"/>
                                 <path d="M28 28V18C28 15.8 29.8 14 32 14H48C50.2 14 52 15.8 52 18V28" stroke="white" stroke-width="2.5" fill="none"/>
                                 <circle cx="40" cy="42" r="6" stroke="white" stroke-width="2.5" fill="none"/>
@@ -100,14 +100,14 @@ include 'includes/header.php';
                 <div class="mission-vision-grid">
                     <div class="mv-card animate-on-scroll">
                         <div class="mv-icon mission-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/></svg>
+                            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/></svg>
                         </div>
                         <h4>Nuestra Misión</h4>
                         <p>Contribuir al desarrollo industrial, participando y coadyuvando a la creaci&oacute;n, implantaci&oacute;n, funcionamiento, fortalecimiento, lanzamiento de nuevas entidades (productos nuevos o mejorados y empresas), adoptando sistemas de gesti&oacute;n integrada que incrementen el fondo de bienes exportables y la sustituci&oacute;n de importaciones en armon&iacute;a con el medio ambiente.</p>
                     </div>
                     <div class="mv-card animate-on-scroll delay-1">
                         <div class="mv-icon vision-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                         </div>
                         <h4>Nuestra Visión</h4>
                         <p>Ser un referente de ecosistema de innovaci&oacute;n y transferencia cient&iacute;fica en la rama de las industrias, con un m&iacute;nimo viable de industria 4.0, para promover la generaci&oacute;n y sostenibilidad de nuevas y exigentes empresas, proporcionando productos y servicios de alto valor agregado y un sistema de gesti&oacute;n alineado a la Pol&iacute;tica de Desarrollo Industrial.</p>
@@ -125,7 +125,7 @@ include 'includes/header.php';
                 <div class="grid">
                     <div class="card animate-on-scroll">
                         <div class="card-icon">
-                            <svg class="icon-alianza" width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <svg aria-hidden="true" class="icon-alianza" width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M8 25C8 25 6 23 6 20C6 17 8 15 10 15C12 15 14 17 14 19V21" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                 <path d="M32 25C32 25 34 23 34 20C34 17 32 15 30 15C28 15 26 17 26 19V21" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                 <path d="M13 26L20 22L27 26" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -140,7 +140,7 @@ include 'includes/header.php';
                     </div>
                     <div class="card animate-on-scroll delay-1">
                         <div class="card-icon">
-                            <svg class="icon-oportunidad" width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <svg aria-hidden="true" class="icon-oportunidad" width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M13 24C13 24 10 20 10 15C10 10 14 6 20 6C26 6 30 10 30 15C30 20 27 24 27 24H13Z" stroke="white" stroke-width="2" stroke-linejoin="round" fill="none"/>
                                 <line x1="15" y1="28" x2="25" y2="28" stroke="white" stroke-width="2" stroke-linecap="round"/>
                                 <line x1="17" y1="31" x2="23" y2="31" stroke="white" stroke-width="2" stroke-linecap="round"/>
@@ -152,7 +152,7 @@ include 'includes/header.php';
                     </div>
                     <div class="card animate-on-scroll delay-2">
                         <div class="card-icon">
-                            <svg class="icon-desarrollo" width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <svg aria-hidden="true" class="icon-desarrollo" width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M20 4L12 18L20 22L28 18L20 4Z" stroke="white" stroke-width="2" stroke-linejoin="round" fill="none"/>
                                 <circle cx="20" cy="13" r="2" stroke="white" stroke-width="1.5" fill="none"/>
                                 <path d="M12 18L8 24L16 20" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
