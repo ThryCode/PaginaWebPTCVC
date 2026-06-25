@@ -2542,12 +2542,27 @@ body {
 }
 
 @media (max-width: 480px) {
+    .container {
+        padding: 0 15px;
+    }
+
     .carousel {
-        height: 100vh;
+        height: 70vh;
     }
 
     .carousel-content h2 {
         font-size: 1.5rem;
+    }
+
+    .carousel-content p {
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+    }
+
+    .carousel-arrow {
+        width: 34px;
+        height: 34px;
+        font-size: 1rem;
     }
 
     .btn {
@@ -2603,6 +2618,116 @@ body {
         font-size: 2rem;
     }
     .parallax-bg { background-attachment: scroll; }
+
+    .contact-form {
+        padding: 25px 18px;
+    }
+
+    .contact-item-icon {
+        width: 50px;
+        height: 50px;
+        min-width: 50px;
+    }
+
+    .page-header {
+        padding: 90px 0 20px;
+    }
+
+    .page-header h1,
+    .page-header h2 {
+        font-size: 1.8rem;
+    }
+
+    .opinion-card {
+        padding: 22px 16px 16px;
+    }
+
+    .opinion-text {
+        font-size: 0.95rem;
+        padding: 0 8px 0 22px;
+        line-height: 1.55;
+    }
+
+    .opinion-text::before {
+        font-size: 3rem;
+        left: -2px;
+    }
+
+    .opinion-text::after {
+        font-size: 2rem;
+    }
+
+    .opinion-card::before {
+        font-size: 8rem;
+    }
+
+    .opinion-author {
+        gap: 10px;
+        padding-top: 14px;
+    }
+
+    .opinion-img, .opinion-img-placeholder {
+        width: 38px;
+        height: 38px;
+    }
+
+    .opinion-info strong {
+        font-size: 0.88rem;
+    }
+
+    .opinion-info span {
+        font-size: 0.7rem;
+    }
+
+    .cta-card {
+        padding: 30px 20px;
+    }
+
+    .cta-grid h3 {
+        font-size: 1.3rem;
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 25px;
+        text-align: center;
+    }
+
+    .footer-social {
+        justify-content: center;
+    }
+
+    .footer-bottom {
+        font-size: 0.8rem;
+    }
+
+    .directivos-grid {
+        grid-template-columns: 1fr;
+        max-width: 320px;
+    }
+
+    .directivo-foto {
+        width: 110px;
+        height: 110px;
+    }
+
+    .whatsapp-float a {
+        width: 50px;
+        height: 50px;
+    }
+
+    .whatsapp-float svg {
+        width: 26px;
+        height: 26px;
+    }
+
+    .membresia-logos {
+        gap: 20px;
+    }
+
+    .membresia-logos img {
+        height: 50px;
+    }
 }
 
 /* ============================================
@@ -3382,12 +3507,33 @@ body {
 }
 
 @media (max-width: 768px) {
+    .opiniones-section { padding: 50px 0; }
+    .opiniones-header { margin-bottom: 25px; }
     .opiniones-arrow { width: 36px; height: 36px; font-size: 1rem; }
-    .opiniones-prev { left: 10px; }
-    .opiniones-next { right: 10px; }
-    .opiniones-carousel { padding: 0 50px; }
+    .opiniones-prev { left: 8px; }
+    .opiniones-next { right: 8px; }
+    .opiniones-carousel { padding: 0 52px; }
     .opiniones-wrapper { max-width: 100%; }
-    .opinion-card { min-width: 0; }
+    .opiniones-track { min-height: auto; }
+    .opinion-card {
+        min-width: 0;
+        min-height: auto;
+        padding: 28px 22px 20px;
+        border-radius: 16px;
+    }
+    .opinion-card::before { font-size: 10rem; top: -15px; right: -5px; }
+    .opinion-text {
+        font-size: 1.05rem;
+        line-height: 1.6;
+        margin-bottom: 18px;
+        padding: 0 12px 0 28px;
+    }
+    .opinion-text::before { font-size: 3.5rem; left: -2px; top: -15px; }
+    .opinion-text::after { font-size: 2.5rem; bottom: -8px; }
+    .opinion-author { gap: 12px; padding-top: 16px; }
+    .opinion-img, .opinion-img-placeholder { width: 44px; height: 44px; }
+    .opinion-info strong { font-size: 0.95rem; }
+    .opinion-info span { font-size: 0.75rem; }
 }
 
 /* ============================================
