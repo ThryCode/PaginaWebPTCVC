@@ -1,1 +1,149 @@
-[]
+[
+    {
+        "imagen": "uploads\/galeria\/galeria_1782398314_3564.jpeg",
+        "titulo": "🎓 Acto Constitutivo",
+        "orden": 0,
+        "id": 1,
+        "created_at": "2026-06-25 10:38"
+    },
+    {
+        "imagen": "uploads\/galeria\/galeria_1782398314_2718.jpeg",
+        "titulo": "🎓 Acto Constitutivo",
+        "orden": 1,
+        "id": 2,
+        "created_at": "2026-06-25 10:38"
+    },
+    {
+        "imagen": "uploads\/galeria\/galeria_1782399532_4797.jpg",
+        "titulo": "💼 Primera Ronda de Negocios con Mipymes",
+        "orden": 0,
+        "id": 3,
+        "created_at": "2026-06-25 10:58"
+    },
+    {
+        "imagen": "uploads\/galeria\/galeria_1782399532_5323.jpg",
+        "titulo": "💼 Primera Ronda de Negocios con Mipymes",
+        "orden": 1,
+        "id": 4,
+        "created_at": "2026-06-25 10:58"
+    },
+    {
+        "imagen": "uploads\/galeria\/galeria_1782399532_4988.jpg",
+        "titulo": "💼 Primera Ronda de Negocios con Mipymes",
+        "orden": 2,
+        "id": 5,
+        "created_at": "2026-06-25 10:58"
+    },
+    {
+        "imagen": "uploads\/galeria\/galeria_1782399532_6474.jpg",
+        "titulo": "💼 Primera Ronda de Negocios con Mipymes",
+        "orden": 3,
+        "id": 6,
+        "created_at": "2026-06-25 10:58"
+    },
+    {
+        "imagen": "uploads\/galeria\/galeria_1782399564_5003.jpg",
+        "titulo": "🇨🇺 Cuba 🤝 Brasil 🇧🇷",
+        "orden": 0,
+        "id": 7,
+        "created_at": "2026-06-25 10:59"
+    },
+    {
+        "imagen": "uploads\/galeria\/galeria_1782399564_1392.jpg",
+        "titulo": "🇨🇺 Cuba 🤝 Brasil 🇧🇷",
+        "orden": 1,
+        "id": 8,
+        "created_at": "2026-06-25 10:59"
+    },
+    {
+        "imagen": "uploads\/galeria\/galeria_1782399564_1868.jpg",
+        "titulo": "🇨🇺 Cuba 🤝 Brasil 🇧🇷",
+        "orden": 2,
+        "id": 9,
+        "created_at": "2026-06-25 10:59"
+    },
+    {
+        "imagen": "uploads\/galeria\/galeria_1782399564_9088.jpg",
+        "titulo": "🇨🇺 Cuba 🤝 Brasil 🇧🇷",
+        "orden": 3,
+        "id": 10,
+        "created_at": "2026-06-25 10:59"
+    },
+    {
+        "imagen": "uploads\/galeria\/galeria_1782399564_6380.jpg",
+        "titulo": "🇨🇺 Cuba 🤝 Brasil 🇧🇷",
+        "orden": 4,
+        "id": 11,
+        "created_at": "2026-06-25 10:59"
+    },
+    {
+        "imagen": "uploads\/galeria\/galeria_1782399592_9227.jpg",
+        "titulo": "🏢 Visita al PCT de La Habana",
+        "orden": 0,
+        "id": 12,
+        "created_at": "2026-06-25 10:59"
+    },
+    {
+        "imagen": "uploads\/galeria\/galeria_1782399592_3554.jpg",
+        "titulo": "🏢 Visita al PCT de La Habana",
+        "orden": 1,
+        "id": 13,
+        "created_at": "2026-06-25 10:59"
+    },
+    {
+        "imagen": "uploads\/galeria\/galeria_1782399592_8117.jpg",
+        "titulo": "🏢 Visita al PCT de La Habana",
+        "orden": 2,
+        "id": 14,
+        "created_at": "2026-06-25 10:59"
+    },
+    {
+        "imagen": "uploads\/galeria\/galeria_1782399592_9031.jpg",
+        "titulo": "🏢 Visita al PCT de La Habana",
+        "orden": 3,
+        "id": 15,
+        "created_at": "2026-06-25 10:59"
+    },
+    {
+        "imagen": "uploads\/galeria\/galeria_1782399643_7778.jpg",
+        "titulo": "🌍 Visita de Especialistas del  PNUD e INIE del Proyecto Mi Emprendimiento",
+        "orden": 0,
+        "id": 16,
+        "created_at": "2026-06-25 11:00"
+    },
+    {
+        "imagen": "uploads\/galeria\/galeria_1782399683_3543.jpg",
+        "titulo": "🗺️ Visita a los Municipios de Camajuani y Placetas",
+        "orden": 0,
+        "id": 17,
+        "created_at": "2026-06-25 11:01"
+    },
+    {
+        "imagen": "uploads\/galeria\/galeria_1782399684_5065.jpg",
+        "titulo": "🗺️ Visita a los Municipios de Camajuani y Placetas",
+        "orden": 1,
+        "id": 18,
+        "created_at": "2026-06-25 11:01"
+    },
+    {
+        "imagen": "uploads\/galeria\/galeria_1782399717_3015.jpg",
+        "titulo": "🏭 4ta Convención Internacional Cubaindustria 2024",
+        "orden": 0,
+        "id": 19,
+        "created_at": "2026-06-25 11:01"
+    },
+    {
+        "imagen": "uploads\/galeria\/galeria_1782399717_7382.jpg",
+        "titulo": "🏭 4ta Convención Internacional Cubaindustria 2024",
+        "orden": 1,
+        "id": 20,
+        "created_at": "2026-06-25 11:01"
+    },
+    {
+        "imagen": "uploads\/galeria\/galeria_1782399717_8049.jpg",
+        "titulo": "🏭 4ta Convención Internacional Cubaindustria 2024",
+        "orden": 2,
+        "id": 21,
+        "created_at": "2026-06-25 11:01"
+    }
+]

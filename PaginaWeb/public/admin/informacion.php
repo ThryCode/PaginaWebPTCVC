@@ -108,6 +108,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 exit;
             }
         }
+        // --- DELETE GROUP (galeria - elimina todas las imágenes de un carrusel) ---
+        if ($action === 'delete_group' && $tab === 'galeria') {
+            $grupoTitulo = $_POST['grupo_titulo'] ?? '';
+            if ($grupoTitulo !== '') {
+                $all = Storage::read('galeria');
+                foreach ($all as $item) {
+                    $t = ($item['titulo'] ?: 'Sin título');
+                    if ($t === $grupoTitulo) {
+                        if (!empty($item['imagen'])) {
+                            $imgPath = '../' . $item['imagen'];
+                            if (file_exists($imgPath)) unlink($imgPath);
+                        }
+                        Storage::delete('galeria', $item['id']);
+                    }
+                }
+                header('Location: informacion.php?tab=galeria&msg=eliminado');
+                exit;
+            }
+        }
         // --- NOTICIAS / EVENTOS create/edit ---
         elseif ($tab === 'noticias' || $tab === 'eventos') {
             $titulo = mb_substr(trim($_POST['titulo'] ?? ''), 0, 100);
@@ -223,7 +242,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
                     $uploaded = 0;
                     $titulo = trim($_POST['titulo'] ?? '');
-                    $descripcion = trim($_POST['descripcion'] ?? '');
                     foreach ($_FILES['imagenes']['tmp_name'] as $key => $tmpName) {
                         if ($_FILES['imagenes']['error'][$key] !== UPLOAD_ERR_OK) continue;
                         $allowedExts = array('jpg', 'jpeg', 'png', 'gif', 'webp');
@@ -231,7 +249,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         if (!in_array($ext, $allowedExts) || $_FILES['imagenes']['size'][$key] > 5 * 1024 * 1024) continue;
                         $filename = 'galeria_' . time() . '_' . rand(1000, 9999) . '.' . $ext;
                         if (move_uploaded_file($tmpName, $uploadDir . $filename)) {
-                            $item = array('imagen' => 'uploads/galeria/' . $filename, 'titulo' => htmlspecialchars($titulo), 'descripcion' => htmlspecialchars($descripcion), 'orden' => $uploaded);
+                            $item = array('imagen' => 'uploads/galeria/' . $filename, 'titulo' => htmlspecialchars($titulo), 'orden' => $uploaded);
                             Storage::insert('galeria', $item);
                             $uploaded++;
                         }
@@ -243,7 +261,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } elseif ($action === 'update') {
                 $updateId = intval($_POST['id'] ?? 0);
                 if ($updateId > 0) {
-                    $data = array('titulo' => htmlspecialchars(trim($_POST['titulo'] ?? '')), 'descripcion' => htmlspecialchars(trim($_POST['descripcion'] ?? '')));
+                    $data = array('titulo' => htmlspecialchars(trim($_POST['titulo'] ?? '')));
                     Storage::update('galeria', $updateId, $data);
                     $message = 'Imagen actualizada.';
                 }
@@ -565,21 +583,37 @@ $csrfToken = generateCSRFToken();
                         <?php if (empty($galeriaList)): ?>
                             <p class="empty">No hay imágenes en la galería.</p>
                         <?php else: ?>
+                            <?php
+                            $groups = array();
+                            foreach ($galeriaList as $img) {
+                                $t = $img['titulo'] ?: 'Sin título';
+                                if (!isset($groups[$t])) $groups[$t] = array();
+                                $groups[$t][] = $img;
+                            }
+                            ?>
                             <div class="gallery-grid">
-                                <?php foreach ($galeriaList as $img): ?>
+                                <?php foreach ($groups as $titulo => $imgs): ?>
                                 <div class="gallery-item">
-                                    <img src="../<?php echo htmlspecialchars($img['imagen']); ?>" alt="<?php echo htmlspecialchars($img['titulo'] ?? ''); ?>">
+                                    <img src="../<?php echo htmlspecialchars($imgs[0]['imagen']); ?>" alt="<?php echo htmlspecialchars($titulo); ?>">
                                     <div class="gallery-item-info">
-                                        <h4><?php echo htmlspecialchars($img['titulo'] ?: 'Sin título'); ?></h4>
-                                        <small><?php echo htmlspecialchars(substr($img['descripcion'] ?? '', 0, 50)); ?></small>
+                                        <h4><?php echo htmlspecialchars($titulo); ?></h4>
+                                        <small><?php echo count($imgs); ?> imagen(es)</small>
                                     </div>
                                     <div class="gallery-item-actions">
-                                        <a href="?action=edit&id=<?php echo $img['id']; ?>&tab=galeria" class="btn btn-sm btn-primary">Editar</a>
+                                        <a href="?action=edit&id=<?php echo $imgs[0]['id']; ?>&tab=galeria" class="btn btn-sm btn-primary">Editar</a>
+                                        <?php if (count($imgs) > 1): ?>
+                                        <form class="delete-form" method="POST" action="?action=delete_group&tab=galeria" data-confirm="¿Eliminar todo el carrusel &ldquo;<?php echo htmlspecialchars($titulo); ?>&rdquo; y sus <?php echo count($imgs); ?> imágenes?" style="display:inline;">
+                                            <?php echo csrfField(); ?>
+                                            <input type="hidden" name="grupo_titulo" value="<?php echo htmlspecialchars($titulo); ?>">
+                                            <button type="submit" class="btn btn-sm btn-danger" title="Eliminar carrusel completo">Eliminar carrusel</button>
+                                        </form>
+                                        <?php else: ?>
                                         <form class="delete-form" method="POST" action="?action=delete&tab=galeria" data-confirm="¿Eliminar esta imagen?" style="display:inline;">
                                             <?php echo csrfField(); ?>
-                                            <input type="hidden" name="id" value="<?php echo $img['id']; ?>">
-                                            <button type="submit" class="btn btn-sm btn-danger">X</button>
+                                            <input type="hidden" name="id" value="<?php echo $imgs[0]['id']; ?>">
+                                            <button type="submit" class="btn btn-sm btn-danger" title="Eliminar imagen">X</button>
                                         </form>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                                 <?php endforeach; ?>
@@ -731,12 +765,9 @@ $csrfToken = generateCSRFToken();
                             <input type="hidden" name="action" value="upload">
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label for="titulo">Título</label>
-                                    <input type="text" id="titulo" name="titulo">
-                                </div>
-                                <div class="form-group">
-                                    <label for="descripcion">Descripción</label>
-                                    <input type="text" id="descripcion" name="descripcion">
+                                    <label for="titulo">Título del grupo</label>
+                                    <input type="text" id="titulo" name="titulo" required placeholder="Ej: Feria de Ciencia 2026">
+                                    <small>Todas las imágenes subidas compartirán este título y se mostrarán como carrusel.</small>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -762,12 +793,8 @@ $csrfToken = generateCSRFToken();
                             <input type="hidden" name="action" value="update">
                             <input type="hidden" name="id" value="<?php echo $imagen['id']; ?>">
                             <div class="form-group">
-                                <label for="titulo">Título</label>
-                                <input type="text" id="titulo" name="titulo" value="<?php echo htmlspecialchars($imagen['titulo'] ?? ''); ?>">
-                            </div>
-                            <div class="form-group">
-                                <label for="descripcion">Descripción</label>
-                                <textarea id="descripcion" name="descripcion" rows="3"><?php echo htmlspecialchars($imagen['descripcion'] ?? ''); ?></textarea>
+                                <label for="titulo">Título del grupo</label>
+                                <input type="text" id="titulo" name="titulo" required value="<?php echo htmlspecialchars($imagen['titulo'] ?? ''); ?>">
                             </div>
                             <div class="form-actions">
                                 <button type="submit" class="btn btn-success">Guardar</button>
