@@ -70,19 +70,18 @@ header("Permissions-Policy: geolocation=(), camera=(), microphone=(), midi=(), s
     <?php if (isset($pageDescription)): ?>
     <meta name="twitter:description" content="<?php echo htmlspecialchars(html_entity_decode($pageDescription, ENT_QUOTES, 'UTF-8'), ENT_QUOTES, 'UTF-8'); ?>">
     <?php endif; ?>
-    <link rel="icon" type="image/x-icon" href="assets/img/logo/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="/assets/img/logo/favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="preload" href="css/style.css?v=<?= filemtime(__DIR__ . '/../css/style.css') ?>" as="style">
-    <link rel="stylesheet" href="css/style.css?v=<?= filemtime(__DIR__ . '/../css/style.css') ?>">
+    <link rel="stylesheet" href="/css/style.min.css?v=<?= filemtime(__DIR__ . '/../css/style.min.css') ?>">
 </head>
 <body>
     <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
     <header class="header" id="header">
         <div class="container">
             <a href="index.php" class="logo">
-                <img src="assets/img/logo/logo.png" alt="Logo Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara" width="50" height="50" loading="lazy" class="logo-img" id="headerLogo">
+                <img src="/assets/img/logo/logo.png" alt="Logo Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara" width="50" height="50" loading="lazy" class="logo-img" id="headerLogo">
                 <span class="logo-text">Parque Cient&iacute;fico Tecnol&oacute;gico<span>de Villa Clara</span></span>
             </a>
             <nav class="nav" id="nav">

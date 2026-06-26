@@ -30,15 +30,15 @@ function renderProyImagenes($p) {
     }
     $titulo = htmlspecialchars($p['titulo'] ?? '');
     if (empty($imgs)) {
-        return '<img src="assets/img/logo/logo.png" alt="' . $titulo . '" loading="lazy" style="object-fit:contain;padding:20px;width:100%;height:100%;">';
+        return '<img src="/assets/img/logo/logo.png" alt="' . $titulo . '" loading="lazy" style="object-fit:contain;padding:20px;width:100%;height:100%;">';
     }
     if (count($imgs) === 1) {
-        return '<img src="' . htmlspecialchars($imgs[0]) . '" alt="' . $titulo . '" loading="lazy" style="width:100%;height:100%;object-fit:cover;">';
+        return '<img src="/' . htmlspecialchars($imgs[0]) . '" alt="' . $titulo . '" loading="lazy" style="width:100%;height:100%;object-fit:cover;">';
     }
     $html = '<div class="card-carousel" data-count="' . count($imgs) . '">';
     $html .= '<div class="carousel-track">';
     foreach ($imgs as $src) {
-        $html .= '<div class="carousel-slide"><img src="' . htmlspecialchars($src) . '" alt="' . $titulo . '" loading="lazy"></div>';
+        $html .= '<div class="carousel-slide"><img src="/' . htmlspecialchars($src) . '" alt="' . $titulo . '" loading="lazy"></div>';
     }
     $html .= '</div><div class="carousel-dots">';
     foreach ($imgs as $i => $src) {

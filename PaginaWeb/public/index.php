@@ -45,7 +45,7 @@ include 'includes/header.php';
                 <?php $first = true; ?>
                 <?php foreach ($sliders as $s): ?>
                 <div class="carousel-slide<?php echo $first ? ' active' : ''; ?>">
-                    <img src="<?php echo htmlspecialchars($s['imagen']); ?>" alt="<?php echo htmlspecialchars($s['titulo'] ?: 'Slider'); ?>">
+                    <img src="/<?php echo htmlspecialchars($s['imagen']); ?>" alt="<?php echo htmlspecialchars($s['titulo'] ?: 'Slider'); ?>">
                 </div>
                 <?php $first = false; ?>
                 <?php endforeach; ?>
@@ -74,7 +74,7 @@ include 'includes/header.php';
                     <p>Nuestro compromiso es ser el puente entre la academia, la industria y el gobierno, facilitando la transferencia de conocimiento y tecnología que genere impacto positivo en la sociedad.</p>
                 </div>
                 <div class="intro-image animate-fade-right">
-                    <img src="assets/img/general/feriaC4.jpg" alt="Feria Cient&iacute;fica del Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara">
+                    <img src="/assets/img/general/feriaC4.jpg" alt="Feria Cient&iacute;fica del Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara" loading="lazy">
                 </div>
             </div>
         </section>

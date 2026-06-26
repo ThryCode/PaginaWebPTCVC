@@ -1,5 +1,5 @@
 // ============================================
-// NAVBAR - Scroll effect + Hamburger menu
+// INIT - Single DOMContentLoaded bootstrap
 // ============================================
 document.addEventListener('DOMContentLoaded', function() {
     var logo = document.getElementById('headerLogo');
@@ -83,12 +83,10 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-});
 
 // ============================================
 // CARRUSEL DE IMAGENES
 // ============================================
-document.addEventListener('DOMContentLoaded', function() {
     var carousel = document.getElementById('carousel');
     if (!carousel) return;
 
@@ -269,7 +267,7 @@ function handleSubmit(event) {
     if (btnSpinner) btnSpinner.style.display = 'inline';
 
     var xhr = new XMLHttpRequest();
-    xhr.open('POST', 'api/contact.php', true);
+    xhr.open('POST', '/api/contact.php', true);
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
     xhr.onreadystatechange = function() {
@@ -595,7 +593,7 @@ function loadNews(containerId, options) {
     var tipo = (options && options.tipo) || '';
     var q = (options && options.q) || '';
 
-    var url = 'api/news.php?limit=' + limit;
+    var url = '/api/news.php?limit=' + limit;
     if (tipo) url += '&tipo=' + tipo;
     if (q) url += '&q=' + encodeURIComponent(q);
 
@@ -652,7 +650,7 @@ function loadEvents(containerId, options) {
     var limit = (options && options.limit) || 10;
     var q = (options && options.q) || '';
 
-    var url = 'api/events.php?limit=' + limit;
+    var url = '/api/events.php?limit=' + limit;
     if (q) url += '&q=' + encodeURIComponent(q);
 
     container.innerHTML = skeletonCards(Math.min(limit, 6));
@@ -705,7 +703,7 @@ function loadOpiniones(containerId) {
     if (!container) return;
 
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'api/opiniones.php', true);
+    xhr.open('GET', '/api/opiniones.php', true);
 
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
@@ -882,7 +880,7 @@ function loadCalendarMonth() {
     }
 
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'api/events.php?calendar=1&year=' + year + '&month=' + month, true);
+    xhr.open('GET', '/api/events.php?calendar=1&year=' + year + '&month=' + month, true);
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
             try {
@@ -991,7 +989,7 @@ function loadGallery(containerId, options) {
 
     var limit = (options && options.limit) || 20;
 
-    var url = 'api/gallery.php?limit=' + limit;
+    var url = '/api/gallery.php?limit=' + limit;
 
     container.innerHTML = skeletonGallery(Math.min(limit, 12));
 
@@ -1253,17 +1251,14 @@ document.addEventListener('keydown', function(e) {
 // ============================================
 // CARGAR NOTICIAS EN EL INDEX
 // ============================================
-document.addEventListener('DOMContentLoaded', function() {
     var newsContainer = document.getElementById('newsContainer');
     if (newsContainer) {
         loadNews('newsContainer', { limit: 6 });
     }
-});
 
 // ============================================
 // SCROLL ANIMATIONS - Intersection Observer
 // ============================================
-document.addEventListener('DOMContentLoaded', function() {
     var animatedElements = document.querySelectorAll('.animate-on-scroll, .animate-fade-up, .animate-fade-down, .animate-fade-left, .animate-fade-right, .animate-fade-in, .animate-scale-in');
     if (animatedElements.length === 0) return;
 
@@ -1282,12 +1277,10 @@ document.addEventListener('DOMContentLoaded', function() {
     animatedElements.forEach(function(el) {
         observer.observe(el);
     });
-});
 
 // ============================================
 // TRANSICIONES DE PAGINA
 // ============================================
-document.addEventListener('DOMContentLoaded', function() {
     if (sessionStorage.getItem('pageTransition') === 'in') {
         sessionStorage.removeItem('pageTransition');
         document.body.classList.add('page-transition');
@@ -1317,12 +1310,10 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 250);
         });
     });
-});
 
 // ============================================
 // BOTON VOLVER ARRIBA
 // ============================================
-document.addEventListener('DOMContentLoaded', function() {
     var backToTop = document.getElementById('backToTop');
     if (!backToTop) return;
 
@@ -1344,12 +1335,10 @@ document.addEventListener('DOMContentLoaded', function() {
     backToTop.addEventListener('click', function() {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
-});
 
 // ============================================
 // CONTADORES ANIMADOS
 // ============================================
-document.addEventListener('DOMContentLoaded', function() {
     var counters = document.querySelectorAll('.counter-number');
     if (counters.length === 0) return;
 
@@ -1365,7 +1354,6 @@ document.addEventListener('DOMContentLoaded', function() {
     counters.forEach(function(counter) {
         observer.observe(counter);
     });
-});
 
 function animateCounter(el) {
     var target = parseInt(el.getAttribute('data-target'), 10);
@@ -1392,7 +1380,6 @@ function animateCounter(el) {
 // ============================================
 // BUSQUEDA CON DEBOUNCE
 // ============================================
-document.addEventListener('DOMContentLoaded', function() {
     var searchInput = document.getElementById('searchInput');
     if (!searchInput) return;
 
@@ -1412,18 +1399,16 @@ document.addEventListener('DOMContentLoaded', function() {
             loadNews(containerId, options);
         }, 300);
     });
-});
 
 // Busqueda de eventos
-document.addEventListener('DOMContentLoaded', function() {
     var eventSearch = document.getElementById('eventSearchInput');
     if (!eventSearch) return;
 
-    var debounceTimer;
+    var eventDebounceTimer;
 
     eventSearch.addEventListener('input', function() {
-        clearTimeout(debounceTimer);
-        debounceTimer = setTimeout(function() {
+        clearTimeout(eventDebounceTimer);
+        eventDebounceTimer = setTimeout(function() {
             var query = eventSearch.value.trim();
             var containerId = eventSearch.getAttribute('data-container') || 'eventsContainer';
 
@@ -1433,12 +1418,10 @@ document.addEventListener('DOMContentLoaded', function() {
             loadEvents(containerId, options);
         }, 300);
     });
-});
 
 // ============================================
 // FAQ ACCORDION
 // ============================================
-document.addEventListener('DOMContentLoaded', function() {
     var faqQuestions = document.querySelectorAll('.faq-question');
     faqQuestions.forEach(function(btn) {
         btn.addEventListener('click', function() {

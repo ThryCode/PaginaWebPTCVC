@@ -176,42 +176,42 @@ include 'includes/header.php';
                 <div class="colaboradores-grid">
                     <div class="colaborador-item animate-on-scroll">
                         <a href="https://www.tecnosime.cu/" target="_blank" rel="noopener noreferrer">
-                            <img src="assets/img/colaboradores/tecnosime.png" alt="TECNOSIME" loading="lazy">
+                            <img src="/assets/img/colaboradores/tecnosime.png" alt="TECNOSIME" loading="lazy">
                         </a>
                     </div>
                     <div class="colaborador-item animate-on-scroll delay-1">
                         <a href="https://www.facebook.com/p/CEDAI-Empresa-de-Automatizaci%C3%B3n-Integral-100064048390294/" target="_blank" rel="noopener noreferrer">
-                            <img src="assets/img/colaboradores/cedai.png" alt="CEDAI" loading="lazy">
+                            <img src="/assets/img/colaboradores/cedai.png" alt="CEDAI" loading="lazy">
                         </a>
                     </div>
                     <div class="colaborador-item animate-on-scroll delay-2">
                         <a href="https://www.plantamec.co.cu/" target="_blank" rel="noopener noreferrer">
-                            <img src="assets/img/colaboradores/planta-mecanica.png" alt="Planta Mec&aacute;nica" loading="lazy">
+                            <img src="/assets/img/colaboradores/planta-mecanica.png" alt="Planta Mec&aacute;nica" loading="lazy">
                         </a>
                     </div>
                     <div class="colaborador-item animate-on-scroll delay-3">
                         <a href="https://www.facebook.com/empresaindustrialminerva/" target="_blank" rel="noopener noreferrer">
-                            <img src="assets/img/colaboradores/minerva.png" alt="Minerva" loading="lazy">
+                            <img src="/assets/img/colaboradores/minerva.png" alt="Minerva" loading="lazy">
                         </a>
                     </div>
                     <div class="colaborador-item animate-on-scroll delay-4">
                         <a href="http://www.ermpvc.co.cu/" target="_blank" rel="noopener noreferrer">
-                            <img src="assets/img/colaboradores/ermp.png" alt="ERMP Villa Clara" loading="lazy">
+                            <img src="/assets/img/colaboradores/ermp.png" alt="ERMP Villa Clara" loading="lazy">
                         </a>
                     </div>
                     <div class="colaborador-item animate-on-scroll delay-5">
                         <a href="https://sicte.uclv.cu/" target="_blank" rel="noopener noreferrer">
-                            <img src="assets/img/colaboradores/sicte.png" alt="SICTE S.A." loading="lazy">
+                            <img src="/assets/img/colaboradores/sicte.png" alt="SICTE S.A." loading="lazy">
                         </a>
                     </div>
                     <div class="colaborador-item animate-on-scroll delay-6">
                         <a href="https://www.mindus.gob.cu/es" target="_blank" rel="noopener noreferrer">
-                            <img src="assets/img/colaboradores/mi.png" alt="Ministerio de Industrias" loading="lazy">
+                            <img src="/assets/img/colaboradores/mi.png" alt="Ministerio de Industrias" loading="lazy">
                         </a>
                     </div>
                     <div class="colaborador-item animate-on-scroll delay-7">
                         <a href="https://www.sime.cu/" target="_blank" rel="noopener noreferrer">
-                            <img src="assets/img/colaboradores/gesime.png" alt="GESIME" loading="lazy">
+                            <img src="/assets/img/colaboradores/gesime.png" alt="GESIME" loading="lazy">
                         </a>
                     </div>
                 </div>
@@ -226,10 +226,10 @@ include 'includes/header.php';
                 </div>
                 <div class="membresia-logos">
                     <a href="https://www.iasp.ws/" target="_blank" rel="noopener noreferrer">
-                        <img src="assets/img/colaboradores/iasp.png" alt="IASP" loading="lazy">
+                        <img src="/assets/img/colaboradores/iasp.png" alt="IASP" loading="lazy">
                     </a>
                     <div class="iasp-latam-logo">
-                        <img src="assets/img/colaboradores/iasp-latam.png" alt="IASP Latam" loading="lazy">
+                        <img src="/assets/img/colaboradores/iasp-latam.png" alt="IASP Latam" loading="lazy">
                     </div>
                 </div>
             </div>
@@ -407,17 +407,17 @@ include 'includes/header.php';
                 </div>
                 <div class="directivos-grid">
                     <div class="directivo-card animate-on-scroll">
-                        <img src="assets/img/junta/edelys.jpg" alt="MSc. Edelys Ada Saavedra Rodr&iacute;guez" class="directivo-foto" loading="lazy">
+                        <img src="/assets/img/junta/edelys.jpg" alt="MSc. Edelys Ada Saavedra Rodr&iacute;guez" class="directivo-foto" loading="lazy">
                         <h4>MSc. Edelys Ada Saavedra Rodr&iacute;guez</h4>
                         <p>Presidenta de la Junta General de Accionistas y de la Junta Directiva</p>
                     </div>
                     <div class="directivo-card animate-on-scroll delay-1">
-                        <img src="assets/img/junta/danay.jpeg" alt="MSc. Danay Alvarez Mesa" class="directivo-foto" loading="lazy">
+                        <img src="/assets/img/junta/danay.jpeg" alt="MSc. Danay Alvarez Mesa" class="directivo-foto" loading="lazy">
                         <h4>MSc. Danay Alvarez Mesa</h4>
                         <p>Vicepresidenta Primera</p>
                     </div>
                     <div class="directivo-card animate-on-scroll delay-2">
-                        <img src="assets/img/junta/dalgys.jpeg" alt="Ing. Dalgys La Rosa Morales" class="directivo-foto" loading="lazy">
+                        <img src="/assets/img/junta/dalgys.jpeg" alt="Ing. Dalgys La Rosa Morales" class="directivo-foto" loading="lazy">
                         <h4>Ing. Dalgys La Rosa Morales</h4>
                         <p>Vicepresidenta Cient&iacute;fica</p>
                     </div>
