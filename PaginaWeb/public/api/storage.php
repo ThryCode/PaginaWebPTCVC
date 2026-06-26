@@ -32,7 +32,15 @@ class Storage {
             self::$cache[$collection] = array();
             return array();
         }
-        $content = file_get_contents($file);
+        $fh = fopen($file, 'r');
+        if (!$fh) {
+            self::$cache[$collection] = array();
+            return array();
+        }
+        flock($fh, LOCK_SH);
+        $content = stream_get_contents($fh);
+        flock($fh, LOCK_UN);
+        fclose($fh);
         if ($content === false || $content === '') {
             self::$cache[$collection] = array();
             return array();
@@ -50,7 +58,14 @@ class Storage {
             mkdir($dir, 0755, true);
         }
         $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-        return file_put_contents($file, $json, LOCK_EX) !== false;
+        $tmp = $file . '.tmp';
+        $written = file_put_contents($tmp, $json, LOCK_EX);
+        if ($written !== false) {
+            rename($tmp, $file);
+            return true;
+        }
+        @unlink($tmp);
+        return false;
     }
 
     public static function findById($collection, $id) {
@@ -97,7 +112,7 @@ class Storage {
                 $data['id'] = $item['id'];
                 $data['created_at'] = $item['created_at'];
                 $data['updated_at'] = date('Y-m-d H:i');
-                $item = $data;
+                $item = array_merge($item, $data);
                 self::write($collection, $items);
                 return $item;
             }
@@ -142,12 +157,9 @@ class Storage {
     }
 
     private static function nextId($items) {
-        $maxId = 0;
-        foreach ($items as $item) {
-            if (isset($item['id']) && $item['id'] > $maxId) {
-                $maxId = $item['id'];
-            }
-        }
-        return $maxId + 1;
+        $ids = array_map(function($item) {
+            return isset($item['id']) ? $item['id'] : 0;
+        }, $items);
+        return empty($ids) ? 1 : max($ids) + 1;
     }
 }
