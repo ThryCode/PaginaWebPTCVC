@@ -14,6 +14,7 @@ class StorageTest extends TestCase
 
     protected function tearDown(): void
     {
+        Storage::clearCache('_test');
         $file = Storage::getFilePath('_test');
         if (file_exists($file)) {
             unlink($file);

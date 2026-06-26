@@ -4,11 +4,11 @@
  * Ejecutar una sola vez
  */
 
-$dataDir = __DIR__ . '/data';
+$dataDir = __DIR__ . '/public/data';
 
 if (is_dir($dataDir)) {
     echo "Ya existe la carpeta data/. Setup completo.<br>";
-    echo '<a href="public/index.html">Ir al sitio</a>';
+    echo '<a href="index.php">Ir al sitio</a>';
     exit;
 }
 
@@ -61,4 +61,4 @@ echo "<ul>";
 echo "<li>Usuario: admin@pctvc.cu</li>";
 echo "<li>Contraseña: admin123</li>";
 echo "</ul>";
-echo '<p><a href="public/index.html">Ir al sitio</a> | <a href="admin/login.php">Ir al admin</a></p>';
+echo '<p>Accede al sitio desde <strong>public/index.php</strong> y al admin desde <strong>public/admin/login.php</strong>.</p>';
