@@ -1,5 +1,5 @@
 <?php
-error_reporting(E_ALL);
+error_reporting(0);
 ini_set('display_errors', 0);
 
 require_once '../api/auth.php';
@@ -51,8 +51,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($deleteId > 0) {
                     $existing = Storage::findById('sliders', $deleteId);
                     if ($existing && isset($existing['imagen'])) {
-                        $imgPath = '../' . $existing['imagen'];
-                        if (file_exists($imgPath)) unlink($imgPath);
+                        $imgPath = '../' . ltrim($existing['imagen'], '/');
+                        if (strpos($imgPath, '/../') === false && strpos($imgPath, '..\\') === false && file_exists($imgPath)) unlink($imgPath);
                     }
                     Storage::delete('sliders', $deleteId);
                     $message = 'Slider eliminado.';

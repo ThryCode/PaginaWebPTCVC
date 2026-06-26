@@ -21,7 +21,7 @@ include 'includes/header.php';
 $fechaRaw = $item['fecha_evento'] ?? $item['created_at'];
 $fecha = new DateTime($fechaRaw);
 $fechaStr = $fecha->format('d/m/Y');
-$tipoLabel = ucfirst($item['tipo'] ?? 'noticia');
+$tipoLabel = htmlspecialchars(ucfirst($item['tipo'] ?? 'noticia'));
 
 $imagenes = array();
 if (isset($item['imagenes']) && is_array($item['imagenes'])) {
@@ -76,13 +76,13 @@ include 'includes/header.php';
                     <div class="detail-images">
                         <?php if (count($imagenes) === 1): ?>
                         <div class="detail-img-main">
-                            <img src="<?php echo $imagenes[0]; ?>" alt="<?php echo htmlspecialchars($item['titulo']); ?>">
+                            <img src="/<?php echo htmlspecialchars($imagenes[0]); ?>" alt="<?php echo htmlspecialchars($item['titulo']); ?>">
                         </div>
                         <?php else: ?>
                         <div class="card-carousel" data-count="<?php echo count($imagenes); ?>">
                             <div class="carousel-track">
                                 <?php foreach ($imagenes as $src): ?>
-                                <div class="carousel-slide"><img src="<?php echo $src; ?>" alt="<?php echo htmlspecialchars($item['titulo']); ?>"></div>
+                                <div class="carousel-slide"><img src="/<?php echo htmlspecialchars($src); ?>" alt="<?php echo htmlspecialchars($item['titulo']); ?>"></div>
                                 <?php endforeach; ?>
                             </div>
                             <div class="carousel-dots">

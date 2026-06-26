@@ -128,7 +128,7 @@ $csrfToken = generateCSRFToken();
                                 <tr>
                                     <td><?php echo htmlspecialchars($u['nombre']); ?></td>
                                     <td><?php echo htmlspecialchars($u['email']); ?></td>
-                                    <td><span class="tag tag-<?php echo $u['rol'] === 'admin' ? 'publicado' : 'evento'; ?>"><?php echo ucfirst($u['rol']); ?></span></td>
+                                    <td><span class="tag tag-<?php echo $u['rol'] === 'admin' ? 'publicado' : 'evento'; ?>"><?php echo htmlspecialchars(ucfirst($u['rol'])); ?></span></td>
                                     <td><span class="tag tag-<?php echo $u['activo'] ? 'publicado' : 'borrador'; ?>"><?php echo $u['activo'] ? 'Activo' : 'Inactivo'; ?></span></td>
                                     <td>
                                         <a href="?action=edit&id=<?php echo $u['id']; ?>" class="btn btn-sm btn-primary">Editar</a>

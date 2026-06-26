@@ -1,5 +1,5 @@
 <?php
-error_reporting(E_ALL);
+error_reporting(0);
 ini_set('display_errors', 0);
 ini_set('log_errors', 1);
 ini_set('error_log', __DIR__ . '/../data/admin_error.log');
@@ -10,41 +10,7 @@ require_once '../api/storage.php';
 $auth = new Auth();
 $auth->requireLogin();
 
-function autoResumen($texto, $max = 200) {
-    $limpio = trim(strip_tags($texto));
-    if (mb_strlen($limpio) <= $max) return $limpio;
-    return mb_substr($limpio, 0, $max) . '…';
-}
-
-function getNoticiaFolder($id) { return '../uploads/noticias/noticia_' . $id . '/'; }
-function getNoticiaFolderUrl($id) { return 'uploads/noticias/noticia_' . $id . '/'; }
-function getEventoFolder($id) { return '../uploads/eventos/evento_' . $id . '/'; }
-function getEventoFolderUrl($id) { return 'uploads/eventos/evento_' . $id . '/'; }
-function getProyectoFolder($id) { return '../uploads/proyectos/proyecto_' . $id . '/'; }
-function getProyectoFolderUrl($id) { return 'uploads/proyectos/proyecto_' . $id . '/'; }
-function ensureFolder($dir) { if (!is_dir($dir)) { mkdir($dir, 0755, true); } }
-function deleteFolder($dir) {
-    if (!is_dir($dir)) return;
-    $files = glob($dir . '*');
-    if ($files) { foreach ($files as $f) { if (is_file($f)) unlink($f); } }
-    rmdir($dir);
-}
-function migrateOldImages(&$imagenes, $folderDir, $folderUrl) {
-    $result = array();
-    foreach ($imagenes as $img) {
-        if (strpos($img, $folderUrl) === 0) { $result[] = $img; }
-        elseif (preg_match('#^uploads/[^/]+$#', $img)) {
-            $oldFile = '../' . $img;
-            if (file_exists($oldFile)) {
-                $ext = pathinfo($oldFile, PATHINFO_EXTENSION);
-                $newName = 'img_' . time() . '_' . rand(1000, 9999) . '.' . $ext;
-                if (copy($oldFile, $folderDir . $newName)) { unlink($oldFile); $result[] = $folderUrl . $newName; }
-                else { $result[] = $img; }
-            } else { $result[] = $img; }
-        } else { $result[] = $img; }
-    }
-    $imagenes = $result;
-}
+require_once 'includes/helpers.php';
 
 $action = isset($_GET['action']) ? $_GET['action'] : 'list';
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
@@ -78,8 +44,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($tab === 'galeria') {
                     $existing = Storage::findById('galeria', $deleteId);
                     if ($existing && isset($existing['imagen'])) {
-                        $imgPath = '../' . $existing['imagen'];
-                        if (file_exists($imgPath)) unlink($imgPath);
+                        $imgPath = '../' . ltrim($existing['imagen'], '/');
+                        if (strpos($imgPath, '/../') === false && strpos($imgPath, '..\\') === false && file_exists($imgPath)) unlink($imgPath);
                     }
                     Storage::delete('galeria', $deleteId);
                 } elseif ($tab === 'proyectos') {
@@ -88,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $imgs = array();
                         if (!empty($existing['imagenes']) && is_array($existing['imagenes'])) $imgs = $existing['imagenes'];
                         elseif (!empty($existing['imagen'])) $imgs = array($existing['imagen']);
-                        foreach ($imgs as $img) { $imgPath = '../' . $img; if (file_exists($imgPath)) unlink($imgPath); }
+                        foreach ($imgs as $img) { $clean = ltrim($img, '/'); if (strpos($clean, '..') === false) { $imgPath = '../' . $clean; if (file_exists($imgPath)) unlink($imgPath); } }
                         deleteFolder(getProyectoFolder($deleteId));
                     }
                     Storage::delete('proyectos', $deleteId);
@@ -98,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $allImages = array();
                         if (isset($existing['imagenes']) && is_array($existing['imagenes'])) $allImages = $existing['imagenes'];
                         elseif (isset($existing['imagen'])) $allImages = array($existing['imagen']);
-                        foreach ($allImages as $img) { $imgPath = '../' . $img; if (file_exists($imgPath)) unlink($imgPath); }
+                        foreach ($allImages as $img) { $clean = ltrim($img, '/'); if (strpos($clean, '..') === false) { $imgPath = '../' . $clean; if (file_exists($imgPath)) unlink($imgPath); } }
                         $folder = ($existing['tipo'] === 'evento') ? getEventoFolder($deleteId) : getNoticiaFolder($deleteId);
                         deleteFolder($folder);
                     }
@@ -525,7 +491,7 @@ $csrfToken = generateCSRFToken();
                                 <?php foreach ($noticiasList as $n): ?>
                                 <tr>
                                     <td><?php echo htmlspecialchars(substr($n['titulo'] ?? 'Sin título', 0, 50)); ?></td>
-                                    <td><span class="tag tag-<?php echo $n['tipo']; ?>"><?php echo ucfirst($n['tipo']); ?></span></td>
+                                    <td><span class="tag tag-<?php echo preg_replace('/[^a-zA-Z0-9_-]/', '', $n['tipo']); ?>"><?php echo htmlspecialchars(ucfirst($n['tipo'])); ?></span></td>
                                     <td><?php
                                         $catName = '—';
                                         foreach ($categorias as $cat) { if ($cat['id'] == $n['categoria_id']) { $catName = htmlspecialchars($cat['nombre']); break; } }
