@@ -132,6 +132,14 @@ Tras la migraci├│n a InfinityFree TODAS las rutas siguen funcionando porque 
 - `/admin/css/admin.css` ΓåÆ `htdocs/admin/css/admin.css`
 - `/api/...` ΓåÆ `htdocs/api/...`
 
+### Cache busting autom├ítico
+InfinityFree usa CloudFlare CDN que cachea CSS/JS indefinidamente. Para forzar refresco:
+- **NUNCA** usar links sin versi├│n: `<link href="css/style.css">`
+- **SIEMPRE** usar `filemtime()`: `<link href="css/style.css?v=<?= filemtime(__DIR__ . '/css/style.css') ?>">`
+- Esto aplica a: style.css, main.js, admin.css, admin.js
+- `filemtime()` es autom├ítico: cuando el archivo cambia, el n├║mero cambia, el browser descarga la versi├│n fresca
+- No se requiere manualmente incrementar n├║meros de versi├│n
+
 ## ETECSA Hosting
 Servidor: Apache 2.4.6 + PHP 7.3.11+ sobre UNIX/Linux.
 

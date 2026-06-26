@@ -126,7 +126,7 @@ $csrfToken = generateCSRFToken();
     <title>Admin - Opiniones</title>
     <link rel="icon" type="image/x-icon" href="../assets/img/logo/favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="css/admin.css?v=<?= filemtime(__DIR__ . '/css/admin.css') ?>">
     <style>
         .opinion-preview { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px; }
         .opinion-preview-card { background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }

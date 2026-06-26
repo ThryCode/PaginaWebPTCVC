@@ -66,6 +66,6 @@
         </svg>
     </button>
 
-    <script src="js/main.js" defer></script>
+    <script src="js/main.js?v=<?= filemtime(__DIR__ . '/../js/main.js') ?>" defer></script>
 </body>
 </html>

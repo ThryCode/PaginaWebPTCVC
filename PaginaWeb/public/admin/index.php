@@ -50,7 +50,7 @@ if (!empty($user['nombre'])) {
     <title>Admin - Dashboard</title>
     <link rel="icon" type="image/x-icon" href="../assets/img/logo/favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="css/admin.css?v=<?= filemtime(__DIR__ . '/css/admin.css') ?>">
 </head>
 <body>
     <div class="admin-wrapper">

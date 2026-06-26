@@ -53,4 +53,4 @@ $isAdmin = isset($_SESSION['user_rol']) && $_SESSION['user_rol'] === 'admin';
         <a href="logout.php" class="btn-logout">Cerrar sesión</a>
     </div>
 </aside>
-<script src="js/admin.js" defer></script>
+<script src="js/admin.js?v=<?= filemtime(__DIR__ . '/../js/admin.js') ?>" defer></script>

@@ -96,7 +96,7 @@ $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
     <title>Admin - Contadores</title>
     <link rel="icon" type="image/x-icon" href="../assets/img/logo/favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="css/admin.css?v=<?= filemtime(__DIR__ . '/css/admin.css') ?>">
     <style>
         .counter-preview { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 30px; }
         .counter-preview-item { background: linear-gradient(135deg, #003c6e, #008674); color: #fff; padding: 24px; border-radius: 12px; text-align: center; }
