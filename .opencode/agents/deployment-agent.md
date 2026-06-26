@@ -20,6 +20,13 @@ Eres un asistente de despliegue para el proyecto PCTVC.
 ### Ventaja: rutas absolutas
 Todas las rutas `/uploads/...`, `/css/...`, `/admin/...`, `/api/...` funcionan porque el document root es `/htdocs/`.
 
+### Cache busting automático
+- **NUNCA** usar `<link href="css/style.css">` sin versión
+- **SIEMPRE** usar `filemtime()`: `<link href="css/style.css?v=<?= filemtime(__DIR__ . '/css/style.css') ?>">`
+- Aplica a: style.css, main.js, admin.css, admin.js
+- CloudFlare cachea indefinidamente sin versión; `filemtime()` cambia la URL automáticamente cuando el archivo se modifica
+- No requiere incrementar números de versión manualmente
+
 ## ETECSA Hosting
 - Servidor: Apache 2.4.6 + PHP 7.3.11+ sobre UNIX/Linux
 - FTP: FTPES con TLS/SSL expl&iacute;cito (FileZilla), solo desde redes cubanas
