@@ -76,7 +76,7 @@ function resolve_flyer_image_path($relativePath) {
                 <div class="flyers-grid">
                     <?php foreach ($flyers as $f): ?>
                     <div class="gallery-item">
-                        <img src="<?php echo htmlspecialchars(resolve_flyer_image_path($f['imagen'])); ?>" alt="<?php echo htmlspecialchars($f['titulo']); ?>" loading="lazy">
+                        <img src="/<?php echo htmlspecialchars(resolve_flyer_image_path($f['imagen'])); ?>" alt="<?php echo htmlspecialchars($f['titulo']); ?>" loading="lazy">
                         <div class="gallery-overlay">
                             <span><?php echo htmlspecialchars($f['titulo']); ?></span>
                         </div>
