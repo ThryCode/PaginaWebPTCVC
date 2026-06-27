@@ -1,5 +1,5 @@
 <?php
-$currentPage = basename($_SERVER['PHP_SELF']);
+$currentPage = htmlspecialchars(basename($_SERVER['PHP_SELF']));
 $user = isset($user) ? $user : (isset($_SESSION['user_nombre']) ? array('nombre' => $_SESSION['user_nombre']) : array('nombre' => 'Admin'));
 $mensajesNoLeidos = isset($mensajesNoLeidos) ? $mensajesNoLeidos : Storage::count('mensajes');
 $isAdmin = isset($_SESSION['user_rol']) && $_SESSION['user_rol'] === 'admin';
@@ -53,4 +53,4 @@ $isAdmin = isset($_SESSION['user_rol']) && $_SESSION['user_rol'] === 'admin';
         <a href="logout.php" class="btn-logout">Cerrar sesión</a>
     </div>
 </aside>
-<script src="js/admin.js?v=<?= filemtime(__DIR__ . '/../js/admin.js') ?>" defer></script>
+<script src="/admin/js/admin.js?v=<?= filemtime(__DIR__ . '/../js/admin.js') ?>" defer></script>

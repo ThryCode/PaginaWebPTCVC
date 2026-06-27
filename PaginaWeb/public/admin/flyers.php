@@ -2,7 +2,7 @@
 error_reporting(0);
 ini_set('display_errors', 0);
 ini_set('log_errors', 1);
-ini_set('error_log', __DIR__ . '/../data/admin_error.log');
+ini_set('error_log', __DIR__ . '/../logs/admin_error.log');
 
 require_once '../api/auth.php';
 require_once '../api/storage.php';
@@ -58,9 +58,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         mkdir($uploadDir, 0755, true);
                     }
                     $allowedExts = array('jpg', 'jpeg', 'png', 'gif', 'webp');
+                    $allowedMime = array('image/jpeg', 'image/png', 'image/gif', 'image/webp');
                     $ext = strtolower(pathinfo($_FILES['imagen']['name'], PATHINFO_EXTENSION));
+                    $mime = mime_content_type($_FILES['imagen']['tmp_name']);
 
-                    if (in_array($ext, $allowedExts) && $_FILES['imagen']['size'] <= 10 * 1024 * 1024) {
+                    if (in_array($ext, $allowedExts) && in_array($mime, $allowedMime) && $_FILES['imagen']['size'] <= 10 * 1024 * 1024) {
                         $filename = 'flyer_' . time() . '_' . rand(1000, 9999) . '.' . $ext;
                         $filepath = $uploadDir . $filename;
                         if (move_uploaded_file($_FILES['imagen']['tmp_name'], $filepath)) {
@@ -161,7 +163,7 @@ $csrfToken = generateCSRFToken();
                                 <tr>
                                     <td>
                                         <?php if (isset($f['imagen'])): ?>
-                                            <img src="../<?php echo htmlspecialchars($f['imagen']); ?>" class="flyer-thumb" alt="<?php echo htmlspecialchars($f['titulo']); ?>">
+                                            <img src="/<?php echo htmlspecialchars($f['imagen']); ?>" class="flyer-thumb" alt="<?php echo htmlspecialchars($f['titulo']); ?>">
                                         <?php else: ?>
                                             Sin imagen
                                         <?php endif; ?>
@@ -196,7 +198,7 @@ $csrfToken = generateCSRFToken();
                                 <input type="file" id="imagen" name="imagen" accept="image/*" <?php echo $action === 'new' ? 'required' : ''; ?>>
                                 <?php if ($flyer && isset($flyer['imagen'])): ?>
                                     <div style="margin-top:10px;">
-                                        <img src="../<?php echo htmlspecialchars($flyer['imagen']); ?>" class="flyer-preview" alt="Actual">
+                                        <img src="/<?php echo htmlspecialchars($flyer['imagen']); ?>" class="flyer-preview" alt="Actual">
                                         <p style="font-size:0.85rem;color:#888;margin-top:4px;">Imagen actual. Sube una nueva solo si deseas cambiarla.</p>
                                     </div>
                                 <?php endif; ?>

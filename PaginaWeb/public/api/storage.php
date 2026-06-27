@@ -46,22 +46,29 @@ class Storage {
             return array();
         }
         $data = json_decode($content, true);
+        if (!is_array($data)) {
+            error_log('[Storage] Invalid JSON in ' . $collection . ': ' . json_last_error_msg());
+        }
         self::$cache[$collection] = is_array($data) ? $data : array();
         return self::$cache[$collection];
     }
 
     public static function write($collection, $data) {
-        self::$cache[$collection] = $data;
         $file = self::getFilePath($collection);
         $dir = dirname($file);
         if (!is_dir($dir)) {
             mkdir($dir, 0755, true);
         }
         $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+        if ($json === false) {
+            error_log('[Storage] JSON encode failed for ' . $collection . ': ' . json_last_error_msg());
+            return false;
+        }
         $tmp = $file . '.tmp';
         $written = file_put_contents($tmp, $json, LOCK_EX);
         if ($written !== false) {
             rename($tmp, $file);
+            self::$cache[$collection] = $data;
             return true;
         }
         @unlink($tmp);

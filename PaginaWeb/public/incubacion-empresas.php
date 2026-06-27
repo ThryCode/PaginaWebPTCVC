@@ -29,23 +29,19 @@ $iconos = array(
 
 function getIcono($key, $iconos) {
     $svg = isset($iconos[$key]) ? $iconos[$key] : $iconos['documento'];
-    return str_replace('<svg ', '<svg aria-hidden="true" class="icon-' . $key . '" ', $svg);
+    return str_replace('<svg ', '<svg aria-hidden="true" class="icon-' . htmlspecialchars($key) . '" ', $svg);
 }
 
+require_once __DIR__ . '/api/storage.php';
+
 $items = array();
-$dataFile = __DIR__ . '/data/servicios.json';
-if (file_exists($dataFile)) {
-    $raw = file_get_contents($dataFile);
-    $all = json_decode($raw, true);
-    if (is_array($all)) {
-        foreach ($all as $s) {
-            if (($s['pagina'] ?? '') === 'incubacion-empresas') {
-                $items[] = $s;
-            }
-        }
-        usort($items, function($a, $b) { return $a['orden'] - $b['orden']; });
+$all = Storage::read('servicios');
+foreach ($all as $s) {
+    if (($s['pagina'] ?? '') === 'incubacion-empresas') {
+        $items[] = $s;
     }
 }
+usort($items, function($a, $b) { return $a['orden'] - $b['orden']; });
 
 include 'includes/header.php';
 ?>

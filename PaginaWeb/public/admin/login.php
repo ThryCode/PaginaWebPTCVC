@@ -159,7 +159,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <button type="submit" class="pac-submit">Verificar Clave</button>
             </form>
             <div class="error-box <?php if ($error) echo 'visible'; ?>" id="pacError">
-                <?php echo $errorMsg; ?>
+                <?php echo htmlspecialchars($errorMsg); ?>
             </div>
         </div>
         <?php endif; ?>
@@ -183,7 +183,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <button type="submit" class="login-submit">Iniciar Sesi&oacute;n</button>
             </form>
             <div class="error-box <?php if ($error) echo 'visible'; ?>" id="loginError">
-                <?php echo $errorMsg; ?>
+                <?php echo htmlspecialchars($errorMsg); ?>
             </div>
         </div>
         <?php endif; ?>

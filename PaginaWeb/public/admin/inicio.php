@@ -8,19 +8,7 @@ require_once '../api/storage.php';
 $auth = new Auth();
 $auth->requireLogin();
 
-$countersFile = DATA_DIR . '/counters.json';
-
-function loadCounters($file) {
-    if (!file_exists($file)) return array();
-    $json = file_get_contents($file);
-    $data = json_decode($json, true);
-    return is_array($data) ? $data : array();
-}
-
-function saveCounters($file, $data) {
-    $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-    file_put_contents($file, $json);
-}
+// Counters managed via Storage::read('counters') / Storage::write('counters')
 
 $action = isset($_GET['action']) ? $_GET['action'] : 'list';
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
@@ -63,11 +51,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $sliderDir = '../uploads/sliders/';
                 if (!is_dir($sliderDir)) mkdir($sliderDir, 0755, true);
                 $allowedExts = array('jpg', 'jpeg', 'png', 'gif', 'webp');
+                $allowedMime = array('image/jpeg', 'image/png', 'image/gif', 'image/webp');
                 $uploaded = 0;
                 foreach ($_FILES['imagenes']['tmp_name'] as $key => $tmpName) {
                     if ($_FILES['imagenes']['error'][$key] !== UPLOAD_ERR_OK) continue;
                     $ext = strtolower(pathinfo($_FILES['imagenes']['name'][$key], PATHINFO_EXTENSION));
-                    if (!in_array($ext, $allowedExts) || $_FILES['imagenes']['size'][$key] > 5 * 1024 * 1024) continue;
+                    $mime = mime_content_type($tmpName);
+                    if (!in_array($ext, $allowedExts) || !in_array($mime, $allowedMime) || $_FILES['imagenes']['size'][$key] > 5 * 1024 * 1024) continue;
                     $filename = 'slider_' . time() . '_' . rand(1000, 9999) . '.' . $ext;
                     if (move_uploaded_file($tmpName, $sliderDir . $filename)) {
                         $allSliders = Storage::read('sliders');
@@ -107,20 +97,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // --- CONTADORES ---
         } elseif ($tab === 'contadores') {
             $postAction = $_POST['action'] ?? '';
-            $counters = loadCounters($countersFile);
+            $counters = Storage::read('counters');
 
             if ($postAction === 'create') {
                 $newId = 1;
                 foreach ($counters as $c) { if ($c['id'] >= $newId) $newId = $c['id'] + 1; }
                 $counters[] = array('id' => $newId, 'numero' => intval($_POST['numero'] ?? 0), 'label' => trim($_POST['label'] ?? ''), 'orden' => intval($_POST['orden'] ?? count($counters) + 1));
-                saveCounters($countersFile, $counters);
+                Storage::write('counters', $counters);
                 header('Location: inicio.php?tab=contadores&msg=created');
                 exit;
 
             } elseif ($postAction === 'update') {
                 $updateId = intval($_POST['id'] ?? 0);
                 foreach ($counters as &$c) { if ($c['id'] === $updateId) { $c['numero'] = intval($_POST['numero'] ?? $c['numero']); $c['label'] = trim($_POST['label'] ?? $c['label']); $c['orden'] = intval($_POST['orden'] ?? $c['orden']); break; } }
-                saveCounters($countersFile, $counters);
+                Storage::write('counters', $counters);
                 header('Location: inicio.php?tab=contadores&msg=updated');
                 exit;
 
@@ -128,14 +118,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $deleteId = intval($_POST['id'] ?? 0);
                 $counters = array_filter($counters, function($c) use ($deleteId) { return $c['id'] !== $deleteId; });
                 $counters = array_values($counters);
-                saveCounters($countersFile, $counters);
+                Storage::write('counters', $counters);
                 header('Location: inicio.php?tab=contadores&msg=deleted');
                 exit;
 
             } elseif ($postAction === 'reorder') {
                 $order = $_POST['order'] ?? array();
                 foreach ($order as $idx => $idVal) { foreach ($counters as &$c) { if ($c['id'] === intval($idVal)) { $c['orden'] = $idx + 1; break; } } }
-                saveCounters($countersFile, $counters);
+                Storage::write('counters', $counters);
                 header('Location: inicio.php?tab=contadores&msg=reordered');
                 exit;
             }
@@ -154,8 +144,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $uploadDir = '../uploads/opiniones/';
                     if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
                     $allowedExts = array('jpg', 'jpeg', 'png', 'gif', 'webp');
+                    $allowedMime = array('image/jpeg', 'image/png', 'image/gif', 'image/webp');
                     $ext = strtolower(pathinfo($_FILES['imagen']['name'], PATHINFO_EXTENSION));
-                    if (in_array($ext, $allowedExts) && $_FILES['imagen']['size'] <= 5 * 1024 * 1024) {
+                    $mime = mime_content_type($_FILES['imagen']['tmp_name']);
+                    if (in_array($ext, $allowedExts) && in_array($mime, $allowedMime) && $_FILES['imagen']['size'] <= 5 * 1024 * 1024) {
                         $filename = 'opinion_' . time() . '_' . rand(1000, 9999) . '.' . $ext;
                         if (move_uploaded_file($_FILES['imagen']['tmp_name'], $uploadDir . $filename)) {
                             $imagen = 'uploads/opiniones/' . $filename;
@@ -182,8 +174,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             $uploadDir = '../uploads/opiniones/';
                             if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
                             $allowedExts = array('jpg', 'jpeg', 'png', 'gif', 'webp');
+                            $allowedMime = array('image/jpeg', 'image/png', 'image/gif', 'image/webp');
                             $ext = strtolower(pathinfo($_FILES['imagen']['name'], PATHINFO_EXTENSION));
-                            if (in_array($ext, $allowedExts) && $_FILES['imagen']['size'] <= 5 * 1024 * 1024) {
+                            $mime = mime_content_type($_FILES['imagen']['tmp_name']);
+                            if (in_array($ext, $allowedExts) && in_array($mime, $allowedMime) && $_FILES['imagen']['size'] <= 5 * 1024 * 1024) {
                                 $filename = 'opinion_' . time() . '_' . rand(1000, 9999) . '.' . $ext;
                                 if (move_uploaded_file($_FILES['imagen']['tmp_name'], $uploadDir . $filename)) {
                                     if (!empty($o['imagen'])) { $oldPath = '../' . $o['imagen']; if (file_exists($oldPath)) unlink($oldPath); }
@@ -232,7 +226,7 @@ if ($action === 'list' && $tab === 'portada') {
 
 $countersList = array();
 if ($tab === 'contadores') {
-    $countersList = loadCounters($countersFile);
+    $countersList = Storage::read('counters');
     usort($countersList, function($a, $b) { return ($a['orden'] ?? 0) - ($b['orden'] ?? 0); });
 }
 
@@ -335,7 +329,7 @@ $csrfToken = generateCSRFToken();
                                 <?php foreach ($slidersList as $s): ?>
                                 <div class="slider-item" data-id="<?php echo $s['id']; ?>">
                                     <div class="drag-handle">☰</div>
-                                    <img src="../<?php echo htmlspecialchars($s['imagen']); ?>" alt="<?php echo htmlspecialchars($s['titulo'] ?? ''); ?>">
+                                    <img src="/<?php echo htmlspecialchars($s['imagen']); ?>" alt="<?php echo htmlspecialchars($s['titulo'] ?? ''); ?>">
                                     <div class="slider-item-info">
                                         <h4><?php echo htmlspecialchars($s['titulo'] ?: 'Sin título'); ?></h4>
                                         <span class="orden-badge">Orden: <?php echo intval($s['orden']); ?></span>
@@ -462,7 +456,7 @@ $csrfToken = generateCSRFToken();
                                         <div class="text"><?php echo htmlspecialchars($o['texto']); ?></div>
                                         <div class="author">
                                             <?php if (!empty($o['imagen'])): ?>
-                                                <img src="../<?php echo $o['imagen']; ?>" alt="<?php echo htmlspecialchars($o['nombre']); ?>">
+                                                <img src="/<?php echo htmlspecialchars($o['imagen']); ?>" alt="<?php echo htmlspecialchars($o['nombre']); ?>">
                                             <?php else: ?>
                                                 <div class="author-placeholder"><?php echo htmlspecialchars(mb_substr($o['nombre'], 0, 1)); ?></div>
                                             <?php endif; ?>
@@ -527,7 +521,7 @@ $csrfToken = generateCSRFToken();
                                         <?php foreach ($opinionesList as $o): ?>
                                             <div class="opinion-row">
                                                 <?php if (!empty($o['imagen'])): ?>
-                                                    <img src="../<?php echo $o['imagen']; ?>" class="opinion-thumb" alt="">
+                                                    <img src="/<?php echo htmlspecialchars($o['imagen']); ?>" class="opinion-thumb" alt="">
                                                 <?php else: ?>
                                                     <div class="opinion-thumb-placeholder"><?php echo htmlspecialchars(mb_substr($o['nombre'], 0, 1)); ?></div>
                                                 <?php endif; ?>
@@ -642,7 +636,7 @@ $csrfToken = generateCSRFToken();
         var grid = document.getElementById('sliderGrid');
         if (grid) {
             var dragItem = null;
-            var csrf = '<?php echo $csrfToken; ?>';
+            var csrf = document.querySelector('input[name="csrf_token"]').value;
             grid.addEventListener('dragstart', function(e) {
                 var target = e.target.closest('.slider-item');
                 if (!target) return;
@@ -700,7 +694,7 @@ $csrfToken = generateCSRFToken();
         var counterList = document.getElementById('counterList');
         if (counterList) {
             var dragCounter = null;
-            var csrf2 = '<?php echo $csrfToken; ?>';
+            var csrf2 = document.querySelector('input[name="csrf_token"]').value;
             counterList.addEventListener('dragstart', function(e) {
                 var row = e.target.closest('.counter-row');
                 if (!row) return;

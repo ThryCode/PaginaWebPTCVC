@@ -8,12 +8,7 @@ header('Content-Type: application/json; charset=utf-8');
 header('X-Content-Type-Options: nosniff');
 
 require_once 'storage.php';
-
-function _cacheBust($path) {
-    $abs = __DIR__ . '/../' . $path;
-    $v = file_exists($abs) ? filemtime($abs) : time();
-    return $path . '?v=' . $v;
-}
+require_once 'functions.php';
 
 $tipo = isset($_GET['tipo']) ? $_GET['tipo'] : null;
 $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 10;

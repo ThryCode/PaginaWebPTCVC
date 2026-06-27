@@ -2,23 +2,13 @@
 $pageTitle = 'Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara';
 $pageDescription = 'El PCTVC es un centro de innovaci&oacute;n y transferencia tecnol&oacute;gica en Villa Clara, Cuba. Servicios de incubaci&oacute;n, capacitaci&oacute;n y cooperaci&oacute;n empresarial.';
 $canonicalUrl = 'https://pctvc.cu/index.php';
-$countersFile = __DIR__ . '/data/counters.json';
-$counters = array();
-if (file_exists($countersFile)) {
-    $json = file_get_contents($countersFile);
-    $counters = json_decode($json, true);
-    if (!is_array($counters)) $counters = array();
-    usort($counters, function($a, $b) {
-        return ($a['orden'] ?? 0) - ($b['orden'] ?? 0);
-    });
-}
 require_once __DIR__ . '/api/storage.php';
+require_once __DIR__ . '/api/functions.php';
 
-function _cacheBust($path) {
-    $abs = __DIR__ . '/' . $path;
-    $v = file_exists($abs) ? filemtime($abs) : time();
-    return $path . '?v=' . $v;
-}
+$counters = Storage::read('counters');
+usort($counters, function($a, $b) {
+    return ($a['orden'] ?? 0) - ($b['orden'] ?? 0);
+});
 
 $sliders = Storage::read('sliders');
 usort($sliders, function($a, $b) {
@@ -70,12 +60,12 @@ include 'includes/header.php';
             <div class="carousel-dots" id="carouselDots"></div>
         </section>
 
-        <h1 class="sr-only">Parque Científico Tecnológico de Villa Clara</h1>
+        <h2 class="sr-only">Parque Científico Tecnológico de Villa Clara</h2>
 
         <section class="intro-section">
             <div class="container">
                 <div class="intro-content animate-fade-left">
-                    <h2>Parque Científico Tecnológico de Villa Clara</h2>
+                    <h1>Parque Científico Tecnológico de Villa Clara</h1>
                     <p>El Parque Científico Tecnológico de Villa Clara es un centro de innovación que promueve la colaboración entre gobierno, el sector del conocimiento y el sector empresarial para impulsar el desarrollo científico-tecnológico en Cuba. Ofrece un entorno dinámico para crear y hacer crecer empresas tecnológicas, facilitando la transferencia de conocimientos y tecnologías.</p>
                     <p>Nuestro compromiso es ser el puente entre la academia, la industria y el gobierno, facilitando la transferencia de conocimiento y tecnología que genere impacto positivo en la sociedad.</p>
                 </div>

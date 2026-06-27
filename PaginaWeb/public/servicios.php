@@ -2,6 +2,8 @@
 $pageTitle = 'Servicios - Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara';
 $pageDescription = 'Servicios de innovaci&oacute;n, transferencia tecnol&oacute;gica, incubaci&oacute;n de empresas, capacitaci&oacute;n y consultor&iacute;a del Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara.';
 $canonicalUrl = 'https://pctvc.cu/servicios.php';
+require_once __DIR__ . '/api/storage.php';
+require_once __DIR__ . '/api/functions.php';
 include 'includes/header.php';
 
 $jsonLd = array(
@@ -39,57 +41,45 @@ $iconos = array(
 
 function getIcono($key, $iconos) {
     $svg = isset($iconos[$key]) ? $iconos[$key] : $iconos['documento'];
-    return str_replace('<svg ', '<svg aria-hidden="true" class="icon-' . $key . '" ', $svg);
+    return str_replace('<svg ', '<svg aria-hidden="true" class="icon-' . htmlspecialchars($key) . '" ', $svg);
 }
 
-$serviciosFile = __DIR__ . '/data/servicios.json';
+$all = Storage::read('servicios');
 $primarias = array();
 $secundarias = array();
 $estrategicos = array();
 
-if (file_exists($serviciosFile)) {
-    $raw = file_get_contents($serviciosFile);
-    $all = json_decode($raw, true);
-    if (is_array($all)) {
-        usort($all, function($a, $b) {
-            $tipoA = $a['tipo'] ?? '';
-            $tipoB = $b['tipo'] ?? '';
-            if ($tipoA === $tipoB) {
-                return $a['orden'] - $b['orden'];
-            }
-            return strcmp($tipoA, $tipoB);
-        });
-        foreach ($all as $s) {
-            $pag = $s['pagina'] ?? 'servicios';
-            if ($pag !== 'servicios') continue;
-            $tipo = $s['tipo'] ?? '';
-            if ($tipo === 'primaria') {
-                $primarias[] = $s;
-            } elseif ($tipo === 'estrategico') {
-                $estrategicos[] = $s;
-            } else {
-                $secundarias[] = $s;
-            }
-            $jsonLd['itemListElement'][] = array(
-                '@type' => 'Service',
-                'position' => $s['orden'] ?? 0,
-                'name' => $s['nombre'],
-                'description' => $s['descripcion'] ?? ''
-            );
-        }
+usort($all, function($a, $b) {
+    $tipoA = $a['tipo'] ?? '';
+    $tipoB = $b['tipo'] ?? '';
+    if ($tipoA === $tipoB) {
+        return $a['orden'] - $b['orden'];
     }
+    return strcmp($tipoA, $tipoB);
+});
+foreach ($all as $s) {
+    $pag = $s['pagina'] ?? 'servicios';
+    if ($pag !== 'servicios') continue;
+    $tipo = $s['tipo'] ?? '';
+    if ($tipo === 'primaria') {
+        $primarias[] = $s;
+    } elseif ($tipo === 'estrategico') {
+        $estrategicos[] = $s;
+    } else {
+        $secundarias[] = $s;
+    }
+    $jsonLd['itemListElement'][] = array(
+        '@type' => 'Service',
+        'position' => $s['orden'] ?? 0,
+        'name' => $s['nombre'],
+        'description' => $s['descripcion'] ?? ''
+    );
 }
 
-$ticFile = __DIR__ . '/data/tic.json';
-$ticItems = array();
-if (file_exists($ticFile)) {
-    $raw = file_get_contents($ticFile);
-    $ticItems = json_decode($raw, true);
-    if (!is_array($ticItems)) $ticItems = array();
-    usort($ticItems, function($a, $b) {
-        return ($a['orden'] ?? 0) - ($b['orden'] ?? 0);
-    });
-}
+$ticItems = Storage::read('tic');
+usort($ticItems, function($a, $b) {
+    return ($a['orden'] ?? 0) - ($b['orden'] ?? 0);
+});
 
 ?>
 

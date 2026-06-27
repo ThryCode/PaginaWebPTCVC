@@ -20,6 +20,10 @@ if (version_compare(PHP_VERSION, '7.3.11', '<')) {
 }
 
 define('ENV', 'production');
+if (ENV === 'production') {
+    error_reporting(0);
+    ini_set('display_errors', 0);
+}
 
 // Directorio de datos
 define('DATA_DIR', __DIR__ . '/../data');

@@ -1,9 +1,21 @@
 # Bloquear ejecuci&oacute;n de scripts
-<FilesMatch "\.(php|phtml|php3|php4|php5|php7|phps|phar|pl|py|jsp|asp|html|htm|shtml|sh|cgi)$">
-    Require all denied
-</FilesMatch>
-
-# Solo permitir acceso a im&aacute;genes
-<FilesMatch "\.(jpg|jpeg|png|gif|webp|svg)$">
-    Require all granted
-</FilesMatch>
+<IfModule mod_authz_core.c>
+    # Apache 2.4+
+    <FilesMatch "\.(php|phtml|php3|php4|php5|php7|phps|phar|pl|py|jsp|asp|html|htm|shtml|sh|cgi)$">
+        Require all denied
+    </FilesMatch>
+    <FilesMatch "\.(jpg|jpeg|png|gif|webp|svg)$">
+        Require all granted
+    </FilesMatch>
+</IfModule>
+<IfModule !mod_authz_core.c>
+    # Apache 2.2 / LiteSpeed
+    <FilesMatch "\.(php|phtml|php3|php4|php5|php7|phps|phar|pl|py|jsp|asp|html|htm|shtml|sh|cgi)$">
+        Order Allow,Deny
+        Deny from all
+    </FilesMatch>
+    <FilesMatch "\.(jpg|jpeg|png|gif|webp|svg)$">
+        Order Allow,Deny
+        Allow from all
+    </FilesMatch>
+</IfModule>

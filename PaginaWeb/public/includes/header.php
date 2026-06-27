@@ -1,5 +1,5 @@
 <?php
-$currentPage = basename($_SERVER['PHP_SELF']);
+$currentPage = htmlspecialchars(basename($_SERVER['PHP_SELF']));
 require_once __DIR__ . '/../api/config.php';
 
 header("X-Frame-Options: DENY");

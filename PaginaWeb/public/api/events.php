@@ -5,12 +5,7 @@
  * GET /api/events.php?calendar=1&year=2026&month=6
  */
 require_once 'storage.php';
-
-function _cacheBust($path) {
-    $abs = __DIR__ . '/../' . $path;
-    $v = file_exists($abs) ? filemtime($abs) : time();
-    return $path . '?v=' . $v;
-}
+require_once 'functions.php';
 
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: https://pctvc.cu');

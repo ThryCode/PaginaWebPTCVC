@@ -1,11 +1,6 @@
 <?php
-function _cacheBust($path) {
-    $abs = __DIR__ . '/' . $path;
-    $v = file_exists($abs) ? filemtime($abs) : time();
-    return $path . '?v=' . $v;
-}
-
 require_once 'api/storage.php';
+require_once 'api/functions.php';
 
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 $item = null;

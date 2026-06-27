@@ -24,9 +24,9 @@ if (!validateCSRFToken($token)) {
     exit;
 }
 
-$sessionId = session_id();
+$ip = $_SERVER['REMOTE_ADDR'];
 
-$rateKey = 'contact_rate_' . $sessionId;
+$rateKey = 'contact_rate_' . $ip;
 $rateData = Storage::read('rate_limits');
 $currentEntry = isset($rateData[$rateKey]) ? $rateData[$rateKey] : array('count' => 0, 'first' => 0);
 
@@ -37,6 +37,12 @@ if ($currentEntry['count'] >= MAX_FORM_SUBMISSIONS) {
         echo json_encode(array('success' => false, 'message' => 'Ha excedido el límite de envíos. Intente más tarde.'));
         exit;
     }
+}
+
+if (!empty($_POST['website'])) {
+    http_response_code(403);
+    echo json_encode(array('success' => false, 'message' => 'Solicitud no válida.'));
+    exit;
 }
 
 $nombre = isset($_POST['nombre']) ? trim($_POST['nombre']) : '';
@@ -82,6 +88,10 @@ Storage::insert('mensajes', array(
 $currentEntry['count']++;
 if ($currentEntry['first'] === 0) $currentEntry['first'] = time();
 $rateData[$rateKey] = $currentEntry;
+$expired = time() - FORM_SUBMISSION_WINDOW;
+$rateData = array_filter($rateData, function($entry) use ($expired) {
+    return $entry['first'] > $expired;
+});
 Storage::write('rate_limits', $rateData);
 
 echo json_encode(array(

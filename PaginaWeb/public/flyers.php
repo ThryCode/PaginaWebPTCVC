@@ -1,28 +1,16 @@
 <?php
-function _cacheBust($path) {
-    $abs = __DIR__ . '/' . $path;
-    $v = file_exists($abs) ? filemtime($abs) : time();
-    return $path . '?v=' . $v;
-}
+require_once __DIR__ . '/api/storage.php';
+require_once __DIR__ . '/api/functions.php';
 
 $pageTitle = 'Flyers - Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara';
 $pageDescription = 'Flyers de eventos y actividades destacadas del Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara.';
 $canonicalUrl = 'https://pctvc.cu/flyers.php';
 include 'includes/header.php';
 
-$flyersFile = __DIR__ . '/data/flyers.json';
-$flyers = array();
-
-if (file_exists($flyersFile)) {
-    $raw = file_get_contents($flyersFile);
-    $all = json_decode($raw, true);
-    if (is_array($all)) {
-        usort($all, function($a, $b) {
-            return $a['orden'] - $b['orden'];
-        });
-        $flyers = $all;
-    }
-}
+$flyers = Storage::read('flyers');
+usort($flyers, function($a, $b) {
+    return $a['orden'] - $b['orden'];
+});
 ?>
 
 <?php
