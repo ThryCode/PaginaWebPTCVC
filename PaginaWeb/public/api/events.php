@@ -8,7 +8,7 @@ require_once 'storage.php';
 require_once 'functions.php';
 
 header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: https://pctvc.cu');
+header('Access-Control-Allow-Origin: ' . SITE_URL);
 
 if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     http_response_code(405);

@@ -35,13 +35,13 @@ header("Permissions-Policy: geolocation=(), camera=(), microphone=(), midi=(), s
         'flyers.php' => 'Flyers'
     );
     $breadcrumbName = isset($pageNames[$currentPage]) ? $pageNames[$currentPage] : $pageTitle;
-    $breadcrumbUrl = isset($canonicalUrl) ? $canonicalUrl : ('https://pctvc.cu/' . $currentPage);
+    $breadcrumbUrl = isset($canonicalUrl) ? $canonicalUrl : (SITE_URL . '/' . $currentPage);
     ?>
     {
         "@context": "https://schema.org",
         "@type": "BreadcrumbList",
         "itemListElement": [
-            {"@type":"ListItem","position":1,"name":"Inicio","item":"https://pctvc.cu/"},
+            {"@type":"ListItem","position":1,"name":"Inicio","item":"<?php echo SITE_URL; ?>/"},
             {"@type":"ListItem","position":2,"name":"<?php echo htmlspecialchars(html_entity_decode($breadcrumbName, ENT_QUOTES, 'UTF-8'), ENT_QUOTES, 'UTF-8'); ?>","item":"<?php echo htmlspecialchars($breadcrumbUrl, ENT_QUOTES, 'UTF-8'); ?>"}
         ]
     }
@@ -53,7 +53,7 @@ header("Permissions-Policy: geolocation=(), camera=(), microphone=(), midi=(), s
     <meta property="og:description" content="<?php echo htmlspecialchars(html_entity_decode($pageDescription, ENT_QUOTES, 'UTF-8'), ENT_QUOTES, 'UTF-8'); ?>">
     <?php endif; ?>
     <?php
-    $defaultOgImage = 'https://pctvc.cu/assets/img/logo/logo.png';
+    $defaultOgImage = SITE_URL . '/assets/img/logo/logo.png';
     $ogImageFinal = isset($ogImage) ? $ogImage : $defaultOgImage;
     ?>
     <meta property="og:image" content="<?php echo htmlspecialchars($ogImageFinal, ENT_QUOTES, 'UTF-8'); ?>">

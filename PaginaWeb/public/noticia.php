@@ -36,7 +36,7 @@ $pageDescription = !empty($item['resumen']) ? $item['resumen'] : $item['titulo']
 $canonicalUrl = 'https://pctvc.cu/noticia.php?id=' . $id;
 $ogType = 'article';
 if (!empty($imagenes)) {
-    $ogImage = 'https://pctvc.cu/' . ltrim($imagenes[0], '/');
+    $ogImage = SITE_URL . '/' . ltrim($imagenes[0], '/');
 }
 
 include 'includes/header.php';
@@ -57,10 +57,10 @@ include 'includes/header.php';
                 'name' => 'Parque Científico Tecnológico de Villa Clara',
                 'logo' => array(
                     '@type' => 'ImageObject',
-                    'url' => 'https://pctvc.cu/assets/img/logo/logo.png'
+                    'url' => SITE_URL . '/assets/img/logo/logo.png'
                 )
             ),
-            'image' => !empty($imagenes) ? array('https://pctvc.cu/' . ltrim($imagenes[0], '/')) : array()
+            'image' => !empty($imagenes) ? array(SITE_URL . '/' . ltrim($imagenes[0], '/')) : array()
         ), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); ?>
         </script>
         <section class="page-header">

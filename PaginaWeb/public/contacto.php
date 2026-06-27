@@ -9,8 +9,8 @@ include 'includes/header.php';
             '@context' => 'https://schema.org',
             '@type' => 'LocalBusiness',
             'name' => 'Parque Científico Tecnológico de Villa Clara',
-            'url' => 'https://pctvc.cu',
-            'logo' => 'https://pctvc.cu/assets/img/logo/logo.png',
+            'url' => SITE_URL,
+            'logo' => SITE_URL . '/assets/img/logo/logo.png',
             'address' => array(
                 '@type' => 'PostalAddress',
                 'streetAddress' => 'Carretera a Planta Mecánica, No. 39 B',

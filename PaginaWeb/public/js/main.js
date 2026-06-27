@@ -1,3 +1,4 @@
+'use strict';
 // ============================================
 // INIT - Single DOMContentLoaded bootstrap
 // ============================================
@@ -789,9 +790,10 @@ function initOpinionesCarousel() {
 // ============================================
 // CALENDARIO DE EVENTOS
 // ============================================
+(function() {
 var calendarState = {};
 
-function renderCalendar(containerId) {
+window.renderCalendar = function(containerId) {
     var container = document.getElementById(containerId);
     if (!container) return;
 
@@ -801,7 +803,7 @@ function renderCalendar(containerId) {
     calendarState.containerId = containerId;
 
     loadCalendarMonth();
-}
+};
 
 function loadCalendarMonth() {
     var container = document.getElementById(calendarState.containerId);
@@ -983,6 +985,7 @@ function calendarGoToYear(year) {
     calendarState.year = year;
     loadCalendarMonth();
 }
+})();
 function loadGallery(containerId, options) {
     var container = document.getElementById(containerId);
     if (!container) return;
@@ -1301,8 +1304,10 @@ document.addEventListener('DOMContentLoaded', function() {
         var href = link.getAttribute('href');
         if (!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('mailto') || href.startsWith('tel')) return;
         if (link.target === '_blank') return;
+        if (href.startsWith('/admin/') || href.startsWith('admin/')) return;
 
         link.addEventListener('click', function(e) {
+            if (e.button !== 0 || e.ctrlKey || e.metaKey) return;
             if (link.closest('.dropdown') && !link.closest('.dropdown-menu')) return;
             var currentPath = window.location.pathname.split('/').pop();
             if (href === currentPath) return;
@@ -1433,7 +1438,6 @@ function animateCounter(el) {
             var item = this.parentElement;
             var answer = item.querySelector('.faq-answer');
             var isOpen = item.classList.contains('faq-open');
-            // Cerrar todos
             var openItems = document.querySelectorAll('.faq-item.faq-open');
             for (var k = 0; k < openItems.length; k++) {
                 var openAns = openItems[k].querySelector('.faq-answer');
@@ -1441,11 +1445,12 @@ function animateCounter(el) {
                 void openAns.offsetHeight;
                 openAns.style.maxHeight = '0';
                 openItems[k].classList.remove('faq-open');
+                openItems[k].querySelector('.faq-question').setAttribute('aria-expanded', 'false');
             }
-            // Abrir
             if (!isOpen) {
                 item.classList.add('faq-open');
                 answer.style.maxHeight = answer.scrollHeight + 20 + 'px';
+                this.setAttribute('aria-expanded', 'true');
             }
         });
     });
