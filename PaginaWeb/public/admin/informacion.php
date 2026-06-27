@@ -43,8 +43,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($tab === 'galeria') {
                     $existing = Storage::findById('galeria', $deleteId);
                     if ($existing && isset($existing['imagen'])) {
-                        $imgPath = '../' . ltrim($existing['imagen'], '/');
-                        if (strpos($imgPath, '/../') === false && strpos($imgPath, '..\\') === false && file_exists($imgPath)) unlink($imgPath);
+                        $clean = ltrim($existing['imagen'], '/');
+                        $realBase = realpath(__DIR__ . '/../uploads');
+                        $realPath = realpath(__DIR__ . '/../' . $clean);
+                        if ($realPath !== false && $realBase !== false && strpos($realPath, $realBase) === 0 && file_exists($realPath)) unlink($realPath);
                     }
                     Storage::delete('galeria', $deleteId);
                 } elseif ($tab === 'proyectos') {
@@ -53,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $imgs = array();
                         if (!empty($existing['imagenes']) && is_array($existing['imagenes'])) $imgs = $existing['imagenes'];
                         elseif (!empty($existing['imagen'])) $imgs = array($existing['imagen']);
-                        foreach ($imgs as $img) { $clean = ltrim($img, '/'); if (strpos($clean, '..') === false) { $imgPath = '../' . $clean; if (file_exists($imgPath)) unlink($imgPath); } }
+                        foreach ($imgs as $img) { $clean = ltrim($img, '/'); $realBase = realpath(__DIR__ . '/../uploads'); $realPath = realpath(__DIR__ . '/../' . $clean); if ($realPath !== false && $realBase !== false && strpos($realPath, $realBase) === 0 && file_exists($realPath)) unlink($realPath); }
                         deleteFolder(getProyectoFolder($deleteId));
                     }
                     Storage::delete('proyectos', $deleteId);
@@ -82,8 +84,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $t = ($item['titulo'] ?: 'Sin título');
                     if ($t === $grupoTitulo) {
                         if (!empty($item['imagen'])) {
-                            $imgPath = '../' . $item['imagen'];
-                            if (file_exists($imgPath)) unlink($imgPath);
+                            $clean = ltrim($item['imagen'], '/');
+                            $realBase = realpath(__DIR__ . '/../uploads');
+                            $realPath = realpath(__DIR__ . '/../' . $clean);
+                            if ($realPath !== false && $realBase !== false && strpos($realPath, $realBase) === 0 && file_exists($realPath)) unlink($realPath);
                         }
                         Storage::delete('galeria', $item['id']);
                     }
@@ -241,7 +245,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } elseif ($action === 'update') {
                 $updateId = intval($_POST['id'] ?? 0);
                 if ($updateId > 0) {
-                    $data = array('titulo' => htmlspecialchars(trim($_POST['titulo'] ?? '')));
+                    $data = array('titulo' => trim($_POST['titulo'] ?? ''));
                     Storage::update('galeria', $updateId, $data);
                     $message = 'Imagen actualizada.';
                 }

@@ -14,7 +14,7 @@ header("Permissions-Policy: geolocation=(), camera=(), microphone=(), midi=(), s
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script>document.documentElement.classList.toggle('is-mobile',/Mobi|Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));</script>
-    <title><?php echo isset($pageTitle) ? html_entity_decode($pageTitle, ENT_QUOTES, 'UTF-8') : 'Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara'; ?></title>
+    <title><?php echo isset($pageTitle) ? htmlspecialchars(html_entity_decode($pageTitle, ENT_QUOTES, 'UTF-8'), ENT_QUOTES, 'UTF-8') : 'Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara'; ?></title>
     <meta name="description" content="<?php echo isset($pageDescription) ? htmlspecialchars(html_entity_decode($pageDescription, ENT_QUOTES, 'UTF-8'), ENT_QUOTES, 'UTF-8') : ''; ?>">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="<?php echo isset($canonicalUrl) ? htmlspecialchars($canonicalUrl, ENT_QUOTES, 'UTF-8') : ''; ?>">
@@ -73,7 +73,7 @@ header("Permissions-Policy: geolocation=(), camera=(), microphone=(), midi=(), s
     <link rel="icon" type="image/x-icon" href="/assets/img/logo/favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.min.css?v=<?= filemtime(__DIR__ . '/../css/style.min.css') ?>">
 </head>
 <body>
@@ -81,7 +81,7 @@ header("Permissions-Policy: geolocation=(), camera=(), microphone=(), midi=(), s
     <header class="header" id="header">
         <div class="container">
             <a href="index.php" class="logo">
-                <img src="/assets/img/logo/logo.png" alt="Logo Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara" width="50" height="50" loading="lazy" class="logo-img" id="headerLogo">
+                <img src="/assets/img/logo/logo.png" alt="Logo Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara" width="50" height="50" class="logo-img" id="headerLogo">
                 <span class="logo-text">Parque Cient&iacute;fico Tecnol&oacute;gico<span>de Villa Clara</span></span>
             </a>
             <nav class="nav" id="nav">

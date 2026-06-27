@@ -41,7 +41,7 @@ include 'includes/header.php';
                 <?php $first = true; ?>
                 <?php foreach ($sliders as $s): ?>
                 <div class="carousel-slide<?php echo $first ? ' active' : ''; ?>">
-                    <img src="/<?php echo htmlspecialchars(_cacheBust($s['imagen'])); ?>" alt="<?php echo htmlspecialchars($s['titulo'] ?: 'Slider'); ?>">
+                    <img src="/<?php echo htmlspecialchars(_cacheBust($s['imagen'])); ?>" alt="<?php echo htmlspecialchars($s['titulo'] ?: 'Slider'); ?>"<?php echo $first ? ' fetchpriority="high"' : ''; ?>>
                 </div>
                 <?php $first = false; ?>
                 <?php endforeach; ?>

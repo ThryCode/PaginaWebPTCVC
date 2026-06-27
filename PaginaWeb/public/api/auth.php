@@ -18,7 +18,8 @@ class Auth {
             if (time() - $lastActivity > $this->sessionTimeout) {
                 $this->logAudit($_SESSION['user_id'], 'logout', $_SESSION['user_email'] ?? 'unknown', $this->getIP());
                 $this->destroySession();
-                header('Location: login.php?timeout=1');
+                $_SESSION['timeout_flag'] = true;
+                header('Location: login.php');
                 exit;
             }
             $_SESSION['last_activity'] = time();
@@ -182,7 +183,7 @@ class Auth {
         $hash = password_hash($newPassword, PASSWORD_BCRYPT);
 
         foreach ($data['users'] as &$user) {
-            if ($user['id'] == $userId) {
+            if ($user['id'] === $userId) {
                 $user['password'] = $hash;
                 break;
             }
@@ -196,7 +197,7 @@ class Auth {
     public function verifyCurrentPassword($userId, $password) {
         $data = $this->readData();
         foreach ($data['users'] as $user) {
-            if ($user['id'] == $userId) {
+            if ($user['id'] === $userId) {
                 if (empty($user['password'])) {
                     return false;
                 }
@@ -220,15 +221,15 @@ class Auth {
 
     private function destroySession() {
         $_SESSION = [];
-        if (!headers_sent() && session_status() === PHP_SESSION_ACTIVE) {
-            if (ini_get('session.use_cookies')) {
-                $params = session_get_cookie_params();
-                setcookie(session_name(), '', time() - 42000,
-                    $params['path'], $params['domain'],
-                    $params['secure'], $params['httponly']
-                );
-            }
+        if (session_status() === PHP_SESSION_ACTIVE) {
             session_destroy();
+        }
+        if (!headers_sent() && ini_get('session.use_cookies')) {
+            $params = session_get_cookie_params();
+            setcookie(session_name(), '', time() - 42000,
+                $params['path'], $params['domain'],
+                $params['secure'], $params['httponly']
+            );
         }
     }
 
@@ -272,7 +273,7 @@ class Auth {
         $pacId = $data['next_id']++;
 
         foreach ($data['users'] as &$user) {
-            if ($user['id'] == $userId) {
+            if ($user['id'] === $userId) {
                 $user['pacs'][] = [
                     'id' => $pacId,
                     'hash' => $hash,
@@ -294,7 +295,7 @@ class Auth {
         $data = $this->readData();
 
         foreach ($data['users'] as &$user) {
-            if ($user['id'] == $userId) {
+            if ($user['id'] === $userId) {
                 foreach ($user['pacs'] as &$p) {
                     $p['activo'] = false;
                 }
@@ -313,7 +314,7 @@ class Auth {
 
         foreach ($data['users'] as &$user) {
             foreach ($user['pacs'] as &$p) {
-                if ($p['id'] == $pacId) {
+                if ($p['id'] === $pacId) {
                     $p['activo'] = false;
                     break 2;
                 }
@@ -382,7 +383,7 @@ class Auth {
         $data = $this->readData();
 
         foreach ($data['users'] as $user) {
-            if ($user['id'] == $userId) {
+            if ($user['id'] === $userId) {
                 return $user['pacs'];
             }
         }
@@ -410,7 +411,7 @@ class Auth {
         $data = $this->readData();
 
         foreach ($data['users'] as $user) {
-            if ($user['id'] == $userId) {
+            if ($user['id'] === $userId) {
                 return [
                     'id' => $user['id'],
                     'nombre' => $user['nombre'],
@@ -427,7 +428,7 @@ class Auth {
         $data = $this->readData();
 
         foreach ($data['users'] as &$user) {
-            if ($user['id'] == $userId) {
+            if ($user['id'] === $userId) {
                 foreach (['nombre', 'email', 'rol', 'activo'] as $key) {
                     if (array_key_exists($key, $fields)) {
                         $user[$key] = $fields[$key];
@@ -467,7 +468,7 @@ class Auth {
         $data = $this->readData();
 
         foreach ($data['users'] as $key => $user) {
-            if ($user['id'] == $userId) {
+            if ($user['id'] === $userId) {
                 array_splice($data['users'], $key, 1);
                 break;
             }

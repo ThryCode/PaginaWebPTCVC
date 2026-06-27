@@ -11,7 +11,8 @@ if ($auth->isLoggedIn()) {
 
 $error = false;
 $errorMsg = '';
-$timeoutMsg = isset($_GET['timeout']);
+$timeoutMsg = isset($_SESSION['timeout_flag']) && $_SESSION['timeout_flag'] === true;
+if ($timeoutMsg) unset($_SESSION['timeout_flag']);
 $step = isset($_SESSION['pac_verified']) && $_SESSION['pac_verified'] === true ? 2 : 1;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

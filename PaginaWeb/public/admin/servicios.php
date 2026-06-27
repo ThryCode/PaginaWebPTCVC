@@ -317,7 +317,7 @@ usort($ticItems, function($a, $b) {
                                     </td>
                                     <td><strong><?php echo htmlspecialchars($s['nombre']); ?></strong></td>
                                     <td><?php echo htmlspecialchars(substr($s['descripcion'], 0, 80)); ?><?php echo mb_strlen($s['descripcion']) > 80 ? '…' : ''; ?></td>
-                                    <td><?php echo $s['orden']; ?></td>
+                                    <td><?php echo htmlspecialchars($s['orden']); ?></td>
                                     <td>
                                         <a href="?action=edit&id=<?php echo $s['id']; ?>&tab=<?php echo $tab; ?>" class="btn btn-sm btn-primary">Editar</a>
                                         <form class="delete-form" method="POST" action="?action=delete&tab=<?php echo $tab; ?>" data-confirm="¿Eliminar este servicio?">

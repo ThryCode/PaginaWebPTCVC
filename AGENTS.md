@@ -242,7 +242,8 @@ Almacenamiento plano en JSON (`public/data/`). Cada recurso es un array de objet
 - `servicios.json` ΓÇö Servicios y subservicios
 - `contadores.json` ΓÇö Contadores de estad├¡sticas
 - `mensajes.json` ΓÇö Mensajes del formulario de contacto
-- `usuarios.json` ΓÇö Usuarios del panel admin
+- `admin_auth.json` ΓÇö Usuarios del panel admin (con PAC y auditor├¡a)
+- `usuarios.json` ΓÇö Legacy (reemplazado por `admin_auth.json`, ya no se usa)
 
 API de acceso v├¡a `Storage::read('nombre')` y `Storage::write('nombre', $data)` en `api/storage.php`.
 
@@ -279,3 +280,34 @@ NO es SQL ΓÇö no se pueden hacer JOINs, consultas complejas ni transacciones.
 - Modificar `public/data/` en producci├│n sin respaldo
 - Commitear secretos, credenciales reales, o datos del sitio
 - Usar `console.log()` en c├│digo JS de producci├│n
+
+## Disaster Recovery
+
+### PAC de Emergencia
+Si se pierde acceso al panel admin (contrase├▒a olvidada, 2FA bloqueado):
+1. Acceder a `/admin/login.php` e ingresar cualquier email
+2. En la pantalla de PAC, hacer clic en "¿Olvidaste tu PAC?"
+3. Ingresar el PAC del sistema (configurado en `setup.php`)
+4. Esto permite crear un nuevo PAC y acceder
+
+Protected by IP restriction (localhost only) in `auth.php:authenticate()`.
+
+### setup.php (Reinstalaci├│n)
+Si los archivos JSON en `public/data/` se corrompen o es necesario reiniciar:
+1. Acceder a `/setup.php` desde el navegador en localhost
+2. Borrar o renombrar `public/data/admin_auth.json` si existe
+3. Recargar `/setup.php` ΓåÆ recrea todos los JSON con datos iniciales
+4. Usuario: `marioc@pctvc.cu` / `12345678`
+5. Acceder al admin y cambiar la contrase├▒a inmediatamente
+
+⚠ S├│lo accesible desde localhost. No eliminar este archivo en producci├│n.
+
+### Respaldo de datos
+- `public/data/*.json` contiene todo el contenido del sitio
+- Hacer backup peri├│dico de estos archivos
+- Para restaurar: subir los JSON respaldados a `public/data/`
+
+### Logs de error
+- Los errores PHP del admin se registran en `public/logs/admin_error.log`
+- No se almacenan en `public/data/` para evitar mezclar datos con logs
+- `public/data/` no debe contener archivos .log

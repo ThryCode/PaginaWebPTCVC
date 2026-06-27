@@ -41,6 +41,10 @@ if (!empty($imagenes)) {
 
 include 'includes/header.php';
 ?>
+        <meta property="article:published_time" content="<?php echo htmlspecialchars($fechaRaw); ?>">
+        <?php if (!empty($item['updated_at'])): ?>
+        <meta property="article:modified_time" content="<?php echo htmlspecialchars($item['updated_at']); ?>">
+        <?php endif; ?>
         <script type="application/ld+json">
         <?php echo json_encode(array(
             '@context' => 'https://schema.org',

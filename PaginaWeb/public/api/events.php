@@ -1,9 +1,4 @@
 <?php
-/**
- * API pública de eventos
- * GET /api/events.php
- * GET /api/events.php?calendar=1&year=2026&month=6
- */
 require_once 'storage.php';
 require_once 'functions.php';
 

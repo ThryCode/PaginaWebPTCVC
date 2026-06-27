@@ -339,12 +339,12 @@ function renderCardImage(imagenes, titulo, tipo) {
         return '<div class="news-card-img">' + (tipo === 'evento' ? '&#128197;' : '&#128196;') + '</div>';
     }
     if (imagenes.length === 1) {
-        return '<div class="news-card-img"><img src="/' + imagenes[0] + '" alt="' + escapeHtml(titulo) + '"></div>';
+        return '<div class="news-card-img"><img src="/' + escapeHtml(imagenes[0]) + '" alt="' + escapeHtml(titulo) + '"></div>';
     }
     var html = '<div class="card-carousel" data-count="' + imagenes.length + '">';
     html += '<div class="carousel-track">';
     imagenes.forEach(function(src) {
-        html += '<div class="carousel-slide"><img src="/' + src + '" alt="' + escapeHtml(titulo) + '"></div>';
+        html += '<div class="carousel-slide"><img src="/' + escapeHtml(src) + '" alt="' + escapeHtml(titulo) + '"></div>';
     });
     html += '</div>';
     html += '<div class="carousel-dots">';
@@ -717,7 +717,7 @@ function loadOpiniones(containerId) {
                         html += '<p class="opinion-text">"' + escapeHtml(item.texto) + '"</p>';
                         html += '<div class="opinion-author">';
                         if (item.imagen) {
-                            html += '<img src="/' + item.imagen + '" alt="' + escapeHtml(item.nombre) + '" width="48" height="48" loading="lazy" class="opinion-img">';
+                            html += '<img src="/' + escapeHtml(item.imagen) + '" alt="' + escapeHtml(item.nombre) + '" width="48" height="48" loading="lazy" class="opinion-img">';
                         } else {
                             html += '<div class="opinion-img opinion-img-placeholder">' + escapeHtml((item.nombre || '').charAt(0) || '?') + '</div>';
                         }
@@ -775,14 +775,14 @@ function initOpinionesCarousel() {
         autoPlay = setInterval(nextOpinion, 5000);
     }
     if (prevBtn) {
-        prevBtn.onclick = function() {
+        prevBtn.addEventListener('click', function() {
             showOpinion(current === 0 ? cards.length - 1 : current - 1);
-        };
+        });
     }
     if (nextBtn) {
-        nextBtn.onclick = function() {
+        nextBtn.addEventListener('click', function() {
             showOpinion(current === cards.length - 1 ? 0 : current + 1);
-        };
+        });
     }
     resetOpinionAutoPlay();
 }
@@ -1059,8 +1059,10 @@ function loadGallery(containerId, options) {
 // LIGHTBOX
 // ============================================
 var lightboxImages = [];
+var _lastTrigger = null;
 
 function openLightbox(src, alt) {
+    _lastTrigger = document.activeElement;
     var existing = document.getElementById('lightbox');
     if (existing) existing.remove();
 
@@ -1074,7 +1076,7 @@ function openLightbox(src, alt) {
     lb.innerHTML = '<button class="lightbox-close" aria-label="Cerrar">&times;</button>' +
         '<button class="lightbox-prev" aria-label="Anterior">&#10094;</button>' +
         '<button class="lightbox-next" aria-label="Siguiente">&#10095;</button>' +
-        '<div class="lightbox-content"><img src="' + src + '" alt="' + (alt || '') + '"></div>';
+        '<div class="lightbox-content"><img src="' + escapeHtml(src) + '" alt="' + escapeHtml(alt || '') + '"></div>';
     document.body.appendChild(lb);
     document.body.style.overflow = 'hidden';
 
@@ -1093,7 +1095,10 @@ function closeLightbox() {
     if (lb) {
         lb.classList.remove('active');
         document.body.style.overflow = '';
-        setTimeout(function() { lb.remove(); }, 300);
+        setTimeout(function() {
+            lb.remove();
+            if (_lastTrigger) { _lastTrigger.focus(); _lastTrigger = null; }
+        }, 300);
     }
 }
 
@@ -1125,6 +1130,7 @@ document.addEventListener('keydown', function(e) {
 // GALLERY CAROUSEL LIGHTBOX
 // ============================================
 function openGalleryLightbox(images, title) {
+    _lastTrigger = document.activeElement;
     var existing = document.getElementById('galleryLightbox');
     if (existing) existing.remove();
 
@@ -1137,7 +1143,7 @@ function openGalleryLightbox(images, title) {
     var slidesHtml = '';
     var dotsHtml = '';
     images.forEach(function(src, i) {
-        slidesHtml += '<div class="gallery-lb-slide"><img src="/' + src + '" alt="' + escapeHtml(title) + '"></div>';
+        slidesHtml += '<div class="gallery-lb-slide"><img src="/' + escapeHtml(src) + '" alt="' + escapeHtml(title) + '"></div>';
         dotsHtml += '<span class="gallery-lb-dot' + (i === 0 ? ' active' : '') + '" data-idx="' + i + '"></span>';
     });
 
@@ -1152,7 +1158,7 @@ function openGalleryLightbox(images, title) {
             '</div>' +
             '<button class="gallery-lb-next gallery-lb-nav"' + singleNav + ' aria-label="Siguiente">&#10095;</button>' +
         '</div>' +
-        (title ? '<div class="gallery-lb-title">' + title + '</div>' : '') +
+        (title ? '<div class="gallery-lb-title">' + escapeHtml(title) + '</div>' : '') +
         '<div class="gallery-lb-dots">' + dotsHtml + '</div>';
 
     document.body.appendChild(lb);
@@ -1239,7 +1245,10 @@ function closeGalleryLightbox() {
     if (lb) {
         lb.classList.remove('active');
         document.body.style.overflow = '';
-        setTimeout(function() { lb.remove(); }, 300);
+        setTimeout(function() {
+            lb.remove();
+            if (_lastTrigger) { _lastTrigger.focus(); _lastTrigger = null; }
+        }, 300);
     }
 }
 

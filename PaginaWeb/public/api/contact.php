@@ -39,7 +39,23 @@ if ($currentEntry['count'] >= MAX_FORM_SUBMISSIONS) {
     }
 }
 
+$currentEntry['count']++;
+if ($currentEntry['first'] === 0) $currentEntry['first'] = time();
+$rateData[$rateKey] = $currentEntry;
+$expired = time() - FORM_SUBMISSION_WINDOW;
+$rateData = array_filter($rateData, function($entry) use ($expired) {
+    return $entry['first'] > $expired;
+});
+Storage::write('rate_limits', $rateData);
+
 if (!empty($_POST['website'])) {
+    http_response_code(403);
+    echo json_encode(array('success' => false, 'message' => 'Solicitud no válida.'));
+    exit;
+}
+
+$formTs = isset($_POST['_ts']) ? intval($_POST['_ts']) : 0;
+if ($formTs === 0 || time() - $formTs < 3) {
     http_response_code(403);
     echo json_encode(array('success' => false, 'message' => 'Solicitud no válida.'));
     exit;
@@ -76,23 +92,14 @@ if (!empty($errors)) {
 }
 
 Storage::insert('mensajes', array(
-    'nombre' => htmlspecialchars($nombre, ENT_QUOTES, 'UTF-8'),
-    'apellidos' => htmlspecialchars($apellidos, ENT_QUOTES, 'UTF-8'),
-    'correo' => htmlspecialchars($correo, ENT_QUOTES, 'UTF-8'),
-    'telefono' => htmlspecialchars($telefono, ENT_QUOTES, 'UTF-8'),
-    'asunto' => htmlspecialchars($asunto, ENT_QUOTES, 'UTF-8'),
-    'mensaje' => htmlspecialchars($mensaje, ENT_QUOTES, 'UTF-8'),
+    'nombre' => $nombre,
+    'apellidos' => $apellidos,
+    'correo' => $correo,
+    'telefono' => $telefono,
+    'asunto' => $asunto,
+    'mensaje' => $mensaje,
     'leido' => 0
 ));
-
-$currentEntry['count']++;
-if ($currentEntry['first'] === 0) $currentEntry['first'] = time();
-$rateData[$rateKey] = $currentEntry;
-$expired = time() - FORM_SUBMISSION_WINDOW;
-$rateData = array_filter($rateData, function($entry) use ($expired) {
-    return $entry['first'] > $expired;
-});
-Storage::write('rate_limits', $rateData);
 
 echo json_encode(array(
     'success' => true,

@@ -35,7 +35,7 @@ define('EMERGENCY_PAC_HASH', '$2y$10$3qdtCS5jT2F.8tH/09FTeuUr8NDqbhNSBuJ0.f6EpwN
 
 date_default_timezone_set('America/Havana');
 
-header('X-Frame-Options: SAMEORIGIN');
+header('X-Frame-Options: DENY');
 header('X-Content-Type-Options: nosniff');
 header('Referrer-Policy: strict-origin-when-cross-origin');
 header('Permissions-Policy: geolocation=(), microphone=(), camera=()');
@@ -43,6 +43,8 @@ header('Permissions-Policy: geolocation=(), microphone=(), camera=()');
 if (ENV === 'production') {
     header('Strict-Transport-Security: max-age=10886400; includeSubDomains; preload');
 }
+
+header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; frame-src 'none'; object-src 'none'; base-uri 'self'");
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -52,6 +54,11 @@ function generateCSRFToken() {
     if (empty($_SESSION[CSRF_TOKEN_NAME])) {
         $_SESSION[CSRF_TOKEN_NAME] = bin2hex(random_bytes(32));
     }
+    return $_SESSION[CSRF_TOKEN_NAME];
+}
+
+function rotateCSRFToken() {
+    $_SESSION[CSRF_TOKEN_NAME] = bin2hex(random_bytes(32));
     return $_SESSION[CSRF_TOKEN_NAME];
 }
 

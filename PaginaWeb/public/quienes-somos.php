@@ -262,15 +262,15 @@ include 'includes/header.php';
                 </div>
                 <div class="faq-list">
                     <div class="faq-item">
-                        <button class="faq-question" aria-expanded="false">¿Qu&eacute; es el Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara?</button>
-                        <div class="faq-answer">
+                        <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-1">¿Qu&eacute; es el Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara?</button>
+                        <div class="faq-answer" id="faq-answer-1">
                             <p>El Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara (PCT Villa Clara) es una empresa cubana que apoya a otras empresas y emprendedores a desarrollar proyectos innovadores y a insertar sus productos en el mercado internacional.</p>
                             <p>Es un espacio donde la ciencia, la tecnolog&iacute;a y los negocios se unen para crear nuevas oportunidades, generar divisas para el pa&iacute;s y fortalecer la industria cubana.</p>
                         </div>
                     </div>
                     <div class="faq-item">
-                        <button class="faq-question" aria-expanded="false">¿Se obtiene alg&uacute;n beneficio econ&oacute;mico por participar en un proyecto?</button>
-                        <div class="faq-answer">
+                        <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-2">¿Se obtiene alg&uacute;n beneficio econ&oacute;mico por participar en un proyecto?</button>
+                        <div class="faq-answer" id="faq-answer-2">
                             <p>S&iacute;, participar en un proyecto en el PCT Villa Clara tiene importantes beneficios econ&oacute;micos.</p>
                             <p>Durante los primeros <strong>cinco (5) a&ntilde;os</strong> de funcionamiento de tu proyecto o empresa incubada las ventajas son:</p>
                             <ul>
@@ -281,8 +281,8 @@ include 'includes/header.php';
                         </div>
                     </div>
                     <div class="faq-item">
-                        <button class="faq-question" aria-expanded="false">Tengo una idea de proyecto. ¿C&oacute;mo puedo desarrollarla en el PCT Villa Clara?</button>
-                        <div class="faq-answer">
+                        <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-3">Tengo una idea de proyecto. ¿C&oacute;mo puedo desarrollarla en el PCT Villa Clara?</button>
+                        <div class="faq-answer" id="faq-answer-3">
                             <p>Desarrollar tu idea de proyecto en el PCT Villa Clara es un proceso que te gu&iacute;a desde el concepto inicial hasta su lanzamiento.</p>
                             <p><strong>Pasos para desarrollar tu proyecto:</strong></p>
                             <ul>
@@ -300,15 +300,15 @@ include 'includes/header.php';
                         </div>
                     </div>
                     <div class="faq-item">
-                        <button class="faq-question" aria-expanded="false">¿Puedo inscribirme y participar en proyectos si vivo fuera de Villa Clara?</button>
-                        <div class="faq-answer">
+                        <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-4">¿Puedo inscribirme y participar en proyectos si vivo fuera de Villa Clara?</button>
+                        <div class="faq-answer" id="faq-answer-4">
                             <p>S&iacute;, absolutamente. Puedes inscribirte y participar en proyectos del PCT Villa Clara aunque vivas fuera de la provincia. <strong>No hay ning&uacute;n requisito de residencia.</strong></p>
                             <p>En cualquier lugar se puede hacer un proyecto y el PCT ofrece acompa&ntilde;amiento t&eacute;cnico hasta que se decida crear una empresa. El PCT est&aacute; abierto a personas de todo el pa&iacute;s, sin importar de qu&eacute; provincia vengas.</p>
                         </div>
                     </div>
                     <div class="faq-item">
-                        <button class="faq-question" aria-expanded="false">¿Cu&aacute;les son los requisitos para pertenecer al PCT Villa Clara?</button>
-                        <div class="faq-answer">
+                        <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-5">¿Cu&aacute;les son los requisitos para pertenecer al PCT Villa Clara?</button>
+                        <div class="faq-answer" id="faq-answer-5">
                             <p>Los requisitos para pertenecer al PCT Villa Clara son flexibles y se adaptan al tipo de participaci&oacute;n que busques. No existen barreras geogr&aacute;ficas ni requisitos excluyentes.</p>
                             <p><strong>¿Qui&eacute;nes pueden pertenecer?</strong></p>
                             <ul>
@@ -327,8 +327,8 @@ include 'includes/header.php';
                         </div>
                     </div>
                     <div class="faq-item">
-                        <button class="faq-question" aria-expanded="false">¿Qu&eacute; tipo de apoyo brinda el PCT Villa Clara a las empresas y emprendedores?</button>
-                        <div class="faq-answer">
+                        <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-6">¿Qu&eacute; tipo de apoyo brinda el PCT Villa Clara a las empresas y emprendedores?</button>
+                        <div class="faq-answer" id="faq-answer-6">
                             <p>El PCT Villa Clara ofrece un sistema de apoyo integral que abarca desde el momento en que tienes una idea hasta que tu producto o servicio llega al mercado. Su objetivo es ser un &ldquo;puente&rdquo; entre el conocimiento, la industria y el gobierno para que puedas innovar y crecer.</p>
                             <p><strong>Principales tipos de apoyo:</strong></p>
                             <ul>
@@ -342,8 +342,8 @@ include 'includes/header.php';
                         </div>
                     </div>
                     <div class="faq-item">
-                        <button class="faq-question" aria-expanded="false">¿Qu&eacute; tipos de proyectos se desarrollan en el PCT Villa Clara?</button>
-                        <div class="faq-answer">
+                        <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-7">¿Qu&eacute; tipos de proyectos se desarrollan en el PCT Villa Clara?</button>
+                        <div class="faq-answer" id="faq-answer-7">
                             <p>En el PCT Villa Clara se desarrollan proyectos de innovaci&oacute;n con perfil industrial, que abarcan desde la creaci&oacute;n de nuevos productos hasta la mejora de los ya existentes.</p>
                             <p><strong>Categor&iacute;as principales:</strong></p>
                             <ul>
@@ -357,8 +357,8 @@ include 'includes/header.php';
                         </div>
                     </div>
                     <div class="faq-item">
-                        <button class="faq-question" aria-expanded="false">¿Qui&eacute;nes pueden participar en los proyectos del PCT Villa Clara?</button>
-                        <div class="faq-answer">
+                        <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-8">¿Qui&eacute;nes pueden participar en los proyectos del PCT Villa Clara?</button>
+                        <div class="faq-answer" id="faq-answer-8">
                             <p>En el PCT Villa Clara pueden participar personas y organizaciones de todo tipo:</p>
                             <ul>
                                 <li><strong>Personas naturales:</strong> emprendedores, estudiantes, trabajadores por cuenta propia.</li>
@@ -370,8 +370,8 @@ include 'includes/header.php';
                         </div>
                     </div>
                     <div class="faq-item">
-                        <button class="faq-question" aria-expanded="false">¿El PCT Villa Clara ofrece servicios de incubaci&oacute;n de empresas?</button>
-                        <div class="faq-answer">
+                        <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-9">¿El PCT Villa Clara ofrece servicios de incubaci&oacute;n de empresas?</button>
+                        <div class="faq-answer" id="faq-answer-9">
                             <p>S&iacute;, el PCT Villa Clara ofrece servicios de incubaci&oacute;n de empresas. Es, de hecho, una de sus actividades principales.</p>
                             <p><strong>¿En qu&eacute; consiste?</strong></p>
                             <p>La incubaci&oacute;n es un proceso de acompa&ntilde;amiento para ayudar a convertir una idea en un negocio real y sostenible. El parque fue creado con el objetivo de incubar nuevos productos y empresas que dinamicen la econom&iacute;a del pa&iacute;s.</p>
@@ -386,8 +386,8 @@ include 'includes/header.php';
                         </div>
                     </div>
                     <div class="faq-item">
-                        <button class="faq-question" aria-expanded="false">¿C&oacute;mo puedo contactar con el PCT Villa Clara para obtener m&aacute;s informaci&oacute;n?</button>
-                        <div class="faq-answer">
+                        <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-10">¿C&oacute;mo puedo contactar con el PCT Villa Clara para obtener m&aacute;s informaci&oacute;n?</button>
+                        <div class="faq-answer" id="faq-answer-10">
                             <p>Si est&aacute;s interesado en incubar tu proyecto o en otro servicio del PCT, puedes contactarnos directamente.</p>
                             <ul>
                                 <li>Correo electr&oacute;nico: dalgys@pctvc.cu</li>

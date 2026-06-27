@@ -1,8 +1,4 @@
 <?php
-/**
- * API: Obtener noticias y eventos
- * Lee de JSON
- */
 
 header('Content-Type: application/json; charset=utf-8');
 header('X-Content-Type-Options: nosniff');

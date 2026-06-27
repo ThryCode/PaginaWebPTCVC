@@ -2,6 +2,7 @@
 
 require_once '../api/auth.php';
 require_once '../api/storage.php';
+require_once 'includes/helpers.php';
 
 $auth = new Auth();
 $auth->requireLogin();
@@ -37,8 +38,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($deleteId > 0) {
                     $existing = Storage::findById('sliders', $deleteId);
                     if ($existing && isset($existing['imagen'])) {
-                        $imgPath = '../' . ltrim($existing['imagen'], '/');
-                        if (strpos($imgPath, '/../') === false && strpos($imgPath, '..\\') === false && file_exists($imgPath)) unlink($imgPath);
+                        $clean = ltrim($existing['imagen'], '/');
+                        $realBase = realpath(__DIR__ . '/../uploads');
+                        $realPath = realpath(__DIR__ . '/../' . $clean);
+                        if ($realPath !== false && $realBase !== false && strpos($realPath, $realBase) === 0 && file_exists($realPath)) unlink($realPath);
                     }
                     Storage::delete('sliders', $deleteId);
                     $message = 'Slider eliminado.';
@@ -139,17 +142,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $orden = intval($_POST['orden'] ?? count($allOpiniones) + 1);
                 $imagen = '';
                 if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
-                    $uploadDir = '../uploads/opiniones/';
-                    if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
-                    $allowedExts = array('jpg', 'jpeg', 'png', 'gif', 'webp');
-                    $allowedMime = array('image/jpeg', 'image/png', 'image/gif', 'image/webp');
-                    $ext = strtolower(pathinfo($_FILES['imagen']['name'], PATHINFO_EXTENSION));
-                    $mime = mime_content_type($_FILES['imagen']['tmp_name']);
-                    if (in_array($ext, $allowedExts) && in_array($mime, $allowedMime) && $_FILES['imagen']['size'] <= 5 * 1024 * 1024) {
-                        $filename = 'opinion_' . time() . '_' . rand(1000, 9999) . '.' . $ext;
-                        if (move_uploaded_file($_FILES['imagen']['tmp_name'], $uploadDir . $filename)) {
-                            $imagen = 'uploads/opiniones/' . $filename;
-                        }
+                    $err = validateUploadedImage($_FILES['imagen'], 5 * 1024 * 1024);
+                    if ($err === null) {
+                        $fn = moveUploadedImage($_FILES['imagen'], '../uploads/opiniones/', 'opinion');
+                        if ($fn) $imagen = 'uploads/opiniones/' . $fn;
                     }
                 }
                 $newId = 1;
@@ -169,17 +165,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $o['texto'] = trim($_POST['texto'] ?? $o['texto']);
                         $o['orden'] = intval($_POST['orden'] ?? $o['orden']);
                         if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
-                            $uploadDir = '../uploads/opiniones/';
-                            if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
-                            $allowedExts = array('jpg', 'jpeg', 'png', 'gif', 'webp');
-                            $allowedMime = array('image/jpeg', 'image/png', 'image/gif', 'image/webp');
-                            $ext = strtolower(pathinfo($_FILES['imagen']['name'], PATHINFO_EXTENSION));
-                            $mime = mime_content_type($_FILES['imagen']['tmp_name']);
-                            if (in_array($ext, $allowedExts) && in_array($mime, $allowedMime) && $_FILES['imagen']['size'] <= 5 * 1024 * 1024) {
-                                $filename = 'opinion_' . time() . '_' . rand(1000, 9999) . '.' . $ext;
-                                if (move_uploaded_file($_FILES['imagen']['tmp_name'], $uploadDir . $filename)) {
+                            $err = validateUploadedImage($_FILES['imagen'], 5 * 1024 * 1024);
+                            if ($err === null) {
+                                $fn = moveUploadedImage($_FILES['imagen'], '../uploads/opiniones/', 'opinion');
+                                if ($fn) {
                                     if (!empty($o['imagen'])) { $oldPath = '../' . $o['imagen']; if (file_exists($oldPath)) unlink($oldPath); }
-                                    $o['imagen'] = 'uploads/opiniones/' . $filename;
+                                    $o['imagen'] = 'uploads/opiniones/' . $fn;
                                 }
                             }
                         }
@@ -196,7 +187,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $allOpiniones = Storage::read('opiniones');
                 foreach ($allOpiniones as $o) {
                     if (isset($o['id']) && $o['id'] === $deleteId) {
-                        if (!empty($o['imagen'])) { $imgPath = '../' . $o['imagen']; if (file_exists($imgPath)) unlink($imgPath); }
+                        if (!empty($o['imagen'])) { $clean = ltrim($o['imagen'], '/'); $realBase = realpath(__DIR__ . '/../uploads'); $realPath = realpath(__DIR__ . '/../' . $clean); if ($realPath !== false && $realBase !== false && strpos($realPath, $realBase) === 0 && file_exists($realPath)) unlink($realPath); }
                         break;
                     }
                 }

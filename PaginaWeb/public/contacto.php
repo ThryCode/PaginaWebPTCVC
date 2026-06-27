@@ -124,6 +124,7 @@ include 'includes/header.php';
                                 <label for="website">Website</label>
                                 <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
                             </div>
+                            <input type="hidden" name="_ts" value="<?php echo time(); ?>">
                             <div id="formMessage" class="form-message" role="alert"></div>
                             <?= csrfField() ?>
                             <button type="submit" class="btn btn-primary" id="contactSubmitBtn" style="width:100%">
