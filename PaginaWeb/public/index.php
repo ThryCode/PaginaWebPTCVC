@@ -387,6 +387,7 @@ include 'includes/header.php';
                                 <textarea id="mensaje" name="mensaje" rows="5" required placeholder="Mensaje"></textarea>
                             </div>
                             <div id="formMessage" class="form-message"></div>
+                            <input type="hidden" name="_ts" value="<?= time() ?>">
                             <?= csrfField() ?>
                             <button type="submit" class="btn btn-primary" style="width:100%">Enviar Mensaje</button>
                         </form>

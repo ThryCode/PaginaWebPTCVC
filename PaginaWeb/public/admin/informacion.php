@@ -65,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $allImages = array();
                         if (isset($existing['imagenes']) && is_array($existing['imagenes'])) $allImages = $existing['imagenes'];
                         elseif (isset($existing['imagen'])) $allImages = array($existing['imagen']);
-                        foreach ($allImages as $img) { $clean = ltrim($img, '/'); if (strpos($clean, '..') === false) { $imgPath = '../' . $clean; if (file_exists($imgPath)) unlink($imgPath); } }
+                        foreach ($allImages as $img) { $clean = ltrim($img, '/'); $realBase = realpath(__DIR__ . '/../uploads'); $realPath = realpath(__DIR__ . '/../' . $clean); if ($realPath !== false && $realBase !== false && strpos($realPath, $realBase) === 0 && file_exists($realPath)) unlink($realPath); }
                         $folder = ($existing['tipo'] === 'evento') ? getEventoFolder($deleteId) : getNoticiaFolder($deleteId);
                         deleteFolder($folder);
                     }
@@ -233,7 +233,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         if (!in_array($ext, $allowedExts) || $_FILES['imagenes']['size'][$key] > 5 * 1024 * 1024) continue;
                         $filename = 'galeria_' . time() . '_' . rand(1000, 9999) . '.' . $ext;
                         if (move_uploaded_file($tmpName, $uploadDir . $filename)) {
-                            $item = array('imagen' => 'uploads/galeria/' . $filename, 'titulo' => htmlspecialchars($titulo), 'orden' => $uploaded);
+                            $item = array('imagen' => 'uploads/galeria/' . $filename, 'titulo' => $titulo, 'orden' => $uploaded);
                             Storage::insert('galeria', $item);
                             $uploaded++;
                         }

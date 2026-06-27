@@ -64,15 +64,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         } elseif ($action === 'tic_create') {
             $texto = trim($_POST['tic_texto'] ?? '');
-            $orden = intval($_POST['tic_orden'] ?? count(Storage::read('tic')) + 1);
+            $orden = intval($_POST['tic_orden'] ?? 1);
             if (!empty($texto)) {
-                $items = Storage::read('tic');
-                $newId = 1;
-                foreach ($items as $it) {
-                    if ($it['id'] >= $newId) $newId = $it['id'] + 1;
-                }
-                $items[] = array('id' => $newId, 'texto' => $texto, 'orden' => $orden);
-                Storage::write('tic', $items);
+                Storage::insert('tic', array('texto' => $texto, 'orden' => $orden));
                 header('Location: servicios.php?tab=estrategico&msg=tic_creado');
                 exit;
             } else {
@@ -83,15 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $texto = trim($_POST['tic_texto'] ?? '');
             $orden = intval($_POST['tic_orden'] ?? 1);
             if ($id > 0 && !empty($texto)) {
-                $items = Storage::read('tic');
-                foreach ($items as &$it) {
-                    if ($it['id'] === $id) {
-                        $it['texto'] = $texto;
-                        $it['orden'] = $orden;
-                        break;
-                    }
-                }
-                Storage::write('tic', $items);
+                Storage::update('tic', $id, array('texto' => $texto, 'orden' => $orden));
                 header('Location: servicios.php?tab=estrategico&msg=tic_editado');
                 exit;
             } else {
@@ -100,12 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } elseif ($action === 'tic_delete') {
             $deleteId = intval($_POST['id'] ?? 0);
             if ($deleteId > 0) {
-                $items = Storage::read('tic');
-                $items = array_filter($items, function($it) use ($deleteId) {
-                    return $it['id'] !== $deleteId;
-                });
-                $items = array_values($items);
-                Storage::write('tic', $items);
+                Storage::delete('tic', $deleteId);
                 header('Location: servicios.php?tab=estrategico&msg=tic_eliminado');
                 exit;
             }

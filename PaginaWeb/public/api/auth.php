@@ -50,22 +50,25 @@ class Auth {
             mkdir($dir, 0755, true);
         }
         $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-        $result = file_put_contents($this->dataFile, $json, LOCK_EX) !== false;
-        if (!$result) {
-            error_log('[AUTH] Error al escribir: ' . $this->dataFile);
-        }
-        return $result;
-    }
-
-    public function loginWithPAC($pac) {
-        $pac = trim($pac);
-        if (empty($pac) || strlen($pac) < 8) {
+        if ($json === false) {
+            error_log('[AUTH] Error al codificar JSON: ' . $this->dataFile);
             return false;
         }
+        if (file_exists($this->dataFile)) {
+            copy($this->dataFile, $this->dataFile . '.bak');
+        }
+        $tmp = $this->dataFile . '.tmp';
+        $written = file_put_contents($tmp, $json, LOCK_EX);
+        if ($written !== false) {
+            rename($tmp, $this->dataFile);
+            return true;
+        }
+        @unlink($tmp);
+        error_log('[AUTH] Error al escribir: ' . $this->dataFile);
+        return false;
+    }
 
-        $data = $this->readData();
-        $ip = $this->getIP();
-
+    private function checkRateLimit($ip) {
         $rateFile = $this->dataDir . '/rate_limits.json';
         $rateData = [];
         if (file_exists($rateFile)) {
@@ -78,11 +81,30 @@ class Auth {
         }
         $attempts['count']++;
         if ($attempts['count'] > 10) {
-            $this->logAudit(null, 'rate_limited', "IP bloqueada por exceso de intentos: $ip", $ip);
             return false;
         }
         $rateData[$ip] = $attempts;
+        $expired = time() - 900;
+        $rateData = array_filter($rateData, function($entry) use ($expired) {
+            return $entry['first_attempt'] > $expired;
+        });
         @file_put_contents($rateFile, json_encode($rateData), LOCK_EX);
+        return true;
+    }
+
+    public function loginWithPAC($pac) {
+        $pac = trim($pac);
+        if (empty($pac) || strlen($pac) < 8) {
+            return false;
+        }
+
+        $data = $this->readData();
+        $ip = $this->getIP();
+
+        if (!$this->checkRateLimit($ip)) {
+            $this->logAudit(null, 'rate_limited', "IP bloqueada por exceso de intentos: $ip", $ip);
+            return false;
+        }
 
         if (!empty($data['system_pac_hash']) && password_verify($pac, $data['system_pac_hash'])) {
             $this->logAudit(null, 'pac_verified', "PAC del sistema verificado", $ip);
@@ -115,23 +137,10 @@ class Auth {
         $data = $this->readData();
         $ip = $this->getIP();
 
-        $rateFile = $this->dataDir . '/rate_limits.json';
-        $rateData = [];
-        if (file_exists($rateFile)) {
-            $rateContent = @file_get_contents($rateFile);
-            $rateData = $rateContent ? json_decode($rateContent, true) : [];
-        }
-        $attempts = $rateData[$ip] ?? ['count' => 0, 'first_attempt' => time()];
-        if (time() - $attempts['first_attempt'] > 900) {
-            $attempts = ['count' => 0, 'first_attempt' => time()];
-        }
-        $attempts['count']++;
-        if ($attempts['count'] > 10) {
+        if (!$this->checkRateLimit($ip)) {
             $this->logAudit(null, 'rate_limited', "IP bloqueada por exceso de intentos: $ip", $ip);
             return false;
         }
-        $rateData[$ip] = $attempts;
-        @file_put_contents($rateFile, json_encode($rateData), LOCK_EX);
 
         $identifierLower = strtolower($identifier);
 
