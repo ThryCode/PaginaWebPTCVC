@@ -338,12 +338,12 @@ function renderCardImage(imagenes, titulo, tipo) {
         return '<div class="news-card-img">' + (tipo === 'evento' ? '&#128197;' : '&#128196;') + '</div>';
     }
     if (imagenes.length === 1) {
-        return '<div class="news-card-img"><img src="' + imagenes[0] + '" alt="' + escapeHtml(titulo) + '"></div>';
+        return '<div class="news-card-img"><img src="/' + imagenes[0] + '" alt="' + escapeHtml(titulo) + '"></div>';
     }
     var html = '<div class="card-carousel" data-count="' + imagenes.length + '">';
     html += '<div class="carousel-track">';
     imagenes.forEach(function(src) {
-        html += '<div class="carousel-slide"><img src="' + src + '" alt="' + escapeHtml(titulo) + '"></div>';
+        html += '<div class="carousel-slide"><img src="/' + src + '" alt="' + escapeHtml(titulo) + '"></div>';
     });
     html += '</div>';
     html += '<div class="carousel-dots">';
@@ -716,7 +716,7 @@ function loadOpiniones(containerId) {
                         html += '<p class="opinion-text">"' + escapeHtml(item.texto) + '"</p>';
                         html += '<div class="opinion-author">';
                         if (item.imagen) {
-                            html += '<img src="' + item.imagen + '" alt="' + escapeHtml(item.nombre) + '" width="48" height="48" loading="lazy" class="opinion-img">';
+                            html += '<img src="/' + item.imagen + '" alt="' + escapeHtml(item.nombre) + '" width="48" height="48" loading="lazy" class="opinion-img">';
                         } else {
                             html += '<div class="opinion-img opinion-img-placeholder">' + escapeHtml((item.nombre || '').charAt(0) || '?') + '</div>';
                         }
@@ -1001,8 +1001,8 @@ function loadGallery(containerId, options) {
                 var imagenes = group.imagenes || [];
 
                 if (imagenes.length === 1) {
-                    html += '<div class="gallery-card" data-src="' + escapeHtml(imagenes[0]) + '" data-title="' + titulo + '">';
-                    html += '<img src="' + escapeHtml(imagenes[0]) + '" alt="' + titulo + '" loading="lazy">';
+                    html += '<div class="gallery-card" data-src="/' + escapeHtml(imagenes[0]) + '" data-title="' + titulo + '">';
+                    html += '<img src="/' + escapeHtml(imagenes[0]) + '" alt="' + titulo + '" loading="lazy">';
                     if (titulo) {
                         html += '<div class="gallery-card-title">' + titulo + '</div>';
                     }
@@ -1012,7 +1012,7 @@ function loadGallery(containerId, options) {
                     html += '<div class="card-carousel" data-count="' + imagenes.length + '">';
                     html += '<div class="carousel-track">';
                     imagenes.forEach(function(src) {
-                        html += '<div class="carousel-slide"><img src="' + escapeHtml(src) + '" alt="' + titulo + '" loading="lazy"></div>';
+                        html += '<div class="carousel-slide"><img src="/' + escapeHtml(src) + '" alt="' + titulo + '" loading="lazy"></div>';
                     });
                     html += '</div>';
                     html += '<div class="carousel-dots">';
@@ -1134,7 +1134,7 @@ function openGalleryLightbox(images, title) {
     var slidesHtml = '';
     var dotsHtml = '';
     images.forEach(function(src, i) {
-        slidesHtml += '<div class="gallery-lb-slide"><img src="' + src + '" alt="' + escapeHtml(title) + '"></div>';
+        slidesHtml += '<div class="gallery-lb-slide"><img src="/' + src + '" alt="' + escapeHtml(title) + '"></div>';
         dotsHtml += '<span class="gallery-lb-dot' + (i === 0 ? ' active' : '') + '" data-idx="' + i + '"></span>';
     });
 
@@ -1249,6 +1249,11 @@ document.addEventListener('keydown', function(e) {
 });
 
 // ============================================
+// APP INIT (DOM listo)
+// ============================================
+document.addEventListener('DOMContentLoaded', function() {
+
+// ============================================
 // CARGAR NOTICIAS EN EL INDEX
 // ============================================
     var newsContainer = document.getElementById('newsContainer');
@@ -1260,23 +1265,23 @@ document.addEventListener('keydown', function(e) {
 // SCROLL ANIMATIONS - Intersection Observer
 // ============================================
     var animatedElements = document.querySelectorAll('.animate-on-scroll, .animate-fade-up, .animate-fade-down, .animate-fade-left, .animate-fade-right, .animate-fade-in, .animate-scale-in');
-    if (animatedElements.length === 0) return;
-
-    var observer = new IntersectionObserver(function(entries) {
-        entries.forEach(function(entry) {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('animate-visible');
-                observer.unobserve(entry.target);
-            }
+    if (animatedElements.length > 0) {
+        var observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
         });
-    }, {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    });
 
-    animatedElements.forEach(function(el) {
-        observer.observe(el);
-    });
+        animatedElements.forEach(function(el) {
+            observer.observe(el);
+        });
+    }
 
 // ============================================
 // TRANSICIONES DE PAGINA
@@ -1310,50 +1315,50 @@ document.addEventListener('keydown', function(e) {
             }, 250);
         });
     });
-
 // ============================================
 // BOTON VOLVER ARRIBA
 // ============================================
     var backToTop = document.getElementById('backToTop');
-    if (!backToTop) return;
+    if (backToTop) {
+        var backToTopTicking = false;
 
-    var backToTopTicking = false;
-    window.addEventListener('scroll', function() {
-        if (!backToTopTicking) {
-            window.requestAnimationFrame(function() {
-                if (window.scrollY > 400) {
-                    backToTop.classList.add('visible');
-                } else {
-                    backToTop.classList.remove('visible');
-                }
-                backToTopTicking = false;
-            });
-            backToTopTicking = true;
-        }
-    });
+        window.addEventListener('scroll', function() {
+            if (!backToTopTicking) {
+                window.requestAnimationFrame(function() {
+                    if (window.scrollY > 400) {
+                        backToTop.classList.add('visible');
+                    } else {
+                        backToTop.classList.remove('visible');
+                    }
+                    backToTopTicking = false;
+                });
+                backToTopTicking = true;
+            }
+        });
 
-    backToTop.addEventListener('click', function() {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
+        backToTop.addEventListener('click', function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
 
 // ============================================
 // CONTADORES ANIMADOS
 // ============================================
     var counters = document.querySelectorAll('.counter-number');
-    if (counters.length === 0) return;
+    if (counters.length > 0) {
+        var observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    animateCounter(entry.target);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
 
-    var observer = new IntersectionObserver(function(entries) {
-        entries.forEach(function(entry) {
-            if (entry.isIntersecting) {
-                animateCounter(entry.target);
-                observer.unobserve(entry.target);
-            }
+        counters.forEach(function(counter) {
+            observer.observe(counter);
         });
-    }, { threshold: 0.5 });
-
-    counters.forEach(function(counter) {
-        observer.observe(counter);
-    });
+    }
 
 function animateCounter(el) {
     var target = parseInt(el.getAttribute('data-target'), 10);
@@ -1381,43 +1386,43 @@ function animateCounter(el) {
 // BUSQUEDA CON DEBOUNCE
 // ============================================
     var searchInput = document.getElementById('searchInput');
-    if (!searchInput) return;
+    if (searchInput) {
+        var debounceTimer;
 
-    var debounceTimer;
+        searchInput.addEventListener('input', function() {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(function() {
+                var query = searchInput.value.trim();
+                var containerId = searchInput.getAttribute('data-container') || 'allNewsContainer';
+                var type = searchInput.getAttribute('data-type') || '';
 
-    searchInput.addEventListener('input', function() {
-        clearTimeout(debounceTimer);
-        debounceTimer = setTimeout(function() {
-            var query = searchInput.value.trim();
-            var containerId = searchInput.getAttribute('data-container') || 'allNewsContainer';
-            var type = searchInput.getAttribute('data-type') || '';
+                var options = { limit: 20 };
+                if (query) options.q = query;
+                if (type) options.tipo = type;
 
-            var options = { limit: 20 };
-            if (query) options.q = query;
-            if (type) options.tipo = type;
-
-            loadNews(containerId, options);
-        }, 300);
-    });
+                loadNews(containerId, options);
+            }, 300);
+        });
+    }
 
 // Busqueda de eventos
     var eventSearch = document.getElementById('eventSearchInput');
-    if (!eventSearch) return;
+    if (eventSearch) {
+        var eventDebounceTimer;
 
-    var eventDebounceTimer;
+        eventSearch.addEventListener('input', function() {
+            clearTimeout(eventDebounceTimer);
+            eventDebounceTimer = setTimeout(function() {
+                var query = eventSearch.value.trim();
+                var containerId = eventSearch.getAttribute('data-container') || 'eventsContainer';
 
-    eventSearch.addEventListener('input', function() {
-        clearTimeout(eventDebounceTimer);
-        eventDebounceTimer = setTimeout(function() {
-            var query = eventSearch.value.trim();
-            var containerId = eventSearch.getAttribute('data-container') || 'eventsContainer';
+                var options = { limit: 10 };
+                if (query) options.q = query;
 
-            var options = { limit: 10 };
-            if (query) options.q = query;
-
-            loadEvents(containerId, options);
-        }, 300);
-    });
+                loadEvents(containerId, options);
+            }, 300);
+        });
+    }
 
 // ============================================
 // FAQ ACCORDION
