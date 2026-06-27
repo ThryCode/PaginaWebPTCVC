@@ -3,13 +3,15 @@ require_once __DIR__ . '/config.php';
 
 class Auth {
     private $dataFile;
-    private $sessionTimeout = 1800; // 30 minutos
+    private $dataDir;
+    private $sessionTimeout = 1800;
 
     public function __construct() {
         if (session_status() === PHP_SESSION_NONE) {
             @session_start();
         }
         $this->dataFile = defined('DATA_DIR') ? DATA_DIR . '/admin_auth.json' : __DIR__ . '/../data/admin_auth.json';
+        $this->dataDir = dirname($this->dataFile);
 
         if ($this->isLoggedIn()) {
             $lastActivity = $_SESSION['last_activity'] ?? 0;
@@ -25,6 +27,7 @@ class Auth {
 
     public function setDataFile($path) {
         $this->dataFile = $path;
+        $this->dataDir = dirname($path);
     }
 
     private function readData() {
@@ -62,13 +65,38 @@ class Auth {
         $data = $this->readData();
         $ip = $this->getIP();
 
+        $rateFile = $this->dataDir . '/rate_limits.json';
+        $rateData = [];
+        if (file_exists($rateFile)) {
+            $rateContent = @file_get_contents($rateFile);
+            $rateData = $rateContent ? json_decode($rateContent, true) : [];
+        }
+        $attempts = $rateData[$ip] ?? ['count' => 0, 'first_attempt' => time()];
+        if (time() - $attempts['first_attempt'] > 900) {
+            $attempts = ['count' => 0, 'first_attempt' => time()];
+        }
+        $attempts['count']++;
+        if ($attempts['count'] > 10) {
+            $this->logAudit(null, 'rate_limited', "IP bloqueada por exceso de intentos: $ip", $ip);
+            return false;
+        }
+        $rateData[$ip] = $attempts;
+        @file_put_contents($rateFile, json_encode($rateData), LOCK_EX);
+
         if (!empty($data['system_pac_hash']) && password_verify($pac, $data['system_pac_hash'])) {
             $this->logAudit(null, 'pac_verified', "PAC del sistema verificado", $ip);
             return true;
         }
 
         if (password_verify($pac, EMERGENCY_PAC_HASH)) {
-            $this->logAudit(null, 'pac_verified', "PAC de emergencia verificado", $ip);
+            $hasActiveAdmin = false;
+            foreach ($data['users'] as $u) {
+                if ($u['activo'] && $u['rol'] === 'admin') {
+                    $hasActiveAdmin = true;
+                    break;
+                }
+            }
+            $this->logAudit(null, 'pac_verified', "PAC de emergencia verificado desde IP: $ip" . ($hasActiveAdmin ? '' : ' (sin admins activos)'), $ip);
             return true;
         }
 
@@ -85,6 +113,25 @@ class Auth {
 
         $data = $this->readData();
         $ip = $this->getIP();
+
+        $rateFile = $this->dataDir . '/rate_limits.json';
+        $rateData = [];
+        if (file_exists($rateFile)) {
+            $rateContent = @file_get_contents($rateFile);
+            $rateData = $rateContent ? json_decode($rateContent, true) : [];
+        }
+        $attempts = $rateData[$ip] ?? ['count' => 0, 'first_attempt' => time()];
+        if (time() - $attempts['first_attempt'] > 900) {
+            $attempts = ['count' => 0, 'first_attempt' => time()];
+        }
+        $attempts['count']++;
+        if ($attempts['count'] > 10) {
+            $this->logAudit(null, 'rate_limited', "IP bloqueada por exceso de intentos: $ip", $ip);
+            return false;
+        }
+        $rateData[$ip] = $attempts;
+        @file_put_contents($rateFile, json_encode($rateData), LOCK_EX);
+
         $identifierLower = strtolower($identifier);
 
         foreach ($data['users'] as &$user) {
@@ -442,7 +489,12 @@ class Auth {
     }
 
     private function getIP() {
-        return $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+        $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+        if (!empty($_SERVER['HTTP_X_FORWARDED_FOR']) && defined('ENV') && ENV !== 'production') {
+            $forwardedIps = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+            $ip = trim($forwardedIps[0]);
+        }
+        return $ip;
     }
 
     public function hashPassword($password) {

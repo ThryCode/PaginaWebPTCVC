@@ -89,7 +89,6 @@ if ($action === 'list') {
     });
 }
 
-$csrfToken = generateCSRFToken();
 ?>
 <!DOCTYPE html>
 <html lang="es">

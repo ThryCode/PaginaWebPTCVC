@@ -1,6 +1,4 @@
 <?php
-error_reporting(0);
-ini_set('display_errors', 0);
 
 require_once '../api/auth.php';
 require_once '../api/storage.php';
@@ -236,7 +234,6 @@ if ($tab === 'opiniones') {
     usort($opinionesList, function($a, $b) { return ($a['orden'] ?? 0) - ($b['orden'] ?? 0); });
 }
 
-$csrfToken = generateCSRFToken();
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -604,7 +601,7 @@ $csrfToken = generateCSRFToken();
                     <!-- PORTADA EDIT -->
                     <div class="form-card">
                         <div style="margin-bottom:20px;">
-                            <img src="../<?php echo htmlspecialchars($slider['imagen']); ?>" style="max-width:400px; border-radius:8px;">
+                            <img src="/<?php echo htmlspecialchars($slider['imagen']); ?>" style="max-width:400px; border-radius:8px;">
                         </div>
                         <form method="POST">
                             <?php echo csrfField(); ?>

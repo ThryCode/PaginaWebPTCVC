@@ -1,6 +1,5 @@
 <?php
-error_reporting(0);
-ini_set('display_errors', 0);
+
 ini_set('log_errors', 1);
 ini_set('error_log', __DIR__ . '/../logs/admin_error.log');
 
@@ -111,6 +110,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $titulo), '-'));
             $slug = substr($slug, 0, 280);
+
+            // Check unique slug
+            $allForSlug = Storage::read('noticias');
+            foreach ($allForSlug as $existingItem) {
+                if (!empty($existingItem['slug']) && $existingItem['slug'] === $slug) {
+                    if (!($action === 'edit' && $id > 0 && ($existingItem['id'] ?? 0) === $id)) {
+                        $slug = $slug . '-' . time();
+                        break;
+                    }
+                }
+            }
 
             $data = array(
                 'titulo' => $titulo, 'slug' => $slug, 'resumen' => $resumen,
@@ -291,6 +301,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $titulo), '-'));
             $slug = substr($slug, 0, 280);
 
+            // Check unique slug for projects
+            $allProjects = Storage::read('proyectos');
+            foreach ($allProjects as $existingProj) {
+                if (!empty($existingProj['slug']) && $existingProj['slug'] === $slug) {
+                    if (!($action === 'edit' && $id > 0 && ($existingProj['id'] ?? 0) === $id)) {
+                        $slug = $slug . '-' . time();
+                        break;
+                    }
+                }
+            }
+
             $data = array(
                 'titulo' => $titulo, 'slug' => $slug, 'resumen' => $resumen,
                 'contenido' => $contenido, 'area' => $area, 'categoria' => $categoria,
@@ -429,7 +450,6 @@ if ($action === 'list') {
     }
 }
 
-$csrfToken = generateCSRFToken();
 ?>
 <!DOCTYPE html>
 <html lang="es">

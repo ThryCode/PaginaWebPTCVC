@@ -1,6 +1,4 @@
 <?php
-error_reporting(0);
-ini_set('display_errors', 0);
 ini_set('log_errors', 1);
 ini_set('error_log', __DIR__ . '/../logs/admin_error.log');
 
@@ -215,7 +213,6 @@ usort($ticItems, function($a, $b) {
     return ($a['orden'] ?? 0) - ($b['orden'] ?? 0);
 });
 
-$csrfToken = generateCSRFToken();
 ?>
 <!DOCTYPE html>
 <html lang="es">

@@ -76,7 +76,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $config = Storage::read('config');
-$csrfToken = generateCSRFToken();
 $pacInfo = $auth->getSystemPACInfo();
 $auditLog = $isAdmin ? $auth->getAuditLog() : [];
 ?>

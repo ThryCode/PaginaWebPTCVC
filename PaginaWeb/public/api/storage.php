@@ -1,8 +1,4 @@
 <?php
-/**
- * Almacenamiento en archivos JSON
- * Reemplaza la base de datos
- */
 
 require_once 'config.php';
 
@@ -59,10 +55,19 @@ class Storage {
         if (!is_dir($dir)) {
             mkdir($dir, 0755, true);
         }
-        $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+        $smallFiles = ['config', 'admin_auth'];
+        $baseName = pathinfo($file, PATHINFO_FILENAME);
+        $flags = JSON_UNESCAPED_UNICODE;
+        if (in_array($baseName, $smallFiles)) {
+            $flags |= JSON_PRETTY_PRINT;
+        }
+        $json = json_encode($data, $flags);
         if ($json === false) {
             error_log('[Storage] JSON encode failed for ' . $collection . ': ' . json_last_error_msg());
             return false;
+        }
+        if (file_exists($file)) {
+            copy($file, $file . '.bak');
         }
         $tmp = $file . '.tmp';
         $written = file_put_contents($tmp, $json, LOCK_EX);
@@ -78,7 +83,7 @@ class Storage {
     public static function findById($collection, $id) {
         $items = self::read($collection);
         foreach ($items as $item) {
-            if (isset($item['id']) && $item['id'] == $id) {
+            if (isset($item['id']) && $item['id'] === $id) {
                 return $item;
             }
         }
@@ -91,7 +96,7 @@ class Storage {
         foreach ($items as $item) {
             $match = true;
             foreach ($conditions as $key => $value) {
-                if (!isset($item[$key]) || $item[$key] != $value) {
+                if (!isset($item[$key]) || $item[$key] !== $value) {
                     $match = false;
                     break;
                 }
@@ -104,35 +109,53 @@ class Storage {
     }
 
     public static function insert($collection, $item) {
+        $file = self::getFilePath($collection);
+        $lockFile = $file . '.lock';
+        $lockFh = fopen($lockFile, 'c');
+        flock($lockFh, LOCK_EX);
         $items = self::read($collection);
         $item['id'] = self::nextId($items);
         $item['created_at'] = date('Y-m-d H:i');
         $items[] = $item;
         self::write($collection, $items);
+        flock($lockFh, LOCK_UN);
+        fclose($lockFh);
         return $item;
     }
 
     public static function update($collection, $id, $data) {
+        $file = self::getFilePath($collection);
+        $lockFile = $file . '.lock';
+        $lockFh = fopen($lockFile, 'c');
+        flock($lockFh, LOCK_EX);
         $items = self::read($collection);
         foreach ($items as &$item) {
-            if (isset($item['id']) && $item['id'] == $id) {
+            if (isset($item['id']) && $item['id'] === $id) {
                 $data['id'] = $item['id'];
                 $data['created_at'] = $item['created_at'];
                 $data['updated_at'] = date('Y-m-d H:i');
                 $item = array_merge($item, $data);
                 self::write($collection, $items);
+                flock($lockFh, LOCK_UN);
+                fclose($lockFh);
                 return $item;
             }
         }
+        flock($lockFh, LOCK_UN);
+        fclose($lockFh);
         return null;
     }
 
     public static function delete($collection, $id) {
+        $file = self::getFilePath($collection);
+        $lockFile = $file . '.lock';
+        $lockFh = fopen($lockFile, 'c');
+        flock($lockFh, LOCK_EX);
         $items = self::read($collection);
         $newItems = array();
         $found = false;
         foreach ($items as $item) {
-            if (isset($item['id']) && $item['id'] == $id) {
+            if (isset($item['id']) && $item['id'] === $id) {
                 $found = true;
                 continue;
             }
@@ -141,6 +164,8 @@ class Storage {
         if ($found) {
             self::write($collection, $newItems);
         }
+        flock($lockFh, LOCK_UN);
+        fclose($lockFh);
         return $found;
     }
 
@@ -153,7 +178,7 @@ class Storage {
         foreach ($items as $item) {
             $match = true;
             foreach ($conditions as $key => $value) {
-                if (!isset($item[$key]) || $item[$key] != $value) {
+                if (!isset($item[$key]) || $item[$key] !== $value) {
                     $match = false;
                     break;
                 }
@@ -164,9 +189,13 @@ class Storage {
     }
 
     private static function nextId($items) {
-        $ids = array_map(function($item) {
-            return isset($item['id']) ? $item['id'] : 0;
-        }, $items);
-        return empty($ids) ? 1 : max($ids) + 1;
+        if (empty($items)) return 1;
+        $maxId = 0;
+        foreach ($items as $item) {
+            if (isset($item['id']) && is_int($item['id']) && $item['id'] > $maxId) {
+                $maxId = $item['id'];
+            }
+        }
+        return $maxId + 1;
     }
 }

@@ -1,6 +1,5 @@
 <?php
-error_reporting(0);
-ini_set('display_errors', 0);
+
 ini_set('log_errors', 1);
 ini_set('error_log', __DIR__ . '/../logs/admin_error.log');
 
@@ -120,7 +119,6 @@ if ($action === 'list') {
     });
 }
 
-$csrfToken = generateCSRFToken();
 ?>
 <!DOCTYPE html>
 <html lang="es">
