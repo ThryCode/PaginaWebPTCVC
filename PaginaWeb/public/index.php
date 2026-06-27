@@ -12,8 +12,14 @@ if (file_exists($countersFile)) {
         return ($a['orden'] ?? 0) - ($b['orden'] ?? 0);
     });
 }
-
 require_once __DIR__ . '/api/storage.php';
+
+function _cacheBust($path) {
+    $abs = __DIR__ . '/' . $path;
+    $v = file_exists($abs) ? filemtime($abs) : time();
+    return $path . '?v=' . $v;
+}
+
 $sliders = Storage::read('sliders');
 usort($sliders, function($a, $b) {
     return ($a['orden'] ?? 0) - ($b['orden'] ?? 0);
@@ -45,7 +51,7 @@ include 'includes/header.php';
                 <?php $first = true; ?>
                 <?php foreach ($sliders as $s): ?>
                 <div class="carousel-slide<?php echo $first ? ' active' : ''; ?>">
-                    <img src="/<?php echo htmlspecialchars($s['imagen']); ?>" alt="<?php echo htmlspecialchars($s['titulo'] ?: 'Slider'); ?>">
+                    <img src="/<?php echo htmlspecialchars(_cacheBust($s['imagen'])); ?>" alt="<?php echo htmlspecialchars($s['titulo'] ?: 'Slider'); ?>">
                 </div>
                 <?php $first = false; ?>
                 <?php endforeach; ?>

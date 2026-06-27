@@ -1,4 +1,10 @@
 <?php
+function _cacheBust($path) {
+    $abs = __DIR__ . '/' . $path;
+    $v = file_exists($abs) ? filemtime($abs) : time();
+    return $path . '?v=' . $v;
+}
+
 require_once 'api/storage.php';
 
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
@@ -76,13 +82,13 @@ include 'includes/header.php';
                     <div class="detail-images">
                         <?php if (count($imagenes) === 1): ?>
                         <div class="detail-img-main">
-                            <img src="/<?php echo htmlspecialchars($imagenes[0]); ?>" alt="<?php echo htmlspecialchars($item['titulo']); ?>">
+                            <img src="/<?php echo htmlspecialchars(_cacheBust($imagenes[0])); ?>" alt="<?php echo htmlspecialchars($item['titulo']); ?>">
                         </div>
                         <?php else: ?>
                         <div class="card-carousel" data-count="<?php echo count($imagenes); ?>">
                             <div class="carousel-track">
                                 <?php foreach ($imagenes as $src): ?>
-                                <div class="carousel-slide"><img src="/<?php echo htmlspecialchars($src); ?>" alt="<?php echo htmlspecialchars($item['titulo']); ?>"></div>
+                                <div class="carousel-slide"><img src="/<?php echo htmlspecialchars(_cacheBust($src)); ?>" alt="<?php echo htmlspecialchars($item['titulo']); ?>"></div>
                                 <?php endforeach; ?>
                             </div>
                             <div class="carousel-dots">

@@ -1,6 +1,12 @@
 <?php
 require_once 'storage.php';
 
+function _cacheBust($path) {
+    $abs = __DIR__ . '/../' . $path;
+    $v = file_exists($abs) ? filemtime($abs) : time();
+    return $path . '?v=' . $v;
+}
+
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: https://pctvc.cu');
 
@@ -23,7 +29,7 @@ foreach ($galeria as $item) {
     if (!isset($groups[$t])) {
         $groups[$t] = array('titulo' => $t, 'imagenes' => array());
     }
-    $groups[$t]['imagenes'][] = $item['imagen'];
+    $groups[$t]['imagenes'][] = _cacheBust($item['imagen']);
 }
 
 $groups = array_values($groups);

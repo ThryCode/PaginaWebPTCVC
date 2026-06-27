@@ -9,6 +9,12 @@ header('X-Content-Type-Options: nosniff');
 
 require_once 'storage.php';
 
+function _cacheBust($path) {
+    $abs = __DIR__ . '/../' . $path;
+    $v = file_exists($abs) ? filemtime($abs) : time();
+    return $path . '?v=' . $v;
+}
+
 $tipo = isset($_GET['tipo']) ? $_GET['tipo'] : null;
 $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 10;
 $q = isset($_GET['q']) ? trim($_GET['q']) : '';
@@ -42,6 +48,19 @@ usort($results, function($a, $b) {
 });
 
 $results = array_slice($results, 0, $limit);
+
+foreach ($results as &$item) {
+    if (!empty($item['imagen'])) {
+        $item['imagen'] = _cacheBust($item['imagen']);
+    }
+    if (!empty($item['imagenes']) && is_array($item['imagenes'])) {
+        foreach ($item['imagenes'] as &$img) {
+            $img = _cacheBust($img);
+        }
+        unset($img);
+    }
+}
+unset($item);
 
 echo json_encode(array(
     'success' => true,

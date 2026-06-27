@@ -1,4 +1,10 @@
 <?php
+function _cacheBust($path) {
+    $abs = __DIR__ . '/' . $path;
+    $v = file_exists($abs) ? filemtime($abs) : time();
+    return $path . '?v=' . $v;
+}
+
 $pageTitle = 'Flyers - Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara';
 $pageDescription = 'Flyers de eventos y actividades destacadas del Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara.';
 $canonicalUrl = 'https://pctvc.cu/flyers.php';
@@ -76,7 +82,7 @@ function resolve_flyer_image_path($relativePath) {
                 <div class="flyers-grid">
                     <?php foreach ($flyers as $f): ?>
                     <div class="gallery-item">
-                        <img src="<?php echo htmlspecialchars(resolve_flyer_image_path($f['imagen'])); ?>" alt="<?php echo htmlspecialchars($f['titulo']); ?>" loading="lazy">
+                        <img src="<?php echo htmlspecialchars(_cacheBust(resolve_flyer_image_path($f['imagen']))); ?>" alt="<?php echo htmlspecialchars($f['titulo']); ?>" loading="lazy">
                         <div class="gallery-overlay">
                             <span><?php echo htmlspecialchars($f['titulo']); ?></span>
                         </div>
