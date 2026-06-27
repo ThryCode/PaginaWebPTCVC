@@ -232,6 +232,175 @@ Este texto deber&iacute;a verse en <strong>Poppins</strong>.<br>
 <div id="diag-resumen"></div>
 </div>
 
+<div class="section">
+<h2>8. Diagn&oacute;stico de Carga de Im&aacute;genes</h2>
+
+<?php
+$diagOk = 0; $diagWarn = 0; $diagFail = 0;
+function diagImgIcon($ok) { global $diagOk, $diagFail; if ($ok) { $diagOk++; return '<span class="pass">✅</span>'; } else { $diagFail++; return '<span class="fail">❌</span>'; } }
+function diagImgWarn() { global $diagWarn; $diagWarn++; return '<span class="warn">⚠️</span>'; }
+
+$base = __DIR__;
+$uploads = $base . '/uploads';
+$slidersDir = $uploads . '/sliders';
+$galeriaDir = $uploads . '/galeria';
+$htaccessFile = $uploads . '/.htaccess';
+
+function testHttp($url, $maxTime = 5) {
+    $ctx = stream_context_create(['http' => ['timeout' => $maxTime, 'method' => 'GET', 'follow_location' => true, 'ignore_errors' => true]]);
+    $start = microtime(true);
+    $headers = @get_headers($url, 1, $ctx);
+    $elapsed = round((microtime(true) - $start) * 1000);
+    if ($headers && isset($headers[0])) {
+        preg_match('/\d{3}/', $headers[0], $m);
+        $code = $m[0] ?? '???';
+        return ['code' => intval($code), 'ms' => $elapsed, 'headers' => $headers[0]];
+    }
+    return ['code' => 0, 'ms' => $elapsed, 'headers' => 'Sin respuesta'];
+}
+
+function permStr($path) {
+    if (!file_exists($path)) return '—';
+    return '0' . decoct(fileperms($path) & 0777);
+}
+?>
+
+<h3>8.1 Directorios de uploads</h3>
+<table>
+<tr><th>Directorio</th><th>Existe</th><th>Permisos</th><th>Archivos</th></tr>
+<?php
+foreach (['uploads/', 'uploads/sliders/', 'uploads/galeria/'] as $rel) {
+    $abs = $base . '/' . $rel;
+    $exists = is_dir($abs);
+    $perm = $exists ? permStr($abs) : '—';
+    $count = $exists ? count(array_diff(scandir($abs), ['.', '..', 'index.html', 'index.php'])) : 0;
+    echo '<tr><td><code>' . htmlspecialchars($rel) . '</code></td>'
+        . '<td>' . diagImgIcon($exists) . '</td>'
+        . '<td><code>' . htmlspecialchars($perm) . '</code></td>'
+        . '<td>' . $count . ' archivos</td></tr>';
+}
+?>
+</table>
+
+<h3>8.2 Archivos de imagen en disco</h3>
+<table>
+<tr><th>Archivo</th><th>Ruta absoluta</th><th>Existe</th><th>Tama&ntilde;o</th><th>Permisos</th></tr>
+<?php
+$testFiles = [
+    'slider' => ['label' => 'Slider (referencia)', 'path' => $slidersDir . '/slider-01.jpg'],
+    'galeria_jpeg' => ['label' => 'Galería .jpeg', 'path' => $galeriaDir . '/galeria_1782398314_2718.jpeg'],
+    'galeria_jpg' => ['label' => 'Galería .jpg', 'path' => $galeriaDir . '/galeria_1782399532_4797.jpg'],
+];
+foreach ($testFiles as $key => $f) {
+    $exists = file_exists($f['path']);
+    $size = $exists ? number_format(filesize($f['path'])) . ' bytes' : '—';
+    $perm = $exists ? permStr($f['path']) : '—';
+    echo '<tr><td>' . htmlspecialchars($f['label']) . '</td>'
+        . '<td><code>' . htmlspecialchars($f['path']) . '</code></td>'
+        . '<td>' . diagImgIcon($exists) . '</td>'
+        . '<td>' . $size . '</td>'
+        . '<td><code>' . $perm . '</code></td></tr>';
+}
+?>
+</table>
+
+<h3>8.3 Prueba HTTP directa (get_headers)</h3>
+<?php
+$hasFopen = ini_get('allow_url_fopen');
+if ($hasFopen) {
+    $proto = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? 'https' : 'http';
+    $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+    $baseUrl = $proto . '://' . $host;
+
+    $urlsToTest = [
+        'Slider (referencia)' => $baseUrl . '/uploads/sliders/slider-01.jpg',
+        'Galería .jpeg' => $baseUrl . '/uploads/galeria/galeria_1782398314_2718.jpeg',
+        'Galería .jpg' => $baseUrl . '/uploads/galeria/galeria_1782399532_4797.jpg',
+        '.htaccess de uploads/' => $baseUrl . '/uploads/.htaccess',
+    ];
+
+    echo '<table><tr><th>URL</th><th>HTTP</th><th>Tiempo</th></tr>';
+    foreach ($urlsToTest as $label => $url) {
+        $result = testHttp($url);
+        $code = $result['code'];
+        $ms = $result['ms'];
+        if ($code >= 200 && $code < 400) {
+            $icon = diagImgIcon(true);
+        } elseif ($code >= 400 && $code < 500) {
+            $icon = diagImgIcon(false);
+        } elseif ($code === 0) {
+            $icon = diagImgWarn();
+        } else {
+            $icon = diagImgIcon(false);
+        }
+        echo '<tr><td>' . htmlspecialchars($label) . '</td>'
+            . '<td>' . $icon . ' HTTP ' . $code . '</td>'
+            . '<td>' . $ms . ' ms</td></tr>';
+    }
+    echo '</table>';
+    echo '<p class="small">Nota: si slider da 200 y galería da 404 → el archivo no existe en el servidor. '
+        . 'Si slider da 200 y galería da 403 → permisos o .htaccess bloquean. '
+        . 'Si ambos dan 403/500 → el .htaccess de uploads/ es el problema.</p>';
+} else {
+    echo '<p>' . diagImgWarn() . ' allow_url_fopen = Off. No se pueden hacer pruebas HTTP desde el servidor.</p>';
+}
+?>
+
+<h3>8.4 Archivo .htaccess de uploads/</h3>
+<table>
+<tr><th>Propiedad</th><th>Valor</th></tr>
+<?php
+$htaccessExists = file_exists($htaccessFile);
+echo '<tr><td>.htaccess existe</td><td>' . diagImgIcon($htaccessExists) . ' ' . ($htaccessExists ? 'Sí' : 'No') . '</td></tr>';
+if ($htaccessExists) {
+    echo '<tr><td>Permisos</td><td><code>' . permStr($htaccessFile) . '</code></td></tr>';
+    echo '<tr><td>Legible</td><td>' . diagImgIcon(is_readable($htaccessFile)) . (is_readable($htaccessFile) ? ' Sí' : ' No') . '</td></tr>';
+    $content = file_get_contents($htaccessFile);
+    echo '<tr><td>Contenido</td><td><pre>' . htmlspecialchars($content) . '</pre></td></tr>';
+    $hasRequireAll = strpos($content, 'Require all') !== false;
+    echo '<tr><td>Usa sintaxis Require all</td><td>' . ($hasRequireAll ? diagImgWarn() . ' ⚠️ Apache 2.4 — puede fallar en LiteSpeed' : diagImgIcon(true) . ' Sintaxis compatible') . '</td></tr>';
+}
+?>
+</table>
+
+<h3>8.5 Conclusi&oacute;n</h3>
+<?php
+$galeriaOnDisk = file_exists($galeriaDir . '/galeria_1782398314_2718.jpeg');
+$sliderOnDisk = file_exists($slidersDir . '/slider-01.jpg');
+echo '<div class="diag-summary" style="background:#f0f0f0;border:1px solid #ccc;padding:12px;border-radius:6px;">';
+echo '<p><strong>Resumen de diagn&oacute;stico:</strong></p>';
+echo '<p>✅ ' . $diagOk . ' correctas | ⚠️ ' . $diagWarn . ' advertencias | ❌ ' . $diagFail . ' fallos</p>';
+
+if ($galeriaOnDisk && $sliderOnDisk) {
+    echo '<p>✅ Ambos tipos de archivos existen en disco.</p>';
+} elseif (!$galeriaOnDisk && $sliderOnDisk) {
+    echo '<p>❌ Los archivos de galería <strong>NO existen</strong> en el servidor. Sliders SÍ existen.</p>';
+    echo '<p><strong>Causa probable:</strong> Las imágenes no se copiaron al FTP. Debes subir <code>uploads/galeria/</code> al servidor.</p>';
+} elseif (!$sliderOnDisk) {
+    echo '<p>❌ Tampoco existen los sliders. Posible error de deploy general.</p>';
+}
+
+if ($hasFopen) {
+    $sliderHttp = testHttp($baseUrl . '/uploads/sliders/slider-01.jpg');
+    $galeriaHttp = testHttp($baseUrl . '/uploads/galeria/galeria_1782398314_2718.jpeg');
+    if ($sliderHttp['code'] === 200 && $galeriaHttp['code'] >= 400) {
+        echo '<p>❌ HTTP: slider OK (200) pero galería falla (' . $galeriaHttp['code'] . '). ';
+        if ($galeriaHttp['code'] === 404) echo 'El archivo no se encontró en la ruta solicitada.</p>';
+        elseif ($galeriaHttp['code'] === 403) echo 'El archivo está bloqueado (permisos o .htaccess).</p>';
+        elseif ($galeriaHttp['code'] === 500) echo 'Error interno del servidor (posible .htaccess incompatible).</p>';
+        else echo 'Código HTTP ' . $galeriaHttp['code'] . '.</p>';
+    } elseif ($sliderHttp['code'] >= 400 && $galeriaHttp['code'] >= 400) {
+        echo '<p>❌ Ambos tipos fallan. Posible problema con el .htaccess de <code>uploads/</code> o permisos generales.</p>';
+    } elseif ($sliderHttp['code'] === 200 && $galeriaHttp['code'] === 200) {
+        echo '<p>✅ HTTP: ambas URLs responden 200. Las imágenes deberían ser accesibles.</p>';
+        echo '<p>⚠️ Si aun así no se ven en la página, puede ser problema de rutas en el código o caché del navegador/CloudFlare.</p>';
+    }
+}
+
+echo '</div>';
+?>
+</div>
+
 <script>
 (function() {
     'use strict';
