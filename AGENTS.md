@@ -175,6 +175,39 @@ Si el `?v=` est├í presente con `filemtime()`, cualquier cambio en el archivo 
 - A├▒adir el `?v=` (lo implementado arriba)
 - Activar "Development Mode" en CloudFlare (dura 3 horas) desde el panel de InfinityFree
 
+## InfinityFree — Session Configuration
+
+PHP sessions en InfinityFree usan `/php_sessions` como save path global compartido.
+En ciertas configuraciones, `session_start()` falla silenciosamente y el token CSRF
+no persiste entre GET y POST, causando error "Token de seguridad inv&aacute;lido".
+
+### S&iacute;ntomas de diagn&oacute;stico (`diagnostico.php` secci&oacute;n 6)
+| Indicador | Valor an&oacute;malo |
+|---|---|
+| `session_status()` | `PHP_SESSION_NONE` tras llamar `session_start()` |
+| `session_id()` | Vac&iacute;o a pesar de cookie presente |
+| `session.cookie_samesite` | No definido (ini_set rechazado) |
+
+### Causa ra&iacute;z
+- `session.use_strict_mode = 1` rechaza IDs de sesi&oacute;n inv&aacute;lidos en ciertos entornos compartidos
+- `ini_set('session.cookie_samesite', 'Lax')` es `PHP_INI_SYSTEM` y no puede cambiarse desde c&oacute;digo
+- `session.cookie_secure` requiere HTTPS; forzarlo en HTTP bloquea la cookie
+
+### Soluci&oacute;n implementada en `config.php`
+1. Crear carpeta `data/sessions/` con `.htaccess` denegando acceso web
+2. Llamar `session_save_path(DATA_DIR . '/sessions')` antes de `session_start()`
+3. NO usar `session.use_strict_mode`
+4. Envolver `ini_set` con `@` (fallo silencioso si hosting lo rechaza)
+5. Fallback: si el save path personalizado falla, reintentar con el path por defecto del servidor
+
+### Verificaci&oacute;n post-deploy
+```php
+// En diagnostics.php secci&oacute;n 6, verificar:
+// - "Custom save path (data/sessions)" debe mostrar "Activo y escribible"
+// - "session_status()" debe mostrar "PHP_SESSION_ACTIVE"
+// - "session.cookie_samesite" debe mostrar "Lax" o "No configurado" (aceptable)
+```
+
 ## ETECSA Hosting
 Servidor: Apache 2.4.6 + PHP 7.3.11+ sobre UNIX/Linux.
 

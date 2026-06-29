@@ -36,9 +36,18 @@ Todas las rutas `/uploads/...`, `/css/...`, `/admin/...`, `/api/...` funcionan p
 - HTTPS: certificado autofirmado solo para admin, para full SSL se requiere certificado CA
 - HSTS obligatorio con `max-age` ≥ 10886400
 
+### Sesiones PHP (InfinityFree)
+- `config.php` crea `data/sessions/` autom&aacute;ticamente
+- Despu&eacute;s del deploy, verificar en `diagnostico.php` secci&oacute;n 6:
+  - ✅ "Custom save path (data/sessions)" = "Activo y escribible"
+  - ✅ "session_status()" = "PHP_SESSION_ACTIVE"
+- Si no est&aacute; activo: asegurar que `data/sessions/` existe y es escribible (permisos 0755)
+- No requiere configuraci&oacute;n manual en InfinityFree
+
 ## Verificaci&oacute;n pre-despliegue
 1. `error_reporting(0)` en producci&oacute;n (ver config.php)
 2. `.htaccess` en `public/data/` bloquea acceso directo
 3. Headers de seguridad: `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`
 4. No hay `console.log()` en JS
 5. Todas las rutas son absolutas `/`
+6. `diagnostico.php` NO bloqueado en `.htaccess` (solo `setup.php`)
