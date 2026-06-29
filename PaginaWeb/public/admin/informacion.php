@@ -1,8 +1,7 @@
 <?php
-error_reporting(0);
-ini_set('display_errors', 0);
+
 ini_set('log_errors', 1);
-ini_set('error_log', __DIR__ . '/../data/admin_error.log');
+ini_set('error_log', __DIR__ . '/../logs/admin_error.log');
 
 require_once '../api/auth.php';
 require_once '../api/storage.php';
@@ -44,8 +43,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($tab === 'galeria') {
                     $existing = Storage::findById('galeria', $deleteId);
                     if ($existing && isset($existing['imagen'])) {
-                        $imgPath = '../' . ltrim($existing['imagen'], '/');
-                        if (strpos($imgPath, '/../') === false && strpos($imgPath, '..\\') === false && file_exists($imgPath)) unlink($imgPath);
+                        $clean = ltrim($existing['imagen'], '/');
+                        $realBase = realpath(__DIR__ . '/../uploads');
+                        $realPath = realpath(__DIR__ . '/../' . $clean);
+                        if ($realPath !== false && $realBase !== false && strpos($realPath, $realBase) === 0 && file_exists($realPath)) unlink($realPath);
                     }
                     Storage::delete('galeria', $deleteId);
                 } elseif ($tab === 'proyectos') {
@@ -54,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $imgs = array();
                         if (!empty($existing['imagenes']) && is_array($existing['imagenes'])) $imgs = $existing['imagenes'];
                         elseif (!empty($existing['imagen'])) $imgs = array($existing['imagen']);
-                        foreach ($imgs as $img) { $clean = ltrim($img, '/'); if (strpos($clean, '..') === false) { $imgPath = '../' . $clean; if (file_exists($imgPath)) unlink($imgPath); } }
+                        foreach ($imgs as $img) { $clean = ltrim($img, '/'); $realBase = realpath(__DIR__ . '/../uploads'); $realPath = realpath(__DIR__ . '/../' . $clean); if ($realPath !== false && $realBase !== false && strpos($realPath, $realBase) === 0 && file_exists($realPath)) unlink($realPath); }
                         deleteFolder(getProyectoFolder($deleteId));
                     }
                     Storage::delete('proyectos', $deleteId);
@@ -64,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $allImages = array();
                         if (isset($existing['imagenes']) && is_array($existing['imagenes'])) $allImages = $existing['imagenes'];
                         elseif (isset($existing['imagen'])) $allImages = array($existing['imagen']);
-                        foreach ($allImages as $img) { $clean = ltrim($img, '/'); if (strpos($clean, '..') === false) { $imgPath = '../' . $clean; if (file_exists($imgPath)) unlink($imgPath); } }
+                        foreach ($allImages as $img) { $clean = ltrim($img, '/'); $realBase = realpath(__DIR__ . '/../uploads'); $realPath = realpath(__DIR__ . '/../' . $clean); if ($realPath !== false && $realBase !== false && strpos($realPath, $realBase) === 0 && file_exists($realPath)) unlink($realPath); }
                         $folder = ($existing['tipo'] === 'evento') ? getEventoFolder($deleteId) : getNoticiaFolder($deleteId);
                         deleteFolder($folder);
                     }
@@ -83,8 +84,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $t = ($item['titulo'] ?: 'Sin título');
                     if ($t === $grupoTitulo) {
                         if (!empty($item['imagen'])) {
-                            $imgPath = '../' . $item['imagen'];
-                            if (file_exists($imgPath)) unlink($imgPath);
+                            $clean = ltrim($item['imagen'], '/');
+                            $realBase = realpath(__DIR__ . '/../uploads');
+                            $realPath = realpath(__DIR__ . '/../' . $clean);
+                            if ($realPath !== false && $realBase !== false && strpos($realPath, $realBase) === 0 && file_exists($realPath)) unlink($realPath);
                         }
                         Storage::delete('galeria', $item['id']);
                     }
@@ -111,6 +114,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $titulo), '-'));
             $slug = substr($slug, 0, 280);
+
+            // Check unique slug
+            $allForSlug = Storage::read('noticias');
+            foreach ($allForSlug as $existingItem) {
+                if (!empty($existingItem['slug']) && $existingItem['slug'] === $slug) {
+                    if (!($action === 'edit' && $id > 0 && ($existingItem['id'] ?? 0) === $id)) {
+                        $slug = $slug . '-' . time();
+                        break;
+                    }
+                }
+            }
 
             $data = array(
                 'titulo' => $titulo, 'slug' => $slug, 'resumen' => $resumen,
@@ -146,6 +160,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 if (isset($_FILES['imagenes'])) {
                     $allowedExts = array('jpg', 'jpeg', 'png', 'gif', 'webp');
+                    $allowedMime = array('image/jpeg', 'image/png', 'image/gif', 'image/webp');
                     $files = $_FILES['imagenes'];
                     $fileCount = is_array($files['name']) ? count($files['name']) : 0;
                     for ($i = 0; $i < $fileCount; $i++) {
@@ -154,7 +169,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             continue;
                         }
                         $ext = strtolower(pathinfo($files['name'][$i], PATHINFO_EXTENSION));
-                        if (!in_array($ext, $allowedExts) || $files['size'][$i] > 5 * 1024 * 1024) { $error = 'Imagen no válida (máx 5MB, JPG/PNG/GIF/WEBP).'; continue; }
+                        $mime = mime_content_type($files['tmp_name'][$i]);
+                        if (!in_array($ext, $allowedExts) || !in_array($mime, $allowedMime) || $files['size'][$i] > 5 * 1024 * 1024) { $error = 'Imagen no válida (máx 5MB, JPG/PNG/GIF/WEBP).'; continue; }
                         $filename = 'img_' . time() . '_' . rand(1000, 9999) . '.' . $ext;
                         if (move_uploaded_file($files['tmp_name'][$i], $folderDir . $filename)) $imagenes[] = $folderUrl . $filename;
                     }
@@ -178,6 +194,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $imagenes = array();
                         if (isset($_FILES['imagenes'])) {
                             $allowedExts = array('jpg', 'jpeg', 'png', 'gif', 'webp');
+                            $allowedMime = array('image/jpeg', 'image/png', 'image/gif', 'image/webp');
                             $files = $_FILES['imagenes'];
                             $fileCount = is_array($files['name']) ? count($files['name']) : 0;
                             for ($i = 0; $i < $fileCount; $i++) {
@@ -186,7 +203,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     continue;
                                 }
                                 $ext = strtolower(pathinfo($files['name'][$i], PATHINFO_EXTENSION));
-                                if (!in_array($ext, $allowedExts) || $files['size'][$i] > 5 * 1024 * 1024) { $error = 'Imagen no válida (máx 5MB, JPG/PNG/GIF/WEBP).'; continue; }
+                                $mime = mime_content_type($files['tmp_name'][$i]);
+                                if (!in_array($ext, $allowedExts) || !in_array($mime, $allowedMime) || $files['size'][$i] > 5 * 1024 * 1024) { $error = 'Imagen no válida (máx 5MB, JPG/PNG/GIF/WEBP).'; continue; }
                                 $filename = 'img_' . time() . '_' . rand(1000, 9999) . '.' . $ext;
                                 if (move_uploaded_file($files['tmp_name'][$i], $folderDir . $filename)) $imagenes[] = $folderUrl . $filename;
                             }
@@ -215,7 +233,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         if (!in_array($ext, $allowedExts) || $_FILES['imagenes']['size'][$key] > 5 * 1024 * 1024) continue;
                         $filename = 'galeria_' . time() . '_' . rand(1000, 9999) . '.' . $ext;
                         if (move_uploaded_file($tmpName, $uploadDir . $filename)) {
-                            $item = array('imagen' => 'uploads/galeria/' . $filename, 'titulo' => htmlspecialchars($titulo), 'orden' => $uploaded);
+                            $item = array('imagen' => 'uploads/galeria/' . $filename, 'titulo' => $titulo, 'orden' => $uploaded);
                             Storage::insert('galeria', $item);
                             $uploaded++;
                         }
@@ -227,7 +245,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } elseif ($action === 'update') {
                 $updateId = intval($_POST['id'] ?? 0);
                 if ($updateId > 0) {
-                    $data = array('titulo' => htmlspecialchars(trim($_POST['titulo'] ?? '')));
+                    $data = array('titulo' => trim($_POST['titulo'] ?? ''));
                     Storage::update('galeria', $updateId, $data);
                     $message = 'Imagen actualizada.';
                 }
@@ -287,6 +305,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $titulo), '-'));
             $slug = substr($slug, 0, 280);
 
+            // Check unique slug for projects
+            $allProjects = Storage::read('proyectos');
+            foreach ($allProjects as $existingProj) {
+                if (!empty($existingProj['slug']) && $existingProj['slug'] === $slug) {
+                    if (!($action === 'edit' && $id > 0 && ($existingProj['id'] ?? 0) === $id)) {
+                        $slug = $slug . '-' . time();
+                        break;
+                    }
+                }
+            }
+
             $data = array(
                 'titulo' => $titulo, 'slug' => $slug, 'resumen' => $resumen,
                 'contenido' => $contenido, 'area' => $area, 'categoria' => $categoria,
@@ -315,6 +344,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if (isset($_FILES['imagenes'])) {
                 $allowedExts = array('jpg', 'jpeg', 'png', 'gif', 'webp');
+                $allowedMime = array('image/jpeg', 'image/png', 'image/gif', 'image/webp');
                 $files = $_FILES['imagenes'];
                 $cnt = is_array($files['tmp_name']) ? count($files['tmp_name']) : 0;
                 if ($action === 'edit' && $id > 0) {
@@ -324,7 +354,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 for ($i = 0; $i < $cnt; $i++) {
                     if ($files['error'][$i] !== UPLOAD_ERR_OK) continue;
                     $ext = strtolower(pathinfo($files['name'][$i], PATHINFO_EXTENSION));
-                    if (!in_array($ext, $allowedExts) || $files['size'][$i] > 5 * 1024 * 1024) { $error = 'Imagen no válida (máx 5MB, JPG/PNG/GIF/WEBP).'; continue; }
+                    $mime = mime_content_type($files['tmp_name'][$i]);
+                    if (!in_array($ext, $allowedExts) || !in_array($mime, $allowedMime) || $files['size'][$i] > 5 * 1024 * 1024) { $error = 'Imagen no válida (máx 5MB, JPG/PNG/GIF/WEBP).'; continue; }
                     $filename = 'img_' . time() . '_' . rand(1000, 9999) . '.' . $ext;
                     if ($action === 'edit' && $id > 0 && move_uploaded_file($files['tmp_name'][$i], $folderDir . $filename)) {
                         $imagenes[] = $folderUrl . $filename;
@@ -350,12 +381,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $newImagenes = array();
                         if (isset($_FILES['imagenes'])) {
                             $allowedExts = array('jpg', 'jpeg', 'png', 'gif', 'webp');
+                            $allowedMime = array('image/jpeg', 'image/png', 'image/gif', 'image/webp');
                             $files = $_FILES['imagenes'];
                             $cnt = is_array($files['tmp_name']) ? count($files['tmp_name']) : 0;
                             for ($i = 0; $i < $cnt; $i++) {
                                 if ($files['error'][$i] !== UPLOAD_ERR_OK) continue;
                                 $ext = strtolower(pathinfo($files['name'][$i], PATHINFO_EXTENSION));
-                                if (!in_array($ext, $allowedExts) || $files['size'][$i] > 5 * 1024 * 1024) { $error = 'Imagen no válida (máx 5MB, JPG/PNG/GIF/WEBP).'; continue; }
+                                $mime = mime_content_type($files['tmp_name'][$i]);
+                                if (!in_array($ext, $allowedExts) || !in_array($mime, $allowedMime) || $files['size'][$i] > 5 * 1024 * 1024) { $error = 'Imagen no válida (máx 5MB, JPG/PNG/GIF/WEBP).'; continue; }
                                 $filename = 'img_' . time() . '_' . rand(1000, 9999) . '.' . $ext;
                                 if (move_uploaded_file($files['tmp_name'][$i], $folderDir . $filename)) $newImagenes[] = $folderUrl . $filename;
                             }
@@ -421,7 +454,6 @@ if ($action === 'list') {
     }
 }
 
-$csrfToken = generateCSRFToken();
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -559,7 +591,7 @@ $csrfToken = generateCSRFToken();
                             <div class="gallery-grid">
                                 <?php foreach ($groups as $titulo => $imgs): ?>
                                 <div class="gallery-item">
-                                    <img loading="lazy" src="../<?php echo htmlspecialchars($imgs[0]['imagen']); ?>" alt="<?php echo htmlspecialchars($titulo); ?>">
+                                    <img src="/<?php echo htmlspecialchars($imgs[0]['imagen']); ?>" loading="lazy" alt="<?php echo htmlspecialchars($titulo); ?>">
                                     <div class="gallery-item-info">
                                         <h4><?php echo htmlspecialchars($titulo); ?></h4>
                                         <small><?php echo count($imgs); ?> imagen(es)</small>
@@ -751,7 +783,7 @@ $csrfToken = generateCSRFToken();
                     <!-- GALERIA EDIT -->
                     <div class="form-card">
                         <div style="margin-bottom:20px;">
-                            <img src="../<?php echo htmlspecialchars($imagen['imagen']); ?>" style="max-width:100%; border-radius:8px;">
+                            <img src="/<?php echo htmlspecialchars($imagen['imagen']); ?>" style="max-width:100%; border-radius:8px;">
                         </div>
                         <form method="POST">
                             <?php echo csrfField(); ?>
@@ -793,7 +825,7 @@ $csrfToken = generateCSRFToken();
                                     <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;">
                                         <?php foreach ($imgsMostrar as $img): ?>
                                         <div style="position:relative;width:100px;height:80px;border:2px solid #ddd;border-radius:8px;overflow:hidden;">
-                                            <img src="../<?php echo htmlspecialchars($img); ?>" style="width:100%;height:100%;object-fit:cover;">
+                                            <img src="/<?php echo htmlspecialchars($img); ?>" style="width:100%;height:100%;object-fit:cover;">
                                             <label style="position:absolute;top:2px;right:2px;background:rgba(255,255,255,0.9);border-radius:4px;padding:1px 4px;font-size:11px;cursor:pointer;">
                                                 <input type="checkbox" onchange="actualizarKeep()" data-img="<?php echo htmlspecialchars($img); ?>" checked> X
                                             </label>
@@ -859,7 +891,7 @@ $csrfToken = generateCSRFToken();
                             </div>
                             <div class="form-group">
                                 <label for="contenido">Descripción completa *</label>
-                                <textarea id="contenido" name="contenido" rows="10" required><?php echo $proyecto ? $proyecto['contenido'] : ''; ?></textarea>
+                                <textarea id="contenido" name="contenido" rows="10" required><?php echo $proyecto ? htmlspecialchars($proyecto['contenido']) : ''; ?></textarea>
                             </div>
                             <div class="form-group">
                                 <label for="resultados">Resultados alcanzados</label>
@@ -901,7 +933,7 @@ $csrfToken = generateCSRFToken();
                                         <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;">
                                         <?php foreach ($existingImages as $ei): ?>
                                             <div style="position:relative;width:100px;height:80px;border-radius:8px;overflow:hidden;border:2px solid #E6F4FA;">
-                                                <img src="../<?php echo $ei; ?>" style="width:100%;height:100%;object-fit:cover;">
+                                                <img src="/<?php echo htmlspecialchars($ei); ?>" style="width:100%;height:100%;object-fit:cover;">
                                                 <label style="position:absolute;bottom:2px;left:2px;background:rgba(192,57,43,0.85);color:#fff;padding:2px 6px;border-radius:4px;font-size:0.7rem;cursor:pointer;">
                                                     <input type="checkbox" name="delete_imagenes[]" value="<?php echo $ei; ?>" data-delete-img> Eliminar
                                                 </label>

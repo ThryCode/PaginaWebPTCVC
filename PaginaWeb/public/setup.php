@@ -5,6 +5,11 @@
  */
 require_once __DIR__ . '/api/config.php';
 
+if (!in_array($_SERVER['REMOTE_ADDR'] ?? '', ['127.0.0.1', '::1', 'localhost'])) {
+    http_response_code(403);
+    die('Acceso denegado');
+}
+
 if (file_exists(DATA_DIR . '/admin_auth.json')) {
     echo "Ya existe la carpeta data/. Setup completo.<br>";
     echo '<a href="index.php">Ir al sitio</a> | <a href="admin/login.php">Ir al admin</a>';
@@ -101,11 +106,7 @@ $categorias = [
     ['id' => 2, 'nombre' => 'Eventos', 'descripcion' => 'Proximos eventos', 'created_at' => date('Y-m-d H:i:s')]
 ];
 file_put_contents(DATA_DIR . '/categorias.json', json_encode($categorias, JSON_PRETTY_PRINT));
-?>
-<h1>Setup completado</h1>
+<?php
+echo '<h1>Setup completado</h1>
 <p>Carpeta <strong>data/</strong> creada con los archivos iniciales.</p>
-<ul>
-    <li>Usuario: marioc@pctvc.cu</li>
-    <li>Contrase&ntilde;a: 12345678</li>
-</ul>
-<p><a href="index.php">Ir al sitio</a> | <a href="admin/login.php">Ir al admin</a></p>
+<p><a href="index.php">Ir al sitio</a> | <a href="admin/login.php">Ir al admin</a></p>';

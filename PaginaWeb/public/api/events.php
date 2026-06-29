@@ -1,13 +1,9 @@
 <?php
-/**
- * API pública de eventos
- * GET /api/events.php
- * GET /api/events.php?calendar=1&year=2026&month=6
- */
 require_once 'storage.php';
+require_once 'functions.php';
 
 header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: https://pctvc.cu');
+header('Access-Control-Allow-Origin: ' . SITE_URL);
 
 if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     http_response_code(405);
@@ -82,6 +78,19 @@ usort($filtered, function($a, $b) {
 
 $total = count($filtered);
 $filtered = array_slice($filtered, $offset, $limit);
+
+foreach ($filtered as &$item) {
+    if (!empty($item['imagen'])) {
+        $item['imagen'] = _cacheBust($item['imagen']);
+    }
+    if (!empty($item['imagenes']) && is_array($item['imagenes'])) {
+        foreach ($item['imagenes'] as &$img) {
+            $img = _cacheBust($img);
+        }
+        unset($img);
+    }
+}
+unset($item);
 
 echo json_encode(array(
     'success' => true,

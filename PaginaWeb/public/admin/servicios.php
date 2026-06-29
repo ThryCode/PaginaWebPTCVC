@@ -1,8 +1,6 @@
 <?php
-error_reporting(0);
-ini_set('display_errors', 0);
 ini_set('log_errors', 1);
-ini_set('error_log', __DIR__ . '/../data/admin_error.log');
+ini_set('error_log', __DIR__ . '/../logs/admin_error.log');
 
 require_once '../api/auth.php';
 require_once '../api/storage.php';
@@ -16,19 +14,7 @@ $tab = isset($_GET['tab']) ? $_GET['tab'] : 'primaria';
 $message = '';
 $error = '';
 
-$ticFile = DATA_DIR . '/tic.json';
-
-function loadTIC($file) {
-    if (!file_exists($file)) return array();
-    $json = file_get_contents($file);
-    $data = json_decode($json, true);
-    return is_array($data) ? $data : array();
-}
-
-function saveTIC($file, $data) {
-    $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-    file_put_contents($file, $json);
-}
+// TIC items managed via Storage::read('tic') / Storage::write('tic')
 
 if (isset($_GET['msg'])) {
     $msg = $_GET['msg'];
@@ -78,15 +64,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         } elseif ($action === 'tic_create') {
             $texto = trim($_POST['tic_texto'] ?? '');
-            $orden = intval($_POST['tic_orden'] ?? count(loadTIC($ticFile)) + 1);
+            $orden = intval($_POST['tic_orden'] ?? 1);
             if (!empty($texto)) {
-                $items = loadTIC($ticFile);
-                $newId = 1;
-                foreach ($items as $it) {
-                    if ($it['id'] >= $newId) $newId = $it['id'] + 1;
-                }
-                $items[] = array('id' => $newId, 'texto' => $texto, 'orden' => $orden);
-                saveTIC($ticFile, $items);
+                Storage::insert('tic', array('texto' => $texto, 'orden' => $orden));
                 header('Location: servicios.php?tab=estrategico&msg=tic_creado');
                 exit;
             } else {
@@ -97,15 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $texto = trim($_POST['tic_texto'] ?? '');
             $orden = intval($_POST['tic_orden'] ?? 1);
             if ($id > 0 && !empty($texto)) {
-                $items = loadTIC($ticFile);
-                foreach ($items as &$it) {
-                    if ($it['id'] === $id) {
-                        $it['texto'] = $texto;
-                        $it['orden'] = $orden;
-                        break;
-                    }
-                }
-                saveTIC($ticFile, $items);
+                Storage::update('tic', $id, array('texto' => $texto, 'orden' => $orden));
                 header('Location: servicios.php?tab=estrategico&msg=tic_editado');
                 exit;
             } else {
@@ -114,18 +86,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } elseif ($action === 'tic_delete') {
             $deleteId = intval($_POST['id'] ?? 0);
             if ($deleteId > 0) {
-                $items = loadTIC($ticFile);
-                $items = array_filter($items, function($it) use ($deleteId) {
-                    return $it['id'] !== $deleteId;
-                });
-                $items = array_values($items);
-                saveTIC($ticFile, $items);
+                Storage::delete('tic', $deleteId);
                 header('Location: servicios.php?tab=estrategico&msg=tic_eliminado');
                 exit;
             }
         } elseif ($action === 'tic_reorder') {
             $order = $_POST['order'] ?? array();
-            $items = loadTIC($ticFile);
+            $items = Storage::read('tic');
             foreach ($order as $idx => $idVal) {
                 foreach ($items as &$it) {
                     if ($it['id'] === intval($idVal)) {
@@ -134,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
                 }
             }
-            saveTIC($ticFile, $items);
+            Storage::write('tic', $items);
             header('Location: servicios.php?tab=estrategico&msg=tic_reordenado');
             exit;
         } else {
@@ -222,12 +189,11 @@ if ($action === 'list') {
     usort($incEmp, function($a, $b) { return $a['orden'] - $b['orden']; });
 }
 
-$ticItems = loadTIC($ticFile);
+$ticItems = Storage::read('tic');
 usort($ticItems, function($a, $b) {
     return ($a['orden'] ?? 0) - ($b['orden'] ?? 0);
 });
 
-$csrfToken = generateCSRFToken();
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -331,7 +297,7 @@ $csrfToken = generateCSRFToken();
                                     </td>
                                     <td data-label="Nombre"><strong><?php echo htmlspecialchars($s['nombre']); ?></strong></td>
                                     <td data-label="Descripción"><?php echo htmlspecialchars(substr($s['descripcion'], 0, 80)); ?><?php echo mb_strlen($s['descripcion']) > 80 ? '…' : ''; ?></td>
-                                    <td data-label="Orden"><?php echo $s['orden']; ?></td>
+                                    <td data-label="Orden"><?php echo htmlspecialchars($s['orden']); ?></td>
                                     <td data-label="Acciones">
                                         <a href="?action=edit&id=<?php echo $s['id']; ?>&tab=<?php echo $tab; ?>" class="btn btn-sm btn-primary">Editar</a>
                                         <form class="delete-form" method="POST" action="?action=delete&tab=<?php echo $tab; ?>" data-confirm="¿Eliminar este servicio?">
@@ -495,7 +461,7 @@ $csrfToken = generateCSRFToken();
         var ticList = document.getElementById('ticList');
         if (ticList) {
             var dragItem = null;
-            var csrf = '<?php echo $csrfToken; ?>';
+            var csrf = document.querySelector('input[name="csrf_token"]').value;
 
             ticList.addEventListener('dragstart', function(e) {
                 var row = e.target.closest('.tic-row');

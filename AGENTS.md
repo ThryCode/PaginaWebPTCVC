@@ -133,12 +133,47 @@ Tras la migraci├│n a InfinityFree TODAS las rutas siguen funcionando porque 
 - `/api/...` ΓåÆ `htdocs/api/...`
 
 ### Cache busting autom├ítico
-InfinityFree usa CloudFlare CDN que cachea CSS/JS indefinidamente. Para forzar refresco:
+InfinityFree usa CloudFlare CDN que cachea CSS, JS e IM├üGENES indefinidamente (TTL 30 d├¡as desde `.htaccess` ra├¡z). Si un archivo cambia pero CloudFlare sirve la versi├│n vieja, hay dos mecanismos de cache busting:
+
+#### Para CSS/JS est├íticos (header.php/footer.php)
 - **NUNCA** usar links sin versi├│n: `<link href="css/style.css">`
 - **SIEMPRE** usar `filemtime()`: `<link href="css/style.css?v=<?= filemtime(__DIR__ . '/css/style.css') ?>">`
 - Esto aplica a: style.css, main.js, admin.css, admin.js
-- `filemtime()` es autom├ítico: cuando el archivo cambia, el n├║mero cambia, el browser descarga la versi├│n fresca
-- No se requiere manualmente incrementar n├║meros de versi├│n
+
+#### Para im├ígenes cargadas din├ímicamente (v├¡a API o PHP server-side)
+CloudFlare cachea la URL completa incluyendo la ruta. Si una imagen se subi├│, se cache├│ un 404/error, y luego se reemplaz├│, CloudFlare sigue sirviendo el error hasta purgar manualmente (30 d├¡as de TTL).
+
+**Soluci├│n:** a├▒adir `?v=` con `filemtime()` a cada ruta de imagen en el momento de servirla:
+
+```php
+function _cacheBust($path) {
+    $abs = __DIR__ . '/../' . $path;
+    $v = file_exists($abs) ? filemtime($abs) : time();
+    return $path . '?v=' . $v;
+}
+```
+
+Esto aplica a:
+- `api/gallery.php` → c/images en `$item['imagen']`
+- `api/opiniones.php` → c/imagen en cada opini├│n
+- `api/news.php` y `api/events.php` → c/images en `$item['imagen']` e `$item['imagenes'][]`
+- `index.php` → c/slider (server-side)
+- `flyers.php` → c/flyer (server-side)
+- `noticia.php` → c/images en detalle de noticia (server-side)
+
+El `?v=` cambia autom├íticamente cuando el archivo se sube/edit├│ → CloudFlare trata cada valor como URL distinta → sirve la versi├│n fresca.
+
+#### Diagn├│stico de carga de im├ígenes
+Si una imagen no se ve en InfinityFree pero s├¡ en localhost:
+1. Acceder a `https://pctvc.cu/diagnostico.php` → Secci├│n 8
+2. Verificar que HTTP devuelva 200 (no 404/403/500)
+3. Si HTTP 200 pero no se ve en navegador → CloudFlare cache├│ respuesta anterior. Soluci├│n: forzar recarga (Ctrl+F5) o esperar que el `?v=` nuevo invalide la cach├®.
+4. Si HTTP 0 o 500 → el `.htaccess` de `uploads/` puede tener sintaxis incompatible (usa `Require all granted` que es Apache 2.4; LiteSpeed de InfinityFree puede fallar).
+
+#### ╚íNo requiere purgar manualmente!
+Si el `?v=` est├í presente con `filemtime()`, cualquier cambio en el archivo cambia el `?v=` → CloudFlare lo ve como URL nueva → sirve el contenido fresco autom├íticamente. Solo en el caso extremo de que una URL sin `?v=` se haya cacheado con error, hay dos opciones:
+- A├▒adir el `?v=` (lo implementado arriba)
+- Activar "Development Mode" en CloudFlare (dura 3 horas) desde el panel de InfinityFree
 
 ## ETECSA Hosting
 Servidor: Apache 2.4.6 + PHP 7.3.11+ sobre UNIX/Linux.
@@ -207,7 +242,8 @@ Almacenamiento plano en JSON (`public/data/`). Cada recurso es un array de objet
 - `servicios.json` ΓÇö Servicios y subservicios
 - `contadores.json` ΓÇö Contadores de estad├¡sticas
 - `mensajes.json` ΓÇö Mensajes del formulario de contacto
-- `usuarios.json` ΓÇö Usuarios del panel admin
+- `admin_auth.json` ΓÇö Usuarios del panel admin (con PAC y auditor├¡a)
+- `usuarios.json` ΓÇö Legacy (reemplazado por `admin_auth.json`, ya no se usa)
 
 API de acceso v├¡a `Storage::read('nombre')` y `Storage::write('nombre', $data)` en `api/storage.php`.
 
@@ -244,3 +280,34 @@ NO es SQL ΓÇö no se pueden hacer JOINs, consultas complejas ni transacciones.
 - Modificar `public/data/` en producci├│n sin respaldo
 - Commitear secretos, credenciales reales, o datos del sitio
 - Usar `console.log()` en c├│digo JS de producci├│n
+
+## Disaster Recovery
+
+### PAC de Emergencia
+Si se pierde acceso al panel admin (contrase├▒a olvidada, 2FA bloqueado):
+1. Acceder a `/admin/login.php` e ingresar cualquier email
+2. En la pantalla de PAC, hacer clic en "¿Olvidaste tu PAC?"
+3. Ingresar el PAC del sistema (configurado en `setup.php`)
+4. Esto permite crear un nuevo PAC y acceder
+
+Protected by IP restriction (localhost only) in `auth.php:authenticate()`.
+
+### setup.php (Reinstalaci├│n)
+Si los archivos JSON en `public/data/` se corrompen o es necesario reiniciar:
+1. Acceder a `/setup.php` desde el navegador en localhost
+2. Borrar o renombrar `public/data/admin_auth.json` si existe
+3. Recargar `/setup.php` ΓåÆ recrea todos los JSON con datos iniciales
+4. Usuario: `marioc@pctvc.cu` / `12345678`
+5. Acceder al admin y cambiar la contrase├▒a inmediatamente
+
+⚠ S├│lo accesible desde localhost. No eliminar este archivo en producci├│n.
+
+### Respaldo de datos
+- `public/data/*.json` contiene todo el contenido del sitio
+- Hacer backup peri├│dico de estos archivos
+- Para restaurar: subir los JSON respaldados a `public/data/`
+
+### Logs de error
+- Los errores PHP del admin se registran en `public/logs/admin_error.log`
+- No se almacenan en `public/data/` para evitar mezclar datos con logs
+- `public/data/` no debe contener archivos .log

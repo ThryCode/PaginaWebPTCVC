@@ -9,7 +9,7 @@ include 'includes/header.php';
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     "name": "Eventos - Parque Científico Tecnológico de Villa Clara",
-    "description": "<?php echo $pageDescription; ?>",
+    "description": "<?php echo htmlspecialchars($pageDescription, ENT_QUOTES, 'UTF-8'); ?>",
     "url": "<?php echo $canonicalUrl; ?>",
     "mainEntity": {
         "@type": "ItemList",

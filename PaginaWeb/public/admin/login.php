@@ -11,7 +11,8 @@ if ($auth->isLoggedIn()) {
 
 $error = false;
 $errorMsg = '';
-$timeoutMsg = isset($_GET['timeout']);
+$timeoutMsg = isset($_SESSION['timeout_flag']) && $_SESSION['timeout_flag'] === true;
+if ($timeoutMsg) unset($_SESSION['timeout_flag']);
 $step = isset($_SESSION['pac_verified']) && $_SESSION['pac_verified'] === true ? 2 : 1;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -159,7 +160,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <button type="submit" class="pac-submit">Verificar Clave</button>
             </form>
             <div class="error-box <?php if ($error) echo 'visible'; ?>" id="pacError">
-                <?php echo $errorMsg; ?>
+                <?php echo htmlspecialchars($errorMsg); ?>
             </div>
         </div>
         <?php endif; ?>
@@ -183,7 +184,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <button type="submit" class="login-submit">Iniciar Sesi&oacute;n</button>
             </form>
             <div class="error-box <?php if ($error) echo 'visible'; ?>" id="loginError">
-                <?php echo $errorMsg; ?>
+                <?php echo htmlspecialchars($errorMsg); ?>
             </div>
         </div>
         <?php endif; ?>

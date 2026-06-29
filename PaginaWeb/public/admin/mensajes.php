@@ -64,7 +64,6 @@ if ($action === 'list') {
 
 $noLeidos = Storage::count('mensajes', array('leido' => 0));
 $mensajesNoLeidos = $noLeidos;
-$csrfToken = generateCSRFToken();
 ?>
 <!DOCTYPE html>
 <html lang="es">

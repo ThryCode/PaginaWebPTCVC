@@ -1,5 +1,6 @@
 <?php
 require_once 'api/storage.php';
+require_once 'api/functions.php';
 
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 $item = null;
@@ -35,11 +36,15 @@ $pageDescription = !empty($item['resumen']) ? $item['resumen'] : $item['titulo']
 $canonicalUrl = 'https://pctvc.cu/noticia.php?id=' . $id;
 $ogType = 'article';
 if (!empty($imagenes)) {
-    $ogImage = 'https://pctvc.cu/' . ltrim($imagenes[0], '/');
+    $ogImage = SITE_URL . '/' . ltrim($imagenes[0], '/');
 }
 
 include 'includes/header.php';
 ?>
+        <meta property="article:published_time" content="<?php echo htmlspecialchars($fechaRaw); ?>">
+        <?php if (!empty($item['updated_at'])): ?>
+        <meta property="article:modified_time" content="<?php echo htmlspecialchars($item['updated_at']); ?>">
+        <?php endif; ?>
         <script type="application/ld+json">
         <?php echo json_encode(array(
             '@context' => 'https://schema.org',
@@ -56,10 +61,10 @@ include 'includes/header.php';
                 'name' => 'Parque Científico Tecnológico de Villa Clara',
                 'logo' => array(
                     '@type' => 'ImageObject',
-                    'url' => 'https://pctvc.cu/assets/img/logo/logo.png'
+                    'url' => SITE_URL . '/assets/img/logo/logo.png'
                 )
             ),
-            'image' => !empty($imagenes) ? array('https://pctvc.cu/' . ltrim($imagenes[0], '/')) : array()
+            'image' => !empty($imagenes) ? array(SITE_URL . '/' . ltrim($imagenes[0], '/')) : array()
         ), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); ?>
         </script>
         <section class="page-header">
@@ -76,13 +81,13 @@ include 'includes/header.php';
                     <div class="detail-images">
                         <?php if (count($imagenes) === 1): ?>
                         <div class="detail-img-main">
-                            <img src="/<?php echo htmlspecialchars($imagenes[0]); ?>" alt="<?php echo htmlspecialchars($item['titulo']); ?>">
+                            <img src="/<?php echo htmlspecialchars(_cacheBust($imagenes[0])); ?>" alt="<?php echo htmlspecialchars($item['titulo']); ?>">
                         </div>
                         <?php else: ?>
                         <div class="card-carousel" data-count="<?php echo count($imagenes); ?>">
                             <div class="carousel-track">
                                 <?php foreach ($imagenes as $src): ?>
-                                <div class="carousel-slide"><img src="/<?php echo htmlspecialchars($src); ?>" alt="<?php echo htmlspecialchars($item['titulo']); ?>"></div>
+                                <div class="carousel-slide"><img src="/<?php echo htmlspecialchars(_cacheBust($src)); ?>" alt="<?php echo htmlspecialchars($item['titulo']); ?>"></div>
                                 <?php endforeach; ?>
                             </div>
                             <div class="carousel-dots">

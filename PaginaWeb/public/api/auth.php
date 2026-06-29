@@ -3,20 +3,23 @@ require_once __DIR__ . '/config.php';
 
 class Auth {
     private $dataFile;
-    private $sessionTimeout = 1800; // 30 minutos
+    private $dataDir;
+    private $sessionTimeout = 1800;
 
     public function __construct() {
         if (session_status() === PHP_SESSION_NONE) {
             @session_start();
         }
         $this->dataFile = defined('DATA_DIR') ? DATA_DIR . '/admin_auth.json' : __DIR__ . '/../data/admin_auth.json';
+        $this->dataDir = dirname($this->dataFile);
 
         if ($this->isLoggedIn()) {
             $lastActivity = $_SESSION['last_activity'] ?? 0;
             if (time() - $lastActivity > $this->sessionTimeout) {
                 $this->logAudit($_SESSION['user_id'], 'logout', $_SESSION['user_email'] ?? 'unknown', $this->getIP());
                 $this->destroySession();
-                header('Location: login.php?timeout=1');
+                $_SESSION['timeout_flag'] = true;
+                header('Location: login.php');
                 exit;
             }
             $_SESSION['last_activity'] = time();
@@ -25,6 +28,7 @@ class Auth {
 
     public function setDataFile($path) {
         $this->dataFile = $path;
+        $this->dataDir = dirname($path);
     }
 
     private function readData() {
@@ -46,11 +50,46 @@ class Auth {
             mkdir($dir, 0755, true);
         }
         $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-        $result = file_put_contents($this->dataFile, $json, LOCK_EX) !== false;
-        if (!$result) {
-            error_log('[AUTH] Error al escribir: ' . $this->dataFile);
+        if ($json === false) {
+            error_log('[AUTH] Error al codificar JSON: ' . $this->dataFile);
+            return false;
         }
-        return $result;
+        if (file_exists($this->dataFile)) {
+            copy($this->dataFile, $this->dataFile . '.bak');
+        }
+        $tmp = $this->dataFile . '.tmp';
+        $written = file_put_contents($tmp, $json, LOCK_EX);
+        if ($written !== false) {
+            rename($tmp, $this->dataFile);
+            return true;
+        }
+        @unlink($tmp);
+        error_log('[AUTH] Error al escribir: ' . $this->dataFile);
+        return false;
+    }
+
+    private function checkRateLimit($ip) {
+        $rateFile = $this->dataDir . '/rate_limits.json';
+        $rateData = [];
+        if (file_exists($rateFile)) {
+            $rateContent = @file_get_contents($rateFile);
+            $rateData = $rateContent ? json_decode($rateContent, true) : [];
+        }
+        $attempts = $rateData[$ip] ?? ['count' => 0, 'first_attempt' => time()];
+        if (time() - $attempts['first_attempt'] > 900) {
+            $attempts = ['count' => 0, 'first_attempt' => time()];
+        }
+        $attempts['count']++;
+        if ($attempts['count'] > 10) {
+            return false;
+        }
+        $rateData[$ip] = $attempts;
+        $expired = time() - 900;
+        $rateData = array_filter($rateData, function($entry) use ($expired) {
+            return $entry['first_attempt'] > $expired;
+        });
+        @file_put_contents($rateFile, json_encode($rateData), LOCK_EX);
+        return true;
     }
 
     public function loginWithPAC($pac) {
@@ -62,13 +101,25 @@ class Auth {
         $data = $this->readData();
         $ip = $this->getIP();
 
+        if (!$this->checkRateLimit($ip)) {
+            $this->logAudit(null, 'rate_limited', "IP bloqueada por exceso de intentos: $ip", $ip);
+            return false;
+        }
+
         if (!empty($data['system_pac_hash']) && password_verify($pac, $data['system_pac_hash'])) {
             $this->logAudit(null, 'pac_verified', "PAC del sistema verificado", $ip);
             return true;
         }
 
         if (password_verify($pac, EMERGENCY_PAC_HASH)) {
-            $this->logAudit(null, 'pac_verified', "PAC de emergencia verificado", $ip);
+            $hasActiveAdmin = false;
+            foreach ($data['users'] as $u) {
+                if ($u['activo'] && $u['rol'] === 'admin') {
+                    $hasActiveAdmin = true;
+                    break;
+                }
+            }
+            $this->logAudit(null, 'pac_verified', "PAC de emergencia verificado desde IP: $ip" . ($hasActiveAdmin ? '' : ' (sin admins activos)'), $ip);
             return true;
         }
 
@@ -85,6 +136,12 @@ class Auth {
 
         $data = $this->readData();
         $ip = $this->getIP();
+
+        if (!$this->checkRateLimit($ip)) {
+            $this->logAudit(null, 'rate_limited', "IP bloqueada por exceso de intentos: $ip", $ip);
+            return false;
+        }
+
         $identifierLower = strtolower($identifier);
 
         foreach ($data['users'] as &$user) {
@@ -135,7 +192,7 @@ class Auth {
         $hash = password_hash($newPassword, PASSWORD_BCRYPT);
 
         foreach ($data['users'] as &$user) {
-            if ($user['id'] == $userId) {
+            if ($user['id'] === $userId) {
                 $user['password'] = $hash;
                 break;
             }
@@ -149,7 +206,7 @@ class Auth {
     public function verifyCurrentPassword($userId, $password) {
         $data = $this->readData();
         foreach ($data['users'] as $user) {
-            if ($user['id'] == $userId) {
+            if ($user['id'] === $userId) {
                 if (empty($user['password'])) {
                     return false;
                 }
@@ -173,15 +230,15 @@ class Auth {
 
     private function destroySession() {
         $_SESSION = [];
-        if (!headers_sent() && session_status() === PHP_SESSION_ACTIVE) {
-            if (ini_get('session.use_cookies')) {
-                $params = session_get_cookie_params();
-                setcookie(session_name(), '', time() - 42000,
-                    $params['path'], $params['domain'],
-                    $params['secure'], $params['httponly']
-                );
-            }
+        if (session_status() === PHP_SESSION_ACTIVE) {
             session_destroy();
+        }
+        if (!headers_sent() && ini_get('session.use_cookies')) {
+            $params = session_get_cookie_params();
+            setcookie(session_name(), '', time() - 42000,
+                $params['path'], $params['domain'],
+                $params['secure'], $params['httponly']
+            );
         }
     }
 
@@ -225,7 +282,7 @@ class Auth {
         $pacId = $data['next_id']++;
 
         foreach ($data['users'] as &$user) {
-            if ($user['id'] == $userId) {
+            if ($user['id'] === $userId) {
                 $user['pacs'][] = [
                     'id' => $pacId,
                     'hash' => $hash,
@@ -247,7 +304,7 @@ class Auth {
         $data = $this->readData();
 
         foreach ($data['users'] as &$user) {
-            if ($user['id'] == $userId) {
+            if ($user['id'] === $userId) {
                 foreach ($user['pacs'] as &$p) {
                     $p['activo'] = false;
                 }
@@ -266,7 +323,7 @@ class Auth {
 
         foreach ($data['users'] as &$user) {
             foreach ($user['pacs'] as &$p) {
-                if ($p['id'] == $pacId) {
+                if ($p['id'] === $pacId) {
                     $p['activo'] = false;
                     break 2;
                 }
@@ -335,7 +392,7 @@ class Auth {
         $data = $this->readData();
 
         foreach ($data['users'] as $user) {
-            if ($user['id'] == $userId) {
+            if ($user['id'] === $userId) {
                 return $user['pacs'];
             }
         }
@@ -363,7 +420,7 @@ class Auth {
         $data = $this->readData();
 
         foreach ($data['users'] as $user) {
-            if ($user['id'] == $userId) {
+            if ($user['id'] === $userId) {
                 return [
                     'id' => $user['id'],
                     'nombre' => $user['nombre'],
@@ -380,7 +437,7 @@ class Auth {
         $data = $this->readData();
 
         foreach ($data['users'] as &$user) {
-            if ($user['id'] == $userId) {
+            if ($user['id'] === $userId) {
                 foreach (['nombre', 'email', 'rol', 'activo'] as $key) {
                     if (array_key_exists($key, $fields)) {
                         $user[$key] = $fields[$key];
@@ -420,7 +477,7 @@ class Auth {
         $data = $this->readData();
 
         foreach ($data['users'] as $key => $user) {
-            if ($user['id'] == $userId) {
+            if ($user['id'] === $userId) {
                 array_splice($data['users'], $key, 1);
                 break;
             }
@@ -442,7 +499,12 @@ class Auth {
     }
 
     private function getIP() {
-        return $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+        $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+        if (!empty($_SERVER['HTTP_X_FORWARDED_FOR']) && defined('ENV') && ENV !== 'production') {
+            $forwardedIps = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+            $ip = trim($forwardedIps[0]);
+        }
+        return $ip;
     }
 
     public function hashPassword($password) {

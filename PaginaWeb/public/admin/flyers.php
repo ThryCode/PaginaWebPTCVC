@@ -1,11 +1,11 @@
 <?php
-error_reporting(0);
-ini_set('display_errors', 0);
+
 ini_set('log_errors', 1);
-ini_set('error_log', __DIR__ . '/../data/admin_error.log');
+ini_set('error_log', __DIR__ . '/../logs/admin_error.log');
 
 require_once '../api/auth.php';
 require_once '../api/storage.php';
+require_once 'includes/helpers.php';
 
 $auth = new Auth();
 $auth->requireLogin();
@@ -31,9 +31,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($deleteId > 0) {
                 $existing = Storage::findById('flyers', $deleteId);
                 if ($existing && isset($existing['imagen'])) {
-                    $imgPath = '../' . $existing['imagen'];
-                    if (file_exists($imgPath)) {
-                        unlink($imgPath);
+                    $clean = ltrim($existing['imagen'], '/');
+                    $realBase = realpath(__DIR__ . '/../uploads');
+                    $realPath = realpath(__DIR__ . '/../' . $clean);
+                    if ($realPath !== false && $realBase !== false && strpos($realPath, $realBase) === 0 && file_exists($realPath)) {
+                        unlink($realPath);
                     }
                 }
                 Storage::delete('flyers', $deleteId);
@@ -53,21 +55,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 );
 
                 if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
-                    $uploadDir = '../uploads/flyers/';
-                    if (!is_dir($uploadDir)) {
-                        mkdir($uploadDir, 0755, true);
-                    }
-                    $allowedExts = array('jpg', 'jpeg', 'png', 'gif', 'webp');
-                    $ext = strtolower(pathinfo($_FILES['imagen']['name'], PATHINFO_EXTENSION));
-
-                    if (in_array($ext, $allowedExts) && $_FILES['imagen']['size'] <= 10 * 1024 * 1024) {
-                        $filename = 'flyer_' . time() . '_' . rand(1000, 9999) . '.' . $ext;
-                        $filepath = $uploadDir . $filename;
-                        if (move_uploaded_file($_FILES['imagen']['tmp_name'], $filepath)) {
-                            $data['imagen'] = 'uploads/flyers/' . $filename;
-                        }
+                    $err = validateUploadedImage($_FILES['imagen'], 10 * 1024 * 1024);
+                    if ($err === null) {
+                        $fn = moveUploadedImage($_FILES['imagen'], '../uploads/flyers/', 'flyer');
+                        if ($fn) $data['imagen'] = 'uploads/flyers/' . $fn;
                     } else {
-                        $error = 'Imagen no v&aacute;lida (m&aacute;x 10MB, JPG/PNG/GIF/WEBP).';
+                        $error = $err;
                     }
                 }
 
@@ -118,7 +111,6 @@ if ($action === 'list') {
     });
 }
 
-$csrfToken = generateCSRFToken();
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -160,13 +152,13 @@ $csrfToken = generateCSRFToken();
                                 <tr>
                                     <td data-label="Imagen">
                                         <?php if (isset($f['imagen'])): ?>
-                                            <img loading="lazy" src="../<?php echo htmlspecialchars($f['imagen']); ?>" class="flyer-thumb" alt="<?php echo htmlspecialchars($f['titulo']); ?>">
+                                            <img src="/<?php echo htmlspecialchars($f['imagen']); ?>" loading="lazy" class="flyer-thumb" alt="<?php echo htmlspecialchars($f['titulo']); ?>">
                                         <?php else: ?>
                                             Sin imagen
                                         <?php endif; ?>
                                     </td>
                                     <td data-label="Título"><strong><?php echo htmlspecialchars($f['titulo']); ?></strong></td>
-                                    <td data-label="Orden"><?php echo $f['orden']; ?></td>
+                                    <td data-label="Orden"><?php echo htmlspecialchars($f['orden']); ?></td>
                                     <td data-label="Acciones">
                                         <a href="?action=edit&id=<?php echo $f['id']; ?>" class="btn btn-sm btn-primary">Editar</a>
                                         <form class="delete-form" method="POST" action="?action=delete" data-confirm="¿Eliminar este flyer?">
@@ -195,14 +187,14 @@ $csrfToken = generateCSRFToken();
                                 <input type="file" id="imagen" name="imagen" accept="image/*" <?php echo $action === 'new' ? 'required' : ''; ?>>
                                 <?php if ($flyer && isset($flyer['imagen'])): ?>
                                     <div style="margin-top:10px;">
-                                        <img src="../<?php echo htmlspecialchars($flyer['imagen']); ?>" class="flyer-preview" alt="Actual">
+                                        <img src="/<?php echo htmlspecialchars($flyer['imagen']); ?>" class="flyer-preview" alt="Actual">
                                         <p style="font-size:0.85rem;color:#888;margin-top:4px;">Imagen actual. Sube una nueva solo si deseas cambiarla.</p>
                                     </div>
                                 <?php endif; ?>
                             </div>
                             <div class="form-group">
                                 <label for="orden">Orden</label>
-                                <input type="number" id="orden" name="orden" min="0" value="<?php echo $flyer ? $flyer['orden'] : 0; ?>">
+                                <input type="number" id="orden" name="orden" min="0" value="<?php echo htmlspecialchars($flyer['orden'] ?? 0); ?>">
                             </div>
                             <div class="form-actions">
                                 <button type="submit" class="btn btn-success">Guardar</button>

@@ -1,13 +1,10 @@
 <?php
-/**
- * API: Obtener noticias y eventos
- * Lee de JSON
- */
 
 header('Content-Type: application/json; charset=utf-8');
 header('X-Content-Type-Options: nosniff');
 
 require_once 'storage.php';
+require_once 'functions.php';
 
 $tipo = isset($_GET['tipo']) ? $_GET['tipo'] : null;
 $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 10;
@@ -42,6 +39,19 @@ usort($results, function($a, $b) {
 });
 
 $results = array_slice($results, 0, $limit);
+
+foreach ($results as &$item) {
+    if (!empty($item['imagen'])) {
+        $item['imagen'] = _cacheBust($item['imagen']);
+    }
+    if (!empty($item['imagenes']) && is_array($item['imagenes'])) {
+        foreach ($item['imagenes'] as &$img) {
+            $img = _cacheBust($img);
+        }
+        unset($img);
+    }
+}
+unset($item);
 
 echo json_encode(array(
     'success' => true,

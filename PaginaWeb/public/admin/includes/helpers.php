@@ -6,12 +6,12 @@ function autoResumen($texto, $max = 200) {
     return mb_substr($limpio, 0, $max) . '…';
 }
 
-function getNoticiaFolder($id) { return '../uploads/noticias/noticia_' . $id . '/'; }
-function getNoticiaFolderUrl($id) { return 'uploads/noticias/noticia_' . $id . '/'; }
-function getEventoFolder($id) { return '../uploads/eventos/evento_' . $id . '/'; }
-function getEventoFolderUrl($id) { return 'uploads/eventos/evento_' . $id . '/'; }
-function getProyectoFolder($id) { return '../uploads/proyectos/proyecto_' . $id . '/'; }
-function getProyectoFolderUrl($id) { return 'uploads/proyectos/proyecto_' . $id . '/'; }
+function getNoticiaFolder($id) { $id = preg_replace('/[^0-9]/', '', $id); return '../uploads/noticias/noticia_' . $id . '/'; }
+function getNoticiaFolderUrl($id) { $id = preg_replace('/[^0-9]/', '', $id); return 'uploads/noticias/noticia_' . $id . '/'; }
+function getEventoFolder($id) { $id = preg_replace('/[^0-9]/', '', $id); return '../uploads/eventos/evento_' . $id . '/'; }
+function getEventoFolderUrl($id) { $id = preg_replace('/[^0-9]/', '', $id); return 'uploads/eventos/evento_' . $id . '/'; }
+function getProyectoFolder($id) { $id = preg_replace('/[^0-9]/', '', $id); return '../uploads/proyectos/proyecto_' . $id . '/'; }
+function getProyectoFolderUrl($id) { $id = preg_replace('/[^0-9]/', '', $id); return 'uploads/proyectos/proyecto_' . $id . '/'; }
 
 function ensureFolder($dir) { if (!is_dir($dir)) { mkdir($dir, 0755, true); } }
 
@@ -20,6 +20,40 @@ function deleteFolder($dir) {
     $files = glob($dir . '*');
     if ($files) { foreach ($files as $f) { if (is_file($f)) unlink($f); } }
     rmdir($dir);
+}
+
+function validateUploadedImage($file, $maxSize = 10485760) {
+    if (!isset($file) || $file['error'] !== UPLOAD_ERR_OK) {
+        return 'Error al subir el archivo.';
+    }
+    $allowedExts = array('jpg', 'jpeg', 'png', 'gif', 'webp');
+    $allowedMime = array('image/jpeg', 'image/png', 'image/gif', 'image/webp');
+    $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+    $mime = mime_content_type($file['tmp_name']);
+    if (!in_array($ext, $allowedExts) || !in_array($mime, $allowedMime)) {
+        return 'Formato de imagen no v&aacute;lido (JPG/PNG/GIF/WEBP).';
+    }
+    if ($file['size'] > $maxSize) {
+        return 'La imagen excede el tama&ntilde;o m&aacute;ximo de ' . ($maxSize / 1048576) . 'MB.';
+    }
+    $imgInfo = @getimagesize($file['tmp_name']);
+    if ($imgInfo === false) {
+        return 'El archivo no es una imagen v&aacute;lida.';
+    }
+    return null;
+}
+
+function moveUploadedImage($file, $targetDir, $prefix = 'img') {
+    if (!is_dir($targetDir)) {
+        mkdir($targetDir, 0755, true);
+    }
+    $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+    $filename = $prefix . '_' . time() . '_' . rand(1000, 9999) . '.' . $ext;
+    $filepath = $targetDir . $filename;
+    if (move_uploaded_file($file['tmp_name'], $filepath)) {
+        return $filename;
+    }
+    return null;
 }
 
 function migrateOldImages(&$imagenes, $folderDir, $folderUrl) {
