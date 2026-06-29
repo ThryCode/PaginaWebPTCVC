@@ -2,6 +2,8 @@
 $pageTitle = 'Contacto - Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara';
 $pageDescription = 'Cont&aacute;ctanos: direcci&oacute;n, tel&eacute;fono, correo electr&oacute;nico y horario del Parque Cient&iacute;fico Tecnol&oacute;gico de Villa Clara.';
 $canonicalUrl = 'https://pctvc.cu/contacto.php';
+require_once 'api/storage.php';
+$config = Storage::read('config');
 include 'includes/header.php';
 ?>
         <script type="application/ld+json">
@@ -11,15 +13,15 @@ include 'includes/header.php';
             'name' => 'Parque Científico Tecnológico de Villa Clara',
             'url' => SITE_URL,
             'logo' => SITE_URL . '/assets/img/logo/logo.png',
-            'address' => array(
-                '@type' => 'PostalAddress',
-                'streetAddress' => 'Carretera a Planta Mecánica, No. 39 B',
-                'addressLocality' => 'Santa Clara',
-                'addressRegion' => 'Villa Clara',
-                'addressCountry' => 'CU'
-            ),
-            'telephone' => '+53-42281551',
-            'email' => 'pctvillaclara@pctvc.cu',
+                'address' => array(
+                    '@type' => 'PostalAddress',
+                    'streetAddress' => htmlspecialchars($config['contact_address'] ?? 'Carretera a Planta Mecánica, No. 39 B'),
+                    'addressLocality' => 'Santa Clara',
+                    'addressRegion' => 'Villa Clara',
+                    'addressCountry' => 'CU'
+                ),
+                'telephone' => htmlspecialchars($config['contact_phone'] ?? '+53-42281551'),
+                'email' => htmlspecialchars($config['contact_email'] ?? 'pctvillaclara@pctvc.cu'),
             'openingHoursSpecification' => array(
                 array(
                     '@type' => 'OpeningHoursSpecification',
