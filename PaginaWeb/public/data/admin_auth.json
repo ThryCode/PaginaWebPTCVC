@@ -1,7 +1,7 @@
 {
     "next_id": 12,
-    "system_pac_hash": "$2y$10$Cq09mWeZOjVt3wOAQAwXfuMdBu6A2zqqfI5Xmq7EUl.nGAt\/QXXNa",
-    "system_pac_created_at": "2026-06-19 17:55:49",
+    "system_pac_hash": "$2y$10$k6ibzGne2MGyIvQfTzu41edYdpO9nxA62KyR44ow0zVbQGjNyc\/q6",
+    "system_pac_created_at": "2026-06-29 12:30:00",
     "users": [
         {
             "id": 3,
@@ -10,7 +10,7 @@
             "rol": "admin",
             "activo": true,
             "password": "$2y$10$PiQqtW9I9Rn2kJ6rzlqzVOdgNqi3XOghk6XqJYG.iUtN0fsXocFl2",
-            "last_login": "2026-06-27 12:11:40",
+            "last_login": "2026-06-29 12:36:58",
             "created_at": "2026-06-19 13:25:22",
             "pacs": [
                 {
@@ -171,6 +171,55 @@
             "details": "marioc@pctvc.cu",
             "ip_address": "::1",
             "created_at": "2026-06-27 12:11:40"
+        },
+        {
+            "user_id": 3,
+            "action": "logout",
+            "details": "marioc@pctvc.cu",
+            "ip_address": "::1",
+            "created_at": "2026-06-29 12:33:34"
+        },
+        {
+            "user_id": null,
+            "action": "pac_verified",
+            "details": "PAC del sistema verificado",
+            "ip_address": "::1",
+            "created_at": "2026-06-29 12:33:41"
+        },
+        {
+            "user_id": 3,
+            "action": "login",
+            "details": "marioc@pctvc.cu",
+            "ip_address": "::1",
+            "created_at": "2026-06-29 12:36:30"
+        },
+        {
+            "user_id": 3,
+            "action": "logout",
+            "details": "marioc@pctvc.cu",
+            "ip_address": "::1",
+            "created_at": "2026-06-29 12:36:33"
+        },
+        {
+            "user_id": null,
+            "action": "pac_verified",
+            "details": "PAC de emergencia verificado desde IP: ::1",
+            "ip_address": "::1",
+            "created_at": "2026-06-29 12:36:55"
+        },
+        {
+            "user_id": 3,
+            "action": "login",
+            "details": "marioc@pctvc.cu",
+            "ip_address": "::1",
+            "created_at": "2026-06-29 12:36:58"
+        },
+        {
+            "user_id": 3,
+            "action": "logout",
+            "details": "marioc@pctvc.cu",
+            "ip_address": "::1",
+            "created_at": "2026-06-29 12:37:00"
         }
     ]
 }
