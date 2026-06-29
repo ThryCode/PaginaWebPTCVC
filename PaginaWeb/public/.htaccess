@@ -1,7 +1,7 @@
 Options -Indexes
 
-# Bloquear acceso directo a archivos delicados
-<FilesMatch "^(setup|diagnostico)\.php$">
+# Bloquear acceso directo a setup.php (diagnostico.php permitido)
+<FilesMatch "^setup\.php$">
     <IfModule mod_authz_core.c>
         Require all denied
     </IfModule>
