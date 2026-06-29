@@ -6,15 +6,25 @@ if (ENV === 'production') {
     ini_set('display_errors', 0);
 }
 
-ini_set('session.use_strict_mode', 1);
+// Session config: use own writable directory (avoid /php_sessions issues on shared hosting)
+$sessDir = __DIR__ . '/../data/sessions';
+if (!is_dir($sessDir)) {
+    @mkdir($sessDir, 0755, true);
+}
+if (is_dir($sessDir) && is_writable($sessDir)) {
+    session_save_path($sessDir);
+}
+
+ini_set('session.use_cookies', 1);
 ini_set('session.use_only_cookies', 1);
 ini_set('session.cookie_httponly', 1);
-if (ENV === 'production') {
-    ini_set('session.cookie_secure', 1);
+@ini_set('session.cookie_samesite', 'Lax');
+@ini_set('session.cookie_lifetime', 0);
+@ini_set('session.gc_maxlifetime', 7200);
+// cookie_secure: only set for HTTPS (hosting may reject, safe to ignore)
+if (ENV === 'production' && (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')) {
+    @ini_set('session.cookie_secure', 1);
 }
-ini_set('session.cookie_samesite', 'Lax');
-ini_set('session.cookie_lifetime', 0);
-ini_set('session.gc_maxlifetime', 7200);
 
 if (version_compare(PHP_VERSION, '7.3.11', '<')) {
     http_response_code(500);
@@ -47,7 +57,17 @@ if (ENV === 'production') {
 header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; frame-src 'none'; object-src 'none'; base-uri 'self'");
 
 if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+    $started = @session_start();
+    if (!$started) {
+        // Fallback: if custom save path failed, try default
+        if (isset($sessDir) && session_save_path() === $sessDir) {
+            session_save_path('');
+            @session_start();
+        }
+        if (!session_id()) {
+            error_log('[CONFIG] session_start() fallo en ambos intentos');
+        }
+    }
 }
 
 function generateCSRFToken() {

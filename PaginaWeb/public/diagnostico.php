@@ -206,7 +206,15 @@ $tokenValid = $tokenStored && $tokenGenerated && hash_equals($tokenStored, $toke
 <tr>
     <td>session_status()</td>
     <td><code><?php echo $sessStatusMap[$sessStatus] ?? 'Desconocido'; ?></code></td>
-    <td><?php echo $sessStatus === PHP_SESSION_ACTIVE ? '<span class="pass">✅ Activa</span>' : '<span class="fail">❌ Inactiva</span>'; ?></td>
+    <td><?php
+    if ($sessStatus === PHP_SESSION_ACTIVE) {
+        echo '<span class="pass">✅ Activa</span>';
+    } elseif ($sessStatus === PHP_SESSION_NONE) {
+        echo '<span class="fail">❌ Inactiva (session_start() fallo o aun no se llamo)</span>';
+    } else {
+        echo '<span class="fail">❌ Deshabilitada</span>';
+    }
+    ?></td>
 </tr>
 <tr>
     <td>session_id()</td>
@@ -224,9 +232,43 @@ $tokenValid = $tokenStored && $tokenGenerated && hash_equals($tokenStored, $toke
     <td><?php echo $sessWritable ? '<span class="pass">✅ Escribible</span>' : '<span class="fail">❌ NO escribible</span>'; ?></td>
 </tr>
 <tr>
+    <td>Custom save path (data/sessions)</td>
+    <td><code><?php echo htmlspecialchars(DATA_DIR . '/sessions'); ?></code></td>
+    <td><?php
+    $customSess = DATA_DIR . '/sessions';
+    if (is_dir($customSess) && is_writable($customSess)) {
+        $isActive = $sessPath === $customSess;
+        echo $isActive ? '<span class="pass">✅ Activo y escribible</span>' : '<span class="warn">⚠️ Existe pero NO activo (save_path=' . htmlspecialchars($sessPath ?: 'default') . ')</span>';
+    } elseif (is_dir($customSess)) {
+        echo '<span class="fail">❌ Existe pero NO escribible</span>';
+    } else {
+        echo '<span class="fail">❌ No existe</span>';
+    }
+    ?></td>
+</tr>
+<tr>
     <td>session.cookie_secure</td>
-    <td><code><?php echo ini_get('session.cookie_secure') ?: 'Off'; ?></code></td>
-    <td><?php echo (!ini_get('session.cookie_secure') || ENV !== 'production') ? '<span class="pass">✅ OK</span>' : '<span class="warn">⚠️ Forzado en produccion</span>'; ?></td>
+    <td><code><?php echo var_export(ini_get('session.cookie_secure'), true); ?></code></td>
+    <td><?php
+    $secureVal = ini_get('session.cookie_secure');
+    if ($secureVal === '1' || $secureVal === 1) {
+        echo '<span class="pass">✅ Forzado</span>';
+    } elseif ($secureVal === '' || $secureVal === false || $secureVal === '0') {
+        $isHttps = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
+        if (ENV === 'production' && $isHttps) {
+            echo '<span class="fail">❌ Deberia ser On (HTTPS)</span>';
+        } else {
+            echo '<span class="pass">✅ Off (HTTP/desarrollo)</span>';
+        }
+    } else {
+        echo '<span class="warn">⚠️ ' . htmlspecialchars(var_export($secureVal, true)) . '</span>';
+    }
+    ?></td>
+</tr>
+<tr>
+    <td>session.use_only_cookies</td>
+    <td><code><?php echo var_export(ini_get('session.use_only_cookies'), true); ?></code></td>
+    <td><?php echo ini_get('session.use_only_cookies') ? '<span class="pass">✅ Solo cookies</span>' : '<span class="fail">❌ Permitir URL</span>'; ?></td>
 </tr>
 <tr>
     <td>session.cookie_samesite</td>
