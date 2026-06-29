@@ -24,7 +24,12 @@
     box-sizing: border-box;
 }
 
+body {
+    overflow-x: hidden;
+}
+
 html {
+    overflow-x: hidden;
     scroll-behavior: smooth;
 }
 
@@ -2463,64 +2468,66 @@ body {
     }
 }
 
-.is-mobile .nav {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: #ffffff;
-    padding: 20px;
-    border-top: 1px solid rgba(0, 0, 0, 0.05);
-    box-shadow: 0 10px 30px rgba(0, 73, 102, 0.15);
-}
+@media (max-width: 768px) {
+    .nav {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: #ffffff;
+        padding: 20px;
+        border-top: 1px solid rgba(0, 0, 0, 0.05);
+        box-shadow: 0 10px 30px rgba(0, 73, 102, 0.15);
+    }
 
-.is-mobile .nav.active {
-    display: block;
-    max-height: calc(100vh - 80px);
-    overflow-y: auto;
-}
+    .nav.active {
+        display: block;
+        max-height: calc(100vh - 80px);
+        overflow-y: auto;
+    }
 
-.is-mobile .nav a {
-    color: #333;
-    padding: 12px 20px;
-    border-radius: 10px;
-    justify-content: center;
-}
+    .nav a {
+        color: #333;
+        padding: 12px 20px;
+        border-radius: 10px;
+        justify-content: center;
+    }
 
-.is-mobile .nav ul {
-    flex-direction: column;
-    gap: 8px;
-}
+    .nav ul {
+        flex-direction: column;
+        gap: 8px;
+    }
 
-.is-mobile .dropdown-menu {
-    position: static;
-    transform: none;
-    box-shadow: none;
-    background: rgba(0, 0, 0, 0.05);
-    border-radius: 10px;
-    margin-top: 8px;
-    opacity: 1;
-    visibility: visible;
-    display: none !important;
-}
+    .dropdown-menu {
+        position: static;
+        transform: none;
+        box-shadow: none;
+        background: rgba(0, 0, 0, 0.05);
+        border-radius: 10px;
+        margin-top: 8px;
+        opacity: 1;
+        visibility: visible;
+        display: none !important;
+    }
 
-.is-mobile .dropdown-menu.open {
-    display: block !important;
-}
+    .dropdown-menu.open {
+        display: block !important;
+    }
 
-.is-mobile .dropdown-menu li a {
-    color: #646464 !important;
-    padding: 8px 18px;
-}
+    .dropdown-menu li a {
+        color: #646464 !important;
+        padding: 8px 18px;
+    }
 
-.is-mobile .dropdown > a::after {
-    content: ' ▾';
-    font-size: 0.65rem;
-}
+    .dropdown > a::after {
+        content: ' ▾';
+        font-size: 0.65rem;
+    }
 
-.is-mobile .nav-toggle {
-    display: block;
+    .nav-toggle {
+        display: block;
+    }
 }
 
 @media (max-width: 768px) {

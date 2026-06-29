@@ -376,11 +376,11 @@ include 'includes/header.php';
                             </div>
                             <div class="form-group">
                                 <label for="correo">Correo</label>
-                                <input type="email" id="correo" name="correo" required placeholder="Dirección de Correo">
+                                <input type="email" inputmode="email" id="correo" name="correo" required placeholder="Dirección de Correo">
                             </div>
                             <div class="form-group">
                                 <label for="telefono">Teléfono</label>
-                                <input type="tel" id="telefono" name="telefono" placeholder="+53 555 12345">
+                                <input type="tel" inputmode="tel" id="telefono" name="telefono" placeholder="+53 555 12345">
                             </div>
                             <div class="form-group">
                                 <label for="asunto">Asunto</label>

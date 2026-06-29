@@ -71,17 +71,16 @@ $csrfToken = generateCSRFToken();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script>(function(){var w=window.innerWidth||document.documentElement.clientWidth,m=/Mobi|Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);if(m&&w<1200){var v=document.createElement('meta');v.name='viewport';v.content='width=1200, initial-scale='+(w/1200)+', maximum-scale=1, user-scalable=no';document.head.insertBefore(v,document.head.querySelector('meta[name="viewport"]'))}document.documentElement.classList.toggle('is-mobile',m)})();</script>
+    <script>(function(){var w=window.innerWidth||document.documentElement.clientWidth,m=w<=768;document.documentElement.classList.toggle('is-mobile',m)})();</script>
     <title>Admin - Mensajes</title>
     <link rel="stylesheet" href="css/admin.css?v=<?= filemtime(__DIR__ . '/css/admin.css') ?>">
 </head>
 <body>
     <div class="admin-wrapper">
-        <?php include 'includes/sidebar.php'; ?>
 
         <main class="main-content">
             <header class="topbar">
-                <button class="hamburger" aria-label="Menu" style="display:none;">☰</button>
+                <button class="hamburger" aria-label="Menu">☰</button>
                 <h1>Mensajes de Contacto</h1>
                 <?php if ($action === 'list' && $noLeidos > 0): ?>
                     <form method="POST" action="?action=readall" style="display:inline;">
@@ -104,12 +103,12 @@ $csrfToken = generateCSRFToken();
                                 <tbody>
                                 <?php foreach ($mensajes as $m): ?>
                                 <tr style="<?php echo !$m['leido'] ? 'font-weight:bold; background:#f0f7ff;' : ''; ?>">
-                                    <td><?php echo htmlspecialchars($m['nombre'] . ( !empty($m['apellidos']) ? ' ' . $m['apellidos'] : '' )); ?></td>
-                                    <td><?php echo htmlspecialchars($m['correo']); ?></td>
-                                    <td><?php echo htmlspecialchars($m['asunto']); ?></td>
-                                    <td><span class="tag tag-<?php echo $m['leido'] ? 'leido' : 'noleido'; ?>"><?php echo $m['leido'] ? 'Leído' : 'Nuevo'; ?></span></td>
-                                    <td><?php echo date('d/m/Y H:i', strtotime($m['created_at'])); ?></td>
-                                    <td>
+                                    <td data-label="Nombre"><?php echo htmlspecialchars($m['nombre'] . ( !empty($m['apellidos']) ? ' ' . $m['apellidos'] : '' )); ?></td>
+                                    <td data-label="Email"><?php echo htmlspecialchars($m['correo']); ?></td>
+                                    <td data-label="Asunto"><?php echo htmlspecialchars($m['asunto']); ?></td>
+                                    <td data-label="Estado"><span class="tag tag-<?php echo $m['leido'] ? 'leido' : 'noleido'; ?>"><?php echo $m['leido'] ? 'Leído' : 'Nuevo'; ?></span></td>
+                                    <td data-label="Fecha"><?php echo date('d/m/Y H:i', strtotime($m['created_at'])); ?></td>
+                                    <td data-label="Acciones">
                                         <a href="?action=view&id=<?php echo $m['id']; ?>" class="btn btn-sm btn-primary">Ver</a>
                                         <form class="delete-form" method="POST" action="?action=delete" data-confirm="¿Eliminar este mensaje?">
                                             <?php echo csrfField(); ?>
@@ -133,7 +132,7 @@ $csrfToken = generateCSRFToken();
                             <div><strong>Teléfono:</strong> <?php echo htmlspecialchars($msg['telefono']); ?></div>
                             <div><strong>Fecha:</strong> <?php echo date('d/m/Y H:i', strtotime($msg['created_at'])); ?></div>
                         </div>
-                        <div style="background:#f9f9f9; padding:20px; border-radius:5px; margin-bottom:20px;">
+                        <div style="background:#f9f9f9; padding:20px; border-radius:5px; margin-bottom:20px; word-break:break-word; overflow-wrap:break-word;">
                             <?php echo nl2br(htmlspecialchars($msg['mensaje'])); ?>
                         </div>
                         <div class="form-actions">
@@ -144,6 +143,7 @@ $csrfToken = generateCSRFToken();
                 <?php endif; ?>
             </div>
         </main>
+        <?php include 'includes/sidebar.php'; ?>
     </div>
 </body>
 </html>

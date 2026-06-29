@@ -96,17 +96,16 @@ $csrfToken = generateCSRFToken();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script>(function(){var w=window.innerWidth||document.documentElement.clientWidth,m=/Mobi|Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);if(m&&w<1200){var v=document.createElement('meta');v.name='viewport';v.content='width=1200, initial-scale='+(w/1200)+', maximum-scale=1, user-scalable=no';document.head.insertBefore(v,document.head.querySelector('meta[name="viewport"]'))}document.documentElement.classList.toggle('is-mobile',m)})();</script>
+    <script>(function(){var w=window.innerWidth||document.documentElement.clientWidth,m=w<=768;document.documentElement.classList.toggle('is-mobile',m)})();</script>
     <title>Admin - Usuarios</title>
     <link rel="stylesheet" href="css/admin.css?v=<?= filemtime(__DIR__ . '/css/admin.css') ?>">
 </head>
 <body>
     <div class="admin-wrapper">
-        <?php include 'includes/sidebar.php'; ?>
 
         <main class="main-content">
             <header class="topbar">
-                <button class="hamburger" aria-label="Menu" style="display:none;">&#9776;</button>
+                <button class="hamburger" aria-label="Menu">☰</button>
                 <h1>Usuarios</h1>
                 <?php if ($action === 'list'): ?>
                     <a href="?action=new" class="btn btn-primary">+ Nuevo</a>
@@ -126,11 +125,11 @@ $csrfToken = generateCSRFToken();
                                 <tbody>
                                 <?php foreach ($usuarios as $u): ?>
                                 <tr>
-                                    <td><?php echo htmlspecialchars($u['nombre']); ?></td>
-                                    <td><?php echo htmlspecialchars($u['email']); ?></td>
-                                    <td><span class="tag tag-<?php echo $u['rol'] === 'admin' ? 'publicado' : 'evento'; ?>"><?php echo htmlspecialchars(ucfirst($u['rol'])); ?></span></td>
-                                    <td><span class="tag tag-<?php echo $u['activo'] ? 'publicado' : 'borrador'; ?>"><?php echo $u['activo'] ? 'Activo' : 'Inactivo'; ?></span></td>
-                                    <td>
+                                    <td data-label="Nombre"><?php echo htmlspecialchars($u['nombre']); ?></td>
+                                    <td data-label="Email"><?php echo htmlspecialchars($u['email']); ?></td>
+                                    <td data-label="Rol"><span class="tag tag-<?php echo $u['rol'] === 'admin' ? 'publicado' : 'evento'; ?>"><?php echo htmlspecialchars(ucfirst($u['rol'])); ?></span></td>
+                                    <td data-label="Estado"><span class="tag tag-<?php echo $u['activo'] ? 'publicado' : 'borrador'; ?>"><?php echo $u['activo'] ? 'Activo' : 'Inactivo'; ?></span></td>
+                                    <td data-label="Acciones">
                                         <a href="?action=edit&id=<?php echo $u['id']; ?>" class="btn btn-sm btn-primary">Editar</a>
                                         <?php if ($u['id'] != $_SESSION['user_id']): ?>
                                             <form class="delete-form" method="POST" action="?action=delete" data-confirm="¿Eliminar este usuario?">
@@ -158,7 +157,7 @@ $csrfToken = generateCSRFToken();
                                 </div>
                                 <div class="form-group">
                                     <label for="email">Email *</label>
-                                    <input type="email" id="email" name="email" required value="<?php echo $usuario ? htmlspecialchars($usuario['email']) : ''; ?>">
+                                    <input type="email" inputmode="email" id="email" name="email" required value="<?php echo $usuario ? htmlspecialchars($usuario['email']) : ''; ?>">
                                 </div>
                             </div>
                             <?php if ($action === 'new'): ?>
@@ -188,6 +187,7 @@ $csrfToken = generateCSRFToken();
                 <?php endif; ?>
             </div>
         </main>
+        <?php include 'includes/sidebar.php'; ?>
     </div>
 </body>
 </html>

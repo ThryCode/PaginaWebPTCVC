@@ -46,7 +46,7 @@ if (!empty($user['nombre'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script>(function(){var w=window.innerWidth||document.documentElement.clientWidth,m=/Mobi|Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);if(m&&w<1200){var v=document.createElement('meta');v.name='viewport';v.content='width=1200, initial-scale='+(w/1200)+', maximum-scale=1, user-scalable=no';document.head.insertBefore(v,document.head.querySelector('meta[name="viewport"]'))}document.documentElement.classList.toggle('is-mobile',m)})();</script>
+    <script>(function(){var w=window.innerWidth||document.documentElement.clientWidth,m=w<=768;document.documentElement.classList.toggle('is-mobile',m)})();</script>
     <title>Admin - Dashboard</title>
     <link rel="icon" type="image/x-icon" href="/assets/img/logo/favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
@@ -54,7 +54,6 @@ if (!empty($user['nombre'])) {
 </head>
 <body>
     <div class="admin-wrapper">
-        <?php include 'includes/sidebar.php'; ?>
 
         <main class="main-content">
             <header class="topbar">
@@ -121,10 +120,10 @@ if (!empty($user['nombre'])) {
                                     <tbody>
                                         <?php foreach ($ultimasNoticias as $n): ?>
                                         <tr>
-                                            <td><?php echo htmlspecialchars(substr($n['titulo'], 0, 40)); ?></td>
-                                            <td><span class="tag tag-<?php echo preg_replace('/[^a-zA-Z0-9_-]/', '', $n['tipo']); ?>"><?php echo htmlspecialchars(ucfirst($n['tipo'])); ?></span></td>
-                                            <td><span class="tag tag-<?php echo $n['publicada'] ? 'publicado' : 'borrador'; ?>"><?php echo $n['publicada'] ? 'Publicado' : 'Borrador'; ?></span></td>
-                                            <td><?php echo date('d/m/Y', strtotime($n['fecha_evento'] ?? $n['created_at'])); ?></td>
+                                            <td data-label="Título"><?php echo htmlspecialchars(substr($n['titulo'], 0, 40)); ?></td>
+                                            <td data-label="Tipo"><span class="tag tag-<?php echo preg_replace('/[^a-zA-Z0-9_-]/', '', $n['tipo']); ?>"><?php echo htmlspecialchars(ucfirst($n['tipo'])); ?></span></td>
+                                            <td data-label="Estado"><span class="tag tag-<?php echo $n['publicada'] ? 'publicado' : 'borrador'; ?>"><?php echo $n['publicada'] ? 'Publicado' : 'Borrador'; ?></span></td>
+                                            <td data-label="Fecha"><?php echo date('d/m/Y', strtotime($n['fecha_evento'] ?? $n['created_at'])); ?></td>
                                         </tr>
                                         <?php endforeach; ?>
                                     </tbody>
@@ -147,10 +146,10 @@ if (!empty($user['nombre'])) {
                                     <tbody>
                                         <?php foreach ($ultimosMensajes as $m): ?>
                                         <tr>
-                                            <td><?php echo htmlspecialchars(substr($m['nombre'], 0, 25)); ?></td>
-                                            <td><?php echo htmlspecialchars($m['asunto']); ?></td>
-                                            <td><span class="tag tag-<?php echo $m['leido'] ? 'leido' : 'noleido'; ?>"><?php echo $m['leido'] ? 'Leído' : 'Nuevo'; ?></span></td>
-                                            <td><?php echo date('d/m/Y', strtotime($m['created_at'])); ?></td>
+                                            <td data-label="Nombre"><?php echo htmlspecialchars(substr($m['nombre'], 0, 25)); ?></td>
+                                            <td data-label="Asunto"><?php echo htmlspecialchars($m['asunto']); ?></td>
+                                            <td data-label="Estado"><span class="tag tag-<?php echo $m['leido'] ? 'leido' : 'noleido'; ?>"><?php echo $m['leido'] ? 'Leído' : 'Nuevo'; ?></span></td>
+                                            <td data-label="Fecha"><?php echo date('d/m/Y', strtotime($m['created_at'])); ?></td>
                                         </tr>
                                         <?php endforeach; ?>
                                     </tbody>
@@ -174,10 +173,10 @@ if (!empty($user['nombre'])) {
                                 <tbody>
                                     <?php foreach ($ultimosProyectos as $p): ?>
                                     <tr>
-                                        <td><?php echo htmlspecialchars(substr($p['titulo'] ?? 'Sin t&iacute;tulo', 0, 40)); ?></td>
-                                        <td><?php echo htmlspecialchars($p['area'] ?: '—'); ?></td>
-                                        <td><span class="tag tag-<?php echo $p['publicada'] ? 'publicado' : 'borrador'; ?>"><?php echo htmlspecialchars(ucfirst($p['estado'] ?: 'propuesta')); ?></span></td>
-                                        <td><?php echo $p['fecha_inicio'] ? date('d/m/Y', strtotime($p['fecha_inicio'])) : '—'; ?></td>
+                                        <td data-label="Título"><?php echo htmlspecialchars(substr($p['titulo'] ?? 'Sin t&iacute;tulo', 0, 40)); ?></td>
+                                        <td data-label="Área"><?php echo htmlspecialchars($p['area'] ?: '—'); ?></td>
+                                        <td data-label="Estado"><span class="tag tag-<?php echo $p['publicada'] ? 'publicado' : 'borrador'; ?>"><?php echo htmlspecialchars(ucfirst($p['estado'] ?: 'propuesta')); ?></span></td>
+                                        <td data-label="Inicio"><?php echo $p['fecha_inicio'] ? date('d/m/Y', strtotime($p['fecha_inicio'])) : '—'; ?></td>
                                     </tr>
                                     <?php endforeach; ?>
                                 </tbody>
@@ -187,6 +186,7 @@ if (!empty($user['nombre'])) {
                 </div>
             </div>
         </main>
+        <?php include 'includes/sidebar.php'; ?>
     </div>
 </body>
 </html>

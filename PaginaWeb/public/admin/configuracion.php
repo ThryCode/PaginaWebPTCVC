@@ -85,16 +85,16 @@ $auditLog = $isAdmin ? $auth->getAuditLog() : [];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>(function(){var w=window.innerWidth||document.documentElement.clientWidth,m=w<=768;document.documentElement.classList.toggle('is-mobile',m)})();</script>
     <title>Admin - Configuracion</title>
     <link rel="stylesheet" href="css/admin.css?v=<?= filemtime(__DIR__ . '/css/admin.css') ?>">
 </head>
 <body>
     <div class="admin-wrapper">
-        <?php include 'includes/sidebar.php'; ?>
 
         <main class="main-content">
             <header class="topbar">
-                <button class="hamburger" aria-label="Menu" style="display:none;">&#9776;</button>
+                <button class="hamburger" aria-label="Menu">&#9776;</button>
                 <h1>Configuracion</h1>
             </header>
             <div class="content">
@@ -125,7 +125,7 @@ $auditLog = $isAdmin ? $auth->getAuditLog() : [];
                             </div>
                             <div class="form-group">
                                 <label>Email de Contacto</label>
-                                <input type="email" name="contact_email" value="<?php echo htmlspecialchars($config['contact_email'] ?? ''); ?>">
+                                <input type="email" inputmode="email" name="contact_email" value="<?php echo htmlspecialchars($config['contact_email'] ?? ''); ?>">
                             </div>
                         </div>
                         <div class="form-group">
@@ -201,8 +201,8 @@ $auditLog = $isAdmin ? $auth->getAuditLog() : [];
                     </div>
 
                     <?php if (!empty($auditLog)): ?>
-                    <div style="margin-top:16px; max-height:400px; overflow-y:auto;">
-                        <table style="width:100%; font-size:0.85rem; border-collapse:collapse;">
+                    <div style="margin-top:16px; max-height:400px; overflow:auto;">
+                        <table class="table" style="width:100%; font-size:0.85rem; border-collapse:collapse;">
                             <thead>
                                 <tr style="border-bottom:2px solid #ddd; position:sticky; top:0; background:#f8f9fa;">
                                     <th style="text-align:left; padding:8px 10px; color:#666;">Usuario</th>
@@ -213,15 +213,15 @@ $auditLog = $isAdmin ? $auth->getAuditLog() : [];
                             <tbody>
                                 <?php foreach ($auditLog as $entry): ?>
                                 <tr style="border-bottom:1px solid #eee;">
-                                    <td style="padding:8px 10px; font-weight:500;"><?php echo htmlspecialchars($entry['details']); ?></td>
-                                    <td style="padding:8px 10px;">
+                                    <td style="padding:8px 10px; font-weight:500;" data-label="Usuario"><?php echo htmlspecialchars($entry['details']); ?></td>
+                                    <td style="padding:8px 10px;" data-label="Acción">
                                         <?php if ($entry['action'] === 'login'): ?>
                                             <span style="color:#16a34a; font-weight:600;">Entro</span>
                                         <?php else: ?>
                                             <span style="color:#888; font-weight:600;">Salio</span>
                                         <?php endif; ?>
                                     </td>
-                                    <td style="padding:8px 10px; color:#555;"><?php echo htmlspecialchars($entry['created_at']); ?></td>
+                                    <td style="padding:8px 10px; color:#555;" data-label="Fecha y Hora"><?php echo htmlspecialchars($entry['created_at']); ?></td>
                                 </tr>
                                 <?php endforeach; ?>
                             </tbody>
@@ -258,6 +258,7 @@ $auditLog = $isAdmin ? $auth->getAuditLog() : [];
                 </div>
             </div>
         </main>
+        <?php include 'includes/sidebar.php'; ?>
     </div>
 
     <style>

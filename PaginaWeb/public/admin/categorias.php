@@ -28,17 +28,16 @@ $csrfToken = generateCSRFToken();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script>(function(){var w=window.innerWidth||document.documentElement.clientWidth,m=/Mobi|Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);if(m&&w<1200){var v=document.createElement('meta');v.name='viewport';v.content='width=1200, initial-scale='+(w/1200)+', maximum-scale=1, user-scalable=no';document.head.insertBefore(v,document.head.querySelector('meta[name="viewport"]'))}document.documentElement.classList.toggle('is-mobile',m)})();</script>
+    <script>(function(){var w=window.innerWidth||document.documentElement.clientWidth,m=w<=768;document.documentElement.classList.toggle('is-mobile',m)})();</script>
     <title>Admin - Categorías</title>
     <link rel="stylesheet" href="css/admin.css?v=<?= filemtime(__DIR__ . '/css/admin.css') ?>">
 </head>
 <body>
     <div class="admin-wrapper">
-        <?php include 'includes/sidebar.php'; ?>
 
         <main class="main-content">
             <header class="topbar">
-                <button class="hamburger" aria-label="Menu" style="display:none;">☰</button>
+                <button class="hamburger" aria-label="Menu">☰</button>
                 <h1>Categorías</h1>
             </header>
             <div class="content">
@@ -54,9 +53,9 @@ $csrfToken = generateCSRFToken();
                             <tbody>
                             <?php foreach ($categorias as $cat): ?>
                             <tr>
-                                <td><?php echo htmlspecialchars($cat['nombre']); ?></td>
-                                <td><?php echo htmlspecialchars($cat['descripcion'] ?: '—'); ?></td>
-                                <td>
+                                <td data-label="Nombre"><?php echo htmlspecialchars($cat['nombre']); ?></td>
+                                <td data-label="Descripción"><?php echo htmlspecialchars($cat['descripcion'] ?: '—'); ?></td>
+                                <td data-label="Acciones">
                                     <form class="delete-form" method="POST" data-confirm="¿Eliminar esta categoría?">
                                         <?php echo csrfField(); ?>
                                         <input type="hidden" name="id" value="<?php echo $cat['id']; ?>">
@@ -71,6 +70,7 @@ $csrfToken = generateCSRFToken();
                 </div></div>
             </div>
         </main>
+        <?php include 'includes/sidebar.php'; ?>
     </div>
 </body>
 </html>

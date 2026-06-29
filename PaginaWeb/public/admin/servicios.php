@@ -234,7 +234,7 @@ $csrfToken = generateCSRFToken();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script>(function(){var w=window.innerWidth||document.documentElement.clientWidth,m=/Mobi|Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);if(m&&w<1200){var v=document.createElement('meta');v.name='viewport';v.content='width=1200, initial-scale='+(w/1200)+', maximum-scale=1, user-scalable=no';document.head.insertBefore(v,document.head.querySelector('meta[name="viewport"]'))}document.documentElement.classList.toggle('is-mobile',m)})();</script>
+    <script>(function(){var w=window.innerWidth||document.documentElement.clientWidth,m=w<=768;document.documentElement.classList.toggle('is-mobile',m)})();</script>
     <title>Admin - Servicios</title>
     <link rel="stylesheet" href="css/admin.css?v=<?= filemtime(__DIR__ . '/css/admin.css') ?>">
     <style>
@@ -270,17 +270,16 @@ $csrfToken = generateCSRFToken();
         .tic-inline-edit { margin-bottom:10px; }
         .tic-inline-edit form { display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap; }
         .tic-inline-edit .form-group { margin-bottom:0; }
-        .tic-inline-edit input[type="text"] { min-width:250px; }
+        .tic-inline-edit input[type="text"] { min-width:180px; }
         @media (max-width:768px) { .tic-form { flex-direction:column; } }
     </style>
 </head>
 <body>
     <div class="admin-wrapper">
-        <?php include 'includes/sidebar.php'; ?>
 
         <main class="main-content">
             <header class="topbar">
-                <button class="hamburger" aria-label="Menu" style="display:none;">☰</button>
+                <button class="hamburger" aria-label="Menu">☰</button>
                 <h1><?php
                     $pagTitles = array('primaria'=>'Servicios - Primarias', 'secundaria'=>'Servicios - Secundarias', 'estrategico'=>'Servicios - Estratégicos', 'producciones-cooperadas'=>'Producciones Cooperadas', 'incubacion-empresas'=>'Incubación de Empresas');
                     $listTitle = $pagTitles[$tab] ?? 'Servicios';
@@ -325,15 +324,15 @@ $csrfToken = generateCSRFToken();
                                 <tbody>
                                 <?php foreach ($items as $s): ?>
                                 <tr>
-                                    <td>
+                                    <td data-label="Icono">
                                         <div class="servicio-row">
                                             <div class="servicio-icono"><?php echo $iconos[$s['icono']] ?? $iconos['documento']; ?></div>
                                         </div>
                                     </td>
-                                    <td><strong><?php echo htmlspecialchars($s['nombre']); ?></strong></td>
-                                    <td><?php echo htmlspecialchars(substr($s['descripcion'], 0, 80)); ?><?php echo mb_strlen($s['descripcion']) > 80 ? '…' : ''; ?></td>
-                                    <td><?php echo $s['orden']; ?></td>
-                                    <td>
+                                    <td data-label="Nombre"><strong><?php echo htmlspecialchars($s['nombre']); ?></strong></td>
+                                    <td data-label="Descripción"><?php echo htmlspecialchars(substr($s['descripcion'], 0, 80)); ?><?php echo mb_strlen($s['descripcion']) > 80 ? '…' : ''; ?></td>
+                                    <td data-label="Orden"><?php echo $s['orden']; ?></td>
+                                    <td data-label="Acciones">
                                         <a href="?action=edit&id=<?php echo $s['id']; ?>&tab=<?php echo $tab; ?>" class="btn btn-sm btn-primary">Editar</a>
                                         <form class="delete-form" method="POST" action="?action=delete&tab=<?php echo $tab; ?>" data-confirm="¿Eliminar este servicio?">
                                             <?php echo csrfField(); ?>
@@ -470,6 +469,7 @@ $csrfToken = generateCSRFToken();
                 <?php endif; ?>
             </div>
         </main>
+        <?php include 'includes/sidebar.php'; ?>
     </div>
 
     <script>

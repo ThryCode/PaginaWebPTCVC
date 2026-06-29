@@ -12,6 +12,27 @@ document.addEventListener('DOMContentLoaded', function() {
     if (overlay) {
         overlay.addEventListener('click', toggleSidebar);
     }
+    var touchStartX = 0;
+    sidebar.addEventListener('touchstart', function(e) {
+        touchStartX = e.touches[0].clientX;
+    }, { passive: true });
+    sidebar.addEventListener('touchmove', function(e) {
+        if (!sidebar.classList.contains('open')) return;
+        var deltaX = e.touches[0].clientX - touchStartX;
+        if (deltaX < -50) {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+        }
+    }, { passive: true });
+    sidebar.querySelectorAll('.sidebar-nav a').forEach(function(link) {
+        link.addEventListener('click', function() {
+            if (window.innerWidth <= 768) {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('active');
+            }
+            pageLoader.classList.add('active');
+        });
+    });
     document.addEventListener('click', function(e) {
         if (e.target.classList.contains('hamburger')) {
             toggleSidebar();
@@ -27,11 +48,43 @@ document.addEventListener('DOMContentLoaded', function() {
             copyPAC();
         }
     });
+    var modalOverlay = document.createElement('div');
+    modalOverlay.className = 'modal-overlay';
+    modalOverlay.innerHTML = '<div class="modal-box"><p id="modalMessage"></p><div class="modal-actions"><button class="btn btn-danger" id="modalConfirm">Confirmar</button><button class="btn btn-light" id="modalCancel">Cancelar</button></div></div>';
+    document.body.appendChild(modalOverlay);
+    var pageLoader = document.createElement('div');
+    pageLoader.className = 'page-loader';
+    document.body.appendChild(pageLoader);
+    var modalMessage = document.getElementById('modalMessage');
+    var modalConfirm = document.getElementById('modalConfirm');
+    var modalCancel = document.getElementById('modalCancel');
+    var pendingForm = null;
+    function closeModal() {
+        modalOverlay.classList.remove('active');
+        pendingForm = null;
+    }
+    modalCancel.addEventListener('click', closeModal);
+    modalOverlay.addEventListener('click', function(e) {
+        if (e.target === modalOverlay) closeModal();
+    });
+    modalConfirm.addEventListener('click', function() {
+        if (pendingForm) {
+            var form = pendingForm;
+            closeModal();
+            pageLoader.classList.add('active');
+            form.submit();
+        }
+    });
     document.addEventListener('submit', function(e) {
         var form = e.target;
         var msg = form.getAttribute('data-confirm');
-        if (msg && !confirm(msg)) {
+        if (msg) {
             e.preventDefault();
+            modalMessage.textContent = msg;
+            pendingForm = form;
+            modalOverlay.classList.add('active');
+        } else {
+            pageLoader.classList.add('active');
         }
     });
     document.addEventListener('change', function(e) {
@@ -70,5 +123,11 @@ document.addEventListener('DOMContentLoaded', function() {
             btn.textContent = orig;
             btn.style.background = '';
         }, 2000);
+    }
+    var alertEl = document.querySelector('.alert-success, .alert-error');
+    if (alertEl) {
+        setTimeout(function() {
+            alertEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
     }
 });

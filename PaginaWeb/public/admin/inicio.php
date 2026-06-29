@@ -249,7 +249,7 @@ $csrfToken = generateCSRFToken();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script>(function(){var w=window.innerWidth||document.documentElement.clientWidth,m=/Mobi|Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);if(m&&w<1200){var v=document.createElement('meta');v.name='viewport';v.content='width=1200, initial-scale='+(w/1200)+', maximum-scale=1, user-scalable=no';document.head.insertBefore(v,document.head.querySelector('meta[name="viewport"]'))}document.documentElement.classList.toggle('is-mobile',m)})();</script>
+    <script>(function(){var w=window.innerWidth||document.documentElement.clientWidth,m=w<=768;document.documentElement.classList.toggle('is-mobile',m)})();</script>
     <title>Admin - Inicio</title>
     <link rel="stylesheet" href="css/admin.css?v=<?= filemtime(__DIR__ . '/css/admin.css') ?>">
     <style>
@@ -300,11 +300,10 @@ $csrfToken = generateCSRFToken();
 </head>
 <body>
     <div class="admin-wrapper">
-        <?php include 'includes/sidebar.php'; ?>
 
         <main class="main-content">
             <header class="topbar">
-                <button class="hamburger" aria-label="Menu" style="display:none;">☰</button>
+                <button class="hamburger" aria-label="Menu">☰</button>
                 <h1><?php
                     $tabTitles = array('portada'=>'Portada', 'contadores'=>'Contadores', 'opiniones'=>'Opiniones');
                     echo $tabTitles[$tab] ?? 'Inicio';
@@ -335,7 +334,7 @@ $csrfToken = generateCSRFToken();
                                 <?php foreach ($slidersList as $s): ?>
                                 <div class="slider-item" data-id="<?php echo $s['id']; ?>">
                                     <div class="drag-handle">☰</div>
-                                    <img src="../<?php echo htmlspecialchars($s['imagen']); ?>" alt="<?php echo htmlspecialchars($s['titulo'] ?? ''); ?>">
+                                    <img loading="lazy" src="../<?php echo htmlspecialchars($s['imagen']); ?>" alt="<?php echo htmlspecialchars($s['titulo'] ?? ''); ?>">
                                     <div class="slider-item-info">
                                         <h4><?php echo htmlspecialchars($s['titulo'] ?: 'Sin título'); ?></h4>
                                         <span class="orden-badge">Orden: <?php echo intval($s['orden']); ?></span>
@@ -462,7 +461,7 @@ $csrfToken = generateCSRFToken();
                                         <div class="text"><?php echo htmlspecialchars($o['texto']); ?></div>
                                         <div class="author">
                                             <?php if (!empty($o['imagen'])): ?>
-                                                <img src="../<?php echo $o['imagen']; ?>" alt="<?php echo htmlspecialchars($o['nombre']); ?>">
+                                                <img loading="lazy" src="../<?php echo $o['imagen']; ?>" alt="<?php echo htmlspecialchars($o['nombre']); ?>">
                                             <?php else: ?>
                                                 <div class="author-placeholder"><?php echo htmlspecialchars(mb_substr($o['nombre'], 0, 1)); ?></div>
                                             <?php endif; ?>
@@ -527,7 +526,7 @@ $csrfToken = generateCSRFToken();
                                         <?php foreach ($opinionesList as $o): ?>
                                             <div class="opinion-row">
                                                 <?php if (!empty($o['imagen'])): ?>
-                                                    <img src="../<?php echo $o['imagen']; ?>" class="opinion-thumb" alt="">
+                                                    <img loading="lazy" src="../<?php echo $o['imagen']; ?>" class="opinion-thumb" alt="">
                                                 <?php else: ?>
                                                     <div class="opinion-thumb-placeholder"><?php echo htmlspecialchars(mb_substr($o['nombre'], 0, 1)); ?></div>
                                                 <?php endif; ?>
@@ -610,7 +609,7 @@ $csrfToken = generateCSRFToken();
                     <!-- PORTADA EDIT -->
                     <div class="form-card">
                         <div style="margin-bottom:20px;">
-                            <img src="../<?php echo htmlspecialchars($slider['imagen']); ?>" style="max-width:400px; border-radius:8px;">
+                            <img src="../<?php echo htmlspecialchars($slider['imagen']); ?>" style="max-width:100%; border-radius:8px;">
                         </div>
                         <form method="POST">
                             <?php echo csrfField(); ?>
@@ -630,6 +629,7 @@ $csrfToken = generateCSRFToken();
 
             </div>
         </main>
+        <?php include 'includes/sidebar.php'; ?>
     </div>
 
     <script>

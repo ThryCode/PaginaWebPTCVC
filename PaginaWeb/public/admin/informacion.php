@@ -428,7 +428,7 @@ $csrfToken = generateCSRFToken();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script>(function(){var w=window.innerWidth||document.documentElement.clientWidth,m=/Mobi|Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);if(m&&w<1200){var v=document.createElement('meta');v.name='viewport';v.content='width=1200, initial-scale='+(w/1200)+', maximum-scale=1, user-scalable=no';document.head.insertBefore(v,document.head.querySelector('meta[name="viewport"]'))}document.documentElement.classList.toggle('is-mobile',m)})();</script>
+    <script>(function(){var w=window.innerWidth||document.documentElement.clientWidth,m=w<=768;document.documentElement.classList.toggle('is-mobile',m)})();</script>
     <title>Admin - Información</title>
     <link rel="stylesheet" href="css/admin.css?v=<?= filemtime(__DIR__ . '/css/admin.css') ?>">
     <style>
@@ -446,11 +446,10 @@ $csrfToken = generateCSRFToken();
 </head>
 <body>
     <div class="admin-wrapper">
-        <?php include 'includes/sidebar.php'; ?>
 
         <main class="main-content">
             <header class="topbar">
-                <button class="hamburger" aria-label="Menu" style="display:none;">☰</button>
+                <button class="hamburger" aria-label="Menu">☰</button>
                 <h1><?php
                     $tabTitles = array('noticias'=>'Noticias', 'eventos'=>'Eventos', 'galeria'=>'Galería', 'proyectos'=>'Proyectos');
                     $listTitle = $tabTitles[$tab] ?? 'Información';
@@ -490,16 +489,16 @@ $csrfToken = generateCSRFToken();
                                 <tbody>
                                 <?php foreach ($noticiasList as $n): ?>
                                 <tr>
-                                    <td><?php echo htmlspecialchars(substr($n['titulo'] ?? 'Sin título', 0, 50)); ?></td>
-                                    <td><span class="tag tag-<?php echo preg_replace('/[^a-zA-Z0-9_-]/', '', $n['tipo']); ?>"><?php echo htmlspecialchars(ucfirst($n['tipo'])); ?></span></td>
-                                    <td><?php
+                                    <td data-label="Título"><?php echo htmlspecialchars(substr($n['titulo'] ?? 'Sin título', 0, 50)); ?></td>
+                                    <td data-label="Tipo"><span class="tag tag-<?php echo preg_replace('/[^a-zA-Z0-9_-]/', '', $n['tipo']); ?>"><?php echo htmlspecialchars(ucfirst($n['tipo'])); ?></span></td>
+                                    <td data-label="Categoría"><?php
                                         $catName = '—';
                                         foreach ($categorias as $cat) { if ($cat['id'] == $n['categoria_id']) { $catName = htmlspecialchars($cat['nombre']); break; } }
                                         echo $catName;
                                     ?></td>
-                                    <td><span class="tag tag-<?php echo $n['publicada'] ? 'publicado' : 'borrador'; ?>"><?php echo $n['publicada'] ? 'Publicado' : 'Borrador'; ?></span></td>
-                                    <td><?php echo date('d/m/Y', strtotime($n['fecha_evento'] ?? $n['created_at'])); ?></td>
-                                    <td>
+                                    <td data-label="Estado"><span class="tag tag-<?php echo $n['publicada'] ? 'publicado' : 'borrador'; ?>"><?php echo $n['publicada'] ? 'Publicado' : 'Borrador'; ?></span></td>
+                                    <td data-label="Fecha"><?php echo date('d/m/Y', strtotime($n['fecha_evento'] ?? $n['created_at'])); ?></td>
+                                    <td data-label="Acciones">
                                         <a href="?action=edit&id=<?php echo $n['id']; ?>&tab=noticias" class="btn btn-sm btn-primary">Editar</a>
                                         <form class="delete-form" method="POST" action="?action=delete&tab=noticias" data-confirm="¿Eliminar esta publicación?" style="display:inline;">
                                             <?php echo csrfField(); ?>
@@ -525,11 +524,11 @@ $csrfToken = generateCSRFToken();
                                 <tbody>
                                 <?php foreach ($eventosList as $e): ?>
                                 <tr>
-                                    <td><?php echo htmlspecialchars(substr($e['titulo'] ?? 'Sin título', 0, 50)); ?></td>
-                                    <td><?php echo $e['fecha_evento'] ? date('d/m/Y H:i', strtotime($e['fecha_evento'])) : '—'; ?></td>
-                                    <td><?php echo htmlspecialchars($e['ubicacion'] ?: '—'); ?></td>
-                                    <td><span class="tag tag-<?php echo $e['publicada'] ? 'publicado' : 'borrador'; ?>"><?php echo $e['publicada'] ? 'Publicado' : 'Borrador'; ?></span></td>
-                                    <td>
+                                    <td data-label="Título"><?php echo htmlspecialchars(substr($e['titulo'] ?? 'Sin título', 0, 50)); ?></td>
+                                    <td data-label="Fecha"><?php echo $e['fecha_evento'] ? date('d/m/Y H:i', strtotime($e['fecha_evento'])) : '—'; ?></td>
+                                    <td data-label="Ubicación"><?php echo htmlspecialchars($e['ubicacion'] ?: '—'); ?></td>
+                                    <td data-label="Estado"><span class="tag tag-<?php echo $e['publicada'] ? 'publicado' : 'borrador'; ?>"><?php echo $e['publicada'] ? 'Publicado' : 'Borrador'; ?></span></td>
+                                    <td data-label="Acciones">
                                         <a href="?action=edit&id=<?php echo $e['id']; ?>&tab=eventos" class="btn btn-sm btn-primary">Editar</a>
                                         <form class="delete-form" method="POST" action="?action=delete&tab=eventos" data-confirm="¿Eliminar este evento?" style="display:inline;">
                                             <?php echo csrfField(); ?>
@@ -560,7 +559,7 @@ $csrfToken = generateCSRFToken();
                             <div class="gallery-grid">
                                 <?php foreach ($groups as $titulo => $imgs): ?>
                                 <div class="gallery-item">
-                                    <img src="../<?php echo htmlspecialchars($imgs[0]['imagen']); ?>" alt="<?php echo htmlspecialchars($titulo); ?>">
+                                    <img loading="lazy" src="../<?php echo htmlspecialchars($imgs[0]['imagen']); ?>" alt="<?php echo htmlspecialchars($titulo); ?>">
                                     <div class="gallery-item-info">
                                         <h4><?php echo htmlspecialchars($titulo); ?></h4>
                                         <small><?php echo count($imgs); ?> imagen(es)</small>
@@ -597,20 +596,20 @@ $csrfToken = generateCSRFToken();
                                 <tbody>
                                 <?php foreach ($proyectosList as $p): ?>
                                 <tr>
-                                    <td><?php echo htmlspecialchars(substr($p['titulo'] ?? 'Sin título', 0, 50)); ?></td>
-                                    <td><span class="tag tag-<?php echo !empty($p['categoria']) ? 'publicado' : 'borrador'; ?>"><?php echo htmlspecialchars(($p['categoria'] ?? '—')); ?></span></td>
-                                    <td><?php echo htmlspecialchars($p['area'] ?: '—'); ?></td>
-                                    <td><span class="tag tag-<?php echo $p['estado'] === 'finalizado' ? 'publicado' : 'borrador'; ?>"><?php echo htmlspecialchars(ucfirst($p['estado'] ?: 'propuesta')); ?></span></td>
-                                    <td><?php echo htmlspecialchars($p['responsable'] ?: '—'); ?></td>
-                                    <td><?php echo $p['fecha_inicio'] ? date('d/m/Y', strtotime($p['fecha_inicio'])) : '—'; ?></td>
-                                    <td><?php
+                                    <td data-label="Título"><?php echo htmlspecialchars(substr($p['titulo'] ?? 'Sin título', 0, 50)); ?></td>
+                                    <td data-label="Categoría"><span class="tag tag-<?php echo !empty($p['categoria']) ? 'publicado' : 'borrador'; ?>"><?php echo htmlspecialchars(($p['categoria'] ?? '—')); ?></span></td>
+                                    <td data-label="Área"><?php echo htmlspecialchars($p['area'] ?: '—'); ?></td>
+                                    <td data-label="Estado"><span class="tag tag-<?php echo $p['estado'] === 'finalizado' ? 'publicado' : 'borrador'; ?>"><?php echo htmlspecialchars(ucfirst($p['estado'] ?: 'propuesta')); ?></span></td>
+                                    <td data-label="Responsable"><?php echo htmlspecialchars($p['responsable'] ?: '—'); ?></td>
+                                    <td data-label="Inicio"><?php echo $p['fecha_inicio'] ? date('d/m/Y', strtotime($p['fecha_inicio'])) : '—'; ?></td>
+                                    <td data-label="Img"><?php
                                         $imgCnt = 0;
                                         if (!empty($p['imagenes']) && is_array($p['imagenes'])) $imgCnt = count($p['imagenes']);
                                         elseif (!empty($p['imagen'])) $imgCnt = 1;
                                         echo $imgCnt > 0 ? $imgCnt : '—';
                                     ?></td>
-                                    <td><span class="tag tag-<?php echo $p['publicada'] ? 'publicado' : 'borrador'; ?>"><?php echo $p['publicada'] ? 'Sí' : 'No'; ?></span></td>
-                                    <td>
+                                    <td data-label="Pub."><span class="tag tag-<?php echo $p['publicada'] ? 'publicado' : 'borrador'; ?>"><?php echo $p['publicada'] ? 'Sí' : 'No'; ?></span></td>
+                                    <td data-label="Acciones">
                                         <a href="?action=edit&id=<?php echo $p['id']; ?>&tab=proyectos" class="btn btn-sm btn-primary">Editar</a>
                                         <form class="delete-form" method="POST" action="?action=delete&tab=proyectos" data-confirm="¿Eliminar este proyecto?" style="display:inline;">
                                             <?php echo csrfField(); ?>
@@ -752,7 +751,7 @@ $csrfToken = generateCSRFToken();
                     <!-- GALERIA EDIT -->
                     <div class="form-card">
                         <div style="margin-bottom:20px;">
-                            <img src="../<?php echo htmlspecialchars($imagen['imagen']); ?>" style="max-width:300px; border-radius:8px;">
+                            <img src="../<?php echo htmlspecialchars($imagen['imagen']); ?>" style="max-width:100%; border-radius:8px;">
                         </div>
                         <form method="POST">
                             <?php echo csrfField(); ?>
@@ -954,6 +953,7 @@ $csrfToken = generateCSRFToken();
                 <?php endif; ?>
             </div>
         </main>
+        <?php include 'includes/sidebar.php'; ?>
     </div>
 </body>
 </html>
