@@ -188,7 +188,112 @@ foreach ($checks as $key => $label) {
 </div>
 
 <div class="section">
-<h2>6. Prueba Visual de Carga de CSS y Fuente</h2>
+<h2>6. Diagn&oacute;stico de Sesi&oacute;n y CSRF</h2>
+<?php
+$sessPath = session_save_path();
+$sessWritable = $sessPath ? is_writable($sessPath) : false;
+$sessId = session_id();
+$sessName = session_name();
+$sessStatus = session_status();
+$sessStatusMap = [0 => 'PHP_SESSION_DISABLED', 1 => 'PHP_SESSION_NONE', 2 => 'PHP_SESSION_ACTIVE'];
+
+$tokenGenerated = generateCSRFToken();
+$tokenStored = $_SESSION[CSRF_TOKEN_NAME] ?? null;
+$tokenValid = $tokenStored && $tokenGenerated && hash_equals($tokenStored, $tokenGenerated);
+?>
+<table>
+<tr><th>Propiedad</th><th>Valor</th><th>Estado</th></tr>
+<tr>
+    <td>session_status()</td>
+    <td><code><?php echo $sessStatusMap[$sessStatus] ?? 'Desconocido'; ?></code></td>
+    <td><?php echo $sessStatus === PHP_SESSION_ACTIVE ? '<span class="pass">✅ Activa</span>' : '<span class="fail">❌ Inactiva</span>'; ?></td>
+</tr>
+<tr>
+    <td>session_id()</td>
+    <td><code><?php echo htmlspecialchars($sessId ?: '(vacio)'); ?></code></td>
+    <td><?php echo $sessId ? '<span class="pass">✅ OK</span>' : '<span class="fail">❌ Sin ID</span>'; ?></td>
+</tr>
+<tr>
+    <td>session_name()</td>
+    <td><code><?php echo htmlspecialchars($sessName ?: '(vacio)'); ?></code></td>
+    <td><?php echo $sessName ? '<span class="pass">✅ OK</span>' : '<span class="fail">❌ Sin nombre</span>'; ?></td>
+</tr>
+<tr>
+    <td>session_save_path()</td>
+    <td><code><?php echo htmlspecialchars($sessPath ?: '(default del servidor)'); ?></code></td>
+    <td><?php echo $sessWritable ? '<span class="pass">✅ Escribible</span>' : '<span class="fail">❌ NO escribible</span>'; ?></td>
+</tr>
+<tr>
+    <td>session.cookie_secure</td>
+    <td><code><?php echo ini_get('session.cookie_secure') ?: 'Off'; ?></code></td>
+    <td><?php echo (!ini_get('session.cookie_secure') || ENV !== 'production') ? '<span class="pass">✅ OK</span>' : '<span class="warn">⚠️ Forzado en produccion</span>'; ?></td>
+</tr>
+<tr>
+    <td>session.cookie_samesite</td>
+    <td><code><?php echo ini_get('session.cookie_samesite') ?: '(no definido)'; ?></code></td>
+    <td><?php echo stripos(ini_get('session.cookie_samesite') ?: '', 'Lax') !== false ? '<span class="pass">✅ Lax</span>' : '<span class="warn">⚠️ ' . htmlspecialchars(ini_get('session.cookie_samesite') ?: 'No configurado') . '</span>'; ?></td>
+</tr>
+<tr>
+    <td>Cookie de sesi&oacute;n recibida</td>
+    <td><code><?php echo isset($_COOKIE[$sessName]) ? htmlspecialchars(substr($_COOKIE[$sessName], 0, 20)) . '...' : 'No recibida'; ?></code></td>
+    <td><?php echo isset($_COOKIE[$sessName]) ? '<span class="pass">✅ OK</span>' : '<span class="fail">❌ No hay cookie</span>'; ?></td>
+</tr>
+<tr>
+    <td>CSRF token en sesi&oacute;n</td>
+    <td><code><?php echo $tokenStored ? htmlspecialchars(substr($tokenStored, 0, 16)) . '...' : 'VACIO'; ?></code></td>
+    <td><?php echo $tokenValid ? '<span class="pass">✅ Persiste</span>' : '<span class="fail">❌ NO persiste</span>'; ?></td>
+</tr>
+<tr>
+    <td>Prueba CSRF (GET actual)</td>
+    <td><code><?php echo htmlspecialchars($tokenGenerated ? substr($tokenGenerated, 0, 16) . '...' : 'VACIO'); ?></code></td>
+    <td><?php echo $tokenGenerated ? '<span class="pass">✅ Generado</span>' : '<span class="fail">❌ No generado</span>'; ?></td>
+</tr>
+</table>
+
+<?php if (!$sessWritable): ?>
+<div class="diag-summary" style="background:#fee2e2;color:#991b1b;border:1px solid #fecaca;margin-top:12px;">
+<strong>❌ CAUSA RA&Iacute;Z:</strong> El directorio de sesiones <code><?php echo htmlspecialchars($sessPath); ?></code> 
+<strong>NO es escribible</strong>. PHP no puede guardar la sesi&oacute;n entre p&aacute;ginas, 
+por lo que el token CSRF se pierde entre GET y POST.
+</div>
+<?php elseif (!$tokenStored): ?>
+<div class="diag-summary" style="background:#fee2e2;color:#991b1b;border:1px solid #fecaca;margin-top:12px;">
+<strong>❌ PROBLEMA DETECTADO:</strong> El token CSRF no persiste en la sesi&oacute;n. 
+Posible causa: el directorio de sesiones no es escribible o hay un error de config.
+</div>
+<?php else: ?>
+<div class="diag-summary" style="background:#dcfce7;color:#166534;border:1px solid #bbf7d0;margin-top:12px;">
+<strong>✅ Sesi&oacute;n funcionando correctamente.</strong> El token CSRF persiste entre requests.
+Si el login sigue fallando con "Token de seguridad inv&aacute;lido", el problema puede ser:
+<ul style="margin:4px 0 0 20px;">
+<li>La cookie de sesi&oacute;n no se env&iacute;a correctamente (revisar dominio/subdominio)</li>
+<li>El navegador bloquea cookies de terceros</li>
+<li>El servidor usa m&uacute;ltiples hosts y la cookie no cubre todos</li>
+<li>Est&aacute;s accediendo por HTTP pero cookie_secure est&aacute; forzado</li>
+</ul>
+</div>
+<?php endif; ?>
+
+<p class="small">Nota: esta prueba solo verifica el estado actual de la sesi&oacute;n en GET.
+Para probar que el token persiste en POST, sube este diagn&oacute;stico al servidor y haz clic en 
+<a href="?csrf_test=1">verificar CSRF en POST</a>.</p>
+
+<?php
+if (isset($_GET['csrf_test'])) {
+    $testToken = generateCSRFToken();
+    $stored = $_SESSION[CSRF_TOKEN_NAME] ?? null;
+    $match = $stored && hash_equals($stored, $testToken);
+    echo '<div class="diag-summary" style="background:' . ($match ? '#dcfce7;color:#166534;border:1px solid #bbf7d0' : '#fee2e2;color:#991b1b;border:1px solid #fecaca') . ';margin-top:8px;">';
+    echo '<strong>' . ($match ? '✅ POST: Token CSRF persiste correctamente.' : '❌ POST: Token CSRF NO persiste.') . '</strong>';
+    echo ' Generado: <code>' . htmlspecialchars(substr($testToken, 0, 16)) . '...</code>';
+    echo ' | En sesi&oacute;n: <code>' . htmlspecialchars(substr($stored ?: 'VACIO', 0, 16)) . '...</code>';
+    echo '</div>';
+}
+?>
+</div>
+
+<div class="section">
+<h2>7. Prueba Visual de Carga de CSS y Fuente</h2>
 
 <p><strong>Indicador de carga de style.css:</strong></p>
 <p id="css-test-loaded" style="display:none;color:#16a34a;font-weight:bold;">✅ style.css cargado</p>
@@ -224,7 +329,7 @@ Este texto deber&iacute;a verse en <strong>Poppins</strong>.<br>
 </div>
 
 <div class="section" id="diag-seccion">
-<h2>7. Diagn&oacute;stico del Navegador <span class="info" id="diag-status-icon">⏳</span></h2>
+<h2>8. Diagn&oacute;stico del Navegador <span class="info" id="diag-status-icon">⏳</span></h2>
 <p class="small" id="diag-progress">Ejecutando pruebas... espera unos segundos.</p>
 
 <div id="diag-table-body"></div>
@@ -233,7 +338,7 @@ Este texto deber&iacute;a verse en <strong>Poppins</strong>.<br>
 </div>
 
 <div class="section">
-<h2>8. Diagn&oacute;stico de Carga de Im&aacute;genes</h2>
+<h2>9. Diagn&oacute;stico de Carga de Im&aacute;genes</h2>
 
 <?php
 $diagOk = 0; $diagWarn = 0; $diagFail = 0;
