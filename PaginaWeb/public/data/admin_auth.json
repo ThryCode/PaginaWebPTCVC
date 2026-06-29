@@ -10,7 +10,7 @@
             "rol": "admin",
             "activo": true,
             "password": "$2y$10$PiQqtW9I9Rn2kJ6rzlqzVOdgNqi3XOghk6XqJYG.iUtN0fsXocFl2",
-            "last_login": "2026-06-25 10:00:16",
+            "last_login": "2026-06-27 12:11:40",
             "created_at": "2026-06-19 13:25:22",
             "pacs": [
                 {
@@ -149,7 +149,28 @@
             "action": "logout",
             "details": "marioc@pctvc.cu",
             "ip_address": "::1",
-            "created_at": "2026-06-25 12:20:43"
+            "created_at": "2026-06-27 11:38:28"
+        },
+        {
+            "user_id": null,
+            "action": "login_failed",
+            "details": "Intento fallido con PAC",
+            "ip_address": "::1",
+            "created_at": "2026-06-27 12:11:25"
+        },
+        {
+            "user_id": null,
+            "action": "pac_verified",
+            "details": "PAC de emergencia verificado desde IP: ::1",
+            "ip_address": "::1",
+            "created_at": "2026-06-27 12:11:38"
+        },
+        {
+            "user_id": 3,
+            "action": "login",
+            "details": "marioc@pctvc.cu",
+            "ip_address": "::1",
+            "created_at": "2026-06-27 12:11:40"
         }
     ]
 }
