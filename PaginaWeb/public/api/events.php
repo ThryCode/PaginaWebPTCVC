@@ -73,6 +73,9 @@ foreach ($eventos as $n) {
 }
 
 usort($filtered, function($a, $b) {
+    $da = isset($a['destacada']) ? intval($a['destacada']) : 0;
+    $db = isset($b['destacada']) ? intval($b['destacada']) : 0;
+    if ($db !== $da) return $db - $da;
     return strcmp($b['created_at'], $a['created_at']);
 });
 

@@ -586,6 +586,10 @@ function apiGet(url, onSuccess, onError) {
 // ============================================
 // CARGAR NOTICIAS DESDE LA API
 // ============================================
+var newsData = [];
+var newsContainerId = '';
+var newsTipo = '';
+
 function loadNews(containerId, options) {
     var container = document.getElementById(containerId);
     if (!container) return;
@@ -594,6 +598,9 @@ function loadNews(containerId, options) {
     var tipo = (options && options.tipo) || '';
     var q = (options && options.q) || '';
 
+    newsContainerId = containerId;
+    newsTipo = tipo;
+
     var url = '/api/news.php?limit=' + limit;
     if (tipo) url += '&tipo=' + tipo;
     if (q) url += '&q=' + encodeURIComponent(q);
@@ -601,49 +608,99 @@ function loadNews(containerId, options) {
     container.innerHTML = skeletonCards(Math.min(limit, 6));
 
     apiGet(url, function(response) {
-        if (response.data.length > 0) {
-            var html = '';
-            response.data.forEach(function(item) {
-                var dateSource = ((item.fecha_evento || item.created_at) || '').split(' ')[0];
-                var fecha = new Date(dateSource + 'T12:00:00');
-                var fechaStr = fecha.toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' });
-                var tagClass = item.tipo === 'evento' ? 'news-tag-evento' : 'news-tag-noticia';
-                var imagenes = getImagenes(item);
-
-                html += '<article class="news-card">';
-                html += renderCardImage(imagenes, item.titulo, item.tipo);
-                html += '<div class="news-card-body">';
-                html += '<div class="news-card-meta">';
-                html += '<span class="news-tag ' + tagClass + '">' + (item.tipo || '').charAt(0).toUpperCase() + (item.tipo || '').slice(1) + '</span>';
-                if (item.categoria) {
-                    html += '<span class="news-card-date">' + escapeHtml(item.categoria) + '</span>';
-                }
-                html += '</div>';
-                html += '<h4>' + escapeHtml(item.titulo) + '</h4>';
-                html += '<p>' + escapeHtml(item.resumen || '') + '</p>';
-                html += '<a href="noticia.php?id=' + item.id + '" class="news-read-more">Leer m&aacute;s <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>';
-                html += '</div>';
-                html += '<div class="news-card-footer">';
-                html += '<span class="news-card-date">' + fechaStr + '</span>';
-                if (item.ubicacion) {
-                    html += '<span class="news-card-location">&#128205; ' + escapeHtml(item.ubicacion) + '</span>';
-                }
-                html += '</div>';
-                html += '</article>';
-            });
-            container.innerHTML = html;
-            initCardCarousels(container);
-        } else {
-            container.innerHTML = '<p class="empty" style="grid-column: 1/-1;">No hay publicaciones disponibles.</p>';
-        }
+        newsData = response.data;
+        sortNews('destacados');
     }, function() {
         container.innerHTML = '<p class="empty" style="grid-column: 1/-1;">Error al cargar noticias.</p>';
     });
 }
 
+function renderNewsCards(items, containerId) {
+    var container = document.getElementById(containerId);
+    if (!container) return;
+    if (items.length > 0) {
+        var html = '';
+        items.forEach(function(item) {
+            var dateSource = ((item.fecha_evento || item.created_at) || '').split(' ')[0];
+            var fecha = new Date(dateSource + 'T12:00:00');
+            var fechaStr = fecha.toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' });
+            var tagClass = item.tipo === 'evento' ? 'news-tag-evento' : 'news-tag-noticia';
+            var imagenes = getImagenes(item);
+
+            html += '<article class="news-card">';
+            html += renderCardImage(imagenes, item.titulo, item.tipo);
+            html += '<div class="news-card-body">';
+            html += '<div class="news-card-meta">';
+            html += '<span class="news-tag ' + tagClass + '">' + (item.tipo || '').charAt(0).toUpperCase() + (item.tipo || '').slice(1) + '</span>';
+            if (item.destacada) {
+                html += '<span class="news-badge-destacada">&#9733; Destacado</span>';
+            }
+            if (item.categoria) {
+                html += '<span class="news-card-date">' + escapeHtml(item.categoria) + '</span>';
+            }
+            html += '</div>';
+            html += '<h4>' + escapeHtml(item.titulo) + '</h4>';
+            html += '<p>' + escapeHtml(item.resumen || '') + '</p>';
+            html += '<a href="noticia.php?id=' + item.id + '" class="news-read-more">Leer m&aacute;s <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>';
+            html += '</div>';
+            html += '<div class="news-card-footer">';
+            html += '<span class="news-card-date">' + fechaStr + '</span>';
+            if (item.ubicacion) {
+                html += '<span class="news-card-location">&#128205; ' + escapeHtml(item.ubicacion) + '</span>';
+            }
+            html += '</div>';
+            html += '</article>';
+        });
+        container.innerHTML = html;
+        initCardCarousels(container);
+    } else {
+        container.innerHTML = '<p class="empty" style="grid-column: 1/-1;">No hay publicaciones disponibles.</p>';
+    }
+}
+
+function sortNews(criterion) {
+    var sorted = newsData.slice();
+    var today = new Date();
+    var todayStr = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
+
+    if (criterion === 'fecha') {
+        sorted.sort(function(a, b) {
+            var da = (a.fecha_evento || a.created_at || '').split(' ')[0];
+            var db = (b.fecha_evento || b.created_at || '').split(' ')[0];
+            return db.localeCompare(da);
+        });
+    } else if (criterion === 'proximos') {
+        sorted = sorted.filter(function(item) {
+            var f = (item.fecha_evento || item.created_at || '').split(' ')[0];
+            return f && f >= todayStr;
+        });
+        sorted.sort(function(a, b) {
+            var da = (a.fecha_evento || a.created_at || '').split(' ')[0];
+            var db = (b.fecha_evento || b.created_at || '').split(' ')[0];
+            return da.localeCompare(db);
+        });
+    } else if (criterion === 'destacados') {
+        sorted.sort(function(a, b) {
+            var da = parseInt(a.destacada) || 0;
+            var db = parseInt(b.destacada) || 0;
+            if (db !== da) return db - da;
+            var ca = (a.created_at || '').split(' ')[0];
+            var cb = (b.created_at || '').split(' ')[0];
+            return cb.localeCompare(ca);
+        });
+    }
+    document.querySelectorAll('.sort-btn').forEach(function(b) { b.classList.remove('active'); });
+    var activeBtn = document.querySelector('.sort-btn[data-sort="' + criterion + '"]');
+    if (activeBtn) activeBtn.classList.add('active');
+    renderNewsCards(sorted, newsContainerId);
+}
+
 // ============================================
 // CARGAR EVENTOS DESDE LA API
 // ============================================
+var eventsData = [];
+var eventsContainerId = '';
+
 function loadEvents(containerId, options) {
     var container = document.getElementById(containerId);
     if (!container) return;
@@ -651,49 +708,102 @@ function loadEvents(containerId, options) {
     var limit = (options && options.limit) || 10;
     var q = (options && options.q) || '';
 
+    eventsContainerId = containerId;
+
     var url = '/api/events.php?limit=' + limit;
     if (q) url += '&q=' + encodeURIComponent(q);
 
     container.innerHTML = skeletonCards(Math.min(limit, 6));
 
     apiGet(url, function(response) {
-        if (response.data.length > 0) {
-            var html = '';
-            response.data.forEach(function(item) {
-                var dateSource = ((item.fecha_evento || item.created_at) || '').split(' ')[0];
-                var fecha = new Date(dateSource + 'T12:00:00');
-                var fechaStr = fecha.toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' });
-                var imagenes = getImagenes(item);
-
-                html += '<article class="news-card">';
-                html += renderCardImage(imagenes, item.titulo, 'evento');
-                html += '<div class="news-card-body">';
-                html += '<div class="news-card-meta">';
-                html += '<span class="news-tag news-tag-evento">Evento</span>';
-                if (item.categoria) {
-                    html += '<span class="news-card-date">' + escapeHtml(item.categoria) + '</span>';
-                }
-                html += '</div>';
-                html += '<h4>' + escapeHtml(item.titulo) + '</h4>';
-                html += '<p>' + escapeHtml(item.resumen || '') + '</p>';
-                html += '<a href="noticia.php?id=' + item.id + '" class="news-read-more">Leer m&aacute;s <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>';
-                html += '</div>';
-                html += '<div class="news-card-footer">';
-                html += '<span class="news-card-date">' + fechaStr + '</span>';
-                if (item.ubicacion) {
-                    html += '<span class="news-card-location">&#128205; ' + escapeHtml(item.ubicacion) + '</span>';
-                }
-                html += '</div>';
-                html += '</article>';
-            });
-            container.innerHTML = html;
-            initCardCarousels(container);
-        } else {
-            container.innerHTML = '<p class="empty" style="grid-column: 1/-1;">No hay eventos disponibles.</p>';
-        }
+        eventsData = response.data;
+        sortEvents('destacados');
     }, function() {
         container.innerHTML = '<p class="empty" style="grid-column: 1/-1;">Error al cargar eventos.</p>';
     });
+}
+
+function renderEventCards(items, containerId) {
+    var container = document.getElementById(containerId);
+    if (!container) return;
+    if (items.length > 0) {
+        var html = '';
+        items.forEach(function(item) {
+            var dateSource = ((item.fecha_evento || item.created_at) || '').split(' ')[0];
+            var fecha = new Date(dateSource + 'T12:00:00');
+            var fechaStr = fecha.toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' });
+            var imagenes = getImagenes(item);
+
+            html += '<article class="news-card">';
+            html += renderCardImage(imagenes, item.titulo, 'evento');
+            html += '<div class="news-card-body">';
+            html += '<div class="news-card-meta">';
+            html += '<span class="news-tag news-tag-evento">Evento</span>';
+            if (item.destacada) {
+                html += '<span class="news-badge-destacada">&#9733; Destacado</span>';
+            }
+            if (item.categoria) {
+                html += '<span class="news-card-date">' + escapeHtml(item.categoria) + '</span>';
+            }
+            html += '</div>';
+            html += '<h4>' + escapeHtml(item.titulo) + '</h4>';
+            html += '<p>' + escapeHtml(item.resumen || '') + '</p>';
+            html += '<a href="noticia.php?id=' + item.id + '" class="news-read-more">Leer m&aacute;s <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>';
+            html += '</div>';
+            html += '<div class="news-card-footer">';
+            html += '<span class="news-card-date">' + fechaStr + '</span>';
+            if (item.ubicacion) {
+                html += '<span class="news-card-location">&#128205; ' + escapeHtml(item.ubicacion) + '</span>';
+            }
+            html += '</div>';
+            html += '</article>';
+        });
+        container.innerHTML = html;
+        initCardCarousels(container);
+    } else {
+        container.innerHTML = '<p class="empty" style="grid-column: 1/-1;">No hay eventos disponibles.</p>';
+    }
+}
+
+function sortEvents(criterion) {
+    var sorted = eventsData.slice();
+    var today = new Date();
+    var todayStr = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
+
+    if (criterion === 'fecha') {
+        sorted = sorted.filter(function(item) {
+            var f = (item.fecha_evento || item.created_at || '').split(' ')[0];
+            return f && f <= todayStr;
+        });
+        sorted.sort(function(a, b) {
+            var da = (a.fecha_evento || a.created_at || '').split(' ')[0];
+            var db = (b.fecha_evento || b.created_at || '').split(' ')[0];
+            return db.localeCompare(da);
+        });
+    } else if (criterion === 'proximos') {
+        sorted = sorted.filter(function(item) {
+            var f = (item.fecha_evento || item.created_at || '').split(' ')[0];
+            return f && f >= todayStr;
+        });
+        sorted.sort(function(a, b) {
+            var da = (a.fecha_evento || a.created_at || '').split(' ')[0];
+            var db = (b.fecha_evento || b.created_at || '').split(' ')[0];
+            return da.localeCompare(db);
+        });
+    } else if (criterion === 'destacados') {
+        sorted.sort(function(a, b) {
+            var da = parseInt(a.destacada) || 0;
+            var db = parseInt(b.destacada) || 0;
+            if (db !== da) return db - da;
+            var ca = (a.created_at || '').split(' ')[0];
+            var cb = (b.created_at || '').split(' ')[0];
+            return cb.localeCompare(ca);
+        });
+    }
+    document.querySelectorAll('.sort-btn').forEach(function(b) { b.classList.remove('active'); });
+    var activeBtn = document.querySelector('.sort-btn[data-sort="' + criterion + '"]');
+    if (activeBtn) activeBtn.classList.add('active');
+    renderEventCards(sorted, eventsContainerId);
 }
 
 // ============================================

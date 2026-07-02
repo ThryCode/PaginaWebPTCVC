@@ -6,6 +6,9 @@ require_once 'api/storage.php';
 $proyectos = Storage::read('proyectos');
 $proyectos = array_filter($proyectos, function($p) { return !empty($p['publicada']); });
 usort($proyectos, function($a, $b) {
+    $da = isset($a['destacada']) ? intval($a['destacada']) : 0;
+    $db = isset($b['destacada']) ? intval($b['destacada']) : 0;
+    if ($db !== $da) return $db - $da;
     return strcmp($b['created_at'], $a['created_at']);
 });
 $proyectos = array_values($proyectos);
@@ -77,6 +80,13 @@ include 'includes/header.php'; ?>
 
 <section class="proyectos-body">
     <div class="container">
+        <div class="sort-bar">
+            <span class="sort-label">Ordenar por:</span>
+            <button class="sort-btn active" data-sort="destacados" onclick="sortProyectos('destacados')">&#9733; Destacados</button>
+            <button class="sort-btn" data-sort="titulo" onclick="sortProyectos('titulo')">&#128221; T&iacute;tulo</button>
+            <button class="sort-btn" data-sort="estado" onclick="sortProyectos('estado')">&#128736; Estado</button>
+        </div>
+        <div id="proyectosContent">
         <?php if (!empty($categorias)): ?>
         <div class="proyectos-tabs" role="tablist">
             <?php foreach ($categorias as $i => $cat): ?>
@@ -94,6 +104,9 @@ include 'includes/header.php'; ?>
                     </div>
                     <div class="proy-card-body">
                         <h3><?php echo htmlspecialchars($p['titulo']); ?></h3>
+                        <?php if (!empty($p['destacada'])): ?>
+                        <span class="news-badge-destacada" style="margin-bottom:8px;display:inline-block;">&#9733; Destacado</span>
+                        <?php endif; ?>
                         <div class="proy-card-text">
                             <p class="proy-resumen"><?php echo nl2br(htmlspecialchars($p['resumen'] ?? '')); ?></p>
                             <?php if (!empty($p['contenido']) && trim($p['contenido']) !== trim($p['resumen'] ?? '')): ?>
@@ -119,10 +132,126 @@ include 'includes/header.php'; ?>
         <?php else: ?>
         <p class="empty" style="text-align:center;padding:60px 0;color:#646464;">No hay proyectos disponibles.</p>
         <?php endif; ?>
+        </div>
     </div>
 </section>
 
 <script>
+var proyectosData = <?php echo json_encode(array_values($proyectos), JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE); ?>;
+
+function sortProyectos(criterion) {
+    var sorted = proyectosData.slice();
+    if (criterion === 'destacados') {
+        sorted.sort(function(a, b) {
+            var da = parseInt(a.destacada) || 0;
+            var db = parseInt(b.destacada) || 0;
+            if (db !== da) return db - da;
+            var order = { 'ejecucion': 1, 'finalizado': 2 };
+            var ea = order[(a.estado || '').toLowerCase()] || 3;
+            var eb = order[(b.estado || '').toLowerCase()] || 3;
+            return ea - eb;
+        });
+    } else if (criterion === 'titulo') {
+        sorted.sort(function(a, b) { return (a.titulo || '').localeCompare(b.titulo || ''); });
+    } else if (criterion === 'estado') {
+        sorted.sort(function(a, b) {
+            var order = { 'finalizado': 1, 'ejecucion': 2 };
+            var ea = order[(a.estado || '').toLowerCase()] || 3;
+            var eb = order[(b.estado || '').toLowerCase()] || 3;
+            return ea - eb;
+        });
+    }
+    document.querySelectorAll('.sort-btn').forEach(function(b) { b.classList.remove('active'); });
+    document.querySelector('.sort-btn[data-sort="' + criterion + '"]').classList.add('active');
+
+    var activeTab = document.querySelector('#proyectosContent .proy-tab.active');
+    var activeCat = activeTab ? activeTab.textContent.trim() : '';
+
+    var cats = [];
+    sorted.forEach(function(p) {
+        var c = (p.categoria || '').trim();
+        if (c && cats.indexOf(c) === -1) cats.push(c);
+    });
+
+    var tabsHtml = '<div class="proyectos-tabs" role="tablist">';
+    cats.forEach(function(cat, i) {
+        var isActive = cat === activeCat;
+        tabsHtml += '<button class="proy-tab' + (isActive ? ' active' : '') + '" data-tab="tab-' + i + '" role="tab" aria-selected="' + (isActive ? 'true' : 'false') + '" tabindex="' + (isActive ? '0' : '-1') + '">' + cat + '</button>';
+    });
+    tabsHtml += '</div>';
+
+    var panelsHtml = '';
+    cats.forEach(function(cat, i) {
+        panelsHtml += '<div class="proy-panel' + (cat === activeCat ? ' active' : '') + '" id="tab-' + i + '">';
+        panelsHtml += '<div class="proy-grid">';
+        sorted.forEach(function(p) {
+            if ((p.categoria || '').trim() !== cat) return;
+            var imgs = (p.imagenes && p.imagenes.length) ? p.imagenes : (p.imagen ? [p.imagen] : []);
+            var imgHtml;
+            if (imgs.length === 0) {
+                imgHtml = '<img src="/assets/img/logo/logo.png" alt="" loading="lazy" style="object-fit:contain;padding:20px;width:100%;height:100%;">';
+            } else if (imgs.length === 1) {
+                imgHtml = '<img src="/' + imgs[0] + '" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;">';
+            } else {
+                imgHtml = '<div class="card-carousel" data-count="' + imgs.length + '"><div class="carousel-track">';
+                imgs.forEach(function(src) { imgHtml += '<div class="carousel-slide"><img src="/' + src + '" alt="" loading="lazy"></div>'; });
+                imgHtml += '</div><div class="carousel-dots">';
+                imgs.forEach(function(_, j) { imgHtml += '<span class="carousel-dot' + (j === 0 ? ' active' : '') + '"></span>'; });
+                imgHtml += '</div></div>';
+            }
+            var badge = p.destacada ? '<span class="news-badge-destacada" style="margin-bottom:8px;display:inline-block;">&#9733; Destacado</span>' : '';
+            var resumen = (p.resumen || '').replace(/&/g,'&amp;').replace(/</g,'&lt;');
+            var contenido = (p.contenido || '').replace(/&/g,'&amp;').replace(/</g,'&lt;');
+            var hasContent = p.contenido && p.contenido.trim() && p.contenido.trim() !== (p.resumen || '').trim();
+            var estadoClass = (p.estado || '').toLowerCase() === 'finalizado' ? 'status-finalizado' : 'status-ejecucion';
+            panelsHtml += '<div class="proy-card">';
+            panelsHtml += '<div class="proy-card-img">' + imgHtml + '</div>';
+            panelsHtml += '<div class="proy-card-body">';
+            panelsHtml += '<h3>' + (p.titulo || '').replace(/&/g,'&amp;').replace(/</g,'&lt;') + '</h3>';
+            panelsHtml += badge;
+            panelsHtml += '<div class="proy-card-text"><p class="proy-resumen">' + resumen + '</p>';
+            if (hasContent) {
+                panelsHtml += '<div class="proy-completo" style="display:none;">' + contenido + '</div>';
+                panelsHtml += '<button class="proy-leer-mas" data-mas="Leer m&amp;aacute;s" data-menos="Mostrar menos">Leer m&amp;aacute;s</button>';
+            }
+            panelsHtml += '</div><div class="proy-card-footer">';
+            if (p.responsable) panelsHtml += '<span class="proy-label">' + (p.responsable || '').replace(/&/g,'&amp;').replace(/</g,'&lt;') + '</span>';
+            if (p.estado) panelsHtml += '<span class="status-badge ' + estadoClass + '">' + (p.estado || '').replace(/&/g,'&amp;').replace(/</g,'&lt;') + '</span>';
+            panelsHtml += '</div></div></div>';
+        });
+        panelsHtml += '</div></div>';
+    });
+
+    var target = document.getElementById('proyectosContent');
+    target.innerHTML = tabsHtml + panelsHtml;
+
+    var newTabs = target.querySelectorAll('.proy-tab');
+    var newPanels = target.querySelectorAll('.proy-panel');
+    newTabs.forEach(function(tab) {
+        tab.addEventListener('click', function() {
+            newTabs.forEach(function(t) { t.classList.remove('active'); t.setAttribute('aria-selected','false'); t.setAttribute('tabindex','-1'); });
+            newPanels.forEach(function(p) { p.classList.remove('active'); });
+            tab.classList.add('active');
+            tab.setAttribute('aria-selected','true');
+            tab.setAttribute('tabindex','0');
+            var panel = target.querySelector('#' + tab.getAttribute('data-tab'));
+            if (panel) panel.classList.add('active');
+        });
+    });
+
+    if (typeof initCardCarousels === 'function') initCardCarousels(target);
+    target.querySelectorAll('.proy-leer-mas').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            var card = this.closest('.proy-card-text');
+            var completo = card.querySelector('.proy-completo');
+            if (!completo) return;
+            var abierto = completo.style.display !== 'none';
+            completo.style.display = abierto ? 'none' : 'block';
+            this.textContent = abierto ? this.getAttribute('data-mas') : this.getAttribute('data-menos');
+        });
+    });
+}
+
 (function() {
     var tabs = document.querySelectorAll('.proy-tab');
     var panels = document.querySelectorAll('.proy-panel');

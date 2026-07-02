@@ -34,6 +34,12 @@ include 'includes/header.php';
                         <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
                     </button>
                 </div>
+                <div class="sort-bar">
+                    <span class="sort-label">Ordenar por:</span>
+                    <button class="sort-btn" data-sort="fecha" onclick="sortNews('fecha')">&#128197; Recientes</button>
+                    <button class="sort-btn" data-sort="proximos" onclick="sortNews('proximos')">&#128205; Pr&oacute;ximos</button>
+                    <button class="sort-btn active" data-sort="destacados" onclick="sortNews('destacados')">&#9733; Destacados</button>
+                </div>
                 <div id="allNewsContainer" class="grid">
                     <p class="empty">Cargando publicaciones...</p>
                 </div>

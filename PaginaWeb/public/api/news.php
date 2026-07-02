@@ -33,9 +33,12 @@ foreach ($items as $item) {
 }
 
 usort($results, function($a, $b) {
-    $da = isset($a['created_at']) ? $a['created_at'] : '';
-    $db = isset($b['created_at']) ? $b['created_at'] : '';
-    return strcmp($db, $da);
+    $da = isset($a['destacada']) ? intval($a['destacada']) : 0;
+    $db = isset($b['destacada']) ? intval($b['destacada']) : 0;
+    if ($db !== $da) return $db - $da;
+    $ca = isset($a['created_at']) ? $a['created_at'] : '';
+    $cb = isset($b['created_at']) ? $b['created_at'] : '';
+    return strcmp($cb, $ca);
 });
 
 $results = array_slice($results, 0, $limit);

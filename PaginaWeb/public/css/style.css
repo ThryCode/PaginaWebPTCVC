@@ -1857,6 +1857,16 @@ body {
     color: #E65100;
 }
 
+.news-badge-destacada {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 6px;
+    letter-spacing: 0.3px;
+}
+
 .news-card-date {
     font-size: 0.85rem;
     color: #9B9B9B;
@@ -3259,6 +3269,52 @@ body {
 
 .search-bar button:hover {
     background: #00A0E1;
+}
+
+/* ============================================
+   BARRA DE ORDENAMIENTO
+   ============================================ */
+.sort-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+
+.sort-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #004966;
+}
+
+.sort-btn {
+    padding: 8px 16px;
+    border: 2px solid #E6F4FA;
+    border-radius: 20px;
+    background: #fff;
+    color: #444;
+    font-size: 0.85rem;
+    font-family: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.sort-btn:hover {
+    border-color: #00A0E1;
+    color: #004966;
+}
+
+.sort-btn.active {
+    background: #004966;
+    color: #fff;
+    border-color: #004966;
+}
+
+.sort-btn.active:hover {
+    background: #00354d;
 }
 
 /* ============================================
