@@ -2627,6 +2627,11 @@ body {
         color: #0077B3;
     }
 
+    .whatsapp-float {
+        right: 20px;
+        bottom: 20px;
+    }
+
     .whatsapp-float .tooltip {
         display: none;
     }
@@ -2912,9 +2917,15 @@ body {
 @media (max-width: 768px) {
     .back-to-top {
         bottom: 90px;
-        right: 20px;
+        right: 29px;
         width: 42px;
         height: 42px;
+    }
+}
+
+@media (max-width: 480px) {
+    .back-to-top {
+        right: 24px;
     }
 }
 
