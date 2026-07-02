@@ -150,12 +150,12 @@ body { font-family: 'Lato', 'Segoe UI', Tahoma, sans-serif; background: #E6F4FA;
    FORMS
    ============================================ */
 .form-card { background: #fff; padding: 32px; border-radius: 16px; box-shadow: 0 2px 12px rgba(0, 73, 102, 0.04); max-width: 800px; }
-.form-group { margin-bottom: 22px; }
-.form-group label { display: block; margin-bottom: 8px; font-weight: 700; color: #004966; font-size: 0.88rem; }
+.form-group { margin-bottom: 16px; }
+.form-group label { display: block; margin-bottom: 5px; font-weight: 700; color: #004966; font-size: 0.88rem; }
 .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 12px 14px; border: 2px solid #E6F4FA; border-radius: 10px; font-size: 0.95rem; font-family: inherit; transition: border-color 0.2s, box-shadow 0.2s; background: #ffffff; }
 .form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: #00A0E1; background: #fff; box-shadow: 0 0 0 4px rgba(0, 160, 225, 0.1); }
 .form-group textarea { min-height: 200px; resize: vertical; }
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .form-actions { display: flex; gap: 10px; margin-top: 30px; }
 
 /* ============================================
