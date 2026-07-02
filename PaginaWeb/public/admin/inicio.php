@@ -103,14 +103,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($postAction === 'create') {
                 $newId = 1;
                 foreach ($counters as $c) { if ($c['id'] >= $newId) $newId = $c['id'] + 1; }
-                $counters[] = array('id' => $newId, 'numero' => intval($_POST['numero'] ?? 0), 'label' => trim($_POST['label'] ?? ''), 'orden' => intval($_POST['orden'] ?? count($counters) + 1));
+                $newOrden = intval($_POST['orden'] ?? count($counters) + 1);
+                foreach ($counters as &$c) {
+                    if ($c['orden'] >= $newOrden) $c['orden']++;
+                }
+                unset($c);
+                $counters[] = array('id' => $newId, 'numero' => intval($_POST['numero'] ?? 0), 'label' => trim($_POST['label'] ?? ''), 'orden' => $newOrden);
                 Storage::write('counters', $counters);
                 header('Location: inicio.php?tab=contadores&msg=created');
                 exit;
 
             } elseif ($postAction === 'update') {
                 $updateId = intval($_POST['id'] ?? 0);
-                foreach ($counters as &$c) { if ($c['id'] === $updateId) { $c['numero'] = intval($_POST['numero'] ?? $c['numero']); $c['label'] = trim($_POST['label'] ?? $c['label']); $c['orden'] = intval($_POST['orden'] ?? $c['orden']); break; } }
+                foreach ($counters as &$c) {
+                    if ($c['id'] === $updateId) {
+                        $c['numero'] = intval($_POST['numero'] ?? $c['numero']);
+                        $c['label'] = trim($_POST['label'] ?? $c['label']);
+                        $nuevoOrden = intval($_POST['orden'] ?? $c['orden']);
+                        if ($nuevoOrden !== $c['orden']) {
+                            foreach ($counters as &$other) {
+                                if ($other['id'] !== $updateId && $other['orden'] >= $nuevoOrden) {
+                                    $other['orden']++;
+                                }
+                            }
+                            unset($other);
+                        }
+                        $c['orden'] = $nuevoOrden;
+                        break;
+                    }
+                }
+                unset($c);
                 Storage::write('counters', $counters);
                 header('Location: inicio.php?tab=contadores&msg=updated');
                 exit;
@@ -258,8 +280,6 @@ if ($tab === 'opiniones') {
         .counter-row .counter-data h4 { color:#1a1a2e; font-size:1rem; }
         .counter-row .counter-data span { color:#888; font-size:0.82rem; }
         .counter-row .actions { display:flex; gap:8px; }
-        .edit-form { background:#f8f9fa; padding:20px; border-radius:12px; margin-bottom:20px; border:2px dashed #e0e0e0; display:none; }
-        .edit-form.active { display:block; }
         .inline-grid { display:grid; grid-template-columns:1fr 2fr 1fr; gap:12px; }
         .opinion-preview { display:grid; grid-template-columns:repeat(3, 1fr); gap:20px; margin-bottom:30px; }
         .opinion-preview-card { background:#fff; border-radius:12px; padding:20px; box-shadow:0 2px 8px rgba(0,0,0,0.06); }
@@ -352,11 +372,12 @@ if ($tab === 'opiniones') {
 
                         <div class="grid-2">
                             <div class="panel">
-                                <div class="panel-header"><h2>Crear nuevo contador</h2></div>
+                                <div class="panel-header"><h2 id="counterFormTitle">Crear nuevo contador</h2></div>
                                 <div class="panel-body">
-                                    <form method="POST">
+                                    <form method="POST" id="counterForm">
                                         <?php echo csrfField(); ?>
-                                        <input type="hidden" name="action" value="create">
+                                        <input type="hidden" name="action" id="counterFormAction" value="create">
+                                        <input type="hidden" name="id" id="counterFormId" value="">
                                         <div class="form-group">
                                             <label for="new_label">Etiqueta (ej: Empresas incubadas)</label>
                                             <input type="text" id="new_label" name="label" required placeholder="Nombre de la categoría">
@@ -371,7 +392,10 @@ if ($tab === 'opiniones') {
                                                 <input type="number" id="new_orden" name="orden" required min="1" value="<?php echo count($countersList) + 1; ?>">
                                             </div>
                                         </div>
-                                        <button type="submit" class="btn btn-success">Crear Contador</button>
+                                        <div style="display:flex;gap:10px;align-items:center;">
+                                            <button type="submit" class="btn btn-success" id="counterFormBtn">Crear Contador</button>
+                                            <button type="button" class="btn btn-secondary" id="counterFormCancel" style="display:none;">Cancelar</button>
+                                        </div>
                                     </form>
                                 </div>
                             </div>
@@ -383,14 +407,14 @@ if ($tab === 'opiniones') {
                                         <p class="empty">No hay contadores creados aún.</p>
                                     <?php else: ?>
                                         <?php foreach ($countersList as $c): ?>
-                                            <div class="counter-row" id="counter-<?php echo $c['id']; ?>" data-id="<?php echo $c['id']; ?>">
+                                            <div class="counter-row" id="counter-<?php echo $c['id']; ?>" data-id="<?php echo $c['id']; ?>" data-label="<?php echo htmlspecialchars($c['label']); ?>" data-numero="<?php echo intval($c['numero']); ?>" data-orden="<?php echo intval($c['orden']); ?>">
                                                 <span class="drag-handle">☰</span>
                                                 <div class="counter-data">
                                                     <h4><?php echo htmlspecialchars($c['label']); ?></h4>
                                                     <span>Número: <?php echo intval($c['numero']); ?> | Orden: <?php echo intval($c['orden']); ?></span>
                                                 </div>
                                                 <div class="actions">
-                                                    <button class="btn btn-sm btn-primary" data-toggle-edit="<?php echo $c['id']; ?>">Editar</button>
+                                                    <button class="btn btn-sm btn-primary edit-counter-btn" type="button">Editar</button>
                                                     <form class="delete-form" method="POST" data-confirm="Eliminar este contador?" style="display:inline;">
                                                         <?php echo csrfField(); ?>
                                                         <input type="hidden" name="action" value="delete">
@@ -398,31 +422,6 @@ if ($tab === 'opiniones') {
                                                         <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
                                                     </form>
                                                 </div>
-                                            </div>
-                                            <div class="edit-form" id="edit-<?php echo $c['id']; ?>">
-                                                <form method="POST">
-                                                    <?php echo csrfField(); ?>
-                                                    <input type="hidden" name="action" value="update">
-                                                    <input type="hidden" name="id" value="<?php echo $c['id']; ?>">
-                                                    <div class="form-group">
-                                                        <label>Etiqueta</label>
-                                                        <input type="text" name="label" required value="<?php echo htmlspecialchars($c['label']); ?>">
-                                                    </div>
-                                                    <div class="inline-grid">
-                                                        <div class="form-group">
-                                                            <label>Número</label>
-                                                            <input type="number" name="numero" required min="0" value="<?php echo intval($c['numero']); ?>">
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label>Orden</label>
-                                                            <input type="number" name="orden" required min="1" value="<?php echo intval($c['orden']); ?>">
-                                                        </div>
-                                                    </div>
-                                                    <div style="display:flex;gap:10px;">
-                                                        <button type="submit" class="btn btn-sm btn-success">Guardar</button>
-                                                        <button type="button" class="btn btn-sm btn-secondary" data-toggle-edit="<?php echo $c['id']; ?>">Cancelar</button>
-                                                    </div>
-                                                </form>
                                             </div>
                                         <?php endforeach; ?>
                                     <?php endif; ?>
@@ -668,15 +667,49 @@ if ($tab === 'opiniones') {
             grid.querySelectorAll('.slider-item').forEach(function(el) { el.draggable = true; });
         }
 
-        // --- Counter inline edit toggles ---
-        var toggleBtns = document.querySelectorAll('[data-toggle-edit]');
-        toggleBtns.forEach(function(btn) {
+        // --- Counter edit: load into create form ---
+        var editBtns = document.querySelectorAll('.edit-counter-btn');
+        var formTitle = document.getElementById('counterFormTitle');
+        var formAction = document.getElementById('counterFormAction');
+        var formId = document.getElementById('counterFormId');
+        var formBtn = document.getElementById('counterFormBtn');
+        var formCancel = document.getElementById('counterFormCancel');
+        var labelInput = document.getElementById('new_label');
+        var numeroInput = document.getElementById('new_numero');
+        var ordenInput = document.getElementById('new_orden');
+
+        editBtns.forEach(function(btn) {
             btn.addEventListener('click', function() {
-                var id = this.dataset.toggleEdit;
-                var form = document.getElementById('edit-' + id);
-                if (form) form.classList.toggle('active');
+                var row = this.closest('.counter-row');
+                if (!row) return;
+                formTitle.textContent = 'Editar contador';
+                formAction.value = 'update';
+                formId.value = row.dataset.id;
+                labelInput.value = row.dataset.label;
+                numeroInput.value = row.dataset.numero;
+                ordenInput.value = row.dataset.orden;
+                formBtn.textContent = 'Guardar Cambios';
+                formBtn.classList.remove('btn-success');
+                formBtn.classList.add('btn-primary');
+                formCancel.style.display = '';
+                formTitle.scrollIntoView({ behavior: 'smooth', block: 'start' });
             });
         });
+
+        if (formCancel) {
+            formCancel.addEventListener('click', function() {
+                formTitle.textContent = 'Crear nuevo contador';
+                formAction.value = 'create';
+                formId.value = '';
+                labelInput.value = '';
+                numeroInput.value = '0';
+                ordenInput.value = '<?php echo count($countersList) + 1; ?>';
+                formBtn.textContent = 'Crear Contador';
+                formBtn.classList.remove('btn-primary');
+                formBtn.classList.add('btn-success');
+                formCancel.style.display = 'none';
+            });
+        }
 
         // --- Counter drag-reorder ---
         var counterList = document.getElementById('counterList');
