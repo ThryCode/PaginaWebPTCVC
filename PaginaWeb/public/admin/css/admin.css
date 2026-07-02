@@ -156,8 +156,17 @@ body { font-family: 'Lato', 'Segoe UI', Tahoma, sans-serif; background: #E6F4FA;
 .form-group input[type="checkbox"],
 .form-group input[type="radio"] {
     width: auto;
-    margin-right: 6px;
+    margin-right: 0;
+    margin-left: 6px;
     accent-color: #00A0E1;
+}
+.form-group label:has(> input[type="checkbox"]),
+.form-group label:has(> input[type="radio"]) {
+    display: inline-flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0;
 }
 .form-group input:not([type="checkbox"]):not([type="radio"]):focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: #00A0E1; background: #fff; box-shadow: 0 0 0 4px rgba(0, 160, 225, 0.1); }
 .form-group textarea { min-height: 200px; resize: vertical; }
