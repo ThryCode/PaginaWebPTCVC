@@ -139,7 +139,7 @@ body { font-family: 'Lato', 'Segoe UI', Tahoma, sans-serif; background: #E6F4FA;
 .btn-secondary:hover { background: #646464; }
 .btn-light { background: #f0f0f0; color: #333; }
 .btn-light:hover { background: #ddd; }
-.btn-sm { padding: 5px 12px; font-size: 0.78rem; border-radius: 6px; }
+.btn-sm { padding: 5px 12px; font-size: 0.78rem; border-radius: 6px; line-height: 1; min-height: 28px; }
 
 /* ============================================
    EMPTY STATE
