@@ -380,7 +380,7 @@ if ($tab === 'opiniones') {
                                 <div class="panel-header"><h2>Contadores actuales</h2></div>
                                 <div class="panel-body" id="counterList">
                                     <?php if (empty($countersList)): ?>
-                                        <p class="empty">No hay contadores creados aun.</p>
+                                        <p class="empty">No hay contadores creados aún.</p>
                                     <?php else: ?>
                                         <?php foreach ($countersList as $c): ?>
                                             <div class="counter-row" id="counter-<?php echo $c['id']; ?>" data-id="<?php echo $c['id']; ?>">
@@ -463,7 +463,7 @@ if ($tab === 'opiniones') {
 
                         <div class="edit-form" id="create-opinion-form" style="margin-bottom:20px;">
                             <div class="panel" style="box-shadow:none;padding:0;">
-                                <div class="panel-header"><h2>Crear nueva opinion</h2></div>
+                                <div class="panel-header"><h2>Crear nueva opinión</h2></div>
                                 <div class="panel-body">
                                     <form method="POST" enctype="multipart/form-data">
                                         <?php echo csrfField(); ?>
@@ -474,11 +474,11 @@ if ($tab === 'opiniones') {
                                         </div>
                                         <div class="form-group">
                                             <label for="new_cargo">Cargo *</label>
-                                            <input type="text" id="new_cargo" name="cargo" required placeholder="Cargo o titulo">
+                                            <input type="text" id="new_cargo" name="cargo" required placeholder="Cargo o título">
                                         </div>
                                         <div class="form-group">
-                                            <label for="new_texto">Texto de la opinion *</label>
-                                            <textarea id="new_texto" name="texto" required rows="3" placeholder="Escribe la opinion..."></textarea>
+                                            <label for="new_texto">Texto de la opinión *</label>
+                                            <textarea id="new_texto" name="texto" required rows="3" placeholder="Escribe la opinión..."></textarea>
                                         </div>
                                         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
                                             <div class="form-group">
@@ -491,7 +491,7 @@ if ($tab === 'opiniones') {
                                             </div>
                                         </div>
                                         <div style="display:flex;gap:10px;">
-                                            <button type="submit" class="btn btn-success">Crear Opinion</button>
+                                            <button type="submit" class="btn btn-success">Crear Opinión</button>
                                             <button type="button" class="btn btn-sm btn-secondary" onclick="toggleCreateOpinion()">Cancelar</button>
                                         </div>
                                     </form>
@@ -503,7 +503,7 @@ if ($tab === 'opiniones') {
                                 <div class="panel-header"><h2>Opiniones actuales</h2></div>
                                 <div class="panel-body">
                                     <?php if (empty($opinionesList)): ?>
-                                        <p class="empty">No hay opiniones creadas aun.</p>
+                                        <p class="empty">No hay opiniones creadas aún.</p>
                                     <?php else: ?>
                                         <?php foreach ($opinionesList as $o): ?>
                                             <div class="opinion-row">
@@ -518,7 +518,7 @@ if ($tab === 'opiniones') {
                                                 </div>
                                                 <div class="actions">
                                                     <button class="btn btn-sm btn-primary" onclick="toggleOpinionEdit(<?php echo $o['id']; ?>)">Editar</button>
-                                                    <form class="delete-form" method="POST" data-confirm="Eliminar esta opinion?" style="display:inline;">
+                                                    <form class="delete-form" method="POST" data-confirm="Eliminar esta opinión?" style="display:inline;">
                                                         <?php echo csrfField(); ?>
                                                         <input type="hidden" name="action" value="delete">
                                                         <input type="hidden" name="id" value="<?php echo $o['id']; ?>">
@@ -545,7 +545,7 @@ if ($tab === 'opiniones') {
                                                     </div>
                                                     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
                                                         <div class="form-group">
-                                                            <label>Foto (dejar vacio para mantener)</label>
+                                                            <label>Foto (dejar vacío para mantener)</label>
                                                             <input type="file" name="imagen" accept="image/*">
                                                         </div>
                                                         <div class="form-group">

@@ -113,7 +113,7 @@ if (!empty($user['nombre'])) {
                         </div>
                         <div class="panel-body">
                             <?php if (empty($ultimasNoticias)): ?>
-                                <p class="empty">No hay publicaciones aun.</p>
+                                <p class="empty">No hay publicaciones aún.</p>
                             <?php else: ?>
                                 <table class="table">
                                     <thead><tr><th>Título</th><th>Tipo</th><th>Estado</th><th>Fecha</th></tr></thead>
@@ -139,7 +139,7 @@ if (!empty($user['nombre'])) {
                         </div>
                         <div class="panel-body">
                             <?php if (empty($ultimosMensajes)): ?>
-                                <p class="empty">No hay mensajes aun.</p>
+                                <p class="empty">No hay mensajes aún.</p>
                             <?php else: ?>
                                 <table class="table">
                                     <thead><tr><th>Nombre</th><th>Asunto</th><th>Estado</th><th>Fecha</th></tr></thead>
@@ -166,7 +166,7 @@ if (!empty($user['nombre'])) {
                     </div>
                     <div class="panel-body">
                         <?php if (empty($ultimosProyectos)): ?>
-                            <p class="empty">No hay proyectos aun.</p>
+                            <p class="empty">No hay proyectos aún.</p>
                         <?php else: ?>
                             <table class="table">
                                 <thead><tr><th>T&iacute;tulo</th><th>&Aacute;rea</th><th>Estado</th><th>Inicio</th></tr></thead>

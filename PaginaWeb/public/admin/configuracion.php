@@ -14,7 +14,7 @@ $newPacCode = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!validateCSRFToken($_POST[CSRF_TOKEN_NAME] ?? '')) {
-        $error = 'Token de seguridad invalido.';
+        $error = 'Token de seguridad inválido.';
     } else {
         if (isset($_POST['site_name'])) {
             $campos = array('site_name', 'site_description', 'contact_email', 'contact_phone', 'contact_address');
@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
             Storage::write('config', $config);
-            $message = 'Configuracion actualizada.';
+            $message = 'Configuración actualizada.';
         }
 
         if (isset($_POST['generate_system_pac']) && $isAdmin) {
@@ -85,7 +85,7 @@ $auditLog = $isAdmin ? $auth->getAuditLog() : [];
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script>(function(){var w=window.innerWidth||document.documentElement.clientWidth,m=w<=768;document.documentElement.classList.toggle('is-mobile',m)})();</script>
-    <title>Admin - Configuracion</title>
+    <title>Admin - Configuración</title>
     <link rel="stylesheet" href="css/admin.css?v=<?= filemtime(__DIR__ . '/css/admin.css') ?>">
 </head>
 <body>
@@ -94,7 +94,7 @@ $auditLog = $isAdmin ? $auth->getAuditLog() : [];
         <main class="main-content">
             <header class="topbar">
                 <button class="hamburger" aria-label="Menu">&#9776;</button>
-                <h1>Configuracion</h1>
+                <h1>Configuración</h1>
             </header>
             <div class="content">
                 <?php if (!empty($message)): ?><div class="alert alert-success"><?php echo $message; ?></div><?php endif; ?>
@@ -109,12 +109,12 @@ $auditLog = $isAdmin ? $auth->getAuditLog() : [];
                         </div>
                         <button type="button" class="btn btn-primary" id="btnCopyPAC">Copiar PAC</button>
                     </div>
-                    <small style="color:#888; display:block; margin-top:8px;">Guardalo ahora. No se mostrara de nuevo.</small>
+                    <small style="color:#888; display:block; margin-top:8px;">Guárdalo ahora. No se mostrará de nuevo.</small>
                 </div>
                 <?php endif; ?>
 
                 <div class="form-card" style="margin-bottom:30px;">
-                    <h2 style="margin-bottom:20px; color:#2c3e50;">Informacion del Sitio</h2>
+                    <h2 style="margin-bottom:20px; color:#2c3e50;">Información del Sitio</h2>
                     <form method="POST">
                         <?php echo csrfField(); ?>
                         <div class="form-row">
@@ -128,16 +128,16 @@ $auditLog = $isAdmin ? $auth->getAuditLog() : [];
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Descripcion</label>
+                            <label>Descripción</label>
                             <textarea name="site_description" rows="3"><?php echo htmlspecialchars($config['site_description'] ?? ''); ?></textarea>
                         </div>
                         <div class="form-row">
                             <div class="form-group">
-                                <label>Telefono</label>
+                                <label>Teléfono</label>
                                 <input type="text" name="contact_phone" value="<?php echo htmlspecialchars($config['contact_phone'] ?? ''); ?>">
                             </div>
                             <div class="form-group">
-                                <label>Direccion</label>
+                                <label>Dirección</label>
                                 <input type="text" name="contact_address" value="<?php echo htmlspecialchars($config['contact_address'] ?? ''); ?>">
                             </div>
                         </div>
@@ -151,7 +151,7 @@ $auditLog = $isAdmin ? $auth->getAuditLog() : [];
                 <div class="form-card" style="margin-bottom:30px;">
                     <h2 style="margin-bottom:20px; color:#2c3e50;">Clave de Acceso (PAC)</h2>
                     <p style="color:#666; font-size:0.9rem; margin-bottom:20px;">
-                        La PAC es una clave de 10 caracteres que se ingresa en la pagina de login tras hacer 5 clicks en "404".
+                        La PAC es una clave de 10 caracteres que se ingresa en la página de login tras hacer 5 clicks en "404".
                         Es la misma para todos los usuarios (admin y editor).
                     </p>
 
@@ -172,12 +172,12 @@ $auditLog = $isAdmin ? $auth->getAuditLog() : [];
                     </div>
 
                     <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:24px;">
-                        <form method="POST" style="display:inline;" data-confirm="Generar nuevo PAC aleatorio? El anterior dejara de funcionar.">
+                        <form method="POST" style="display:inline;" data-confirm="Generar nuevo PAC aleatorio? El anterior dejará de funcionar.">
                             <?php echo csrfField(); ?>
                             <input type="hidden" name="generate_system_pac" value="1">
                             <button type="submit" class="btn btn-primary">Generar PAC aleatorio</button>
                         </form>
-                        <form method="POST" style="display:inline; flex:1; min-width:250px; display:flex; gap:8px;" data-confirm="Establecer este PAC personalizado? El anterior dejara de funcionar.">
+                        <form method="POST" style="display:inline; flex:1; min-width:250px; display:flex; gap:8px;" data-confirm="Establecer este PAC personalizado? El anterior dejará de funcionar.">
                             <?php echo csrfField(); ?>
                             <input type="hidden" name="set_system_pac" value="1">
                             <input type="text" name="custom_pac" placeholder="PAC personalizado (min. 8 chars)" minlength="8" style="flex:1; padding:8px 12px; border:1px solid #d2d2d7; border-radius:8px; font-size:0.9rem;">
@@ -192,7 +192,7 @@ $auditLog = $isAdmin ? $auth->getAuditLog() : [];
                             <h3 style="font-size:1rem; color:#2c3e50; margin-bottom:4px;">Historial de entradas</h3>
                             <p style="color:#888; font-size:0.85rem; margin:0;">Registro de intentos de login y verificaciones PAC.</p>
                         </div>
-                        <form method="POST" style="display:inline;" data-confirm="Limpiar todo el historial de entradas? Esta accion no se puede deshacer.">
+                        <form method="POST" style="display:inline;" data-confirm="Limpiar todo el historial de entradas? Esta acción no se puede deshacer.">
                             <?php echo csrfField(); ?>
                             <input type="hidden" name="clear_audit" value="1">
                             <button type="submit" class="btn btn-danger">Limpiar historial</button>
@@ -205,7 +205,7 @@ $auditLog = $isAdmin ? $auth->getAuditLog() : [];
                             <thead>
                                 <tr style="border-bottom:2px solid #ddd; position:sticky; top:0; background:#f8f9fa;">
                                     <th style="text-align:left; padding:8px 10px; color:#666;">Usuario</th>
-                                    <th style="text-align:left; padding:8px 10px; color:#666;">Accion</th>
+                                    <th style="text-align:left; padding:8px 10px; color:#666;">Acción</th>
                                     <th style="text-align:left; padding:8px 10px; color:#666;">Fecha y Hora</th>
                                 </tr>
                             </thead>
@@ -215,9 +215,9 @@ $auditLog = $isAdmin ? $auth->getAuditLog() : [];
                                     <td style="padding:8px 10px; font-weight:500;" data-label="Usuario"><?php echo htmlspecialchars($entry['details']); ?></td>
                                     <td style="padding:8px 10px;" data-label="Acción">
                                         <?php if ($entry['action'] === 'login'): ?>
-                                            <span style="color:#16a34a; font-weight:600;">Entro</span>
+                                            <span style="color:#16a34a; font-weight:600;">Entró</span>
                                         <?php else: ?>
-                                            <span style="color:#888; font-weight:600;">Salio</span>
+                                            <span style="color:#888; font-weight:600;">Salió</span>
                                         <?php endif; ?>
                                     </td>
                                     <td style="padding:8px 10px; color:#555;" data-label="Fecha y Hora"><?php echo htmlspecialchars($entry['created_at']); ?></td>
